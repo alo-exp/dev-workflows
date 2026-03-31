@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Silver Bullet — AI-native Software Engineering Process Orchestrator</title>
-<meta name="description" content="Silver Bullet is an AI-native software engineering process orchestrator for Claude Code. Combines GSD, Superpowers, Engineering, and Design into one enforced development workflow — purpose-built for how AI agents work.">
-<meta property="og:title" content="Silver Bullet — AI-native Software Engineering Process Orchestrator">
-<meta property="og:description" content="The AI-native software engineering process orchestrator. Combines the best open-source agentic workflows and enforces every step. GSD + Superpowers + Engineering + Design.">
+<title>Silver Bullet — AI-native Software Engineering &amp; DevOps Process Orchestrator</title>
+<meta name="description" content="Silver Bullet is an AI-native process orchestrator for Claude Code. Two enforced workflows: 19-step dev cycle and 23-step DevOps cycle. Combines GSD, Superpowers, Engineering, Design, and 5 leading DevOps plugins into one enforced system.">
+<meta property="og:title" content="Silver Bullet — AI-native Software Engineering &amp; DevOps Process Orchestrator">
+<meta property="og:description" content="The AI-native process orchestrator. Two enforced workflows for app dev and DevOps/IaC. GSD + Superpowers + Engineering + Design + 5 leading DevOps plugins. Brooks was right. Until now.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sb.alolabs.dev">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Silver Bullet — AI-native SE Process Orchestrator">
-<meta name="twitter:description" content="The AI-native software engineering process orchestrator. Combines GSD, Superpowers, Engineering, and Design. Brooks was right. Until now.">
+<meta name="twitter:title" content="Silver Bullet — AI-native SE &amp; DevOps Process Orchestrator">
+<meta name="twitter:description" content="The AI-native process orchestrator. Two enforced workflows for app dev and DevOps/IaC. GSD + Superpowers + Engineering + Design + 5 leading DevOps plugins.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -349,6 +349,67 @@ section:nth-child(even){background:var(--section-alt)}
   border-radius:999px;padding:3px 10px;font-size:.7rem;font-weight:700;
   color:var(--accent-light);letter-spacing:.04em;margin-bottom:12px;
 }
+.optional-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(34,211,238,.1);border:1px solid rgba(34,211,238,.25);
+  border-radius:999px;padding:3px 10px;font-size:.7rem;font-weight:700;
+  color:var(--cyan);letter-spacing:.04em;margin-bottom:12px;
+}
+
+/* ───── DEVOPS GRID ───── */
+.devops-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+@media(max-width:900px){.devops-grid{grid-template-columns:1fr}}
+@media(min-width:901px) and (max-width:1200px){.devops-grid{grid-template-columns:repeat(3,1fr)}}
+.devops-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:24px;
+  transition:all .3s;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.devops-card:hover{
+  border-color:rgba(34,211,238,.3);
+  box-shadow:0 0 30px rgba(34,211,238,.06);transform:translateY(-4px);
+}
+.devops-card .plugin-logo{font-size:1.6rem;margin-bottom:10px}
+.devops-card .plugin-name{font-size:.95rem;font-weight:800;margin-bottom:3px;letter-spacing:-.02em}
+.devops-card .plugin-role{
+  font-size:.7rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--cyan);margin-bottom:12px;
+}
+.devops-card .plugin-desc{
+  font-size:.82rem;color:var(--text-secondary);line-height:1.6;margin-bottom:14px;flex:1;
+}
+.devops-card .plugin-features{
+  list-style:none;padding:0;margin:0 0 14px;
+  display:flex;flex-direction:column;gap:5px;
+}
+.devops-card .plugin-features li{
+  font-size:.75rem;color:var(--text-secondary);
+  display:flex;align-items:flex-start;gap:6px;line-height:1.4;
+}
+.devops-card .plugin-features li::before{
+  content:'\2192';color:var(--cyan);font-weight:700;flex-shrink:0;margin-top:1px;
+}
+
+/* ───── WORKFLOW TABS ───── */
+.workflow-tabs{display:flex;gap:8px;justify-content:center;margin-bottom:32px}
+.workflow-tab{
+  padding:10px 24px;border-radius:999px;font-size:.85rem;font-weight:600;
+  border:1px solid var(--border);background:var(--bg-card);
+  color:var(--text-secondary);cursor:pointer;transition:all .2s;
+}
+.workflow-tab:hover{border-color:var(--border-hover);color:var(--text-primary)}
+.workflow-tab.active{
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;border-color:transparent;
+}
+.workflow-panel{display:none}
+.workflow-panel.active{display:block}
+
+/* ───── DEVOPS PHASE BADGES ───── */
+.phase-incident{background:rgba(248,113,113,.15);color:var(--red)}
+.phase-blast{background:rgba(251,191,36,.15);color:var(--amber)}
+.phase-promotion{background:rgba(34,211,238,.12);color:var(--cyan)}
 
 /* ───── ENFORCEMENT / LAYER CARDS ───── */
 .layer-card{
@@ -549,7 +610,7 @@ footer .footer-links{display:flex;gap:24px}
 <!-- ────── HERO ────── -->
 <section class="hero text-center">
   <div class="container">
-    <div class="version-badge"><span class="dot"></span> AI-native Software Engineering Process Orchestrator</div>
+    <div class="version-badge"><span class="dot"></span> AI-native Software Engineering &amp; DevOps Process Orchestrator</div>
     <h1><span class="gradient">Silver Bullet</span></h1>
 
     <div class="brooks-block">
@@ -566,7 +627,7 @@ footer .footer-links{display:flex;gap:24px}
 
     <p class="tagline mt-3">Brooks was right. Until now.</p>
 
-    <p class="subtitle">The AI-native software engineering process orchestrator.<br>Purpose-built for how AI agents work &mdash; not retrofitted from human processes.</p>
+    <p class="subtitle">The AI-native software engineering &amp; DevOps process orchestrator.<br>Purpose-built for how AI agents work &mdash; not retrofitted from human processes.</p>
 
     <div class="cta-group">
       <a href="#install" class="btn btn-primary">Get Started</a>
@@ -574,9 +635,9 @@ footer .footer-links{display:flex;gap:24px}
     </div>
 
     <div class="hero-pills">
-      <span class="hero-pill">4 Best-in-Class Plugins</span>
-      <span class="hero-pill">19-Step Workflow</span>
-      <span class="hero-pill">8 Quality Gates</span>
+      <span class="hero-pill">9 Best-in-Class Plugins</span>
+      <span class="hero-pill">Two Enforced Workflows</span>
+      <span class="hero-pill">19 + 23 Steps</span>
       <span class="hero-pill">7 Enforcement Layers</span>
     </div>
   </div>
@@ -627,12 +688,12 @@ footer .footer-links{display:flex;gap:24px}
   <div class="container text-center">
     <div class="section-label">The Orchestrator</div>
     <h2 class="section-title">Orchestrate. Enforce. Ship.</h2>
-    <p class="section-desc centered">Silver Bullet is an AI-native software engineering process orchestrator. It curates the four best open-source agentic systems and wraps them in a seven-layer enforcement engine &mdash; purpose-built for how AI agents work, not retrofitted from human processes.</p>
+    <p class="section-desc centered">Silver Bullet is an AI-native process orchestrator for software engineering and DevOps. It curates nine best-in-class plugins and wraps them in a seven-layer enforcement engine &mdash; with two dedicated workflows for app development and infrastructure.</p>
 
     <div class="hero-pills mb-4 fade-in">
-      <span class="hero-pill">4 Best-in-Class Plugins</span>
-      <span class="hero-pill">19-Step Workflow</span>
-      <span class="hero-pill">8 Quality Gates</span>
+      <span class="hero-pill">9 Best-in-Class Plugins</span>
+      <span class="hero-pill">Two Enforced Workflows</span>
+      <span class="hero-pill">19 + 23 Steps</span>
       <span class="hero-pill">7 Enforcement Layers</span>
     </div>
     <div class="feature-grid mt-4 fade-in">
@@ -648,8 +709,8 @@ footer .footer-links{display:flex;gap:24px}
       </div>
       <div class="feature-card">
         <div class="feature-icon">&#128736;</div>
-        <h3>8 Quality Gates</h3>
-        <p>Every plan is verified against the eight software quality dimensions &mdash; modularity, reusability, scalability, security, reliability, usability, testability, extensibility &mdash; in a single enforced checkpoint.</p>
+        <h3>Two Workflow Modes</h3>
+        <p>19-step <strong>full-dev-cycle</strong> for app development with 8 quality dimensions. 23-step <strong>devops-cycle</strong> for IaC/infrastructure with blast radius assessment and 7 IaC-adapted quality gates.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">&#128274;</div>
@@ -752,6 +813,94 @@ footer .footer-links{display:flex;gap:24px}
         <p><strong>Silver Bullet is the orchestration layer.</strong> It defines the order these plugins are invoked, enforces that none are skipped, injects quality gate criteria into GSD&rsquo;s planning agents, and adds the seven-layer compliance enforcement that none of these plugins provide on their own.</p>
       </div>
     </div>
+
+    <!-- DevOps Plugins -->
+    <div class="text-center mt-8">
+      <div class="section-label">DevOps Enrichment</div>
+      <h2 class="section-title">Five Leading DevOps Plugins. One Skill Router.</h2>
+      <p class="section-desc centered">For the <strong>devops-cycle</strong> workflow, Silver Bullet integrates five best-in-class DevOps plugins as optional contextual enrichments. A smart skill router maps your IaC toolchain and cloud provider to the best available skill &mdash; with automatic fallback chains.</p>
+    </div>
+
+    <div class="devops-grid mt-6">
+
+      <div class="devops-card fade-in">
+        <div class="plugin-logo">&#9881;&#65039;</div>
+        <div class="optional-badge">Optional</div>
+        <div class="plugin-name">HashiCorp</div>
+        <div class="plugin-role">hashicorp/agent-skills</div>
+        <div class="plugin-desc">Official HashiCorp skills for Terraform HCL authoring, module design, provider development, and Packer image building.</div>
+        <ul class="plugin-features">
+          <li>Terraform code generation</li>
+          <li>Module &amp; provider scaffolding</li>
+          <li>Packer builders &amp; HCP integration</li>
+        </ul>
+        <div class="plugin-tags"><span class="tag tag-cyan">Terraform / Packer</span></div>
+      </div>
+
+      <div class="devops-card fade-in">
+        <div class="plugin-logo">&#9729;&#65039;</div>
+        <div class="optional-badge">Optional</div>
+        <div class="plugin-name">AWS Labs</div>
+        <div class="plugin-role">awslabs/agent-plugins</div>
+        <div class="plugin-desc">AWS architecture, serverless patterns, database selection, CDK/CloudFormation, and deployment best practices.</div>
+        <ul class="plugin-features">
+          <li>Deploy-on-AWS architecture guidance</li>
+          <li>Lambda / API Gateway / Step Functions</li>
+          <li>RDS, DynamoDB, Aurora selection</li>
+        </ul>
+        <div class="plugin-tags"><span class="tag tag-cyan">AWS / Serverless</span></div>
+      </div>
+
+      <div class="devops-card fade-in">
+        <div class="plugin-logo">&#128640;</div>
+        <div class="optional-badge">Optional</div>
+        <div class="plugin-name">Pulumi</div>
+        <div class="plugin-role">pulumi/agent-skills</div>
+        <div class="plugin-desc">Pulumi programs, ComponentResource patterns, Automation API, and IaC migration from Terraform, CDK, CloudFormation, and ARM.</div>
+        <ul class="plugin-features">
+          <li>Pulumi best practices &amp; components</li>
+          <li>IaC migration (TF/CDK/CF/ARM &rarr; Pulumi)</li>
+          <li>Pulumi ESC for secrets management</li>
+        </ul>
+        <div class="plugin-tags"><span class="tag tag-cyan">Pulumi / Migration</span></div>
+      </div>
+
+      <div class="devops-card fade-in">
+        <div class="plugin-logo">&#128295;</div>
+        <div class="optional-badge">Optional</div>
+        <div class="plugin-name">DevOps Skills</div>
+        <div class="plugin-role">ahmedasmar/devops-claude-skills</div>
+        <div class="plugin-desc">Comprehensive DevOps toolkit: Terraform/Terragrunt, k8s troubleshooting, CI/CD pipelines, GitOps, monitoring, and AWS cost optimization.</div>
+        <ul class="plugin-features">
+          <li>Kubernetes troubleshooter</li>
+          <li>CI/CD &amp; GitOps workflows</li>
+          <li>Monitoring, observability &amp; cost optimization</li>
+        </ul>
+        <div class="plugin-tags"><span class="tag tag-cyan">k8s / CI-CD / GitOps</span></div>
+      </div>
+
+      <div class="devops-card fade-in">
+        <div class="plugin-logo">&#9784;&#65039;</div>
+        <div class="optional-badge">Optional</div>
+        <div class="plugin-name">wshobson/agents</div>
+        <div class="plugin-role">Kubernetes Operations</div>
+        <div class="plugin-desc">Kubernetes manifests, Helm chart authoring, GitOps security, and multi-agent orchestration for complex cluster operations.</div>
+        <ul class="plugin-features">
+          <li>Kubernetes manifests &amp; Helm charts</li>
+          <li>GitOps security &amp; RBAC</li>
+          <li>Multi-agent team orchestration</li>
+        </ul>
+        <div class="plugin-tags"><span class="tag tag-cyan">k8s / Helm / GitOps</span></div>
+      </div>
+
+    </div>
+
+    <div class="mt-6">
+      <div class="callout fade-in">
+        <div class="callout-icon">&#128268;</div>
+        <p><strong>Smart skill routing, not hard dependencies.</strong> Silver Bullet&rsquo;s <code>/devops-skill-router</code> detects which plugins are installed and maps each context (Terraform authoring, k8s troubleshooting, AWS deployment) to the best available skill with automatic fallback chains. No plugin is required &mdash; the workflow runs without them, but is significantly richer with them.</p>
+      </div>
+    </div>
   </div>
 </section>
 
@@ -823,8 +972,8 @@ footer .footer-links{display:flex;gap:24px}
   <div class="container">
     <div class="text-center">
       <div class="section-label">Quality Gates</div>
-      <h2 class="section-title">Eight Quality Dimensions. One Checkpoint.</h2>
-      <p class="section-desc centered">The <code>/quality-gates</code> skill applies all eight dimensions in a single enforced pass before any plan is written. Every ❌ is a hard stop &mdash; not a warning.</p>
+      <h2 class="section-title">Quality Dimensions. Enforced Checkpoints.</h2>
+      <p class="section-desc centered">The <strong>full-dev-cycle</strong> applies 8 quality dimensions via <code>/quality-gates</code>. The <strong>devops-cycle</strong> applies 7 IaC-adapted dimensions via <code>/devops-quality-gates</code> (usability excluded) plus a mandatory <code>/blast-radius</code> assessment. Every dimension is a hard stop &mdash; not a warning.</p>
     </div>
     <div class="grid grid-4 mt-6">
       <div class="feature-card fade-in">
@@ -874,6 +1023,13 @@ footer .footer-links{display:flex;gap:24px}
         <h3>Extensibility</h3>
         <p style="font-size:.85rem">Open-closed principle. Plugin architecture. Versioned interfaces. Change without breakage.</p>
         <span class="tag tag-purple mt-2" style="margin-top:12px;display:inline-block">/quality-gates</span>
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <div class="callout fade-in">
+        <div class="callout-icon">&#128165;</div>
+        <p><strong>DevOps Cycle: Blast Radius First.</strong> Before quality gates, the devops-cycle requires a <code>/blast-radius</code> assessment &mdash; mapping change scope, downstream dependencies, failure scenarios, and rollback plans. Changes rated HIGH require explicit approval and a runbook. CRITICAL changes are a hard stop requiring CAB review.</p>
       </div>
     </div>
   </div>
@@ -966,12 +1122,17 @@ footer .footer-links{display:flex;gap:24px}
 <section id="workflow">
   <div class="container">
     <div class="text-center">
-      <div class="section-label">The Workflow</div>
-      <h2 class="section-title">19 Steps. Every One Enforced.</h2>
-      <p class="section-desc centered">GSD commands drive the main flow. Silver Bullet quality gates and gap-filling skills lock in compliance. The per-phase loop repeats until all roadmap phases are complete.</p>
+      <div class="section-label">The Workflows</div>
+      <h2 class="section-title">Two Workflows. Every Step Enforced.</h2>
+      <p class="section-desc centered">GSD commands drive the main flow. Silver Bullet quality gates and gap-filling skills lock in compliance. Choose your workflow at project initialization &mdash; enforcement adapts automatically.</p>
     </div>
 
-    <div class="mt-6" style="overflow-x:auto">
+    <div class="workflow-tabs mt-4 fade-in">
+      <button class="workflow-tab active" onclick="switchWorkflow('dev')">Full Dev Cycle <span style="opacity:.6">(19 steps)</span></button>
+      <button class="workflow-tab" onclick="switchWorkflow('devops')">DevOps Cycle <span style="opacity:.6">(23 steps)</span></button>
+    </div>
+
+    <div id="workflow-dev" class="workflow-panel active" style="overflow-x:auto">
       <table class="workflow-table fade-in">
         <thead>
           <tr>
@@ -985,7 +1146,7 @@ footer .footer-links{display:flex;gap:24px}
         <tbody>
           <tr><td>1</td><td><span class="phase-badge phase-init">INIT</span></td><td>Worktree decision</td><td>Silver Bullet</td><td></td></tr>
           <tr><td>2</td><td><span class="phase-badge phase-init">INIT</span></td><td>/gsd:new-project</td><td>GSD</td><td><span class="step-required">Required</span> <span class="step-gsd">GSD</span></td></tr>
-          <tr><td colspan="5" style="font-size:.75rem;color:var(--text-dim);padding:8px 16px;font-family:var(--font-sans);font-style:italic">↻ Per-phase loop — repeat for each phase in ROADMAP.md</td></tr>
+          <tr><td colspan="5" style="font-size:.75rem;color:var(--text-dim);padding:8px 16px;font-family:var(--font-sans);font-style:italic">&#8635; Per-phase loop &mdash; repeat for each phase in ROADMAP.md</td></tr>
           <tr><td>3</td><td><span class="phase-badge phase-discuss">DISCUSS</span></td><td>/gsd:discuss-phase</td><td>GSD</td><td><span class="step-required">Required</span> <span class="step-gsd">GSD</span></td></tr>
           <tr><td>3a</td><td><span class="phase-badge phase-discuss">DISCUSS</span></td><td>/system-design (if architectural)</td><td>Engineering</td><td></td></tr>
           <tr><td>3b</td><td><span class="phase-badge phase-discuss">DISCUSS</span></td><td>/design-system + /ux-copy (if UI)</td><td>Design</td><td></td></tr>
@@ -998,7 +1159,7 @@ footer .footer-links{display:flex;gap:24px}
           <tr><td>10</td><td><span class="phase-badge phase-review">REVIEW</span></td><td>/receiving-code-review</td><td>Superpowers</td><td><span class="step-required">Required</span></td></tr>
           <tr><td>11</td><td><span class="phase-badge phase-planning">PLAN</span></td><td>/gsd:plan-phase (revision)</td><td>GSD</td><td></td></tr>
           <tr><td>12</td><td><span class="phase-badge phase-execution">EXECUTE</span></td><td>/gsd:execute-phase (revision)</td><td>GSD</td><td></td></tr>
-          <tr><td colspan="5" style="font-size:.75rem;color:var(--text-dim);padding:8px 16px;font-family:var(--font-sans);font-style:italic">↓ Finalization — once all phases complete</td></tr>
+          <tr><td colspan="5" style="font-size:.75rem;color:var(--text-dim);padding:8px 16px;font-family:var(--font-sans);font-style:italic">&darr; Finalization &mdash; once all phases complete</td></tr>
           <tr><td>13</td><td><span class="phase-badge phase-finalization">FINALIZATION</span></td><td>/testing-strategy</td><td>Engineering</td><td><span class="step-required">Required</span></td></tr>
           <tr><td>14</td><td><span class="phase-badge phase-finalization">FINALIZATION</span></td><td>Tech-debt notes (inline)</td><td>Silver Bullet</td><td></td></tr>
           <tr><td>15</td><td><span class="phase-badge phase-finalization">FINALIZATION</span></td><td>/documentation</td><td>Engineering</td><td><span class="step-required">Required</span></td></tr>
@@ -1006,6 +1167,54 @@ footer .footer-links{display:flex;gap:24px}
           <tr><td>17</td><td><span class="phase-badge phase-deployment">DEPLOYMENT</span></td><td>CI/CD pipeline</td><td></td><td><span class="step-required">Required</span></td></tr>
           <tr><td>18</td><td><span class="phase-badge phase-deployment">DEPLOYMENT</span></td><td>/deploy-checklist</td><td>Engineering</td><td><span class="step-required">Required</span></td></tr>
           <tr><td>19</td><td><span class="phase-badge phase-ship">SHIP</span></td><td>/gsd:ship</td><td>GSD</td><td><span class="step-required">Required</span> <span class="step-gsd">GSD</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="workflow-devops" class="workflow-panel" style="overflow-x:auto">
+      <table class="workflow-table fade-in visible">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Phase</th>
+            <th>Step</th>
+            <th>Source</th>
+            <th>Required</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="5" style="font-size:.75rem;color:var(--text-dim);padding:8px 16px;font-family:var(--font-sans);font-style:italic">&#9888;&#65039; Incident fast path &mdash; for emergency production changes only</td></tr>
+          <tr><td>0</td><td><span class="phase-badge phase-incident">INCIDENT</span></td><td>Incident fast path (skip to hotfix)</td><td>Silver Bullet</td><td></td></tr>
+          <tr><td colspan="5" style="font-size:.75rem;color:var(--text-dim);padding:8px 16px;font-family:var(--font-sans);font-style:italic">&darr; Standard flow</td></tr>
+          <tr><td>1</td><td><span class="phase-badge phase-init">INIT</span></td><td>Worktree decision</td><td>Silver Bullet</td><td></td></tr>
+          <tr><td>2</td><td><span class="phase-badge phase-init">INIT</span></td><td>/gsd:new-project</td><td>GSD</td><td><span class="step-required">Required</span> <span class="step-gsd">GSD</span></td></tr>
+          <tr><td colspan="5" style="font-size:.75rem;color:var(--text-dim);padding:8px 16px;font-family:var(--font-sans);font-style:italic">&#8635; Per-phase loop &mdash; repeat for each phase in ROADMAP.md</td></tr>
+          <tr><td>3</td><td><span class="phase-badge phase-discuss">DISCUSS</span></td><td>/gsd:discuss-phase</td><td>GSD</td><td><span class="step-required">Required</span> <span class="step-gsd">GSD</span></td></tr>
+          <tr><td>3a</td><td><span class="phase-badge phase-discuss">DISCUSS</span></td><td>Contextual enrichment (skill router)</td><td>DevOps Plugins</td><td></td></tr>
+          <tr><td>4</td><td><span class="phase-badge phase-blast">BLAST RADIUS</span></td><td>/blast-radius</td><td>Silver Bullet</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>5</td><td><span class="phase-badge phase-planning">QUALITY</span></td><td>/devops-quality-gates (7 dimensions)</td><td>Silver Bullet</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>6</td><td><span class="phase-badge phase-planning">PLAN</span></td><td>/gsd:plan-phase</td><td>GSD</td><td><span class="step-required">Required</span> <span class="step-gsd">GSD</span></td></tr>
+          <tr><td>6a</td><td><span class="phase-badge phase-planning">PLAN</span></td><td>Contextual enrichment (skill router)</td><td>DevOps Plugins</td><td></td></tr>
+          <tr><td>7</td><td><span class="phase-badge phase-execution">EXECUTE</span></td><td>/gsd:execute-phase</td><td>GSD</td><td><span class="step-required">Required</span> <span class="step-gsd">GSD</span></td></tr>
+          <tr><td>7a</td><td><span class="phase-badge phase-execution">EXECUTE</span></td><td>Contextual enrichment (skill router)</td><td>DevOps Plugins</td><td></td></tr>
+          <tr><td>8</td><td><span class="phase-badge phase-verify">VERIFY</span></td><td>/gsd:verify-work</td><td>GSD</td><td><span class="step-required">Required</span> <span class="step-gsd">GSD</span></td></tr>
+          <tr><td>8a</td><td><span class="phase-badge phase-verify">VERIFY</span></td><td>Contextual enrichment (skill router)</td><td>DevOps Plugins</td><td></td></tr>
+          <tr><td>9</td><td><span class="phase-badge phase-review">REVIEW</span></td><td>/code-review + code-reviewer agent</td><td>Superpowers</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>10</td><td><span class="phase-badge phase-review">REVIEW</span></td><td>/requesting-code-review</td><td>Superpowers</td><td></td></tr>
+          <tr><td>11</td><td><span class="phase-badge phase-review">REVIEW</span></td><td>/receiving-code-review</td><td>Superpowers</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>12</td><td><span class="phase-badge phase-planning">PLAN</span></td><td>/gsd:plan-phase (revision)</td><td>GSD</td><td></td></tr>
+          <tr><td>13</td><td><span class="phase-badge phase-execution">EXECUTE</span></td><td>/gsd:execute-phase (revision)</td><td>GSD</td><td></td></tr>
+          <tr><td colspan="5" style="font-size:.75rem;color:var(--text-dim);padding:8px 16px;font-family:var(--font-sans);font-style:italic">&darr; Environment promotion &mdash; dev &rarr; staging &rarr; prod</td></tr>
+          <tr><td>14</td><td><span class="phase-badge phase-promotion">PROMOTION</span></td><td>Environment promotion gates</td><td>Silver Bullet</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td colspan="5" style="font-size:.75rem;color:var(--text-dim);padding:8px 16px;font-family:var(--font-sans);font-style:italic">&darr; Finalization &mdash; once all phases complete</td></tr>
+          <tr><td>15</td><td><span class="phase-badge phase-finalization">FINALIZATION</span></td><td>/testing-strategy</td><td>Engineering</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>15a</td><td><span class="phase-badge phase-finalization">FINALIZATION</span></td><td>Contextual enrichment (CI/CD, GitOps)</td><td>DevOps Plugins</td><td></td></tr>
+          <tr><td>16</td><td><span class="phase-badge phase-finalization">FINALIZATION</span></td><td>Tech-debt notes (inline)</td><td>Silver Bullet</td><td></td></tr>
+          <tr><td>17</td><td><span class="phase-badge phase-finalization">FINALIZATION</span></td><td>/documentation</td><td>Engineering</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>18</td><td><span class="phase-badge phase-finalization">FINALIZATION</span></td><td>/finishing-a-development-branch</td><td>Superpowers</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>19</td><td><span class="phase-badge phase-deployment">DEPLOYMENT</span></td><td>CI/CD pipeline</td><td></td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>20</td><td><span class="phase-badge phase-deployment">DEPLOYMENT</span></td><td>/deploy-checklist</td><td>Engineering</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>21</td><td><span class="phase-badge phase-ship">SHIP</span></td><td>/gsd:ship</td><td>GSD</td><td><span class="step-required">Required</span> <span class="step-gsd">GSD</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -1017,12 +1226,12 @@ footer .footer-links{display:flex;gap:24px}
   <div class="container text-center">
     <div class="section-label">Installation</div>
     <h2 class="section-title">Get Started in 2 Minutes</h2>
-    <p class="section-desc centered">Silver Bullet orchestrates four plugins. Install all four, initialize your project, and the full enforced workflow is active immediately.</p>
+    <p class="section-desc centered">Install the four core plugins, add Silver Bullet, and initialize. For DevOps projects, optionally add leading IaC plugins for contextual enrichment.</p>
 
     <div class="install-block mt-4 fade-in">
       <div class="install-code">
-        <div><span class="comment"># 1. Install the four workflow plugins</span></div>
-        <div><span class="cmd">npx</span> <span class="flag">get-shit-done-cc@latest</span></div>
+        <div><span class="comment"># 1. Install the four core workflow plugins</span></div>
+        <div><span class="cmd">npx</span> <span class="flag">get-shit-done-cc@^1.30.0</span></div>
         <div><span class="cmd">/plugin install</span> <span class="flag">obra/superpowers</span></div>
         <div><span class="cmd">/plugin install</span> <span class="flag">anthropics/knowledge-work-plugins/tree/main/engineering</span></div>
         <div><span class="cmd">/plugin install</span> <span class="flag">anthropics/knowledge-work-plugins/tree/main/design</span></div>
@@ -1030,8 +1239,16 @@ footer .footer-links{display:flex;gap:24px}
         <div><span class="comment"># 2. Install Silver Bullet</span></div>
         <div><span class="cmd">/plugin install</span> <span class="flag">alo-exp/silver-bullet</span></div>
         <div>&nbsp;</div>
-        <div><span class="comment"># 3. Initialize your project</span></div>
+        <div><span class="comment"># 3. (Optional) DevOps plugins — for devops-cycle workflow</span></div>
+        <div><span class="cmd">/plugin marketplace add</span> <span class="flag">hashicorp/agent-skills</span></div>
+        <div><span class="cmd">/plugin marketplace add</span> <span class="flag">awslabs/agent-plugins</span></div>
+        <div><span class="cmd">/plugin marketplace add</span> <span class="flag">pulumi/agent-skills</span></div>
+        <div><span class="cmd">/plugin marketplace add</span> <span class="flag">ahmedasmar/devops-claude-skills</span></div>
+        <div><span class="cmd">/plugin marketplace add</span> <span class="flag">wshobson/agents</span></div>
+        <div>&nbsp;</div>
+        <div><span class="comment"># 4. Initialize your project</span></div>
         <div><span class="cmd">/using-silver-bullet</span></div>
+        <div><span class="comment"># Asks: application or DevOps/infrastructure project?</span></div>
       </div>
     </div>
 
@@ -1039,7 +1256,7 @@ footer .footer-links{display:flex;gap:24px}
       <div class="callout fade-in">
         <div class="callout-icon">&#9889;</div>
         <p><strong>Enforcement starts immediately.</strong><br>
-        After running <code>/using-silver-bullet</code>, hooks are active and the workflow is live. Your first task runs through GSD&rsquo;s project initialization, Silver Bullet&rsquo;s quality gates, and all seven enforcement layers &mdash; automatically.</p>
+        After running <code>/using-silver-bullet</code>, hooks are active and the workflow is live. For app projects, the 19-step full-dev-cycle activates. For DevOps projects, the 23-step devops-cycle activates with blast radius assessment, IaC-adapted quality gates, and automatic detection of installed DevOps plugins.</p>
       </div>
     </div>
   </div>
@@ -1049,8 +1266,8 @@ footer .footer-links{display:flex;gap:24px}
 <section class="cta-section" style="padding:80px 0">
   <div class="container text-center">
     <div class="section-label">Get Started</div>
-    <h2 class="section-title fade-in">The AI-native software engineering<br>process orchestrator.</h2>
-    <p class="section-desc centered fade-in">Stop hoping your AI agent follows the process. Silver Bullet orchestrates the best agentic workflows, enforces every step, and ships software the way it was meant to be built.</p>
+    <h2 class="section-title fade-in">The AI-native software engineering<br>&amp; DevOps process orchestrator.</h2>
+    <p class="section-desc centered fade-in">Stop hoping your AI agent follows the process. Silver Bullet orchestrates the best agentic workflows for both app development and infrastructure, enforces every step, and ships the way it was meant to be built.</p>
     <a href="#install" class="btn btn-primary fade-in" style="font-size:1rem;padding:16px 36px">Install Silver Bullet &darr;</a>
   </div>
 </section>
@@ -1101,6 +1318,19 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ── Workflow tab switcher ──
+function switchWorkflow(mode) {
+  document.querySelectorAll('.workflow-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.workflow-panel').forEach(p => p.classList.remove('active'));
+  if (mode === 'devops') {
+    document.querySelectorAll('.workflow-tab')[1].classList.add('active');
+    document.getElementById('workflow-devops').classList.add('active');
+  } else {
+    document.querySelectorAll('.workflow-tab')[0].classList.add('active');
+    document.getElementById('workflow-dev').classList.add('active');
+  }
+}
 </script>
 
 </body>
