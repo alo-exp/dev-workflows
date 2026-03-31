@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Silver Bullet — Claude Code Workflow Enforcement Plugin</title>
-<meta name="description" content="A Claude Code plugin that enforces a 31-step development workflow through 6 layers of enforcement. Stops AI agents from skipping planning, quality gates, and code review.">
-<meta property="og:title" content="Silver Bullet — Claude Code Workflow Enforcement">
-<meta property="og:description" content="Stop hoping Claude follows the process. Enforce it. 31 steps, 8 quality gates, 6 enforcement layers.">
+<title>Silver Bullet — The Best Agentic Workflows, Enforced</title>
+<meta name="description" content="Silver Bullet orchestrates the best open-source agentic workflows — GSD, Superpowers, Engineering, and Design — into a single enforced development process for Claude Code.">
+<meta property="og:title" content="Silver Bullet — The Best Agentic Workflows, Enforced">
+<meta property="og:description" content="Not just enforcement. The best open-source agentic workflows, combined and enforced. GSD + Superpowers + Engineering + Design.">
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://alo-exp.github.io/silver-bullet">
+<meta property="og:url" content="https://sb.alolabs.dev">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Silver Bullet — Claude Code Plugin">
-<meta name="twitter:description" content="31 steps. 8 quality gates. 6 enforcement layers. Brooks was right. Until now.">
+<meta name="twitter:description" content="The best agentic workflows, combined and enforced. Brooks was right. Until now.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
@@ -300,6 +300,56 @@ section:nth-child(even){background:var(--section-alt)}
 .feature-card h3{font-size:1.1rem;font-weight:700;margin-bottom:8px}
 .feature-card p{font-size:.9rem;color:var(--text-secondary);line-height:1.6}
 
+/* ───── ECOSYSTEM CARDS ───── */
+.ecosystem-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+@media(max-width:900px){.ecosystem-grid{grid-template-columns:1fr}}
+@media(min-width:901px) and (max-width:1100px){.ecosystem-grid{grid-template-columns:repeat(2,1fr)}}
+.ecosystem-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:28px;
+  transition:all .3s;position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+}
+.ecosystem-card:hover{
+  border-color:var(--border-hover);
+  box-shadow:var(--shadow-glow);transform:translateY(-4px);
+}
+.ecosystem-card.primary-plugin{
+  border-color:rgba(99,102,241,.3);
+  background:linear-gradient(135deg,var(--bg-card),rgba(99,102,241,.03));
+}
+.ecosystem-card .plugin-logo{
+  font-size:1.8rem;margin-bottom:12px;
+}
+.ecosystem-card .plugin-name{
+  font-size:1rem;font-weight:800;margin-bottom:4px;letter-spacing:-.02em;
+}
+.ecosystem-card .plugin-role{
+  font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;
+  color:var(--accent-light);margin-bottom:14px;
+}
+.ecosystem-card .plugin-desc{
+  font-size:.85rem;color:var(--text-secondary);line-height:1.6;margin-bottom:16px;flex:1;
+}
+.ecosystem-card .plugin-features{
+  list-style:none;padding:0;margin:0 0 16px;
+  display:flex;flex-direction:column;gap:6px;
+}
+.ecosystem-card .plugin-features li{
+  font-size:.8rem;color:var(--text-secondary);
+  display:flex;align-items:flex-start;gap:8px;line-height:1.4;
+}
+.ecosystem-card .plugin-features li::before{
+  content:'→';color:var(--accent-light);font-weight:700;flex-shrink:0;margin-top:1px;
+}
+.ecosystem-card .plugin-tags{display:flex;gap:6px;flex-wrap:wrap}
+.primary-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  background:rgba(99,102,241,.12);border:1px solid rgba(99,102,241,.25);
+  border-radius:999px;padding:3px 10px;font-size:.7rem;font-weight:700;
+  color:var(--accent-light);letter-spacing:.04em;margin-bottom:12px;
+}
+
 /* ───── ENFORCEMENT / LAYER CARDS ───── */
 .layer-card{
   background:var(--bg-card);border:1px solid var(--border);
@@ -399,15 +449,25 @@ section:nth-child(even){background:var(--section-alt)}
   font-size:.7rem;font-weight:700;letter-spacing:.05em;
   font-family:var(--font-sans);
 }
+.phase-init{background:rgba(100,116,139,.12);color:#64748b}
+.phase-discuss{background:rgba(8,145,178,.12);color:var(--cyan)}
 .phase-planning{background:rgba(99,102,241,.15);color:var(--accent-light)}
 .phase-execution{background:rgba(52,211,153,.12);color:var(--green)}
+.phase-verify{background:rgba(251,191,36,.12);color:var(--amber)}
 .phase-review{background:rgba(251,191,36,.12);color:var(--amber)}
 .phase-finalization{background:rgba(244,114,182,.12);color:var(--accent3)}
 .phase-deployment{background:rgba(34,211,238,.12);color:var(--cyan)}
+.phase-ship{background:rgba(5,150,105,.12);color:var(--green)}
 .step-required{
   display:inline-block;padding:2px 8px;border-radius:4px;
   font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
   background:rgba(239,68,68,.12);color:var(--red);
+  font-family:var(--font-sans);margin-left:8px;
+}
+.step-gsd{
+  display:inline-block;padding:2px 8px;border-radius:4px;
+  font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+  background:rgba(99,102,241,.12);color:var(--accent-light);
   font-family:var(--font-sans);margin-left:8px;
 }
 
@@ -421,20 +481,6 @@ section:nth-child(even){background:var(--section-alt)}
 .callout .callout-icon{font-size:2rem;margin-bottom:12px}
 .callout p{font-size:1.05rem;color:var(--text-secondary);line-height:1.7}
 .callout strong{color:var(--text-primary)}
-
-/* ───── STATS BAR ───── */
-.stats-bar{
-  display:flex;justify-content:center;gap:48px;flex-wrap:wrap;
-  padding:40px 0;
-}
-.stat{text-align:center}
-.stat .stat-num{
-  font-size:2.5rem;font-weight:900;
-  background:linear-gradient(135deg,var(--accent-light),var(--accent2));
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
-  letter-spacing:-.03em;
-}
-.stat .stat-label{font-size:.8rem;color:var(--text-dim);margin-top:4px;font-weight:500}
 
 /* ───── CTA SECTION ───── */
 .cta-section{
@@ -461,7 +507,6 @@ footer .footer-links{display:flex;gap:24px}
 
 /* ───── RESPONSIVE ───── */
 @media(max-width:600px){
-  .stats-bar{gap:24px}
   .hero .brooks-block{max-width:100%;gap:14px}
   .hero .brooks-photo{width:56px;height:56px}
   .hero .brooks-quote,.hero .brooks-attr{max-width:100%;padding-left:12px}
@@ -480,6 +525,7 @@ footer .footer-links{display:flex;gap:24px}
     <ul class="nav-links">
       <li><a href="#problem">Problem</a></li>
       <li><a href="#solution">How It Works</a></li>
+      <li><a href="#ecosystem">Ecosystem</a></li>
       <li><a href="#quality-gates">Quality Gates</a></li>
       <li><a href="#enforcement">Enforcement</a></li>
       <li><a href="#workflow">Workflow</a></li>
@@ -520,6 +566,19 @@ footer .footer-links{display:flex;gap:24px}
 
     <p class="tagline mt-3">Brooks was right. Until now.</p>
 
+    <p class="subtitle">The best open-source agentic workflows &mdash; combined and enforced.<br>Not guidelines. Hard constraints.</p>
+
+    <div class="cta-group">
+      <a href="#install" class="btn btn-primary">Get Started</a>
+      <a href="https://github.com/alo-exp/silver-bullet" class="btn btn-outline" target="_blank">GitHub &rarr;</a>
+    </div>
+
+    <div class="hero-pills">
+      <span class="hero-pill">4 Best-in-Class Plugins</span>
+      <span class="hero-pill">19-Step Workflow</span>
+      <span class="hero-pill">8 Quality Gates</span>
+      <span class="hero-pill">7 Enforcement Layers</span>
+    </div>
   </div>
 </section>
 
@@ -528,10 +587,10 @@ footer .footer-links{display:flex;gap:24px}
   <div class="container">
     <div class="text-center">
       <div class="section-label">The Problem</div>
-      <h2 class="section-title">AI Agents Skip Steps</h2>
-      <p class="section-desc centered">Even when your CLAUDE.md explicitly says &ldquo;always brainstorm first,&rdquo; Claude rationalizes its way past it.</p>
+      <h2 class="section-title">AI Agents Skip Steps &mdash; and Lose Context</h2>
+      <p class="section-desc centered">Even when your CLAUDE.md explicitly says &ldquo;always plan first,&rdquo; Claude rationalizes its way past it. And as context fills, quality silently degrades.</p>
     </div>
-    <div class="grid grid-3 mt-6">
+    <div class="grid grid-4 mt-6">
       <div class="feature-card fade-in">
         <div class="feature-icon" style="background:rgba(99,102,241,.12);color:var(--accent-light);font-size:1.6rem">&#9889;</div>
         <h3>Skipped Planning</h3>
@@ -545,14 +604,19 @@ footer .footer-links{display:flex;gap:24px}
       <div class="feature-card fade-in">
         <div class="feature-icon" style="background:rgba(52,211,153,.12);color:var(--green);font-size:1.6rem">&#127937;</div>
         <h3>Premature Completion</h3>
-        <p>Work is declared &ldquo;done&rdquo; without code review, testing strategy, or verification. Commits and pushes happen before the workflow is complete.</p>
+        <p>Work is declared &ldquo;done&rdquo; without code review, testing strategy, or verification. Commits happen before the workflow is complete.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon" style="background:rgba(251,191,36,.12);color:var(--amber);font-size:1.6rem">&#128165;</div>
+        <h3>Context Rot</h3>
+        <p>As the context window fills, output quality silently degrades. The best workflows in the world mean nothing if the agent is operating on a rotting context.</p>
       </div>
     </div>
 
     <div class="mt-6">
       <div class="callout fade-in">
         <div class="callout-icon">&#128161;</div>
-        <p><strong>The root cause:</strong> CLAUDE.md instructions are advisory. Claude treats them as suggestions, not constraints. When under time pressure or facing an &ldquo;obvious&rdquo; solution, it rationalizes skipping steps. Silver Bullet replaces hope with enforcement.</p>
+        <p><strong>The root cause:</strong> Great workflows exist. Great enforcement tools exist. Great execution engines exist. But they&rsquo;ve never been combined into a single, coherent, enforced system &mdash; until Silver Bullet.</p>
       </div>
     </div>
   </div>
@@ -562,34 +626,35 @@ footer .footer-links{display:flex;gap:24px}
 <section id="solution">
   <div class="container text-center">
     <div class="section-label">The Solution</div>
-    <h2 class="section-title">Enforcement, Not Suggestion</h2>
-    <p class="section-desc centered">Silver Bullet is a Claude Code plugin that wraps every session in a <strong>31-step enforced workflow</strong>. It doesn't ask Claude to follow a process — it makes skipping one impossible.</p>
+    <h2 class="section-title">The Best Workflows. Enforced.</h2>
+    <p class="section-desc centered">Silver Bullet doesn&rsquo;t build its own workflow from scratch. It curates and orchestrates the four best open-source agentic systems &mdash; and wraps them in a seven-layer enforcement engine that makes skipping steps impossible.</p>
 
     <div class="hero-pills mb-4 fade-in">
-      <span class="hero-pill">31 Steps</span>
+      <span class="hero-pill">4 Best-in-Class Plugins</span>
+      <span class="hero-pill">19-Step Workflow</span>
       <span class="hero-pill">8 Quality Gates</span>
-      <span class="hero-pill">6 Enforcement Layers</span>
+      <span class="hero-pill">7 Enforcement Layers</span>
     </div>
     <div class="feature-grid mt-4 fade-in">
       <div class="feature-card">
-        <div class="feature-icon">&#9881;</div>
-        <h3>Hook-Based Enforcement</h3>
-        <p>PostToolUse hooks intercept every file edit, bash command, and skill invocation. Non-compliance triggers a hard stop before any damage is done.</p>
+        <div class="feature-icon">&#127381;</div>
+        <h3>Best Open-Source Execution</h3>
+        <p>GSD brings wave-based parallel execution, fresh 200K context per task, atomic per-task commits, and requirements traceability &mdash; the most sophisticated execution engine available.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">&#128203;</div>
-        <h3>31-Step Workflow</h3>
-        <p>Five phases — Planning, Execution, Review, Finalization, Deployment — with required checkpoints. Claude cannot proceed to the next phase until the current one is complete.</p>
+        <h3>Best Community Skills</h3>
+        <p>Superpowers, Engineering, and Design plugins contribute peer code review, deploy checklists, testing strategy, design system audits, and UX copy review &mdash; each covering its specialty.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">&#128736;</div>
         <h3>8 Quality Gates</h3>
-        <p>Every design is verified against the eight software quality dimensions — modularity, reusability, scalability, security, reliability, usability, testability, and extensibility — before a line of code is written.</p>
+        <p>Every plan is verified against the eight software quality dimensions &mdash; modularity, reusability, scalability, security, reliability, usability, testability, extensibility &mdash; in a single enforced checkpoint.</p>
       </div>
       <div class="feature-card">
         <div class="feature-icon">&#128274;</div>
-        <h3>6 Enforcement Layers</h3>
-        <p>From hard-stop gates to anti-rationalization prompts, six independent layers ensure compliance. Even if one layer is bypassed, five more remain.</p>
+        <h3>7 Enforcement Layers</h3>
+        <p>Silver Bullet&rsquo;s PostToolUse hooks plus GSD&rsquo;s workflow guard and context monitor form seven independent enforcement layers. No single point of bypass.</p>
       </div>
     </div>
 
@@ -600,13 +665,103 @@ footer .footer-links{display:flex;gap:24px}
   </div>
 </section>
 
+<!-- ────── ECOSYSTEM ────── -->
+<section id="ecosystem">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-label">The Ecosystem</div>
+      <h2 class="section-title">Built on the Best</h2>
+      <p class="section-desc centered">Silver Bullet doesn&rsquo;t reinvent what already exists. It curates the four best open-source plugins in the Claude Code ecosystem and enforces them together as a unified workflow.</p>
+    </div>
+
+    <div class="ecosystem-grid mt-6">
+
+      <div class="ecosystem-card primary-plugin fade-in">
+        <div class="plugin-logo">&#127381;</div>
+        <div class="primary-badge">&#11088; Primary Workflow</div>
+        <div class="plugin-name">GSD</div>
+        <div class="plugin-role">get-shit-done &mdash; Execution Engine</div>
+        <div class="plugin-desc">The most sophisticated agentic execution system in the community. Solves context rot at the architectural level by giving every task a fresh 200K-token context window.</div>
+        <ul class="plugin-features">
+          <li>Wave-based parallel execution with dependency graphs</li>
+          <li>Fresh 200K context per agent &mdash; eliminates context rot</li>
+          <li>Atomic git commit per task with conventional format</li>
+          <li>Requirements traceability with unique IDs</li>
+          <li>Pre-execution plan verification across 8 dimensions</li>
+          <li>Brownfield codebase analysis before planning</li>
+          <li>Workflow guard and context monitor hooks</li>
+        </ul>
+        <div class="plugin-tags">
+          <span class="tag tag-purple">npx get-shit-done-cc@latest</span>
+        </div>
+      </div>
+
+      <div class="ecosystem-card fade-in">
+        <div class="plugin-logo">&#9889;</div>
+        <div class="plugin-name">Superpowers</div>
+        <div class="plugin-role">obra/superpowers &mdash; Dev Skills</div>
+        <div class="plugin-desc">The community&rsquo;s most-used Claude Code skill set. Covers the human-review workflow that GSD doesn&rsquo;t: peer code review, branch management, and cross-session memory.</div>
+        <ul class="plugin-features">
+          <li>Peer code review with dedicated subagent</li>
+          <li>Requesting and receiving external review</li>
+          <li>Development branch finish and merge prep</li>
+          <li>Episodic memory across sessions and projects</li>
+        </ul>
+        <div class="plugin-tags">
+          <span class="tag tag-indigo">/plugin install obra/superpowers</span>
+        </div>
+      </div>
+
+      <div class="ecosystem-card fade-in">
+        <div class="plugin-logo">&#128296;</div>
+        <div class="plugin-name">Engineering</div>
+        <div class="plugin-role">Anthropic &mdash; Quality Assurance</div>
+        <div class="plugin-desc">Anthropic&rsquo;s engineering best practices plugin. Covers the quality assurance and deployment gates that complete the post-execution workflow.</div>
+        <ul class="plugin-features">
+          <li>Testing strategy: pyramid, coverage goals, tooling</li>
+          <li>Technical documentation (PRD, ADR, CI/CD)</li>
+          <li>Pre-deployment verification checklist</li>
+          <li>Incident response and post-mortem workflow</li>
+        </ul>
+        <div class="plugin-tags">
+          <span class="tag tag-cyan">knowledge-work-plugins/engineering</span>
+        </div>
+      </div>
+
+      <div class="ecosystem-card fade-in">
+        <div class="plugin-logo">&#127912;</div>
+        <div class="plugin-name">Design</div>
+        <div class="plugin-role">Anthropic &mdash; UI/UX Validation</div>
+        <div class="plugin-desc">Anthropic&rsquo;s design plugin for UI phases. Invoked conditionally when a phase involves user-facing work, covering design system integrity and UX copy quality.</div>
+        <ul class="plugin-features">
+          <li>Design system audit: tokens, component reuse</li>
+          <li>UX copy review: microcopy, error messages, empty states</li>
+          <li>Accessibility review (WCAG 2.1 AA)</li>
+          <li>Design critique and handoff specs</li>
+        </ul>
+        <div class="plugin-tags">
+          <span class="tag tag-pink">knowledge-work-plugins/design</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="mt-6">
+      <div class="callout fade-in">
+        <div class="callout-icon">&#127760;</div>
+        <p><strong>Silver Bullet is the orchestration layer.</strong> It defines the order these plugins are invoked, enforces that none are skipped, injects quality gate criteria into GSD&rsquo;s planning agents, and adds the seven-layer compliance enforcement that none of these plugins provide on their own.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- ────── HOW IT WORKS ────── -->
 <section id="how-it-works">
   <div class="container">
     <div class="text-center">
       <div class="section-label">Architecture</div>
-      <h2 class="section-title">Six Layers of Enforcement</h2>
-      <p class="section-desc centered">Each layer is independently sufficient. Together, they make skipping the workflow practically impossible.</p>
+      <h2 class="section-title">Seven Layers of Enforcement</h2>
+      <p class="section-desc centered">Silver Bullet&rsquo;s five enforcement layers plus GSD&rsquo;s two runtime hooks. Each layer is independently sufficient. Together, they make bypassing the workflow practically impossible.</p>
     </div>
 
     <div class="grid grid-2 mt-6">
@@ -614,7 +769,7 @@ footer .footer-links{display:flex;gap:24px}
         <div class="layer-num">1</div>
         <div>
           <h3>HARD STOP Gate</h3>
-          <p>A PreToolUse hook intercepts every file edit. If planning skills haven&rsquo;t been completed, the edit is blocked with an explicit error listing exactly what&rsquo;s missing. No exceptions.</p>
+          <p>A PreToolUse hook intercepts every file edit. If the quality gates haven&rsquo;t been completed, the edit is blocked with an explicit error listing exactly what&rsquo;s missing.</p>
         </div>
       </div>
       <div class="layer-card fade-in">
@@ -628,7 +783,7 @@ footer .footer-links{display:flex;gap:24px}
         <div class="layer-num">3</div>
         <div>
           <h3>Phase Gates</h3>
-          <p>Enforces strict phase ordering: PLANNING &rarr; EXECUTION &rarr; REVIEW &rarr; FINALIZATION. You cannot enter the next phase until all required steps in the current phase are complete.</p>
+          <p>Enforces strict phase ordering: DISCUSS &rarr; QUALITY GATES &rarr; PLAN &rarr; EXECUTE &rarr; VERIFY. You cannot enter the next phase until all required steps in the current phase are complete.</p>
         </div>
       </div>
       <div class="layer-card fade-in">
@@ -641,15 +796,22 @@ footer .footer-links{display:flex;gap:24px}
       <div class="layer-card fade-in">
         <div class="layer-num">5</div>
         <div>
-          <h3>Redundant Instructions</h3>
-          <p>The same rules appear in three places: CLAUDE.md, the workflow skill file, and every hook message. Redundancy defeats rationalization &mdash; there&rsquo;s no &ldquo;I wasn&rsquo;t told&rdquo; escape hatch.</p>
+          <h3>GSD Workflow Guard</h3>
+          <p>GSD&rsquo;s own hook detects file edits made outside a <code>/gsd:*</code> command and warns immediately. A second enforcement layer on the execution side, independent of Silver Bullet&rsquo;s hooks.</p>
         </div>
       </div>
       <div class="layer-card fade-in">
         <div class="layer-num">6</div>
         <div>
-          <h3>Anti-Rationalization</h3>
-          <p>Explicit language that names and blocks common excuses: &ldquo;This is simple enough to skip,&rdquo; &ldquo;The user asked me to just do it,&rdquo; &ldquo;I&rsquo;ll do the review mentally.&rdquo; Named = blocked.</p>
+          <h3>GSD Context Monitor</h3>
+          <p>GSD&rsquo;s context monitor warns when token budget drops to &le;35% and escalates at &le;25%. Prevents context rot before it degrades output quality &mdash; a runtime safeguard no other plugin provides.</p>
+        </div>
+      </div>
+      <div class="layer-card fade-in" style="grid-column:1/-1">
+        <div class="layer-num">7</div>
+        <div>
+          <h3>Redundant Instructions + Anti-Rationalization</h3>
+          <p>The same rules appear in three places: CLAUDE.md, the workflow file, and every hook message. Explicit language names and blocks common excuses: &ldquo;This is simple enough to skip,&rdquo; &ldquo;I&rsquo;ll do the review mentally.&rdquo; Named = blocked.</p>
         </div>
       </div>
     </div>
@@ -661,57 +823,57 @@ footer .footer-links{display:flex;gap:24px}
   <div class="container">
     <div class="text-center">
       <div class="section-label">Quality Gates</div>
-      <h2 class="section-title">Eight Quality Gates</h2>
-      <p class="section-desc centered">Every design is verified against world-class best practices before a single line of code is written. The eight &ldquo;-ilities&rdquo; of software quality &mdash; all enforced.</p>
+      <h2 class="section-title">Eight Quality Dimensions. One Checkpoint.</h2>
+      <p class="section-desc centered">The <code>/quality-gates</code> skill applies all eight dimensions in a single enforced pass before any plan is written. Every ❌ is a hard stop &mdash; not a warning.</p>
     </div>
     <div class="grid grid-4 mt-6">
       <div class="feature-card fade-in">
         <div class="feature-icon" style="background:rgba(167,139,250,.12);color:var(--accent2)">&#9650;</div>
         <h3>Modularity</h3>
         <p style="font-size:.85rem">Small, focused modules. File size limits. Change locality max 3&ndash;5 files. Single responsibility enforced.</p>
-        <span class="tag tag-purple mt-2" style="margin-top:12px;display:inline-block">Planning</span>
+        <span class="tag tag-purple mt-2" style="margin-top:12px;display:inline-block">/quality-gates</span>
       </div>
       <div class="feature-card fade-in">
         <div class="feature-icon" style="background:rgba(99,102,241,.12);color:var(--accent-light)">&#9854;</div>
         <h3>Reusability</h3>
         <p style="font-size:.85rem">DRY, composable components. Rule of Three. No duplication across the codebase.</p>
-        <span class="tag tag-indigo mt-2" style="margin-top:12px;display:inline-block">Planning</span>
+        <span class="tag tag-indigo mt-2" style="margin-top:12px;display:inline-block">/quality-gates</span>
       </div>
       <div class="feature-card fade-in">
         <div class="feature-icon" style="background:rgba(34,211,238,.12);color:var(--cyan)">&#128200;</div>
         <h3>Scalability</h3>
         <p style="font-size:.85rem">Stateless by default. Indexed queries. Async processing. Resource limits defined upfront.</p>
-        <span class="tag tag-cyan mt-2" style="margin-top:12px;display:inline-block">Planning</span>
+        <span class="tag tag-cyan mt-2" style="margin-top:12px;display:inline-block">/quality-gates</span>
       </div>
       <div class="feature-card fade-in">
         <div class="feature-icon" style="background:rgba(244,114,182,.12);color:var(--accent3)">&#128737;</div>
         <h3>Security</h3>
         <p style="font-size:.85rem">OWASP Top 10. Input validation. Secrets management. Defense in depth. No trust boundaries crossed.</p>
-        <span class="tag tag-pink mt-2" style="margin-top:12px;display:inline-block">Planning</span>
+        <span class="tag tag-pink mt-2" style="margin-top:12px;display:inline-block">/quality-gates</span>
       </div>
       <div class="feature-card fade-in">
         <div class="feature-icon" style="background:rgba(52,211,153,.12);color:var(--green)">&#128994;</div>
         <h3>Reliability</h3>
         <p style="font-size:.85rem">Fault tolerance. Retries with backoff. Circuit breakers. Graceful degradation under load.</p>
-        <span class="tag tag-green mt-2" style="margin-top:12px;display:inline-block">Planning</span>
+        <span class="tag tag-green mt-2" style="margin-top:12px;display:inline-block">/quality-gates</span>
       </div>
       <div class="feature-card fade-in">
         <div class="feature-icon" style="background:rgba(251,191,36,.12);color:var(--amber)">&#127919;</div>
         <h3>Usability</h3>
         <p style="font-size:.85rem">Intuitive APIs. Actionable error messages. Accessibility. Progressive disclosure of complexity.</p>
-        <span class="tag tag-amber mt-2" style="margin-top:12px;display:inline-block">Planning</span>
+        <span class="tag tag-amber mt-2" style="margin-top:12px;display:inline-block">/quality-gates</span>
       </div>
       <div class="feature-card fade-in">
         <div class="feature-icon" style="background:rgba(99,102,241,.12);color:var(--accent-light)">&#128299;</div>
         <h3>Testability</h3>
         <p style="font-size:.85rem">Dependency injection. Pure functions. Test seams. Deterministic behavior. No hidden state.</p>
-        <span class="tag tag-indigo mt-2" style="margin-top:12px;display:inline-block">Planning</span>
+        <span class="tag tag-indigo mt-2" style="margin-top:12px;display:inline-block">/quality-gates</span>
       </div>
       <div class="feature-card fade-in">
         <div class="feature-icon" style="background:rgba(167,139,250,.12);color:var(--accent2)">&#128268;</div>
         <h3>Extensibility</h3>
         <p style="font-size:.85rem">Open-closed principle. Plugin architecture. Versioned interfaces. Change without breakage.</p>
-        <span class="tag tag-purple mt-2" style="margin-top:12px;display:inline-block">Planning</span>
+        <span class="tag tag-purple mt-2" style="margin-top:12px;display:inline-block">/quality-gates</span>
       </div>
     </div>
   </div>
@@ -740,15 +902,12 @@ footer .footer-links{display:flex;gap:24px}
         </div>
         <div class="enforcement-body">
 <span class="stop">&#128683; HARD STOP</span> <span class="dim">&mdash; Planning incomplete.</span>
-<span class="dim">Missing skills:</span>
-<span class="cross">&#10007;</span> <span class="accent">brainstorming</span>
-<span class="cross">&#10007;</span> <span class="accent">write-spec</span>
-<span class="cross">&#10007;</span> <span class="accent">modularity</span>
-<span class="cross">&#10007;</span> <span class="accent">security</span>
-<span class="cross">&#10007;</span> <span class="accent">writing-plans</span>
+<span class="dim">Missing required skills:</span>
+<span class="cross">&#10007;</span> <span class="accent">quality-gates</span>
 
-<span class="dim">Run the missing planning skills</span>
-<span class="dim">before editing source code.</span>
+<span class="dim">Run /quality-gates before</span>
+<span class="dim">editing any source file.</span>
+<span class="dim">Then run /gsd:plan-phase.</span>
         </div>
       </div>
 
@@ -768,11 +927,11 @@ footer .footer-links{display:flex;gap:24px}
 
 <span class="cross">&#10007;</span> <span class="accent">/code-review</span>
 <span class="cross">&#10007;</span> <span class="accent">/testing-strategy</span>
-<span class="cross">&#10007;</span> <span class="accent">/verification-before
-  -completion</span>
+<span class="cross">&#10007;</span> <span class="accent">/documentation</span>
+<span class="cross">&#10007;</span> <span class="accent">/deploy-checklist</span>
 
-<span class="dim">Complete ALL required workflow</span>
-<span class="dim">steps before finalizing.</span>
+<span class="dim">Complete ALL required steps</span>
+<span class="dim">before finalizing.</span>
         </div>
       </div>
 
@@ -787,15 +946,15 @@ footer .footer-links{display:flex;gap:24px}
           </div>
         </div>
         <div class="enforcement-body">
-<span class="ok">Silver Bullet:</span> <span class="warn">12 steps</span>
+<span class="ok">Silver Bullet:</span> <span class="warn">phase 2/3</span>
 
-<span class="ok">PLANNING</span>   <span class="accent">11/11</span> <span class="ok">&#10003;</span>
-<span class="ok">EXECUTION</span>  <span class="accent">1/1</span>  <span class="ok">&#10003;</span>
-<span class="warn">REVIEW</span>     <span class="accent">0/3</span>  <span class="cross">&#10007;</span>
-<span class="dim">FINALIZATION</span> <span class="dim">0/3</span>
+<span class="ok">DISCUSS</span>    <span class="accent">1/1</span>  <span class="ok">&#10003;</span>
+<span class="ok">QUALITY</span>    <span class="accent">1/1</span>  <span class="ok">&#10003;</span>
+<span class="ok">PLAN</span>       <span class="accent">1/1</span>  <span class="ok">&#10003;</span>
+<span class="ok">EXECUTE</span>    <span class="accent">1/1</span>  <span class="ok">&#10003;</span>
+<span class="warn">VERIFY</span>     <span class="accent">0/3</span>  <span class="cross">&#10007;</span>
 
-<span class="dim">Next required step:</span>
-<span class="accent">/code-review</span>
+<span class="dim">Next: </span><span class="accent">/gsd:verify-work</span>
         </div>
       </div>
 
@@ -808,8 +967,8 @@ footer .footer-links{display:flex;gap:24px}
   <div class="container">
     <div class="text-center">
       <div class="section-label">The Workflow</div>
-      <h2 class="section-title">The 31-Step Workflow</h2>
-      <p class="section-desc centered">Five phases. Every required step enforced by hooks. No step can be skipped without an explicit block.</p>
+      <h2 class="section-title">19 Steps. Every One Enforced.</h2>
+      <p class="section-desc centered">GSD commands drive the main flow. Silver Bullet quality gates and gap-filling skills lock in compliance. The per-phase loop repeats until all roadmap phases are complete.</p>
     </div>
 
     <div class="mt-6" style="overflow-x:auto">
@@ -818,42 +977,35 @@ footer .footer-links{display:flex;gap:24px}
           <tr>
             <th>#</th>
             <th>Phase</th>
-            <th>Skill / Step</th>
+            <th>Step</th>
+            <th>Source</th>
             <th>Required</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td>1</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>using-superpowers</td><td><span class="step-required">Required</span></td></tr>
-          <tr><td>2</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>git-worktrees</td><td></td></tr>
-          <tr><td>3</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>brainstorming</td><td><span class="step-required">Required</span></td></tr>
-          <tr><td>4</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>write-spec</td><td><span class="step-required">Required</span></td></tr>
-          <tr><td>5</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>design-system</td><td></td></tr>
-          <tr><td>6</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>ux-copy</td><td></td></tr>
-          <tr><td>7</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>architecture</td><td><span class="step-required">Required</span></td></tr>
-          <tr><td>8</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>system-design</td><td></td></tr>
-          <tr><td>9</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>modularity</td><td><span class="step-required">Required</span></td></tr>
-          <tr><td>10</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>reusability</td><td><span class="step-required">Required</span></td></tr>
-          <tr><td>11</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>scalability</td><td><span class="step-required">Required</span></td></tr>
-          <tr><td>12</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>security</td><td><span class="step-required">Required</span></td></tr>
-          <tr><td>13</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>reliability</td><td><span class="step-required">Required</span></td></tr>
-          <tr><td>14</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>usability</td><td><span class="step-required">Required</span></td></tr>
-          <tr><td>15</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>testability</td><td><span class="step-required">Required</span></td></tr>
-          <tr><td>16</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>extensibility</td><td><span class="step-required">Required</span></td></tr>
-          <tr><td>17</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>writing-plans</td><td><span class="step-required">Required</span></td></tr>
-          <tr><td>18</td><td><span class="phase-badge phase-execution">EXECUTION</span></td><td>executing-plans (TDD + subagent-driven)</td><td><span class="step-required">Required</span></td></tr>
-          <tr><td>19</td><td><span class="phase-badge phase-review">REVIEW</span></td><td>code-review</td><td><span class="step-required">Required</span></td></tr>
-          <tr><td>20</td><td><span class="phase-badge phase-review">REVIEW</span></td><td>requesting-code-review</td><td><span class="step-required">Required</span></td></tr>
-          <tr><td>21</td><td><span class="phase-badge phase-review">REVIEW</span></td><td>receiving-code-review</td><td><span class="step-required">Required</span></td></tr>
-          <tr><td>22</td><td><span class="phase-badge phase-review">REVIEW</span></td><td>writing-plans (revision)</td><td></td></tr>
-          <tr><td>23</td><td><span class="phase-badge phase-review">REVIEW</span></td><td>executing-plans (revision)</td><td></td></tr>
-          <tr><td>24</td><td><span class="phase-badge phase-review">REVIEW</span></td><td>testing-strategy</td><td><span class="step-required">Required</span></td></tr>
-          <tr><td>25</td><td><span class="phase-badge phase-review">REVIEW</span></td><td>systematic-debugging</td><td></td></tr>
-          <tr><td>26</td><td><span class="phase-badge phase-finalization">FINALIZATION</span></td><td>tech-debt</td><td></td></tr>
-          <tr><td>27</td><td><span class="phase-badge phase-finalization">FINALIZATION</span></td><td>documentation</td><td><span class="step-required">Required</span></td></tr>
-          <tr><td>28</td><td><span class="phase-badge phase-finalization">FINALIZATION</span></td><td>verification-before-completion</td><td><span class="step-required">Required</span></td></tr>
-          <tr><td>29</td><td><span class="phase-badge phase-finalization">FINALIZATION</span></td><td>finishing-a-development-branch</td><td><span class="step-required">Required</span></td></tr>
-          <tr><td>30</td><td><span class="phase-badge phase-deployment">DEPLOYMENT</span></td><td>CICD pipeline</td><td></td></tr>
-          <tr><td>31</td><td><span class="phase-badge phase-deployment">DEPLOYMENT</span></td><td>deploy-checklist</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>1</td><td><span class="phase-badge phase-init">INIT</span></td><td>Worktree decision</td><td>Silver Bullet</td><td></td></tr>
+          <tr><td>2</td><td><span class="phase-badge phase-init">INIT</span></td><td>/gsd:new-project</td><td>GSD</td><td><span class="step-required">Required</span> <span class="step-gsd">GSD</span></td></tr>
+          <tr><td colspan="5" style="font-size:.75rem;color:var(--text-dim);padding:8px 16px;font-family:var(--font-sans);font-style:italic">↻ Per-phase loop — repeat for each phase in ROADMAP.md</td></tr>
+          <tr><td>3</td><td><span class="phase-badge phase-discuss">DISCUSS</span></td><td>/gsd:discuss-phase</td><td>GSD</td><td><span class="step-required">Required</span> <span class="step-gsd">GSD</span></td></tr>
+          <tr><td>3a</td><td><span class="phase-badge phase-discuss">DISCUSS</span></td><td>/system-design (if architectural)</td><td>Engineering</td><td></td></tr>
+          <tr><td>3b</td><td><span class="phase-badge phase-discuss">DISCUSS</span></td><td>/design-system + /ux-copy (if UI)</td><td>Design</td><td></td></tr>
+          <tr><td>4</td><td><span class="phase-badge phase-planning">QUALITY</span></td><td>/quality-gates</td><td>Silver Bullet</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>5</td><td><span class="phase-badge phase-planning">PLAN</span></td><td>/gsd:plan-phase</td><td>GSD</td><td><span class="step-required">Required</span> <span class="step-gsd">GSD</span></td></tr>
+          <tr><td>6</td><td><span class="phase-badge phase-execution">EXECUTE</span></td><td>/gsd:execute-phase</td><td>GSD</td><td><span class="step-required">Required</span> <span class="step-gsd">GSD</span></td></tr>
+          <tr><td>7</td><td><span class="phase-badge phase-verify">VERIFY</span></td><td>/gsd:verify-work</td><td>GSD</td><td><span class="step-required">Required</span> <span class="step-gsd">GSD</span></td></tr>
+          <tr><td>8</td><td><span class="phase-badge phase-review">REVIEW</span></td><td>/code-review + code-reviewer agent</td><td>Superpowers</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>9</td><td><span class="phase-badge phase-review">REVIEW</span></td><td>/requesting-code-review</td><td>Superpowers</td><td></td></tr>
+          <tr><td>10</td><td><span class="phase-badge phase-review">REVIEW</span></td><td>/receiving-code-review</td><td>Superpowers</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>11</td><td><span class="phase-badge phase-planning">PLAN</span></td><td>/gsd:plan-phase (revision)</td><td>GSD</td><td></td></tr>
+          <tr><td>12</td><td><span class="phase-badge phase-execution">EXECUTE</span></td><td>/gsd:execute-phase (revision)</td><td>GSD</td><td></td></tr>
+          <tr><td colspan="5" style="font-size:.75rem;color:var(--text-dim);padding:8px 16px;font-family:var(--font-sans);font-style:italic">↓ Finalization — once all phases complete</td></tr>
+          <tr><td>13</td><td><span class="phase-badge phase-finalization">FINALIZATION</span></td><td>/testing-strategy</td><td>Engineering</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>14</td><td><span class="phase-badge phase-finalization">FINALIZATION</span></td><td>Tech-debt notes (inline)</td><td>Silver Bullet</td><td></td></tr>
+          <tr><td>15</td><td><span class="phase-badge phase-finalization">FINALIZATION</span></td><td>/documentation</td><td>Engineering</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>16</td><td><span class="phase-badge phase-finalization">FINALIZATION</span></td><td>/finishing-a-development-branch</td><td>Superpowers</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>17</td><td><span class="phase-badge phase-deployment">DEPLOYMENT</span></td><td>CI/CD pipeline</td><td></td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>18</td><td><span class="phase-badge phase-deployment">DEPLOYMENT</span></td><td>/deploy-checklist</td><td>Engineering</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>19</td><td><span class="phase-badge phase-ship">SHIP</span></td><td>/gsd:ship</td><td>GSD</td><td><span class="step-required">Required</span> <span class="step-gsd">GSD</span></td></tr>
         </tbody>
       </table>
     </div>
@@ -865,13 +1017,15 @@ footer .footer-links{display:flex;gap:24px}
   <div class="container text-center">
     <div class="section-label">Installation</div>
     <h2 class="section-title">Get Started in 2 Minutes</h2>
-    <p class="section-desc centered">Silver Bullet builds on the Superpowers and Engineering plugins. Install all three, initialize your project, and enforcement begins immediately.</p>
+    <p class="section-desc centered">Silver Bullet orchestrates four plugins. Install all four, initialize your project, and the full enforced workflow is active immediately.</p>
 
     <div class="install-block mt-4 fade-in">
       <div class="install-code">
-        <div><span class="comment"># 1. Install prerequisites</span></div>
+        <div><span class="comment"># 1. Install the four workflow plugins</span></div>
+        <div><span class="cmd">npx</span> <span class="flag">get-shit-done-cc@latest</span></div>
         <div><span class="cmd">/plugin install</span> <span class="flag">obra/superpowers</span></div>
         <div><span class="cmd">/plugin install</span> <span class="flag">anthropics/knowledge-work-plugins/tree/main/engineering</span></div>
+        <div><span class="cmd">/plugin install</span> <span class="flag">anthropics/knowledge-work-plugins/tree/main/design</span></div>
         <div>&nbsp;</div>
         <div><span class="comment"># 2. Install Silver Bullet</span></div>
         <div><span class="cmd">/plugin install</span> <span class="flag">alo-exp/silver-bullet</span></div>
@@ -885,7 +1039,7 @@ footer .footer-links{display:flex;gap:24px}
       <div class="callout fade-in">
         <div class="callout-icon">&#9889;</div>
         <p><strong>Enforcement starts immediately.</strong><br>
-        After running <code>/using-silver-bullet</code>, hooks are installed and the workflow is active. Your first attempt to edit source code without completing planning will be blocked with a clear, actionable error.</p>
+        After running <code>/using-silver-bullet</code>, hooks are active and the workflow is live. Your first task runs through GSD&rsquo;s project initialization, Silver Bullet&rsquo;s quality gates, and all seven enforcement layers &mdash; automatically.</p>
       </div>
     </div>
   </div>
@@ -895,8 +1049,8 @@ footer .footer-links{display:flex;gap:24px}
 <section class="cta-section" style="padding:80px 0">
   <div class="container text-center">
     <div class="section-label">Get Started</div>
-    <h2 class="section-title fade-in">Stop hoping Claude follows the process.<br>Enforce it.</h2>
-    <p class="section-desc centered fade-in">Silver Bullet turns your development workflow from aspirational guidelines into hard constraints. Every step, every time.</p>
+    <h2 class="section-title fade-in">The best agentic workflows.<br>Combined. Enforced.</h2>
+    <p class="section-desc centered fade-in">Stop choosing between execution quality, process compliance, and developer experience. Silver Bullet gives you all three &mdash; because it combines the tools that are already best at each.</p>
     <a href="#install" class="btn btn-primary fade-in" style="font-size:1rem;padding:16px 36px">Install Silver Bullet &darr;</a>
   </div>
 </section>
