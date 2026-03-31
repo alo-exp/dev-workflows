@@ -90,6 +90,29 @@ main() {
     exit 0
   fi
 
+  # --- Auto-detect trivial changes (per-edit, no persistent bypass) ---
+  if [[ -n "$file_path" ]]; then
+    # Non-logic file extensions inside src/ are trivial
+    case "$file_path" in
+      *.json|*.yml|*.yaml|*.md|*.txt|*.css|*.svg|*.env|*.env.*|*.toml|*.ini|*.cfg|*.conf|*.lock)
+        printf '{"hookSpecificOutput":{"message":"ℹ️ Non-logic file — enforcement skipped for this edit."}}'
+        exit 0
+        ;;
+    esac
+
+    # Small Edit tool changes (combined old+new < 300 chars) are trivial
+    tool_name=$(printf '%s' "$input" | jq -r '.tool_name // ""')
+    if [[ "$tool_name" == "Edit" ]]; then
+      old_str_len=$(printf '%s' "$input" | jq -r '.tool_input.old_string // "" | length')
+      new_str_len=$(printf '%s' "$input" | jq -r '.tool_input.new_string // "" | length')
+      combined_len=$((old_str_len + new_str_len))
+      if [[ $combined_len -gt 0 && $combined_len -lt 300 ]]; then
+        printf '{"hookSpecificOutput":{"message":"ℹ️ Small edit (%d chars) — enforcement skipped for this edit."}}'  "$combined_len"
+        exit 0
+      fi
+    fi
+  fi
+
   # --- Read state file and determine stage ---
   completed_skills=""
   if [[ -f "$state_file" ]]; then

@@ -33,9 +33,9 @@ Six layers enforce compliance:
 5. **Redundant instructions** — Workflow file + CLAUDE.md both enforce rules
 6. **Anti-rationalization** — Explicit rules against skipping/combining steps
 
-**Trivial changes** (typos, copy fixes, config tweaks): Before starting,
-automatically run `touch /tmp/.dev-workflows-trivial` to bypass enforcement.
-Use your judgment — if the change touches logic, it is NOT trivial.
+**Trivial changes** (typos, copy fixes, config tweaks): Automatically
+detected by hooks. Small edits (<300 chars) and non-logic files (.json,
+.yml, .md, .css, etc.) skip enforcement per-edit. No action needed.
 
 **Subagent commits**: Every git commit MUST use HEREDOC format and end with:
 Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>

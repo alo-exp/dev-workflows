@@ -45,6 +45,9 @@ while true; do
   search_dir=$(dirname "$search_dir")
 done
 
+# No config → project not set up with Dev Workflows — silent exit
+[[ -z "$config_file" ]] && exit 0
+
 # --- Read config values ---
 state_file="/tmp/.dev-workflows-state"
 trivial_file="/tmp/.dev-workflows-trivial"
