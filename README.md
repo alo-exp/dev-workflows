@@ -66,7 +66,7 @@ Both workflows use GSD as the primary execution engine and Silver Bullet skills 
 ### 1. Install prerequisites
 
 ```
-npx get-shit-done-cc@latest
+npx get-shit-done-cc@^1.30.0
 /plugin install obra/superpowers
 /plugin install anthropics/knowledge-work-plugins/tree/main/engineering
 /plugin install anthropics/knowledge-work-plugins/tree/main/design
@@ -289,7 +289,7 @@ It detects the existing config and asks if you want to refresh templates while p
 
 **"Design plugin not found"** — Run `/plugin install anthropics/knowledge-work-plugins/tree/main/design`.
 
-**"GSD plugin not found"** — Run `npx get-shit-done-cc@latest`.
+**"GSD plugin not found"** — Run `npx get-shit-done-cc@^1.30.0`.
 
 **Hooks not firing** — Make sure you ran `/using-silver-bullet` in the project. Check that `.silver-bullet.json` exists in your project root.
 

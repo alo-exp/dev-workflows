@@ -9,6 +9,14 @@ This skill initializes Silver Bullet enforcement for a project. Follow each phas
 
 **Plugin root**: Determine `PLUGIN_ROOT` from this skill file's own path. This file lives at `${PLUGIN_ROOT}/skills/using-silver-bullet/SKILL.md`, so the plugin root is two directories up from this file's location.
 
+## Allowed Bash Commands
+
+This skill uses the Bash tool ONLY for the following commands:
+`test`, `command`, `basename`, `git`, `ls`, `mkdir`, `touch`
+
+Do NOT run any other Bash commands during this skill's execution.
+If a step requires a command not on this list, STOP and notify the user.
+
 ---
 
 ## Phase −1: Session Init
@@ -129,7 +137,7 @@ test -f "$HOME/.claude/commands/gsd/new-project.md" && echo "EXISTS" || echo "NO
 ```
 
 If `NOT_FOUND`, output exactly:
-> ❌ GSD plugin not found. Install: `npx get-shit-done-cc@latest`
+> ❌ GSD plugin not found. Install: `npx get-shit-done-cc@^1.30.0`
 
 STOP. Do not proceed.
 
@@ -215,8 +223,24 @@ Detected:
 Look right? (yes / edit)
 ```
 
-- If user says "yes" or equivalent → proceed to step 2.6.
-- If user says "edit" → ask which fields to change, accept new values, then proceed to step 2.6.
+- If user says "yes" or equivalent → proceed to step 2.5a.
+- If user says "edit" → ask which fields to change, accept new values, then proceed to step 2.5a.
+
+### 2.5a Sanitize detected values
+
+Before proceeding, sanitize all detected values to prevent template injection:
+
+- **Project name**: Strip newlines, control characters, and any character not in
+  `[a-zA-Z0-9._-]`. Truncate to 64 characters. If the result is empty, fall back
+  to the directory name.
+- **Tech stack**: Strip newlines and control characters. Truncate to 128 characters.
+- **Repo URL**: Must match `^(https?://|git@)[^\n\r]{1,256}$`. If it doesn't match,
+  set to "NONE".
+- **Source pattern**: Must match `^/[a-zA-Z0-9._-]+/$`. If invalid, default to `/src/`.
+
+If any value was modified by sanitization, inform the user:
+> Some detected values contained unexpected characters and were sanitized.
+> Please verify the values above are correct.
 
 ### 2.6 Detect project type
 
