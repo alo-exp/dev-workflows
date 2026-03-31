@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Silver Bullet — Claude Code Workflow Enforcement Plugin</title>
+<meta name="description" content="A Claude Code plugin that enforces a 31-step development workflow through 6 layers of enforcement. Stops AI agents from skipping planning, quality gates, and code review.">
+<meta property="og:title" content="Silver Bullet — Claude Code Workflow Enforcement">
+<meta property="og:description" content="Stop hoping Claude follows the process. Enforce it. 31 steps, 8 quality gates, 6 enforcement layers.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://alo-exp.github.io/silver-bullet">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Silver Bullet — Claude Code Plugin">
+<meta name="twitter:description" content="31 steps. 8 quality gates. 6 enforcement layers. Brooks was right. Until now.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* ───── RESET ───── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+
+/* ───── DESIGN TOKENS — LIGHT (default) ───── */
+:root{
+  --bg-page:#f8f9fc;
+  --bg-card:#ffffff;
+  --bg-card-hover:#f1f5f9;
+  --bg-code:#f1f5f9;
+  --bg-hero:linear-gradient(135deg,#eef2ff 0%,#f5f3ff 50%,#fdf2f8 100%);
+  --accent:#4f46e5;
+  --accent-light:#6366f1;
+  --accent-glow:rgba(99,102,241,.1);
+  --accent2:#7c3aed;
+  --accent3:#db2777;
+  --green:#059669;
+  --amber:#d97706;
+  --red:#dc2626;
+  --cyan:#0891b2;
+  --text-primary:#0f172a;
+  --text-secondary:#475569;
+  --text-dim:#94a3b8;
+  --border:#e2e8f0;
+  --border-hover:#cbd5e1;
+  --radius:12px;
+  --radius-lg:20px;
+  --radius-sm:8px;
+  --font-sans:'Inter',system-ui,-apple-system,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --shadow-lg:0 20px 60px rgba(0,0,0,.08);
+  --shadow-glow:0 0 40px rgba(99,102,241,.06);
+  --nav-bg:rgba(248,249,252,.9);
+  --nav-mobile-bg:rgba(248,249,252,.98);
+  --section-alt:rgba(241,245,249,.6);
+  --table-row-hover:rgba(99,102,241,.03);
+  --skill-phase-border:rgba(226,232,240,.8);
+}
+
+/* ───── DARK THEME ───── */
+[data-theme="dark"]{
+  --bg-page:#0a0a0f;
+  --bg-card:#12121a;
+  --bg-card-hover:#181825;
+  --bg-code:#1a1a2e;
+  --bg-hero:linear-gradient(135deg,#0a0a1a 0%,#0f0f2e 40%,#1a0a2e 100%);
+  --accent:#6366f1;
+  --accent-light:#818cf8;
+  --accent-glow:rgba(99,102,241,.15);
+  --accent2:#a78bfa;
+  --accent3:#f472b6;
+  --green:#34d399;
+  --amber:#fbbf24;
+  --red:#f87171;
+  --cyan:#22d3ee;
+  --text-primary:#e2e8f0;
+  --text-secondary:#94a3b8;
+  --text-dim:#64748b;
+  --border:#1e293b;
+  --border-hover:#334155;
+  --shadow-lg:0 20px 60px rgba(0,0,0,.4);
+  --shadow-glow:0 0 40px rgba(99,102,241,.08);
+  --nav-bg:rgba(10,10,15,.85);
+  --nav-mobile-bg:rgba(10,10,15,.97);
+  --section-alt:rgba(18,18,26,.4);
+  --table-row-hover:rgba(99,102,241,.03);
+  --skill-phase-border:rgba(30,41,59,.5);
+}
+
+/* ───── THEME TRANSITION ───── */
+body,nav,section,.feature-card,.skill-card,.platform-pill,.install-block,.code-block,.arch-diagram,.callout,.comparison-table td,.comparison-table th,.enforcement-block{
+  transition:background .25s,background-color .25s,border-color .25s,color .25s,box-shadow .25s;
+}
+
+body{
+  font-family:var(--font-sans);
+  background:var(--bg-page);
+  color:var(--text-primary);
+  line-height:1.7;
+  overflow-x:hidden;
+}
+
+/* ───── UTILITIES ───── */
+.container{max-width:1200px;margin:0 auto;padding:0 24px}
+.grid{display:grid;gap:24px}
+.grid-2{grid-template-columns:repeat(2,1fr)}
+.grid-3{grid-template-columns:repeat(3,1fr)}
+.grid-4{grid-template-columns:repeat(4,1fr)}
+@media(max-width:900px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr}}
+@media(min-width:901px) and (max-width:1100px){.grid-3,.grid-4{grid-template-columns:repeat(2,1fr)}}
+.text-center{text-align:center}
+.mt-2{margin-top:16px}.mt-3{margin-top:24px}.mt-4{margin-top:32px}.mt-6{margin-top:48px}.mt-8{margin-top:64px}
+.mb-2{margin-bottom:16px}.mb-4{margin-bottom:32px}
+.tag{display:inline-block;padding:4px 12px;border-radius:999px;font-size:.75rem;font-weight:600;letter-spacing:.03em}
+.tag-purple{background:rgba(99,102,241,.15);color:var(--accent-light)}
+.tag-green{background:rgba(52,211,153,.12);color:var(--green)}
+.tag-amber{background:rgba(251,191,36,.12);color:var(--amber)}
+.tag-pink{background:rgba(244,114,182,.12);color:var(--accent3)}
+.tag-cyan{background:rgba(34,211,238,.12);color:var(--cyan)}
+.tag-red{background:rgba(248,113,113,.12);color:var(--red)}
+.tag-indigo{background:rgba(99,102,241,.15);color:var(--accent-light)}
+
+/* ───── NAV ───── */
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:var(--nav-bg);
+  backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+  padding:0 24px;
+}
+nav .nav-inner{
+  max-width:1200px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  height:64px;
+}
+nav .logo{
+  font-weight:800;font-size:1.1rem;
+  background:linear-gradient(135deg,var(--accent-light),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  letter-spacing:-.02em;
+}
+nav .nav-links{display:flex;gap:28px;list-style:none}
+nav .nav-links a{
+  color:var(--text-secondary);text-decoration:none;font-size:.875rem;
+  font-weight:500;transition:color .2s;
+}
+nav .nav-links a:hover{color:var(--text-primary)}
+nav .nav-cta{
+  background:var(--accent);color:#fff;padding:8px 20px;border-radius:999px;
+  font-size:.8rem;font-weight:600;text-decoration:none;
+  transition:all .2s;border:none;cursor:pointer;
+}
+nav .nav-cta:hover{background:var(--accent-light);box-shadow:0 0 20px rgba(99,102,241,.3)}
+.nav-toggle{display:none;background:none;border:none;color:var(--text-primary);font-size:1.5rem;cursor:pointer}
+@media(max-width:768px){
+  nav .nav-links{display:none}
+  .nav-toggle{display:block}
+  nav .nav-links.active{
+    display:flex;flex-direction:column;position:absolute;
+    top:64px;left:0;right:0;background:var(--nav-mobile-bg);
+    padding:20px 24px;gap:16px;border-bottom:1px solid var(--border);
+  }
+}
+
+/* ───── HERO ───── */
+.hero{
+  background:var(--bg-hero);
+  padding:140px 24px 100px;
+  position:relative;
+  overflow:hidden;
+}
+.hero::before{
+  content:'';position:absolute;top:-200px;right:-200px;
+  width:600px;height:600px;border-radius:50%;
+  background:radial-gradient(circle,rgba(99,102,241,.08) 0%,transparent 70%);
+}
+.hero::after{
+  content:'';position:absolute;bottom:-150px;left:-100px;
+  width:500px;height:500px;border-radius:50%;
+  background:radial-gradient(circle,rgba(167,139,250,.06) 0%,transparent 70%);
+}
+.hero .container{position:relative;z-index:1}
+.hero .version-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.25);
+  border-radius:999px;padding:6px 16px;font-size:.8rem;
+  color:var(--accent-light);font-weight:500;margin-bottom:24px;
+}
+.hero .version-badge .dot{
+  width:6px;height:6px;border-radius:50%;background:var(--green);
+  animation:pulse 2s infinite;
+}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{
+  font-size:clamp(3rem,7vw,6rem);font-weight:900;
+  line-height:1.05;letter-spacing:-.04em;
+  max-width:800px;margin:0 auto 16px;
+}
+.hero h1 .gradient{
+  background:linear-gradient(135deg,var(--accent-light) 0%,var(--accent2) 50%,var(--accent3) 100%);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.hero .brooks-quote{
+  font-size:.95rem;color:var(--text-dim);max-width:640px;
+  margin:0 auto 16px;line-height:1.7;font-style:italic;
+  border-left:3px solid rgba(99,102,241,.3);padding-left:16px;text-align:left;
+}
+.hero .brooks-attr{
+  font-size:.8rem;color:var(--text-dim);margin-bottom:8px;text-align:left;max-width:640px;margin-left:auto;margin-right:auto;
+  padding-left:19px;
+}
+.hero .tagline{
+  font-size:1.25rem;font-weight:700;color:var(--text-primary);
+  margin:0 auto 36px;letter-spacing:-.01em;
+}
+.hero .subtitle{
+  font-size:1.1rem;color:var(--text-secondary);max-width:580px;
+  margin:0 auto 40px;line-height:1.7;
+}
+.hero .cta-group{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:40px}
+.hero .hero-pills{
+  display:flex;gap:12px;justify-content:center;flex-wrap:wrap;
+  margin-top:8px;
+}
+.hero-pill{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:8px 18px;border-radius:999px;
+  background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.2);
+  font-size:.8rem;font-weight:700;color:var(--accent-light);
+  letter-spacing:.02em;font-family:var(--font-mono);
+}
+.btn{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:14px 28px;border-radius:999px;font-size:.9rem;
+  font-weight:600;text-decoration:none;transition:all .25s;
+  border:none;cursor:pointer;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--accent),#7c3aed);
+  color:#fff;box-shadow:0 4px 20px rgba(99,102,241,.3);
+}
+.btn-primary:hover{
+  box-shadow:0 8px 30px rgba(99,102,241,.4);transform:translateY(-2px);
+}
+.btn-outline{
+  background:transparent;color:var(--text-primary);
+  border:1px solid var(--border-hover);
+}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent-light)}
+
+/* ───── SECTION HEADINGS ───── */
+section{padding:80px 0}
+section:nth-child(even){background:var(--section-alt)}
+.section-label{
+  text-transform:uppercase;font-size:.75rem;font-weight:700;
+  letter-spacing:.12em;color:var(--accent-light);margin-bottom:12px;
+}
+.section-title{
+  font-size:clamp(1.8rem,3vw,2.5rem);font-weight:800;
+  letter-spacing:-.03em;margin-bottom:16px;line-height:1.2;
+}
+.section-desc{
+  font-size:1rem;color:var(--text-secondary);max-width:600px;
+  margin-bottom:48px;
+}
+.section-desc.centered{margin-left:auto;margin-right:auto}
+
+/* ───── FEATURE CARDS ───── */
+.feature-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:32px;
+  transition:all .3s;position:relative;overflow:hidden;
+}
+.feature-card:hover{
+  border-color:var(--border-hover);
+  box-shadow:var(--shadow-glow);transform:translateY(-4px);
+}
+.feature-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;
+  height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);
+  opacity:0;transition:opacity .3s;
+}
+.feature-card:hover::before{opacity:1}
+.feature-icon{
+  width:48px;height:48px;border-radius:12px;
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.4rem;margin-bottom:16px;
+}
+.feature-card h3{font-size:1.1rem;font-weight:700;margin-bottom:8px}
+.feature-card p{font-size:.9rem;color:var(--text-secondary);line-height:1.6}
+
+/* ───── ENFORCEMENT / LAYER CARDS ───── */
+.layer-card{
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:var(--radius-lg);padding:28px;
+  transition:all .3s;position:relative;overflow:hidden;
+  display:flex;align-items:flex-start;gap:16px;
+}
+.layer-card:hover{
+  border-color:var(--border-hover);
+  box-shadow:var(--shadow-glow);transform:translateY(-3px);
+}
+.layer-num{
+  min-width:36px;height:36px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--accent),var(--accent2));
+  color:#fff;font-weight:700;font-size:.85rem;
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--font-mono);margin-top:2px;
+}
+.layer-card h3{font-size:1rem;font-weight:700;margin-bottom:6px}
+.layer-card p{font-size:.875rem;color:var(--text-secondary);line-height:1.6}
+
+/* ───── ENFORCEMENT BLOCKS (code) ───── */
+.enforcement-block{
+  background:var(--bg-code);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+}
+.enforcement-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:12px 20px;border-bottom:1px solid var(--border);
+}
+.enforcement-header .block-title{
+  font-size:.75rem;font-weight:700;color:var(--text-dim);
+  text-transform:uppercase;letter-spacing:.08em;
+  font-family:var(--font-mono);
+}
+.enforcement-header .block-dots{display:flex;gap:6px}
+.enforcement-header .block-dots span{
+  width:10px;height:10px;border-radius:50%;
+}
+.enforcement-body{
+  padding:20px 24px;
+  font-family:var(--font-mono);font-size:.82rem;
+  line-height:1.9;color:var(--text-secondary);
+  overflow-x:auto;
+}
+.enforcement-body .stop{color:var(--red);font-weight:700}
+.enforcement-body .ok{color:var(--green);font-weight:700}
+.enforcement-body .warn{color:var(--amber);font-weight:700}
+.enforcement-body .dim{color:var(--text-dim)}
+.enforcement-body .accent{color:var(--accent-light)}
+.enforcement-body .cross{color:var(--red)}
+
+/* ───── INSTALL SECTION ───── */
+.install-block{
+  background:var(--bg-code);border:1px solid var(--border);
+  border-radius:var(--radius);overflow:hidden;
+  max-width:680px;margin:0 auto;
+}
+.install-code{
+  padding:28px 32px;font-family:var(--font-mono);font-size:.85rem;
+  line-height:2.2;color:var(--text-secondary);
+}
+.install-code .comment{color:var(--text-dim)}
+.install-code .cmd{color:var(--green)}
+.install-code .flag{color:var(--accent2)}
+
+/* ───── CODE BLOCKS ───── */
+.code-block{
+  background:var(--bg-code);border:1px solid var(--border);
+  border-radius:var(--radius-sm);padding:20px 24px;
+  font-family:var(--font-mono);font-size:.82rem;
+  line-height:1.8;color:var(--text-secondary);
+  overflow-x:auto;
+}
+.code-block .prompt{color:var(--green)}
+.code-block .string{color:var(--amber)}
+.code-block .flag{color:var(--accent2)}
+.code-block .comment{color:var(--text-dim)}
+
+/* ───── WORKFLOW TABLE ───── */
+.workflow-table{width:100%;border-collapse:collapse;margin-top:8px}
+.workflow-table th{
+  text-align:left;padding:10px 16px;font-size:.7rem;
+  text-transform:uppercase;letter-spacing:.08em;
+  color:var(--text-dim);border-bottom:2px solid var(--border);
+}
+.workflow-table td{
+  padding:10px 16px;font-size:.82rem;
+  border-bottom:1px solid var(--skill-phase-border);
+  color:var(--text-secondary);font-family:var(--font-mono);
+  vertical-align:middle;
+}
+.workflow-table td:first-child{color:var(--text-primary);font-weight:600;font-family:var(--font-sans)}
+.workflow-table tr:hover td{background:var(--table-row-hover)}
+.phase-badge{
+  display:inline-block;padding:2px 10px;border-radius:999px;
+  font-size:.7rem;font-weight:700;letter-spacing:.05em;
+  font-family:var(--font-sans);
+}
+.phase-planning{background:rgba(99,102,241,.15);color:var(--accent-light)}
+.phase-execution{background:rgba(52,211,153,.12);color:var(--green)}
+.phase-review{background:rgba(251,191,36,.12);color:var(--amber)}
+.phase-finalization{background:rgba(244,114,182,.12);color:var(--accent3)}
+.phase-deployment{background:rgba(34,211,238,.12);color:var(--cyan)}
+.step-required{
+  display:inline-block;padding:2px 8px;border-radius:4px;
+  font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+  background:rgba(239,68,68,.12);color:var(--red);
+  font-family:var(--font-sans);margin-left:8px;
+}
+
+/* ───── CALLOUT ───── */
+.callout{
+  background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(167,139,250,.05));
+  border:1px solid rgba(99,102,241,.2);
+  border-radius:var(--radius-lg);padding:40px;
+  text-align:center;max-width:700px;margin:0 auto;
+}
+.callout .callout-icon{font-size:2rem;margin-bottom:12px}
+.callout p{font-size:1.05rem;color:var(--text-secondary);line-height:1.7}
+.callout strong{color:var(--text-primary)}
+
+/* ───── STATS BAR ───── */
+.stats-bar{
+  display:flex;justify-content:center;gap:48px;flex-wrap:wrap;
+  padding:40px 0;
+}
+.stat{text-align:center}
+.stat .stat-num{
+  font-size:2.5rem;font-weight:900;
+  background:linear-gradient(135deg,var(--accent-light),var(--accent2));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  letter-spacing:-.03em;
+}
+.stat .stat-label{font-size:.8rem;color:var(--text-dim);margin-top:4px;font-weight:500}
+
+/* ───── CTA SECTION ───── */
+.cta-section{
+  background:linear-gradient(135deg,rgba(79,70,229,.12) 0%,rgba(124,58,237,.08) 50%,rgba(219,39,119,.06) 100%);
+  border-top:1px solid var(--border);border-bottom:1px solid var(--border);
+}
+
+/* ───── FOOTER ───── */
+footer{
+  border-top:1px solid var(--border);padding:48px 0;
+  color:var(--text-dim);font-size:.85rem;
+}
+footer .footer-inner{
+  display:flex;justify-content:space-between;align-items:center;
+  flex-wrap:wrap;gap:16px;
+}
+footer a{color:var(--text-secondary);text-decoration:none}
+footer a:hover{color:var(--accent-light)}
+footer .footer-links{display:flex;gap:24px}
+
+/* ───── ANIMATIONS ───── */
+.fade-in{opacity:0;transform:translateY(20px);transition:all .6s ease-out}
+.fade-in.visible{opacity:1;transform:translateY(0)}
+
+/* ───── RESPONSIVE ───── */
+@media(max-width:600px){
+  .stats-bar{gap:24px}
+  .hero .brooks-quote,.hero .brooks-attr{max-width:100%;padding-left:12px}
+  .install-code{padding:20px}
+  .workflow-table td,.workflow-table th{padding:8px 10px}
+}
+</style>
+</head>
+<body>
+
+<!-- ────── NAV ────── -->
+<nav>
+  <div class="nav-inner">
+    <span class="logo">Silver Bullet</span>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')" aria-label="Toggle menu">&#9776;</button>
+    <ul class="nav-links">
+      <li><a href="#problem">Problem</a></li>
+      <li><a href="#how-it-works">How It Works</a></li>
+      <li><a href="#quality-gates">Quality Gates</a></li>
+      <li><a href="#enforcement">Enforcement</a></li>
+      <li><a href="#workflow">Workflow</a></li>
+      <li><a href="#install">Install</a></li>
+    </ul>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button id="theme-toggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()" style="
+        width:40px;height:40px;border-radius:50%;border:1px solid var(--border);
+        background:var(--bg-card);color:var(--text-secondary);font-size:1.1rem;
+        display:flex;align-items:center;justify-content:center;cursor:pointer;
+        transition:all .2s;flex-shrink:0;
+      " onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent-light)'"
+         onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-secondary)'">
+        <span id="theme-icon">&#9728;&#65039;</span>
+      </button>
+      <a href="https://github.com/alo-exp/silver-bullet" class="nav-cta" target="_blank">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ────── HERO ────── -->
+<section class="hero text-center">
+  <div class="container">
+    <div class="version-badge"><span class="dot"></span> Claude Code Plugin</div>
+    <h1><span class="gradient">Silver Bullet</span></h1>
+
+    <div class="brooks-quote">
+      &ldquo;There is no single development, in either technology or management technique, which by itself promises even one order-of-magnitude improvement in productivity, in reliability, in simplicity.&rdquo;
+    </div>
+    <div class="brooks-attr">
+      &mdash; Fred Brooks, <em>No Silver Bullet</em> (1986)
+    </div>
+
+    <p class="tagline mt-3">Brooks was right. Until now.</p>
+
+    <div class="cta-group">
+      <a href="#install" class="btn btn-primary">Get Started</a>
+      <a href="https://github.com/alo-exp/silver-bullet" class="btn btn-outline" target="_blank">GitHub &rarr;</a>
+    </div>
+
+    <div class="hero-pills">
+      <span class="hero-pill">31 Steps</span>
+      <span class="hero-pill">8 Quality Gates</span>
+      <span class="hero-pill">6 Enforcement Layers</span>
+    </div>
+  </div>
+</section>
+
+<!-- ────── STATS BAR ────── -->
+<section style="padding:0;border-bottom:1px solid var(--border)">
+  <div class="container">
+    <div class="stats-bar">
+      <div class="stat"><div class="stat-num">31</div><div class="stat-label">Workflow Steps</div></div>
+      <div class="stat"><div class="stat-num">8</div><div class="stat-label">Quality Gates</div></div>
+      <div class="stat"><div class="stat-num">6</div><div class="stat-label">Enforcement Layers</div></div>
+      <div class="stat"><div class="stat-num">0</div><div class="stat-label">Steps Skipped</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ────── PROBLEM ────── -->
+<section id="problem">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-label">The Problem</div>
+      <h2 class="section-title">AI Agents Skip Steps</h2>
+      <p class="section-desc centered">Even when your CLAUDE.md explicitly says &ldquo;always brainstorm first,&rdquo; Claude rationalizes its way past it.</p>
+    </div>
+    <div class="grid grid-3 mt-6">
+      <div class="feature-card fade-in">
+        <div class="feature-icon" style="background:rgba(99,102,241,.12);color:var(--accent-light);font-size:1.6rem">&#9889;</div>
+        <h3>Skipped Planning</h3>
+        <p>Claude jumps straight to coding. No brainstorming, no spec, no design review. The path of least resistance is always to just start writing code.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon" style="background:rgba(244,114,182,.12);color:var(--accent3);font-size:1.6rem">&#128737;</div>
+        <h3>No Quality Gates</h3>
+        <p>Security, scalability, and reliability are afterthoughts &mdash; not enforced checkpoints. Modularity and testability are never considered before implementation.</p>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon" style="background:rgba(52,211,153,.12);color:var(--green);font-size:1.6rem">&#127937;</div>
+        <h3>Premature Completion</h3>
+        <p>Work is declared &ldquo;done&rdquo; without code review, testing strategy, or verification. Commits and pushes happen before the workflow is complete.</p>
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <div class="callout fade-in">
+        <div class="callout-icon">&#128161;</div>
+        <p><strong>The root cause:</strong> CLAUDE.md instructions are advisory. Claude treats them as suggestions, not constraints. When under time pressure or facing an &ldquo;obvious&rdquo; solution, it rationalizes skipping steps. Silver Bullet replaces hope with enforcement.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────── HOW IT WORKS ────── -->
+<section id="how-it-works">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-label">Architecture</div>
+      <h2 class="section-title">Six Layers of Enforcement</h2>
+      <p class="section-desc centered">Each layer is independently sufficient. Together, they make skipping the workflow practically impossible.</p>
+    </div>
+
+    <div class="grid grid-2 mt-6">
+      <div class="layer-card fade-in">
+        <div class="layer-num">1</div>
+        <div>
+          <h3>HARD STOP Gate</h3>
+          <p>A PreToolUse hook intercepts every file edit. If planning skills haven&rsquo;t been completed, the edit is blocked with an explicit error listing exactly what&rsquo;s missing. No exceptions.</p>
+        </div>
+      </div>
+      <div class="layer-card fade-in">
+        <div class="layer-num">2</div>
+        <div>
+          <h3>Compliance Status</h3>
+          <p>Every tool use triggers a progress display: current phase, completed steps, total score, and the next required action. Compliance is always visible &mdash; there&rsquo;s no hiding from it.</p>
+        </div>
+      </div>
+      <div class="layer-card fade-in">
+        <div class="layer-num">3</div>
+        <div>
+          <h3>Phase Gates</h3>
+          <p>Enforces strict phase ordering: PLANNING &rarr; EXECUTION &rarr; REVIEW &rarr; FINALIZATION. You cannot enter the next phase until all required steps in the current phase are complete.</p>
+        </div>
+      </div>
+      <div class="layer-card fade-in">
+        <div class="layer-num">4</div>
+        <div>
+          <h3>Completion Audit</h3>
+          <p>A PostToolUse hook intercepts git commit, push, and deploy commands. If the full workflow isn&rsquo;t complete, the operation is blocked with a list of remaining required steps.</p>
+        </div>
+      </div>
+      <div class="layer-card fade-in">
+        <div class="layer-num">5</div>
+        <div>
+          <h3>Redundant Instructions</h3>
+          <p>The same rules appear in three places: CLAUDE.md, the workflow skill file, and every hook message. Redundancy defeats rationalization &mdash; there&rsquo;s no &ldquo;I wasn&rsquo;t told&rdquo; escape hatch.</p>
+        </div>
+      </div>
+      <div class="layer-card fade-in">
+        <div class="layer-num">6</div>
+        <div>
+          <h3>Anti-Rationalization</h3>
+          <p>Explicit language that names and blocks common excuses: &ldquo;This is simple enough to skip,&rdquo; &ldquo;The user asked me to just do it,&rdquo; &ldquo;I&rsquo;ll do the review mentally.&rdquo; Named = blocked.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────── QUALITY GATES ────── -->
+<section id="quality-gates">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-label">Quality Gates</div>
+      <h2 class="section-title">Eight Quality Gates</h2>
+      <p class="section-desc centered">Every design is verified against world-class best practices before a single line of code is written. The eight &ldquo;-ilities&rdquo; of software quality &mdash; all enforced.</p>
+    </div>
+    <div class="grid grid-4 mt-6">
+      <div class="feature-card fade-in">
+        <div class="feature-icon" style="background:rgba(167,139,250,.12);color:var(--accent2)">&#9650;</div>
+        <h3>Modularity</h3>
+        <p style="font-size:.85rem">Small, focused modules. File size limits. Change locality max 3&ndash;5 files. Single responsibility enforced.</p>
+        <span class="tag tag-purple mt-2" style="margin-top:12px;display:inline-block">Planning</span>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon" style="background:rgba(99,102,241,.12);color:var(--accent-light)">&#9854;</div>
+        <h3>Reusability</h3>
+        <p style="font-size:.85rem">DRY, composable components. Rule of Three. No duplication across the codebase.</p>
+        <span class="tag tag-indigo mt-2" style="margin-top:12px;display:inline-block">Planning</span>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon" style="background:rgba(34,211,238,.12);color:var(--cyan)">&#128200;</div>
+        <h3>Scalability</h3>
+        <p style="font-size:.85rem">Stateless by default. Indexed queries. Async processing. Resource limits defined upfront.</p>
+        <span class="tag tag-cyan mt-2" style="margin-top:12px;display:inline-block">Planning</span>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon" style="background:rgba(244,114,182,.12);color:var(--accent3)">&#128737;</div>
+        <h3>Security</h3>
+        <p style="font-size:.85rem">OWASP Top 10. Input validation. Secrets management. Defense in depth. No trust boundaries crossed.</p>
+        <span class="tag tag-pink mt-2" style="margin-top:12px;display:inline-block">Planning</span>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon" style="background:rgba(52,211,153,.12);color:var(--green)">&#128994;</div>
+        <h3>Reliability</h3>
+        <p style="font-size:.85rem">Fault tolerance. Retries with backoff. Circuit breakers. Graceful degradation under load.</p>
+        <span class="tag tag-green mt-2" style="margin-top:12px;display:inline-block">Planning</span>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon" style="background:rgba(251,191,36,.12);color:var(--amber)">&#127919;</div>
+        <h3>Usability</h3>
+        <p style="font-size:.85rem">Intuitive APIs. Actionable error messages. Accessibility. Progressive disclosure of complexity.</p>
+        <span class="tag tag-amber mt-2" style="margin-top:12px;display:inline-block">Planning</span>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon" style="background:rgba(99,102,241,.12);color:var(--accent-light)">&#128299;</div>
+        <h3>Testability</h3>
+        <p style="font-size:.85rem">Dependency injection. Pure functions. Test seams. Deterministic behavior. No hidden state.</p>
+        <span class="tag tag-indigo mt-2" style="margin-top:12px;display:inline-block">Planning</span>
+      </div>
+      <div class="feature-card fade-in">
+        <div class="feature-icon" style="background:rgba(167,139,250,.12);color:var(--accent2)">&#128268;</div>
+        <h3>Extensibility</h3>
+        <p style="font-size:.85rem">Open-closed principle. Plugin architecture. Versioned interfaces. Change without breakage.</p>
+        <span class="tag tag-purple mt-2" style="margin-top:12px;display:inline-block">Planning</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────── LIVE ENFORCEMENT ────── -->
+<section id="enforcement">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-label">Live Enforcement</div>
+      <h2 class="section-title">See It In Action</h2>
+      <p class="section-desc centered">These are the actual messages Claude receives from the enforcement hooks. Every message is a hard block &mdash; not a warning.</p>
+    </div>
+
+    <div class="grid grid-3 mt-6">
+
+      <!-- Block 1: Planning Gate -->
+      <div class="enforcement-block fade-in">
+        <div class="enforcement-header">
+          <span class="block-title">Planning Gate</span>
+          <div class="block-dots">
+            <span style="background:#ef4444"></span>
+            <span style="background:#f59e0b"></span>
+            <span style="background:#10b981"></span>
+          </div>
+        </div>
+        <div class="enforcement-body">
+<span class="stop">&#128683; HARD STOP</span> <span class="dim">&mdash; Planning incomplete.</span>
+<span class="dim">Missing skills:</span>
+<span class="cross">&#10007;</span> <span class="accent">brainstorming</span>
+<span class="cross">&#10007;</span> <span class="accent">write-spec</span>
+<span class="cross">&#10007;</span> <span class="accent">modularity</span>
+<span class="cross">&#10007;</span> <span class="accent">security</span>
+<span class="cross">&#10007;</span> <span class="accent">writing-plans</span>
+
+<span class="dim">Run the missing planning skills</span>
+<span class="dim">before editing source code.</span>
+        </div>
+      </div>
+
+      <!-- Block 2: Completion Audit -->
+      <div class="enforcement-block fade-in">
+        <div class="enforcement-header">
+          <span class="block-title">Completion Audit</span>
+          <div class="block-dots">
+            <span style="background:#ef4444"></span>
+            <span style="background:#f59e0b"></span>
+            <span style="background:#10b981"></span>
+          </div>
+        </div>
+        <div class="enforcement-body">
+<span class="stop">&#128721; COMPLETION BLOCKED</span>
+<span class="dim">&mdash; Workflow incomplete.</span>
+
+<span class="cross">&#10007;</span> <span class="accent">/code-review</span>
+<span class="cross">&#10007;</span> <span class="accent">/testing-strategy</span>
+<span class="cross">&#10007;</span> <span class="accent">/verification-before
+  -completion</span>
+
+<span class="dim">Complete ALL required workflow</span>
+<span class="dim">steps before finalizing.</span>
+        </div>
+      </div>
+
+      <!-- Block 3: Progress Tracking -->
+      <div class="enforcement-block fade-in">
+        <div class="enforcement-header">
+          <span class="block-title">Progress Tracking</span>
+          <div class="block-dots">
+            <span style="background:#ef4444"></span>
+            <span style="background:#f59e0b"></span>
+            <span style="background:#10b981"></span>
+          </div>
+        </div>
+        <div class="enforcement-body">
+<span class="ok">Silver Bullet:</span> <span class="warn">12 steps</span>
+
+<span class="ok">PLANNING</span>   <span class="accent">11/11</span> <span class="ok">&#10003;</span>
+<span class="ok">EXECUTION</span>  <span class="accent">1/1</span>  <span class="ok">&#10003;</span>
+<span class="warn">REVIEW</span>     <span class="accent">0/3</span>  <span class="cross">&#10007;</span>
+<span class="dim">FINALIZATION</span> <span class="dim">0/3</span>
+
+<span class="dim">Next required step:</span>
+<span class="accent">/code-review</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ────── WORKFLOW ────── -->
+<section id="workflow">
+  <div class="container">
+    <div class="text-center">
+      <div class="section-label">The Workflow</div>
+      <h2 class="section-title">The 31-Step Workflow</h2>
+      <p class="section-desc centered">Five phases. Every required step enforced by hooks. No step can be skipped without an explicit block.</p>
+    </div>
+
+    <div class="mt-6" style="overflow-x:auto">
+      <table class="workflow-table fade-in">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Phase</th>
+            <th>Skill / Step</th>
+            <th>Required</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>using-superpowers</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>2</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>git-worktrees</td><td></td></tr>
+          <tr><td>3</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>brainstorming</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>4</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>write-spec</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>5</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>design-system</td><td></td></tr>
+          <tr><td>6</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>ux-copy</td><td></td></tr>
+          <tr><td>7</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>architecture</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>8</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>system-design</td><td></td></tr>
+          <tr><td>9</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>modularity</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>10</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>reusability</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>11</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>scalability</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>12</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>security</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>13</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>reliability</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>14</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>usability</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>15</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>testability</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>16</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>extensibility</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>17</td><td><span class="phase-badge phase-planning">PLANNING</span></td><td>writing-plans</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>18</td><td><span class="phase-badge phase-execution">EXECUTION</span></td><td>executing-plans (TDD + subagent-driven)</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>19</td><td><span class="phase-badge phase-review">REVIEW</span></td><td>code-review</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>20</td><td><span class="phase-badge phase-review">REVIEW</span></td><td>requesting-code-review</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>21</td><td><span class="phase-badge phase-review">REVIEW</span></td><td>receiving-code-review</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>22</td><td><span class="phase-badge phase-review">REVIEW</span></td><td>writing-plans (revision)</td><td></td></tr>
+          <tr><td>23</td><td><span class="phase-badge phase-review">REVIEW</span></td><td>executing-plans (revision)</td><td></td></tr>
+          <tr><td>24</td><td><span class="phase-badge phase-review">REVIEW</span></td><td>testing-strategy</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>25</td><td><span class="phase-badge phase-review">REVIEW</span></td><td>systematic-debugging</td><td></td></tr>
+          <tr><td>26</td><td><span class="phase-badge phase-finalization">FINALIZATION</span></td><td>tech-debt</td><td></td></tr>
+          <tr><td>27</td><td><span class="phase-badge phase-finalization">FINALIZATION</span></td><td>documentation</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>28</td><td><span class="phase-badge phase-finalization">FINALIZATION</span></td><td>verification-before-completion</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>29</td><td><span class="phase-badge phase-finalization">FINALIZATION</span></td><td>finishing-a-development-branch</td><td><span class="step-required">Required</span></td></tr>
+          <tr><td>30</td><td><span class="phase-badge phase-deployment">DEPLOYMENT</span></td><td>CICD pipeline</td><td></td></tr>
+          <tr><td>31</td><td><span class="phase-badge phase-deployment">DEPLOYMENT</span></td><td>deploy-checklist</td><td><span class="step-required">Required</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ────── INSTALL ────── -->
+<section id="install">
+  <div class="container text-center">
+    <div class="section-label">Installation</div>
+    <h2 class="section-title">Get Started in 2 Minutes</h2>
+    <p class="section-desc centered">Silver Bullet builds on the Superpowers and Engineering plugins. Install all three, initialize your project, and enforcement begins immediately.</p>
+
+    <div class="install-block mt-4 fade-in">
+      <div class="install-code">
+<span class="comment"># 1. Install prerequisites</span>
+<span class="cmd">/plugin install</span> <span class="flag">obra/superpowers</span>
+<span class="cmd">/plugin install</span> <span class="flag">anthropics/knowledge-work-plugins/tree/main/engineering</span>
+<span class="cmd">brew install</span> jq
+
+<span class="comment"># 2. Install Silver Bullet</span>
+<span class="cmd">/plugin install</span> <span class="flag">alo-exp/silver-bullet</span>
+
+<span class="comment"># 3. Initialize your project</span>
+<span class="cmd">/using-silver-bullet</span>
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <div class="callout fade-in">
+        <div class="callout-icon">&#9889;</div>
+        <p><strong>Enforcement starts immediately.</strong><br>
+        After running <code>/using-silver-bullet</code>, hooks are installed and the workflow is active. Your first attempt to edit source code without completing planning will be blocked with a clear, actionable error.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────── CTA ────── -->
+<section class="cta-section" style="padding:80px 0">
+  <div class="container text-center">
+    <div class="section-label">Get Started</div>
+    <h2 class="section-title fade-in">Stop hoping Claude follows the process.<br>Enforce it.</h2>
+    <p class="section-desc centered fade-in">Silver Bullet turns your development workflow from aspirational guidelines into hard constraints. Every step, every time.</p>
+    <a href="#install" class="btn btn-primary fade-in" style="font-size:1rem;padding:16px 36px">Install Silver Bullet &darr;</a>
+  </div>
+</section>
+
+<!-- ────── FOOTER ────── -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div>
+        <span style="font-weight:700;color:var(--text-secondary)">Silver Bullet</span>
+        <span style="margin-left:8px">&bull; MIT License</span>
+      </div>
+      <div style="font-size:.9rem;color:var(--text-secondary)">
+        Innovated at <a href="https://alolabs.dev" target="_blank" style="font-weight:700;background:linear-gradient(135deg,var(--accent-light),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none">&#256;lo Labs</a>
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/alo-exp/silver-bullet" target="_blank">GitHub</a>
+        <a href="https://github.com/alo-exp/silver-bullet/blob/main/LICENSE" target="_blank">MIT License</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<!-- ────── SCRIPTS ────── -->
+<script>
+// ── Theme ──
+function applyTheme(dark) {
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  document.getElementById('theme-icon').textContent = dark ? '☀️' : '🌙';
+  localStorage.setItem('silver-bullet-theme', dark ? 'dark' : 'light');
+}
+function toggleTheme() {
+  applyTheme(document.documentElement.getAttribute('data-theme') !== 'dark');
+}
+// Init: dark by default, honour saved preference
+(function(){
+  const saved = localStorage.getItem('silver-bullet-theme');
+  if (saved) {
+    applyTheme(saved === 'dark');
+  } else {
+    applyTheme(true); // dark by default
+  }
+})();
+
+// ── Scroll-triggered fade-in ──
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
