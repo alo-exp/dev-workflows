@@ -20,40 +20,47 @@
 7.  `/architecture`       (if needed) — ADR for architectural decisions
 8.  `/system-design`      (if needed) — Service/component design
 9.  `/modularity`                     — Verify modular design before planning       **REQUIRED** <- DO NOT SKIP
-10. `/writing-plans`                  — Detailed implementation plan               **REQUIRED** <- DO NOT SKIP
+10. `/reusability`                    — Enforce DRY, composable components          **REQUIRED** <- DO NOT SKIP
+11. `/scalability`                    — Verify stateless, efficient, scalable       **REQUIRED** <- DO NOT SKIP
+12. `/security`                       — Security-first: OWASP, input validation    **REQUIRED** <- DO NOT SKIP
+13. `/reliability`                    — Fault tolerance, graceful degradation       **REQUIRED** <- DO NOT SKIP
+14. `/usability`                      — Intuitive APIs, clear errors, a11y         **REQUIRED** <- DO NOT SKIP
+15. `/testability`                    — Injectable deps, pure functions, seams      **REQUIRED** <- DO NOT SKIP
+16. `/extensibility`                  — Open-closed, versioned, backward-compatible **REQUIRED** <- DO NOT SKIP
+17. `/writing-plans`                  — Detailed implementation plan               **REQUIRED** <- DO NOT SKIP
 
 ### EXECUTION
 
-11. `/executing-plans`                — Execute using BOTH:                        **REQUIRED** <- DO NOT SKIP
+18. `/executing-plans`                — Execute using BOTH:                        **REQUIRED** <- DO NOT SKIP
                                           `/test-driven-development` (TDD)
                                           `/subagent-driven-development` (parallel)
 
 ### REVIEW (must complete before deploy — deploy gate enforced)
 
-12. `/code-review`                    — Round 1 self-review                        **REQUIRED** <- DO NOT SKIP
+19. `/code-review`                    — Round 1 self-review                        **REQUIRED** <- DO NOT SKIP
     `superpowers:code-reviewer agent` — Run code-reviewer subagent
-13. `/requesting-code-review`         — Request external/peer review
-14. `/receiving-code-review`          — Accept/reject all items from 12-13         **REQUIRED** <- DO NOT SKIP
-15. `/writing-plans`                  — Plan to address accepted review items
-16. `/executing-plans`                — Implement the review-driven plan
-17. `/testing-strategy`               — Define best test strategy                  **REQUIRED** <- DO NOT SKIP
-18. `/systematic-debugging` + `/debug` — Use BOTH for any bug encountered
+20. `/requesting-code-review`         — Request external/peer review
+21. `/receiving-code-review`          — Accept/reject all items from 19-20         **REQUIRED** <- DO NOT SKIP
+22. `/writing-plans`                  — Plan to address accepted review items
+23. `/executing-plans`                — Implement the review-driven plan
+24. `/testing-strategy`               — Define best test strategy                  **REQUIRED** <- DO NOT SKIP
+25. `/systematic-debugging` + `/debug` — Use BOTH for any bug encountered
 
 ### FINALIZATION (must complete before deploy — deploy gate enforced)
 
-19. `/tech-debt`                      — Identify and document technical debt
-20. `/documentation`                  — Update/create all project docs              **REQUIRED** <- DO NOT SKIP
+26. `/tech-debt`                      — Identify and document technical debt
+27. `/documentation`                  — Update/create all project docs              **REQUIRED** <- DO NOT SKIP
                                         Minimum: `Master-PRD.md`,
                                         `Architecture-and-Design.md`,
                                         `Testing-Strategy-and-Plan.md`, `CICD.md`
-21. `/verification-before-completion` — Produce evidence before claiming done      **REQUIRED** <- DO NOT SKIP
-22. `/finishing-a-development-branch` — If on dev branch: merge prep + cleanup     **REQUIRED** <- DO NOT SKIP
+28. `/verification-before-completion` — Produce evidence before claiming done      **REQUIRED** <- DO NOT SKIP
+29. `/finishing-a-development-branch` — If on dev branch: merge prep + cleanup     **REQUIRED** <- DO NOT SKIP
 
 ### DEPLOYMENT
 
-23. CICD pipeline                     — Use existing or set up before deploying    **REQUIRED** <- DO NOT SKIP
+30. CICD pipeline                     — Use existing or set up before deploying    **REQUIRED** <- DO NOT SKIP
                                         GitHub repos: use GitHub Actions
-24. `/deploy-checklist`               — Pre-deployment verification gate           **REQUIRED** <- DO NOT SKIP
+31. `/deploy-checklist`               — Pre-deployment verification gate           **REQUIRED** <- DO NOT SKIP
 
 ---
 
