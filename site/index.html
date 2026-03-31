@@ -198,15 +198,26 @@ nav .nav-cta:hover{background:var(--accent-light);box-shadow:0 0 20px rgba(99,10
   background:linear-gradient(135deg,var(--accent-light) 0%,var(--accent2) 50%,var(--accent3) 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
 }
+.hero .brooks-block{
+  display:flex;align-items:flex-start;gap:20px;max-width:640px;
+  margin:0 auto 16px;
+}
+.hero .brooks-photo{
+  width:72px;height:72px;border-radius:50%;object-fit:cover;object-position:center top;
+  flex-shrink:0;opacity:.85;filter:grayscale(20%);
+  border:2px solid rgba(99,102,241,.3);margin-top:2px;
+}
+.hero .brooks-text{flex:1;}
 .hero .brooks-quote{
-  font-size:.95rem;color:var(--text-dim);max-width:640px;
-  margin:0 auto 16px;line-height:1.7;font-style:italic;
+  font-size:.95rem;color:var(--text-dim);
+  margin:0 0 10px;line-height:1.7;font-style:italic;
   border-left:3px solid rgba(99,102,241,.3);padding-left:16px;text-align:left;
 }
 .hero .brooks-attr{
-  font-size:.8rem;color:var(--text-dim);margin-bottom:8px;text-align:left;max-width:640px;margin-left:auto;margin-right:auto;
+  font-size:.8rem;color:var(--text-dim);margin-bottom:8px;text-align:left;
   padding-left:19px;
 }
+.hero .brooks-attr a{color:var(--text-dim);text-decoration:underline;text-underline-offset:2px;}
 .hero .tagline{
   font-size:1.25rem;font-weight:700;color:var(--text-primary);
   margin:0 auto 36px;letter-spacing:-.01em;
@@ -449,6 +460,8 @@ footer .footer-links{display:flex;gap:24px}
 /* ───── RESPONSIVE ───── */
 @media(max-width:600px){
   .stats-bar{gap:24px}
+  .hero .brooks-block{max-width:100%;gap:14px}
+  .hero .brooks-photo{width:56px;height:56px}
   .hero .brooks-quote,.hero .brooks-attr{max-width:100%;padding-left:12px}
   .install-code{padding:20px}
   .workflow-table td,.workflow-table th{padding:8px 10px}
@@ -491,11 +504,16 @@ footer .footer-links{display:flex;gap:24px}
     <div class="version-badge"><span class="dot"></span> Claude Code Plugin</div>
     <h1><span class="gradient">Silver Bullet</span></h1>
 
-    <div class="brooks-quote">
-      &ldquo;There is no single development, in either technology or management technique, which by itself promises even one order-of-magnitude improvement in productivity, in reliability, in simplicity.&rdquo;
-    </div>
-    <div class="brooks-attr">
-      &mdash; Fred Brooks, <a href="https://www.cs.unc.edu/techreports/86-020.pdf" target="_blank" rel="noopener noreferrer"><em>No Silver Bullet</em></a> (1986)
+    <div class="brooks-block">
+      <img src="fred-brooks.jpg" alt="Fred Brooks" class="brooks-photo">
+      <div class="brooks-text">
+        <div class="brooks-quote">
+          &ldquo;There is no single development, in either technology or management technique, which by itself promises even one order-of-magnitude improvement in productivity, in reliability, in simplicity.&rdquo;
+        </div>
+        <div class="brooks-attr">
+          &mdash; Fred Brooks, <a href="https://www.cs.unc.edu/techreports/86-020.pdf" target="_blank" rel="noopener noreferrer"><em>No Silver Bullet</em></a> (1986) &middot; <a href="https://amturing.acm.org/award_winners/brooks_1002187.cfm" target="_blank" rel="noopener noreferrer">Turing Award Winner, 1999</a>
+        </div>
+      </div>
     </div>
 
     <p class="tagline mt-3">Brooks was right. Until now.</p>
