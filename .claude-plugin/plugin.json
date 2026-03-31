@@ -1,7 +1,7 @@
 {
   "name": "dev-workflows",
   "description": "Enforced development workflows leveraging Superpowers and Engineering plugins. Full dev cycle, code review, TDD, deployment gates, and more.",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "author": {
     "name": "Ālo Labs",
     "email": "info@alolabs.dev"

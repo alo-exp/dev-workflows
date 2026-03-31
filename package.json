@@ -1,6 +1,6 @@
 {
   "name": "dev-workflows",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Enforced development workflows for Claude Code — full dev cycle, code review, TDD, deployment gates.",
   "author": "Ālo Labs <info@alolabs.dev>",
   "license": "MIT",

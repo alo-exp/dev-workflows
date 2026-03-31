@@ -58,7 +58,7 @@ jobs:
 
 ## Current Status
 
-CI pipeline will be created as `.github/workflows/ci.yml` before first release. The release workflow will be added when tagging v1.0.0.
+CI pipeline is active at `.github/workflows/ci.yml`. The release workflow will be added when needed.
 
 ## Deploy Gate Integration
 
