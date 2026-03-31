@@ -85,7 +85,7 @@ This will:
 
 That's it. Enforcement is now active.
 
-## The 24-Step Workflow
+## The 31-Step Workflow
 
 ### PLANNING (must complete before any source code edit)
 

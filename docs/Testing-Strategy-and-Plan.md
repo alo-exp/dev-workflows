@@ -23,7 +23,7 @@ Pure bash integration tests. Each hook is tested by piping JSON to stdin and che
 |-----------|-------|-------|----------|
 | Stage A: no planning | Edit src file | empty | HARD STOP |
 | Stage A: partial | Edit src file | brainstorming only | HARD STOP, lists missing |
-| Stage B: planning done | Edit src file | brainstorming, write-spec, writing-plans | "Planning complete" |
+| Stage B: planning done | Edit src file | all 11 required planning skills | "Planning complete" |
 | Stage C: review done | Edit src file | + code-review | "Finalization remaining" |
 | Stage D: all done | Edit src file | + verification-before-completion | "Proceed freely" |
 | Non-src file | Edit README.md | empty | Silent exit |
@@ -48,8 +48,8 @@ Pure bash integration tests. Each hook is tested by piping JSON to stdin and che
 | Test Case | State | Expected Output |
 |-----------|-------|-----------------|
 | No config | (no .dev-workflows.json) | Silent exit |
-| Empty state | No state file | "0 steps, PLANNING 0/3..." |
-| Partial progress | brainstorming done | "1 steps, PLANNING 1/3..." |
+| Empty state | No state file | "0 steps, PLANNING 0/11..." |
+| Partial progress | brainstorming done | "1 steps, PLANNING 1/11..." |
 | All complete | All skills done | Full counts, no "Next" |
 
 ### deploy-gate-snippet.sh

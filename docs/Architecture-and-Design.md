@@ -108,8 +108,24 @@ dev-workflows/
 ├── scripts/
 │   └── deploy-gate-snippet.sh  # Copy-paste for CI/CD pipelines
 ├── skills/
-│   └── using-dev-workflows/
-│       └── SKILL.md         # Setup skill (4 phases)
+│   ├── using-dev-workflows/
+│   │   └── SKILL.md         # Setup skill (4 phases)
+│   ├── modularity/
+│   │   └── SKILL.md         # Modular design enforcement
+│   ├── reusability/
+│   │   └── SKILL.md         # DRY, composable components
+│   ├── scalability/
+│   │   └── SKILL.md         # Stateless, efficient, scalable design
+│   ├── security/
+│   │   └── SKILL.md         # OWASP, input validation, defense in depth
+│   ├── reliability/
+│   │   └── SKILL.md         # Fault tolerance, graceful degradation
+│   ├── usability/
+│   │   └── SKILL.md         # Intuitive APIs, clear errors, accessibility
+│   ├── testability/
+│   │   └── SKILL.md         # Injectable deps, pure functions, test seams
+│   └── extensibility/
+│       └── SKILL.md         # Open-closed, versioned interfaces
 ├── templates/
 │   ├── CLAUDE.md.base       # Project CLAUDE.md template
 │   ├── dev-workflows.config.json.default  # Config template
