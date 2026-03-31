@@ -223,6 +223,10 @@ Edit `.silver-bullet.json` in your project root:
     "pulumi": false,
     "devops-skills": false,
     "wshobson": false
+  },
+  "state": {
+    "state_file": "/tmp/.silver-bullet-state",
+    "trivial_file": "/tmp/.silver-bullet-trivial"
   }
 }
 ```
