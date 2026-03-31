@@ -1,8 +1,12 @@
-# Dev Workflows
+# Silver Bullet
 
-**Enforced development workflows for Claude Code.**
+**The silver bullet for AI-driven software engineering.**
 
-Dev Workflows is a Claude Code plugin that makes Claude follow a structured 31-step development cycle — every time, without exception. It solves the #1 problem with AI coding agents: they skip steps. Even when your CLAUDE.md says "always brainstorm first," Claude will rationalize its way past it ("this is simple enough to just code directly"). This plugin makes that impossible.
+> *"There is no single development, in either technology or management technique, which by itself promises even one order-of-magnitude improvement..."* — Fred Brooks, 1986
+
+Brooks was right then. AI changes the equation now.
+
+Silver Bullet is a Claude Code plugin that makes Claude follow a structured 31-step development cycle — every time, without exception. It solves the #1 problem with AI coding agents: they skip steps. Even when your CLAUDE.md says "always brainstorm first," Claude will rationalize its way past it ("this is simple enough to just code directly"). This plugin makes that impossible.
 
 ## How It Works
 
@@ -40,7 +44,7 @@ Complete ALL required workflow steps before finalizing.
 On every single tool use, you see progress:
 
 ```
-Dev Workflows: 12 steps | PLANNING 11/11 | EXECUTION 1/1 | REVIEW 0/3 | FINALIZATION 0/3 | Next: /code-review
+Silver Bullet: 12 steps | PLANNING 11/11 | EXECUTION 1/1 | REVIEW 0/3 | FINALIZATION 0/3 | Next: /code-review
 ```
 
 There is no way to skip steps without the plugin telling Claude (and you) exactly what's missing.
@@ -60,10 +64,10 @@ brew install jq    # macOS
 apt install jq     # Linux
 ```
 
-### 2. Install Dev Workflows
+### 2. Install Silver Bullet
 
 ```
-/plugin install alo-exp/dev-workflows
+/plugin install alo-exp/silver-bullet
 ```
 
 ### 3. Initialize your project
@@ -71,14 +75,14 @@ apt install jq     # Linux
 Open your project in Claude Code and run:
 
 ```
-/using-dev-workflows
+/using-silver-bullet
 ```
 
 This will:
 - Check that all dependencies are installed
 - Auto-detect your project name, tech stack, and source directory
 - Create a `CLAUDE.md` with enforcement rules
-- Create `.dev-workflows.json` with your project config
+- Create `.silver-bullet.json` with your project config
 - Create `docs/workflows/full-dev-cycle.md` with the 31-step workflow
 - Create placeholder docs (`docs/Master-PRD.md`, etc.)
 - Commit everything
@@ -158,7 +162,7 @@ The plugin doesn't rely on Claude reading instructions. It enforces compliance t
 
 ## Customization
 
-Edit `.dev-workflows.json` in your project root:
+Edit `.silver-bullet.json` in your project root:
 
 ```json
 {
@@ -189,8 +193,8 @@ Edit `.dev-workflows.json` in your project root:
     ]
   },
   "state": {
-    "state_file": "/tmp/.dev-workflows-state",
-    "trivial_file": "/tmp/.dev-workflows-trivial"
+    "state_file": "/tmp/.silver-bullet-state",
+    "trivial_file": "/tmp/.silver-bullet-trivial"
   }
 }
 ```
@@ -210,7 +214,7 @@ Edit `.dev-workflows.json` in your project root:
 For typo fixes, copy edits, and config tweaks that don't need the full workflow, Claude will automatically detect the change is trivial and bypass enforcement by running:
 
 ```bash
-touch /tmp/.dev-workflows-trivial
+touch /tmp/.silver-bullet-trivial
 ```
 
 You can also run this manually if Claude doesn't detect a trivial change. The flag is automatically cleaned up on the next session start.
@@ -234,7 +238,7 @@ This checks the workflow state file and blocks deployment if required skills are
 If the plugin is updated and you want to refresh templates:
 
 ```
-/using-dev-workflows
+/using-silver-bullet
 ```
 
 It detects the existing config and asks if you want to refresh templates while preserving your customizations.
@@ -247,25 +251,25 @@ It detects the existing config and asks if you want to refresh templates while p
 
 **"Engineering plugin not found"** — Run `/plugin install anthropics/knowledge-work-plugins/tree/main/engineering`.
 
-**Hooks not firing** — Make sure you ran `/using-dev-workflows` in the project. Check that `.dev-workflows.json` exists in your project root.
+**Hooks not firing** — Make sure you ran `/using-silver-bullet` in the project. Check that `.silver-bullet.json` exists in your project root.
 
-**Wrong files triggering enforcement** — Edit `src_pattern` in `.dev-workflows.json` to match your project's source directory (e.g., `/app/` or `/lib/`).
+**Wrong files triggering enforcement** — Edit `src_pattern` in `.silver-bullet.json` to match your project's source directory (e.g., `/app/` or `/lib/`).
 
-**Want to start fresh** — Delete `.dev-workflows.json` and `CLAUDE.md`, then run `/using-dev-workflows` again.
+**Want to start fresh** — Delete `.silver-bullet.json` and `CLAUDE.md`, then run `/using-silver-bullet` again.
 
 ## Architecture
 
 ```
-Plugin hooks (fire automatically)          Project files (created by /using-dev-workflows)
+Plugin hooks (fire automatically)          Project files (created by /using-silver-bullet)
 ─────────────────────────────────          ───────────────────────────────────────────────
-hooks/record-skill.sh                      .dev-workflows.json (config)
+hooks/record-skill.sh                      .silver-bullet.json (config)
   → records skill invocations              CLAUDE.md (enforcement rules)
                                            docs/workflows/full-dev-cycle.md (31 steps)
 hooks/dev-cycle-check.sh
   → HARD STOP if planning incomplete       State files (ephemeral, in /tmp/)
                                            ─────────────────────────────────
-hooks/compliance-status.sh                 /tmp/.dev-workflows-state (skill log)
-  → progress score on every tool use       /tmp/.dev-workflows-trivial (bypass flag)
+hooks/compliance-status.sh                 /tmp/.silver-bullet-state (skill log)
+  → progress score on every tool use       /tmp/.silver-bullet-trivial (bypass flag)
 
 hooks/completion-audit.sh
   → blocks commit/push/deploy

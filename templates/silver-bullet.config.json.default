@@ -22,7 +22,7 @@
     ]
   },
   "state": {
-    "state_file": "/tmp/.dev-workflows-state",
-    "trivial_file": "/tmp/.dev-workflows-trivial"
+    "state_file": "/tmp/.silver-bullet-state",
+    "trivial_file": "/tmp/.silver-bullet-trivial"
   }
 }

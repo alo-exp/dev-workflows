@@ -1,4 +1,4 @@
-# Dev Workflows — CI/CD
+# Silver Bullet — CI/CD
 
 ## Pipeline Overview
 
@@ -24,7 +24,7 @@ jobs:
         run: shellcheck hooks/*.sh scripts/*.sh
       - name: Validate JSON files
         run: |
-          for f in .claude-plugin/plugin.json .claude-plugin/marketplace.json hooks/hooks.json templates/dev-workflows.config.json.default package.json; do
+          for f in .claude-plugin/plugin.json .claude-plugin/marketplace.json hooks/hooks.json templates/silver-bullet.config.json.default package.json; do
             jq empty "$f" || { echo "Invalid JSON: $f"; exit 1; }
           done
   test:
@@ -62,7 +62,7 @@ CI pipeline is active at `.github/workflows/ci.yml`. The release workflow will b
 
 ## Deploy Gate Integration
 
-For projects using Dev Workflows, copy `scripts/deploy-gate-snippet.sh` into your CI pipeline before the build/deploy step. It checks the workflow state file and blocks deployment if required skills are incomplete.
+For projects using Silver Bullet, copy `scripts/deploy-gate-snippet.sh` into your CI pipeline before the build/deploy step. It checks the workflow state file and blocks deployment if required skills are incomplete.
 
 ```bash
 # In your deploy script or CI job:

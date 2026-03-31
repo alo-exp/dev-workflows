@@ -6,7 +6,7 @@ set -euo pipefail
 # This script does NOT read stdin.
 
 # Clean up trivial-change bypass from previous session
-rm -f /tmp/.dev-workflows-trivial 2>/dev/null
+rm -f /tmp/.silver-bullet-trivial 2>/dev/null
 
 # Best-effort: silently exit if jq is unavailable
 command -v jq >/dev/null 2>&1 || exit 0

@@ -1,4 +1,4 @@
-# Dev Workflows — Product Requirements Document
+# Silver Bullet — Product Requirements Document
 
 ## Problem
 
@@ -20,14 +20,14 @@ A Claude Code plugin that enforces a structured 31-step development cycle throug
 
 ### Must Have (v1.0)
 
-1. **Single-command setup**: `/using-dev-workflows` initializes any project
+1. **Single-command setup**: `/using-silver-bullet` initializes any project
 2. **HARD STOP gate**: Block source code edits until planning is complete
 3. **Completion audit**: Block git commit/push/deploy when workflow is incomplete
 4. **Compliance status**: Show progress on every tool use
 5. **Skill tracking**: Record every skill invocation to a state file
 6. **Phase enforcement**: PLANNING -> EXECUTION -> REVIEW -> FINALIZATION -> DEPLOYMENT
-7. **Trivial change bypass**: `touch /tmp/.dev-workflows-trivial` for minor fixes
-8. **Per-project config**: `.dev-workflows.json` with customizable skill lists and patterns
+7. **Trivial change bypass**: `touch /tmp/.silver-bullet-trivial` for minor fixes
+8. **Per-project config**: `.silver-bullet.json` with customizable skill lists and patterns
 9. **Dependency detection**: Check for Superpowers, Engineering plugins, and jq at setup
 10. **Anti-rationalization**: Explicit language preventing Claude from skipping steps
 

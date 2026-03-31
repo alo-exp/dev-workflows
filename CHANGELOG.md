@@ -14,5 +14,5 @@
   - `/testability` — dependency injection, pure functions, test seams, deterministic behavior
   - `/extensibility` — open-closed principle, plugin architecture, versioned interfaces
 - Six-layer compliance enforcement system
-- `/using-dev-workflows` setup skill
+- `/using-silver-bullet` setup skill
 - Superpowers + Engineering plugin dependency management

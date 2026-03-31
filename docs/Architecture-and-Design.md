@@ -1,8 +1,8 @@
-# Dev Workflows — Architecture and Design
+# Silver Bullet — Architecture and Design
 
 ## Overview
 
-Dev Workflows is a Claude Code plugin that enforces development workflow compliance through PostToolUse hooks and a setup skill. It runs entirely in bash, requires no build step, and uses the filesystem for state.
+Silver Bullet is a Claude Code plugin that enforces development workflow compliance through PostToolUse hooks and a setup skill. It runs entirely in bash, requires no build step, and uses the filesystem for state.
 
 ## System Architecture
 
@@ -11,7 +11,7 @@ Dev Workflows is a Claude Code plugin that enforces development workflow complia
 │  Claude Code Runtime                                │
 │                                                     │
 │  ┌──────────────┐    ┌──────────────────────────┐   │
-│  │  Skill Tool   │───>│  /using-dev-workflows     │   │
+│  │  Skill Tool   │───>│  /using-silver-bullet     │   │
 │  │  invocation   │    │  (SKILL.md — setup)       │   │
 │  └──────────────┘    └──────────────────────────┘   │
 │                                                     │
@@ -38,7 +38,7 @@ Dev Workflows is a Claude Code plugin that enforces development workflow complia
 
 All hooks follow the same pattern:
 1. Read JSON from stdin (hook protocol)
-2. Walk up from `$PWD` to find `.dev-workflows.json` (stop at `.git/` or `/`)
+2. Walk up from `$PWD` to find `.silver-bullet.json` (stop at `.git/` or `/`)
 3. Read config values with jq (fall back to defaults if missing)
 4. Perform check logic
 5. Output JSON to stdout with `hookSpecificOutput.message`
@@ -68,16 +68,16 @@ All hooks follow the same pattern:
 All hooks resolve config by walking up from `$PWD`:
 
 ```
-$PWD → check .dev-workflows.json → parent dir → ... → .git/ boundary → /
+$PWD → check .silver-bullet.json → parent dir → ... → .git/ boundary → /
 ```
 
-`compliance-status.sh` caches the resolved path in `/tmp/.dev-workflows-config-path-<md5>` for performance (fires on every tool use).
+`compliance-status.sh` caches the resolved path in `/tmp/.silver-bullet-config-path-<md5>` for performance (fires on every tool use).
 
 ## State Management
 
-- **State file** (`/tmp/.dev-workflows-state`): One skill name per line, appended by `record-skill.sh`
-- **Trivial file** (`/tmp/.dev-workflows-trivial`): Presence = bypass enforcement
-- Both paths configurable via `.dev-workflows.json` and `DEV_WORKFLOWS_STATE_FILE` env var
+- **State file** (`/tmp/.silver-bullet-state`): One skill name per line, appended by `record-skill.sh`
+- **Trivial file** (`/tmp/.silver-bullet-trivial`): Presence = bypass enforcement
+- Both paths configurable via `.silver-bullet.json` and `SILVER_BULLET_STATE_FILE` env var
 
 ## Key Design Decisions
 
@@ -93,7 +93,7 @@ $PWD → check .dev-workflows.json → parent dir → ... → .git/ boundary →
 ## File Structure
 
 ```
-dev-workflows/
+silver-bullet/
 ├── .claude-plugin/
 │   ├── plugin.json          # Plugin identity and entry points
 │   └── marketplace.json     # Marketplace metadata and dependencies
@@ -108,7 +108,7 @@ dev-workflows/
 ├── scripts/
 │   └── deploy-gate-snippet.sh  # Copy-paste for CI/CD pipelines
 ├── skills/
-│   ├── using-dev-workflows/
+│   ├── using-silver-bullet/
 │   │   └── SKILL.md         # Setup skill (4 phases)
 │   ├── modularity/
 │   │   └── SKILL.md         # Modular design enforcement
@@ -128,7 +128,7 @@ dev-workflows/
 │       └── SKILL.md         # Open-closed, versioned interfaces
 ├── templates/
 │   ├── CLAUDE.md.base       # Project CLAUDE.md template
-│   ├── dev-workflows.config.json.default  # Config template
+│   ├── silver-bullet.config.json.default  # Config template
 │   └── workflows/
 │       └── full-dev-cycle.md # 31-step workflow definition
 ├── docs/                    # Project documentation

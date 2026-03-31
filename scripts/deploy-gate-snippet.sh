@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ###############################################################################
-# Deploy Gate Snippet — Dev Workflows
+# Deploy Gate Snippet — Silver Bullet
 #
 # Copy-paste this snippet into your deploy / CI script to block deployment
 # unless all required workflow skills were invoked during the current session.
@@ -12,19 +12,19 @@ set -euo pipefail
 #   source /path/to/deploy-gate-snippet.sh           # sourced in deploy script
 #   bash /path/to/deploy-gate-snippet.sh --skip-workflow-check  # bypass
 #
-# The script reads .dev-workflows.json (walking up from $PWD) for config.
+# The script reads .silver-bullet.json (walking up from $PWD) for config.
 # If no config is found it falls back to sensible defaults.
 #
 # Note: Uses return (not exit) so sourcing doesn't kill the caller's shell.
 # When run standalone, bash treats return outside a function as exit.
 ###############################################################################
 
-# --- Resolve .dev-workflows.json by walking up from $PWD ---
+# --- Resolve .silver-bullet.json by walking up from $PWD ---
 _dw_config_file=""
 _dw_search_dir="$PWD"
 while true; do
-  if [[ -f "$_dw_search_dir/.dev-workflows.json" ]]; then
-    _dw_config_file="$_dw_search_dir/.dev-workflows.json"
+  if [[ -f "$_dw_search_dir/.silver-bullet.json" ]]; then
+    _dw_config_file="$_dw_search_dir/.silver-bullet.json"
     break
   fi
   # Stop at .git boundary or filesystem root
@@ -35,8 +35,8 @@ while true; do
 done
 
 # --- Read config (gracefully degrade if jq is absent) ---
-STATE_FILE="/tmp/.dev-workflows-state"
-TRIVIAL_FILE="/tmp/.dev-workflows-trivial"
+STATE_FILE="/tmp/.silver-bullet-state"
+TRIVIAL_FILE="/tmp/.silver-bullet-trivial"
 REQUIRED_DEPLOY="brainstorming write-spec code-review verification-before-completion"
 
 if [[ -n "$_dw_config_file" ]] && command -v jq >/dev/null 2>&1; then
@@ -68,7 +68,7 @@ fi
 # 3. State file must exist
 if [[ ! -f "$STATE_FILE" ]]; then
   echo "[deploy-gate] ❌ No workflow state file found at $STATE_FILE."
-  echo "    Did you run through the dev workflow skills before deploying?"
+  echo "    Did you run through the Silver Bullet workflow skills before deploying?"
   return 1 2>/dev/null || exit 1
 fi
 

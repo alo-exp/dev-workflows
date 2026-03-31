@@ -1,21 +1,21 @@
 ---
-name: using-dev-workflows
-description: Initialize Dev Workflows enforcement for a project — checks dependencies, auto-detects project, scaffolds CLAUDE.md + config + workflow files
+name: using-silver-bullet
+description: Initialize Silver Bullet enforcement for a project — checks dependencies, auto-detects project, scaffolds CLAUDE.md + config + workflow files
 ---
 
-# /using-dev-workflows — Project Setup
+# /using-silver-bullet — Project Setup
 
-This skill initializes Dev Workflows enforcement for a project. Follow each phase in order. Do NOT skip phases unless explicitly instructed below.
+This skill initializes Silver Bullet enforcement for a project. Follow each phase in order. Do NOT skip phases unless explicitly instructed below.
 
-**Plugin root**: Determine `PLUGIN_ROOT` from this skill file's own path. This file lives at `${PLUGIN_ROOT}/skills/using-dev-workflows/SKILL.md`, so the plugin root is two directories up from this file's location.
+**Plugin root**: Determine `PLUGIN_ROOT` from this skill file's own path. This file lives at `${PLUGIN_ROOT}/skills/using-silver-bullet/SKILL.md`, so the plugin root is two directories up from this file's location.
 
 ---
 
 ## Phase 0: Update Check
 
-1. Use the Bash tool to check if `.dev-workflows.json` exists in the current project root:
+1. Use the Bash tool to check if `.silver-bullet.json` exists in the current project root:
    ```
-   test -f .dev-workflows.json && echo "EXISTS" || echo "NOT_FOUND"
+   test -f .silver-bullet.json && echo "EXISTS" || echo "NOT_FOUND"
    ```
 2. If `EXISTS` → this is a **re-run/update**. Skip Phase 1 and Phase 2. Go directly to Phase 3 in **update mode**.
 3. If `NOT_FOUND` → this is a **fresh setup**. Proceed to Phase 1.
@@ -33,7 +33,7 @@ Run via Bash tool:
 command -v jq
 ```
 If the command fails (exit code non-zero), output exactly:
-> ❌ Dev Workflows requires jq. Install: `brew install jq` (macOS) / `apt install jq` (Linux)
+> ❌ Silver Bullet requires jq. Install: `brew install jq` (macOS) / `apt install jq` (Linux)
 
 STOP. Do not proceed.
 
@@ -73,10 +73,10 @@ If the file exists, inspect its contents for any references to:
 - `/tmp/.wyzr-workflow-state`
 
 If any of these strings are found, output:
-> ⚠️ Incompatible v1 Dev Workflows hooks detected in `.claude/settings.json`.
+> ⚠️ Incompatible v1 Silver Bullet hooks detected in `.claude/settings.json`.
 > Found references to: [list the matched strings]
 >
-> These must be removed before Dev Workflows v2 can be installed.
+> These must be removed before Silver Bullet v2 can be installed.
 > Remove these entries? (yes / no)
 
 Wait for user confirmation. If "yes", use the Edit tool to remove the offending hook entries from `.claude/settings.json`. If "no", STOP.
@@ -152,15 +152,15 @@ Look right? (yes / edit)
 
 ## Phase 3: Scaffold
 
-### Update mode (`.dev-workflows.json` already exists)
+### Update mode (`.silver-bullet.json` already exists)
 
 If Phase 0 determined this is an update:
 
 1. Ask the user:
-   > Dev Workflows already configured. Refresh templates from plugin? (Your `.dev-workflows.json` customizations will be preserved.)
+   > Silver Bullet already configured. Refresh templates from plugin? (Your `.silver-bullet.json` customizations will be preserved.)
 2. If user says "no" → output "No changes made." and exit.
 3. If user says "yes":
-   a. Read `.dev-workflows.json` to get the current `project.name` and `project.src_pattern` values.
+   a. Read `.silver-bullet.json` to get the current `project.name` and `project.src_pattern` values.
    b. Read the template `${PLUGIN_ROOT}/templates/CLAUDE.md.base` using the Read tool. Replace `{{PROJECT_NAME}}` with the project name from config, replace `{{TECH_STACK}}` and `{{GIT_REPO}}` with values from config or re-detect them using Phase 2 steps.
    c. Write the rendered `CLAUDE.md` to the project root using the Write tool.
    d. Read `${PLUGIN_ROOT}/templates/workflows/full-dev-cycle.md` and write it to `docs/workflows/full-dev-cycle.md`.
@@ -177,7 +177,7 @@ Check if `CLAUDE.md` exists in the project root (use Bash: `test -f CLAUDE.md`).
 
 If it exists, ask the user:
 > Existing CLAUDE.md found. Choose one:
-> 1. **Replace** — overwrite with Dev Workflows template (your content will be lost)
+> 1. **Replace** — overwrite with Silver Bullet template (your content will be lost)
 > 2. **Append** — keep your CLAUDE.md and append only the Active Workflow section
 >
 > Which? (replace / append)
@@ -209,14 +209,14 @@ If user chose **append**:
 
 #### 3.4 Write config
 
-Read the template file at `${PLUGIN_ROOT}/templates/dev-workflows.config.json.default` using the Read tool.
+Read the template file at `${PLUGIN_ROOT}/templates/silver-bullet.config.json.default` using the Read tool.
 
 Perform these replacements:
 - `{{PROJECT_NAME}}` → the detected/confirmed project name
 
 Also set `src_pattern` to the detected/confirmed source pattern (replacing the default `/src/` if different).
 
-Write the result to `.dev-workflows.json` in the project root using the Write tool.
+Write the result to `.silver-bullet.json` in the project root using the Write tool.
 
 #### 3.5 Copy workflow file
 
@@ -260,9 +260,9 @@ TODO — Document CI/CD pipeline configuration and deployment process here.
 
 Run via Bash tool:
 ```bash
-git add CLAUDE.md .dev-workflows.json docs/
+git add CLAUDE.md .silver-bullet.json docs/
 git commit -m "$(cat <<'EOF'
-feat: initialize Dev Workflows enforcement
+feat: initialize Silver Bullet enforcement
 
 Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 EOF
@@ -278,4 +278,4 @@ Invoke `/using-superpowers` via the Skill tool to establish available skills for
 #### 3.9 Done
 
 Output:
-> Dev Workflows initialized. Start any task and the active workflow will be enforced automatically.
+> Silver Bullet initialized. Start any task and the active workflow will be enforced automatically.

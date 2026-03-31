@@ -70,4 +70,4 @@
 - "I already covered this" is NOT valid — hooks track Skill tool invocations, not judgment
 - Phase order MUST be followed: PLANNING -> EXECUTION -> REVIEW -> FINALIZATION -> DEPLOYMENT
 - Do NOT skip to a later phase before completing the current phase
-- For trivial changes (typos, copy fixes): `touch /tmp/.dev-workflows-trivial`
+- For trivial changes (typos, copy fixes): `touch /tmp/.silver-bullet-trivial`

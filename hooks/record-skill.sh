@@ -6,7 +6,7 @@ set -euo pipefail
 
 # jq is required for JSON parsing
 if ! command -v jq >/dev/null 2>&1; then
-  printf '{"hookSpecificOutput":{"message":"⚠️ Dev Workflows hooks require jq. Install: brew install jq (macOS) / apt install jq (Linux)"}}'
+  printf '{"hookSpecificOutput":{"message":"⚠️ Silver Bullet hooks require jq. Install: brew install jq (macOS) / apt install jq (Linux)"}}'
   exit 0
 fi
 
@@ -24,8 +24,8 @@ skill=$(printf '%s' "$skill" | sed 's/^[a-zA-Z_-]*://')
 config_file=""
 search_dir="$PWD"
 while true; do
-  if [[ -f "$search_dir/.dev-workflows.json" ]]; then
-    config_file="$search_dir/.dev-workflows.json"
+  if [[ -f "$search_dir/.silver-bullet.json" ]]; then
+    config_file="$search_dir/.silver-bullet.json"
     break
   fi
   # Stop at .git boundary or filesystem root
@@ -36,11 +36,11 @@ while true; do
 done
 
 # --- State file (env var override first, then config, then default) ---
-STATE_FILE="${DEV_WORKFLOWS_STATE_FILE:-}"
+STATE_FILE="${SILVER_BULLET_STATE_FILE:-}"
 if [[ -z "$STATE_FILE" && -n "$config_file" ]]; then
   STATE_FILE=$(jq -r '.state.state_file // ""' "$config_file")
 fi
-STATE_FILE="${STATE_FILE:-/tmp/.dev-workflows-state}"
+STATE_FILE="${STATE_FILE:-/tmp/.silver-bullet-state}"
 
 # --- Tracked skills list ---
 DEFAULT_TRACKED="using-superpowers brainstorming write-spec design-system ux-copy architecture system-design modularity reusability scalability security reliability usability testability extensibility writing-plans executing-plans code-review requesting-code-review receiving-code-review testing-strategy systematic-debugging debug tech-debt documentation verification-before-completion finishing-a-development-branch deploy-checklist"
@@ -63,7 +63,7 @@ for t in $tracked_list; do
 done
 
 if [[ "$is_tracked" == false ]]; then
-  printf '{"hookSpecificOutput":{"message":"ℹ️ Skill not tracked by Dev Workflows: %s"}}' "$skill"
+  printf '{"hookSpecificOutput":{"message":"ℹ️ Skill not tracked by Silver Bullet: %s"}}' "$skill"
   exit 0
 fi
 

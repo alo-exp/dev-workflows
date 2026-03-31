@@ -1,4 +1,4 @@
-# Dev Workflows — Testing Strategy and Plan
+# Silver Bullet — Testing Strategy and Plan
 
 ## Approach
 
@@ -15,7 +15,7 @@ Pure bash integration tests. Each hook is tested by piping JSON to stdin and che
 | Strip namespace | `{"tool_input":{"skill":"superpowers:brainstorming"}}` | `brainstorming` in state file (not `superpowers:brainstorming`) |
 | No duplicates | Record same skill twice | Only one entry in state file |
 | Missing jq | (jq not on PATH) | Install instructions message, exit 0 |
-| No config | (no .dev-workflows.json) | Uses default tracked list |
+| No config | (no .silver-bullet.json) | Uses default tracked list |
 
 ### dev-cycle-check.sh
 
@@ -47,7 +47,7 @@ Pure bash integration tests. Each hook is tested by piping JSON to stdin and che
 
 | Test Case | State | Expected Output |
 |-----------|-------|-----------------|
-| No config | (no .dev-workflows.json) | Silent exit |
+| No config | (no .silver-bullet.json) | Silent exit |
 | Empty state | No state file | "0 steps, PLANNING 0/11..." |
 | Partial progress | brainstorming done | "1 steps, PLANNING 1/11..." |
 | All complete | All skills done | Full counts, no "Next" |

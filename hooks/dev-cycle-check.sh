@@ -6,7 +6,7 @@ set -euo pipefail
 
 # jq is required for JSON parsing
 if ! command -v jq >/dev/null 2>&1; then
-  printf '{"hookSpecificOutput":{"message":"⚠️ Dev Workflows hooks require jq. Install: brew install jq (macOS) / apt install jq (Linux)"}}'
+  printf '{"hookSpecificOutput":{"message":"⚠️ Silver Bullet hooks require jq. Install: brew install jq (macOS) / apt install jq (Linux)"}}'
   exit 0
 fi
 
@@ -33,8 +33,8 @@ main() {
     search_dir="$PWD"
   fi
   while true; do
-    if [[ -f "$search_dir/.dev-workflows.json" ]]; then
-      config_file="$search_dir/.dev-workflows.json"
+    if [[ -f "$search_dir/.silver-bullet.json" ]]; then
+      config_file="$search_dir/.silver-bullet.json"
       break
     fi
     if [[ -d "$search_dir/.git" ]] || [[ "$search_dir" == "/" ]]; then
@@ -47,8 +47,8 @@ main() {
   src_pattern="/src/"
   src_exclude_pattern='__tests__|\.test\.'
   required_planning="brainstorming write-spec modularity reusability scalability security reliability usability testability extensibility writing-plans"
-  state_file="/tmp/.dev-workflows-state"
-  trivial_file="/tmp/.dev-workflows-trivial"
+  state_file="/tmp/.silver-bullet-state"
+  trivial_file="/tmp/.silver-bullet-trivial"
 
   if [[ -n "$config_file" ]]; then
     src_pattern=$(jq -r '.project.src_pattern // "/src/"' "$config_file")
@@ -62,7 +62,7 @@ main() {
   fi
 
   # Env var overrides
-  state_file="${DEV_WORKFLOWS_STATE_FILE:-$state_file}"
+  state_file="${SILVER_BULLET_STATE_FILE:-$state_file}"
 
   # --- Check if file/command matches src_pattern ---
   if [[ -n "$file_path" ]]; then

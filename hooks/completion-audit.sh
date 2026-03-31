@@ -35,8 +35,8 @@ trap 'printf "{\"hookSpecificOutput\":{\"message\":\"⚠️ completion-audit.sh:
 config_file=""
 search_dir="$PWD"
 while true; do
-  if [[ -f "$search_dir/.dev-workflows.json" ]]; then
-    config_file="$search_dir/.dev-workflows.json"
+  if [[ -f "$search_dir/.silver-bullet.json" ]]; then
+    config_file="$search_dir/.silver-bullet.json"
     break
   fi
   if [[ -d "$search_dir/.git" ]] || [[ "$search_dir" == "/" ]]; then
@@ -45,18 +45,18 @@ while true; do
   search_dir=$(dirname "$search_dir")
 done
 
-# No config → project not set up with Dev Workflows — silent exit
+# No config → project not set up with Silver Bullet — silent exit
 [[ -z "$config_file" ]] && exit 0
 
 # --- Read config values ---
-state_file="/tmp/.dev-workflows-state"
-trivial_file="/tmp/.dev-workflows-trivial"
+state_file="/tmp/.silver-bullet-state"
+trivial_file="/tmp/.silver-bullet-trivial"
 required_deploy=""
 
 if [[ -n "$config_file" ]]; then
   config_vals=$(jq -r '[
-    (.state.state_file // "/tmp/.dev-workflows-state"),
-    (.state.trivial_file // "/tmp/.dev-workflows-trivial"),
+    (.state.state_file // "/tmp/.silver-bullet-state"),
+    (.state.trivial_file // "/tmp/.silver-bullet-trivial"),
     ((.skills.required_deploy // []) | join(" "))
   ] | join("\n")' "$config_file")
 
@@ -66,7 +66,7 @@ if [[ -n "$config_file" ]]; then
 fi
 
 # Env var override for state file
-state_file="${DEV_WORKFLOWS_STATE_FILE:-$state_file}"
+state_file="${SILVER_BULLET_STATE_FILE:-$state_file}"
 
 # --- Check trivial file override ---
 if [[ -f "$trivial_file" ]]; then

@@ -23,7 +23,7 @@ fi
 config_file=""
 
 if [[ -n "$pwd_hash" ]]; then
-  cache_file="/tmp/.dev-workflows-config-path-${pwd_hash}"
+  cache_file="/tmp/.silver-bullet-config-path-${pwd_hash}"
 
   # Check cache
   if [[ -f "$cache_file" ]]; then
@@ -40,8 +40,8 @@ fi
 if [[ -z "$config_file" ]]; then
   search_dir="$PWD"
   while true; do
-    if [[ -f "$search_dir/.dev-workflows.json" ]]; then
-      config_file="$search_dir/.dev-workflows.json"
+    if [[ -f "$search_dir/.silver-bullet.json" ]]; then
+      config_file="$search_dir/.silver-bullet.json"
       break
     fi
     if [[ -d "$search_dir/.git" ]] || [[ "$search_dir" == "/" ]]; then
@@ -52,7 +52,7 @@ if [[ -z "$config_file" ]]; then
 
   # Cache result
   if [[ -n "${pwd_hash:-}" ]]; then
-    cache_file="/tmp/.dev-workflows-config-path-${pwd_hash}"
+    cache_file="/tmp/.silver-bullet-config-path-${pwd_hash}"
     printf '%s' "$config_file" > "$cache_file"
   fi
 fi
@@ -62,7 +62,7 @@ fi
 
 # --- Read config values (single jq call for performance) ---
 config_vals=$(jq -r '[
-  (.state.state_file // "/tmp/.dev-workflows-state"),
+  (.state.state_file // "/tmp/.silver-bullet-state"),
   ((.skills.required_planning // ["brainstorming","write-spec","modularity","reusability","scalability","security","reliability","usability","testability","extensibility","writing-plans"]) | join(" "))
 ] | join("\n")' "$config_file")
 
@@ -70,14 +70,14 @@ state_file=$(printf '%s' "$config_vals" | sed -n '1p')
 required_planning=$(printf '%s' "$config_vals" | sed -n '2p')
 
 # Env var override
-state_file="${DEV_WORKFLOWS_STATE_FILE:-$state_file}"
+state_file="${SILVER_BULLET_STATE_FILE:-$state_file}"
 
 # If no state file exists → early output with zeros
 if [[ ! -f "$state_file" ]]; then
   # Count totals
   plan_total=0
   for _ in $required_planning; do ((plan_total++)) || true; done
-  printf '{"hookSpecificOutput":{"message":"Dev Workflows: 0 steps | PLANNING 0/%d | EXECUTION 0/1 | REVIEW 0/3 | FINALIZATION 0/3 | Next: /%s"}}' \
+  printf '{"hookSpecificOutput":{"message":"Silver Bullet: 0 steps | PLANNING 0/%d | EXECUTION 0/1 | REVIEW 0/3 | FINALIZATION 0/3 | Next: /%s"}}' \
     "$plan_total" \
     "$(printf '%s' "$required_planning" | cut -d' ' -f1)"
   exit 0
@@ -151,7 +151,7 @@ elif [[ -n "$first_missing_final" ]]; then
 fi
 
 # --- Build output ---
-msg="Dev Workflows: ${total_steps} steps | PLANNING ${plan_done}/${plan_total} | EXECUTION ${exec_done}/${exec_total} | REVIEW ${review_done}/${review_total} | FINALIZATION ${final_done}/${final_total}"
+msg="Silver Bullet: ${total_steps} steps | PLANNING ${plan_done}/${plan_total} | EXECUTION ${exec_done}/${exec_total} | REVIEW ${review_done}/${review_total} | FINALIZATION ${final_done}/${final_total}"
 if [[ -n "$next_skill" ]]; then
   msg="${msg} | Next: /${next_skill}"
 fi
