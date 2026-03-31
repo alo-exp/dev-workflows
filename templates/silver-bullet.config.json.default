@@ -8,8 +8,7 @@
   },
   "skills": {
     "required_planning": [
-      "modularity", "reusability", "scalability", "security",
-      "reliability", "usability", "testability", "extensibility"
+      "quality-gates"
     ],
     "required_deploy": [
       "code-review", "receiving-code-review",
@@ -17,8 +16,7 @@
       "finishing-a-development-branch", "deploy-checklist"
     ],
     "all_tracked": [
-      "modularity", "reusability", "scalability", "security",
-      "reliability", "usability", "testability", "extensibility",
+      "quality-gates",
       "design-system", "ux-copy",
       "architecture", "system-design",
       "code-review", "requesting-code-review", "receiving-code-review",
