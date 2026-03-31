@@ -183,13 +183,13 @@ Edit `.dev-workflows.json` in your project root:
 
 ## Trivial Changes
 
-For typo fixes, copy edits, and config tweaks that don't need the full workflow:
+For typo fixes, copy edits, and config tweaks that don't need the full workflow, Claude will automatically detect the change is trivial and bypass enforcement by running:
 
 ```bash
 touch /tmp/.dev-workflows-trivial
 ```
 
-This bypasses all enforcement for the current session. The flag is automatically cleaned up on the next session start.
+You can also run this manually if Claude doesn't detect a trivial change. The flag is automatically cleaned up on the next session start.
 
 ## For CI/CD Pipelines
 
