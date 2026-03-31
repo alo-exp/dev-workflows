@@ -78,7 +78,13 @@ brew install jq    # macOS
 apt install jq     # Linux
 ```
 
-### 2. (Optional) Install DevOps plugins
+### 2. Install Silver Bullet
+
+```
+/plugin install alo-exp/silver-bullet
+```
+
+### 3. (Optional) Install DevOps plugins
 
 If you'll use the `devops-cycle` workflow, these optional plugins provide context-aware
 enrichment. Silver Bullet's skill router automatically selects the best plugin for
@@ -103,12 +109,6 @@ your IaC toolchain and cloud provider. None are required — the workflow works 
 During `/using-silver-bullet` setup, Silver Bullet detects which of these are installed
 and stores the results in `.silver-bullet.json`. The `devops-cycle` workflow then uses
 the `/devops-skill-router` to invoke the best available skill at each trigger point.
-
-### 3. Install Silver Bullet
-
-```
-/plugin install alo-exp/silver-bullet
-```
 
 ### 4. Initialize your project
 
@@ -210,12 +210,19 @@ Edit `.silver-bullet.json` in your project root:
       "finishing-a-development-branch", "deploy-checklist"
     ],
     "all_tracked": [
-      "quality-gates", "blast-radius", "devops-quality-gates",
+      "quality-gates", "blast-radius", "devops-quality-gates", "devops-skill-router",
       "design-system", "ux-copy", "architecture", "system-design",
       "code-review", "requesting-code-review", "receiving-code-review",
       "testing-strategy", "documentation",
       "finishing-a-development-branch", "deploy-checklist"
     ]
+  },
+  "devops_plugins": {
+    "hashicorp": false,
+    "awslabs": false,
+    "pulumi": false,
+    "devops-skills": false,
+    "wshobson": false
   }
 }
 ```
@@ -229,7 +236,8 @@ Edit `.silver-bullet.json` in your project root:
 | `active_workflow` | Which workflow to enforce | `full-dev-cycle` |
 | `required_planning` | Skills that must run before code edits | `quality-gates` |
 | `required_deploy` | Skills that must run before commit/push/deploy | code-review, receiving-code-review, testing-strategy, documentation, finishing-a-development-branch, deploy-checklist |
-| `all_tracked` | All skills that get recorded | 13 skills (see above) |
+| `all_tracked` | All skills that get recorded | 14 skills (see above) |
+| `devops_plugins` | Which optional DevOps plugins are installed (auto-detected) | all `false` |
 
 ## Trivial Changes
 

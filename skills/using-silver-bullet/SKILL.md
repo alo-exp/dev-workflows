@@ -258,6 +258,10 @@ ls ~/.claude/plugins/cache/*/agents/*/plugins/kubernetes-operations/skills/*/SKI
 
 If a probe returns a path → that plugin is detected (`true`). If empty → `false`.
 
+**Fallback detection**: If a Glob probe returns empty but you suspect the plugin is
+installed (e.g., the user says it is), try invoking one of its known skills via the
+Skill tool as a fallback check — similar to how Phase 1.3 checks the Design plugin.
+
 Present a summary to the user:
 
 ```
@@ -289,7 +293,7 @@ If Phase 0 determined this is an update:
 2. If user says "no" → output "No changes made." and exit.
 3. If user says "yes":
    a. Read `.silver-bullet.json` to get the current `project.name` and `project.src_pattern` values.
-   b. Read the template `${PLUGIN_ROOT}/templates/CLAUDE.md.base` using the Read tool. Replace `{{PROJECT_NAME}}` with the project name from config, replace `{{TECH_STACK}}` and `{{GIT_REPO}}` with values from config or re-detect them using Phase 2 steps.
+   b. Read the template `${PLUGIN_ROOT}/templates/CLAUDE.md.base` using the Read tool. Replace `{{PROJECT_NAME}}` with the project name from config, replace `{{TECH_STACK}}` and `{{GIT_REPO}}` with values from config or re-detect them using Phase 2 steps. Replace `{{ACTIVE_WORKFLOW}}` with the `active_workflow` value from config.
    c. Write the rendered `CLAUDE.md` to the project root using the Write tool.
    d. Read `${PLUGIN_ROOT}/templates/workflows/full-dev-cycle.md` and write it to `docs/workflows/full-dev-cycle.md`.
       Also read `${PLUGIN_ROOT}/templates/workflows/devops-cycle.md` and write it to `docs/workflows/devops-cycle.md` if that file already exists in the project.
@@ -328,6 +332,7 @@ Perform these replacements in the template content:
 - `{{PROJECT_NAME}}` → the detected/confirmed project name
 - `{{TECH_STACK}}` → the detected/confirmed tech stack
 - `{{GIT_REPO}}` → the detected/confirmed repo URL
+- `{{ACTIVE_WORKFLOW}}` → the value of `WORKFLOW_TYPE` from step 2.6 (`full-dev-cycle` or `devops-cycle`)
 
 If user chose **replace** (or no existing CLAUDE.md exists):
 - Write the fully rendered template to `CLAUDE.md` in the project root using the Write tool.
@@ -346,8 +351,11 @@ Perform these replacements:
 Also set:
 - `src_pattern` to the detected/confirmed source pattern (replacing the default `/src/` if different).
 - `active_workflow` to the value of `WORKFLOW_TYPE` from step 2.6 (replacing the default `full-dev-cycle` if `devops-cycle` was selected).
-- If `WORKFLOW_TYPE == devops-cycle` and `DEVOPS_PLUGINS` was gathered in step 2.7, add
-  a `devops_plugins` section to the config with the detection results:
+- If `WORKFLOW_TYPE == devops-cycle`:
+  - Replace `required_planning` with `["blast-radius", "devops-quality-gates"]` (these are the
+    planning gates for IaC work — `quality-gates` is for application work only).
+  - Set each key in the `devops_plugins` section to `true` or `false` based on the
+    detection results from step 2.7:
   ```json
   "devops_plugins": {
     "hashicorp": true/false,

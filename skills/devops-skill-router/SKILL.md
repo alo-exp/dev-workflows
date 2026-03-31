@@ -116,8 +116,12 @@ context, proceed without — Silver Bullet's own quality gates still apply.
 
 For the highest-priority available skill:
 
-1. Invoke it via the Skill tool (e.g., `/hashicorp:terraform-code-generation`).
-   If the skill uses a different invocation pattern (slash command, etc.), use that.
+1. Invoke it via the Skill tool. The exact syntax depends on how each plugin
+   registers its skills. Try these patterns in order:
+   - `/<plugin-namespace>:<skill-name>` (e.g., `/hashicorp:terraform-code-generation`)
+   - `/<skill-name>@<plugin-name>` (e.g., `/terraform-code-generation@hashicorp`)
+   - `/<skill-name>` (e.g., `/terraform-code-generation`)
+   Use whichever pattern works for the installed plugin version.
 2. Feed the skill's output into the current workflow phase as additional context.
 3. If the skill invocation fails (not found, error), silently fall through to the
    next priority. If all priorities fail, proceed without — log a note:

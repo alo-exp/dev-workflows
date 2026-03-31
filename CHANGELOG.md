@@ -23,6 +23,13 @@
 - `/using-silver-bullet` Phase 2.6 asks application vs DevOps/infrastructure
 - Sets `active_workflow` in config to `full-dev-cycle` or `devops-cycle`
 
+### New: DevOps plugin integration
+- `/devops-skill-router` skill — context-aware routing table mapping IaC toolchain + cloud provider to the best available plugin skill with fallback chains
+- 5 optional DevOps plugins supported: hashicorp/agent-skills, awslabs/agent-plugins, pulumi/agent-skills, ahmedasmar/devops-claude-skills, wshobson/agents
+- `/using-silver-bullet` Phase 2.7 auto-detects which DevOps plugins are installed
+- `devops-cycle.md` contextual enrichment trigger points at DISCUSS, PLAN, EXECUTE, VERIFY, FINALIZATION
+- `devops_plugins` section added to config for tracking installed plugins
+
 ### Hook updates
 - All hooks updated to align with GSD-integrated workflow
 - `record-skill.sh` — tracked skills list updated (removed GSD-replaced skills, added new skills)

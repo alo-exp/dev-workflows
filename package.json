@@ -1,12 +1,12 @@
 {
   "name": "silver-bullet",
-  "version": "0.1.0",
-  "description": "The silver bullet for AI-driven software engineering. Enforced 31-step workflow with 8 quality-ility gates for Claude Code.",
-  "author": "Ālo Labs <info@alolabs.dev>",
+  "version": "0.2.0",
+  "description": "AI-native Software Engineering Process Orchestrator. Enforced 19-step (app) and 23-step (DevOps) workflows with quality gates for Claude Code.",
+  "author": "Alo Labs <info@alolabs.dev>",
   "license": "MIT",
   "repository": {
     "type": "git",
     "url": "https://github.com/alo-exp/silver-bullet.git"
   },
-  "keywords": ["claude-code", "plugin", "silver-bullet", "enforcement", "quality"]
+  "keywords": ["claude-code", "plugin", "silver-bullet", "enforcement", "quality", "orchestrator", "devops", "gsd"]
 }

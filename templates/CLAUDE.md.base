@@ -51,7 +51,7 @@ Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
 The active workflow is loaded from `docs/workflows/`. Claude MUST read
 the active workflow file before starting any non-trivial task.
 
-**Default**: `docs/workflows/full-dev-cycle.md`
+**Active**: `docs/workflows/{{ACTIVE_WORKFLOW}}.md`
 
 **Skill not found rule**: If a skill listed in the workflow cannot be
 invoked, STOP and notify the user immediately. Do NOT silently skip.
