@@ -215,8 +215,22 @@ Detected:
 Look right? (yes / edit)
 ```
 
-- If user says "yes" or equivalent → proceed to Phase 3.
-- If user says "edit" → ask which fields to change, accept new values, then proceed to Phase 3.
+- If user says "yes" or equivalent → proceed to step 2.6.
+- If user says "edit" → ask which fields to change, accept new values, then proceed to step 2.6.
+
+### 2.6 Detect project type
+
+Ask the user:
+
+> What type of project is this?
+> 1. **Application** — software product (web app, API, CLI, library, etc.) → uses `full-dev-cycle` workflow
+> 2. **DevOps / Infrastructure** — IaC, CI/CD pipelines, k8s, Terraform, Helm → uses `devops-cycle` workflow
+
+Store the user's answer as `WORKFLOW_TYPE`:
+- Answer "1" / "application" / "app" → `WORKFLOW_TYPE = full-dev-cycle`
+- Answer "2" / "devops" / "infra" / "infrastructure" → `WORKFLOW_TYPE = devops-cycle`
+
+Proceed to Phase 3 with `WORKFLOW_TYPE` set.
 
 ---
 
@@ -234,6 +248,7 @@ If Phase 0 determined this is an update:
    b. Read the template `${PLUGIN_ROOT}/templates/CLAUDE.md.base` using the Read tool. Replace `{{PROJECT_NAME}}` with the project name from config, replace `{{TECH_STACK}}` and `{{GIT_REPO}}` with values from config or re-detect them using Phase 2 steps.
    c. Write the rendered `CLAUDE.md` to the project root using the Write tool.
    d. Read `${PLUGIN_ROOT}/templates/workflows/full-dev-cycle.md` and write it to `docs/workflows/full-dev-cycle.md`.
+      Also read `${PLUGIN_ROOT}/templates/workflows/devops-cycle.md` and write it to `docs/workflows/devops-cycle.md` if that file already exists in the project.
    e. Output: "Templates refreshed. Config preserved."
    f. Exit. Do NOT re-run the commit or `/using-superpowers` steps.
 
@@ -284,15 +299,26 @@ Read the template file at `${PLUGIN_ROOT}/templates/silver-bullet.config.json.de
 Perform these replacements:
 - `{{PROJECT_NAME}}` → the detected/confirmed project name
 
-Also set `src_pattern` to the detected/confirmed source pattern (replacing the default `/src/` if different).
+Also set:
+- `src_pattern` to the detected/confirmed source pattern (replacing the default `/src/` if different).
+- `active_workflow` to the value of `WORKFLOW_TYPE` from step 2.6 (replacing the default `full-dev-cycle` if `devops-cycle` was selected).
 
 Write the result to `.silver-bullet.json` in the project root using the Write tool.
 
-#### 3.5 Copy workflow file
+#### 3.5 Copy workflow file(s)
 
-Read `${PLUGIN_ROOT}/templates/workflows/full-dev-cycle.md` using the Read tool.
+Based on `WORKFLOW_TYPE` from step 2.6:
 
-Write the contents to `docs/workflows/full-dev-cycle.md` using the Write tool.
+**If `full-dev-cycle`**:
+- Read `${PLUGIN_ROOT}/templates/workflows/full-dev-cycle.md` using the Read tool.
+- Write to `docs/workflows/full-dev-cycle.md` using the Write tool.
+
+**If `devops-cycle`**:
+- Read `${PLUGIN_ROOT}/templates/workflows/devops-cycle.md` using the Read tool.
+- Write to `docs/workflows/devops-cycle.md` using the Write tool.
+- Also read `${PLUGIN_ROOT}/templates/workflows/full-dev-cycle.md` and write to
+  `docs/workflows/full-dev-cycle.md` so it is available if the project adds
+  application code later.
 
 #### 3.6 Create placeholder docs
 
