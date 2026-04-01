@@ -635,14 +635,15 @@ footer .footer-links{display:flex;gap:24px}
 
 /* 768px — tablet / large phone */
 @media(max-width:768px){
-  section{padding:56px 0}
-  .hero{padding:100px 20px 64px}
-  .hero h1{margin-bottom:32px}
+  section{padding:72px 0}
+  .hero{padding:110px 20px 72px}
+  .hero h1{margin-bottom:36px}
   .hero .version-badge{font-size:.72rem;padding:5px 12px}
-  .hero .tagline{font-size:1.1rem;margin-bottom:36px}
-  .hero .subtitle{font-size:.95rem;margin-bottom:32px}
+  .hero .tagline{font-size:1.1rem;margin-bottom:40px}
+  .hero .subtitle{font-size:.95rem;margin-bottom:36px}
   .hero .subtitle br{display:none}
-  .hero .cta-group{margin-bottom:40px}
+  .hero .cta-group{margin-bottom:48px}
+  .hero-pills{gap:14px}
   .callout{padding:28px 20px}
   .install-code{font-size:.78rem;padding:20px 16px}
   .workflow-tabs{flex-wrap:wrap;gap:6px}
@@ -651,12 +652,13 @@ footer .footer-links{display:flex;gap:24px}
   .layer-card{padding:20px}
   .feature-card{padding:24px}
   .compare-card{padding:24px}
+  .mt-6{margin-top:56px}
 }
 
 /* 600px — small phone */
 @media(max-width:600px){
-  section{padding:48px 0}
-  .hero{padding:88px 16px 56px}
+  section{padding:60px 0}
+  .hero{padding:96px 16px 64px}
   .hero .brooks-block{max-width:100%;gap:14px}
   .hero .brooks-photo{width:56px;height:56px}
   .hero .brooks-quote,.hero .brooks-attr{max-width:100%;padding-left:12px}
@@ -667,15 +669,20 @@ footer .footer-links{display:flex;gap:24px}
   .install-code{padding:16px;font-size:.73rem}
   .install-code div{word-break:break-all;white-space:normal}
   .workflow-table td,.workflow-table th{padding:7px 8px;font-size:.75rem}
-  .callout{padding:20px 16px}
+  .callout{padding:24px 16px}
   .callout p{font-size:.95rem}
   .enforcement-body{font-size:.74rem;padding:14px 16px;line-height:1.7}
   footer .footer-inner{flex-direction:column;align-items:flex-start;gap:12px}
   footer .footer-links{flex-wrap:wrap;gap:16px}
-  .section-desc{margin-bottom:32px}
+  .section-desc{margin-bottom:40px}
+  .section-title{margin-bottom:20px}
   .ecosystem-card,.devops-card{padding:20px}
   .compare-card{padding:20px}
   .layer-card{padding:16px;gap:12px}
+  .hero-pills{gap:14px;margin-bottom:40px}
+  .mt-4{margin-top:40px}
+  .mt-6{margin-top:56px}
+  .mb-4{margin-bottom:40px}
 }
 </style>
 </head>
@@ -843,7 +850,6 @@ footer .footer-links{display:flex;gap:24px}
 
       <div class="ecosystem-card primary-plugin fade-in">
         <div class="plugin-logo">&#127381;</div>
-        <div class="primary-badge">&#11088; Primary Workflow</div>
         <div class="plugin-name">GSD</div>
         <div class="plugin-role">get-shit-done &mdash; Execution Engine</div>
         <div class="plugin-desc">The most sophisticated agentic execution system in the community. Solves context rot at the architectural level by giving every task a fresh 200K-token context window.</div>
