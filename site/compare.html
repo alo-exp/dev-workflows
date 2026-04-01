@@ -157,6 +157,39 @@ footer .footer-inner{display:flex;justify-content:space-between;align-items:cent
 footer a{color:var(--text-secondary);text-decoration:none}
 footer a:hover{color:var(--accent-light)}
 footer .footer-links{display:flex;gap:24px}
+
+/* ── RESPONSIVE ── */
+/* 768px — tables scroll, hero shrinks */
+@media(max-width:768px){
+  section{padding:52px 0}
+  .hero{padding:90px 20px 56px}
+  .score-card{padding:24px}
+  .when-card{padding:24px}
+  .feat-category-header{flex-direction:column;align-items:flex-start;gap:6px}
+  .feat-category-header .cat-scores{font-size:.75rem}
+  /* wrap feature tables in scroll containers */
+  .feat-table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .cat-table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .feat-table th:nth-child(1),.feat-table td:nth-child(1){width:auto;min-width:180px}
+  .feat-table th:nth-child(2),.feat-table td:nth-child(2){min-width:70px}
+  .feat-table th:nth-child(3),.feat-table td:nth-child(3){min-width:80px}
+  .feat-table th:nth-child(4),.feat-table td:nth-child(4){min-width:80px}
+  .feat-table th:nth-child(5),.feat-table td:nth-child(5){min-width:80px}
+}
+
+/* 600px — stack everything */
+@media(max-width:600px){
+  section{padding:40px 0}
+  .hero{padding:80px 16px 48px}
+  .score-card{padding:20px}
+  .when-card{padding:20px}
+  .feat-table td,.feat-table th{padding:8px 10px;font-size:.76rem}
+  .cat-table td,.cat-table th{padding:8px 10px;font-size:.8rem}
+  .feat-category-header{padding:10px 14px;font-size:.82rem}
+  footer .footer-inner{flex-direction:column;align-items:flex-start;gap:12px}
+  footer .footer-links{flex-wrap:wrap;gap:16px}
+  .section-desc{margin-bottom:28px}
+}
 </style>
 </head>
 <body>

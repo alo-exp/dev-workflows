@@ -627,12 +627,55 @@ footer .footer-links{display:flex;gap:24px}
 .fade-in.visible{opacity:1;transform:translateY(0)}
 
 /* ───── RESPONSIVE ───── */
+
+/* 900px — grid collapsing (feature-grid missing breakpoint) */
+@media(max-width:900px){
+  .feature-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* 768px — tablet / large phone */
+@media(max-width:768px){
+  section{padding:56px 0}
+  .hero{padding:100px 20px 64px}
+  .hero h1{margin-bottom:32px}
+  .hero .version-badge{font-size:.72rem;padding:5px 12px}
+  .hero .tagline{font-size:1.1rem;margin-bottom:36px}
+  .hero .subtitle{font-size:.95rem;margin-bottom:32px}
+  .hero .subtitle br{display:none}
+  .hero .cta-group{margin-bottom:40px}
+  .callout{padding:28px 20px}
+  .install-code{font-size:.78rem;padding:20px 16px}
+  .workflow-tabs{flex-wrap:wrap;gap:6px}
+  .workflow-tab{padding:8px 16px;font-size:.8rem}
+  .enforcement-body{font-size:.78rem;padding:16px 18px}
+  .layer-card{padding:20px}
+  .feature-card{padding:24px}
+  .compare-card{padding:24px}
+}
+
+/* 600px — small phone */
 @media(max-width:600px){
+  section{padding:48px 0}
+  .hero{padding:88px 16px 56px}
   .hero .brooks-block{max-width:100%;gap:14px}
   .hero .brooks-photo{width:56px;height:56px}
   .hero .brooks-quote,.hero .brooks-attr{max-width:100%;padding-left:12px}
-  .install-code{padding:20px}
-  .workflow-table td,.workflow-table th{padding:8px 10px}
+  .hero .cta-group{flex-direction:column;align-items:center}
+  .btn{width:100%;max-width:300px;justify-content:center}
+  .feature-grid{grid-template-columns:1fr}
+  .install-block{max-width:100%}
+  .install-code{padding:16px;font-size:.73rem}
+  .install-code div{word-break:break-all;white-space:normal}
+  .workflow-table td,.workflow-table th{padding:7px 8px;font-size:.75rem}
+  .callout{padding:20px 16px}
+  .callout p{font-size:.95rem}
+  .enforcement-body{font-size:.74rem;padding:14px 16px;line-height:1.7}
+  footer .footer-inner{flex-direction:column;align-items:flex-start;gap:12px}
+  footer .footer-links{flex-wrap:wrap;gap:16px}
+  .section-desc{margin-bottom:32px}
+  .ecosystem-card,.devops-card{padding:20px}
+  .compare-card{padding:20px}
+  .layer-card{padding:16px;gap:12px}
 }
 </style>
 </head>
