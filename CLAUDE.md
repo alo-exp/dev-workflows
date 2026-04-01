@@ -78,3 +78,54 @@ the enforcement hooks track Skill tool invocations, not your judgment.
 - Do NOT stop until the final outcome is achieved
 - Always use /systematic-debugging + /debug for ANY bug
 - Always strictly adhere to this CLAUDE.md 100%
+
+## 4. Session Mode
+
+At the start of every session, before any work begins, ask:
+
+> Run this session **interactively** or **autonomously**?
+> - **Interactive** (default) — I pause at decision points and phase gates
+> - **Autonomous** — I drive start to finish and surface blockers at the end
+
+Write the choice:
+```bash
+echo "interactive" > /tmp/.silver-bullet-mode
+# or
+echo "autonomous" > /tmp/.silver-bullet-mode
+```
+
+**Fallback**: if `/tmp/.silver-bullet-mode` is unreadable at any point, default to interactive
+and log "Mode fallback: defaulted to interactive" in the session log.
+
+**In autonomous mode:**
+- Phase gates removed — proceed without approval pauses
+- Clarifying questions suppressed — make best-judgment calls, log each as "Autonomous decision"
+- **Genuine blockers first** (missing credentials, ambiguous destructive operations): these take
+  precedence over all other rules — queue under "Needs human review", skip, surface in summary
+- **Anti-stall** (non-blocker stalls only): a stall = the same tool call with identical args
+  producing the same result 2+ times consecutively, OR 3+ tool calls in one step with no new
+  state change (no file written, no new decision, no new information). On stall: make
+  best-judgment decision, move on, log it.
+- All Agent Team dispatches use `run_in_background: true`
+- On completion: output structured summary (phases done, autonomous decisions, blockers queued,
+  agents dispatched, commits made, virtual cost)
+
+---
+
+## 5. Model Routing
+
+Default model: **claude-sonnet-4-6** (latest Sonnet). No user friction for standard work.
+
+Ask about Opus at two phase transitions only:
+
+1. **Before Planning begins (before DISCUSS step):**
+   > Entering Planning phase. Use Opus (claude-opus-4-6) for deeper reasoning, or stay on Sonnet?
+
+2. **Before Design sub-steps apply (design-system / ux-copy / architecture / system-design):**
+   > Entering Design phase. Use Opus, or stay on Sonnet?
+
+If Opus permitted: switch to `claude-opus-4-6` for that phase, return to Sonnet afterward.
+
+**Autonomous mode**: stay Sonnet. Escalate silently to Opus only if a planning step produces
+measurably incomplete output: fewer than 5 lines, contains `TBD`/`[TODO]`/`...` placeholders,
+or a step expected to produce a file produces none. Log escalation as an autonomous decision.
