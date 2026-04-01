@@ -19,6 +19,22 @@ Use `/gsd:next` at any point to auto-advance to the next GSD step if unsure of c
 
 ---
 
+## STEP 0: SESSION MODE
+
+> Run once at the very start of the session, before any project work.
+
+Ask:
+> Run this session **interactively** or **autonomously**?
+> - **Interactive** (default) — I pause at decision points and phase gates
+> - **Autonomous** — I drive start to finish, surface blockers at the end
+
+Write choice to `/tmp/.silver-bullet-mode`:
+```bash
+echo "interactive" > /tmp/.silver-bullet-mode   # or "autonomous"
+```
+
+---
+
 ## PROJECT INITIALIZATION
 
 > Run once per project. Skip entirely if `.planning/PROJECT.md` already exists.
@@ -39,6 +55,15 @@ Use `/gsd:next` at any point to auto-advance to the next GSD step if unsure of c
 
 ---
 
+### MODEL ROUTING (once per session)
+
+Before DISCUSS begins, ask:
+> Entering Planning phase. Use Opus (claude-opus-4-6) for deeper reasoning, or stay on Sonnet?
+
+Autonomous mode: stay Sonnet; escalate silently only on measurably incomplete planning output.
+
+---
+
 ### DISCUSS
 
 3. `/gsd:discuss-phase` — Capture implementation decisions, gray areas, and
@@ -51,6 +76,10 @@ Use `/gsd:next` at any point to auto-advance to the next GSD step if unsure of c
    - If this phase introduces a **new service or major component**: `/system-design`
    - If this phase involves **UI work**: `/design-system` + `/ux-copy`
 
+   **Model routing for Design**: if any design sub-steps apply (design-system, ux-copy,
+   architecture, system-design), ask once before beginning them:
+   > Entering Design phase. Use Opus, or stay on Sonnet?
+
 ---
 
 ### QUALITY GATES
@@ -59,6 +88,12 @@ Use `/gsd:next` at any point to auto-advance to the next GSD step if unsure of c
    reusability, scalability, security, reliability, usability, testability,
    extensibility) against the current design. Produces a consolidated pass/fail
    report. All dimensions must pass — ❌ is a hard stop, not a warning.
+
+   **Agent Team dispatch**: Dispatch all 8 quality dimensions as a single parallel
+   Agent Team wave — one agent per dimension, `isolation: "worktree"`.
+   Claude synthesises results. Conflict resolution: more conservative/restrictive
+   finding wins; resolution rationale logged in session log.
+   Autonomous mode: all dispatches use `run_in_background: true`.
 
 ---
 
@@ -76,12 +111,22 @@ Use `/gsd:next` at any point to auto-advance to the next GSD step if unsure of c
    TDD principles apply per task within GSD execution.
    → Produces: atomic git commits (one per task), `.planning/{phase}-{N}-SUMMARY.md`
 
+   Each GSD wave dispatches Agent Teams for independent implementation units
+   (`isolation: "worktree"` per agent). Merge gate after each wave before the next begins.
+   Autonomous mode: all agents use `run_in_background: true`.
+
 ---
 
 ### VERIFY
 
 7. `/gsd:verify-work` — Goal-backward verification against requirements + UAT.       **REQUIRED** ← DO NOT SKIP
    → Produces: `.planning/{phase}-VERIFICATION.md`, `.planning/{phase}-UAT.md`
+
+   **Agent Team scope for steps 8 + 10**: Steps 8 and 10 may use parallel agents
+   (security, performance, correctness) with `isolation: "worktree"`.
+   Step 9 (`/requesting-code-review`) is human-facing — runs sequentially after
+   step 8 agent wave resolves; cannot be parallelised.
+   Autonomous mode: agent dispatches use `run_in_background: true`.
 
 8. `/code-review` — Peer code quality review (security, perf, correctness,           **REQUIRED** ← DO NOT SKIP
    readability — distinct from GSD's goal verification).
@@ -122,6 +167,30 @@ Use `/gsd:next` at any point to auto-advance to the next GSD step if unsure of c
     - `docs/Testing-Strategy-and-Plan.md`
     - `docs/CICD.md`
 
+    **Additional required at this step:**
+    - Update `docs/KNOWLEDGE.md` Part 2: append dated entries to Architecture patterns,
+      Known gotchas, Key decisions, Recurring patterns, Open questions as applicable.
+      Resolved questions: append `[RESOLVED YYYY-MM-DD]: <resolution>` below original.
+    - Update `docs/CHANGELOG.md`: prepend a new entry (newest first):
+      ```
+      ## YYYY-MM-DD — <task-slug>
+      **What**: one sentence
+      **Commits**: <hashes>
+      **Skills run**: <list>
+      **Virtual cost**: ~$X.XX (Model, complexity)
+      **KNOWLEDGE.md**: updated (<sections>) | no changes
+      ```
+      Virtual cost complexity tiers: simple < 5 files / < 300 lines changed;
+      medium 5–15 files or 300–1000 lines; complex > 15 files or architectural.
+      Sonnet base rate; Opus ≈ 3× multiplier.
+    - Complete the session log: read path from `/tmp/.silver-bullet-session-log-path`,
+      edit that file to fill in Task, Approach, Files changed, Skills invoked,
+      Agent Teams dispatched, Autonomous decisions, Outcome, KNOWLEDGE.md additions,
+      Model, Virtual cost. If `/tmp/.silver-bullet-session-log-path` is missing,
+      create `docs/sessions/<today>-manual.md` from the session log template.
+    - Documentation agents writing to `docs/` run in the **main worktree only**
+      (no `isolation: "worktree"`). Only implementation-touching agents use worktree isolation.
+
 16. `/finishing-a-development-branch` — Branch rebase, cleanup, and merge prep.      **REQUIRED** ← DO NOT SKIP
 
 ---
@@ -130,6 +199,22 @@ Use `/gsd:next` at any point to auto-advance to the next GSD step if unsure of c
 
 17. **CI/CD pipeline** — Use existing pipeline or set one up before deploying.       **REQUIRED** ← DO NOT SKIP
     GitHub repos: use GitHub Actions.
+
+    **CI verification gate:**
+    - Run local verify commands first (from `.silver-bullet.json` `verify_commands`,
+      or stack defaults: `npm test` / `pytest` / `cargo test` / `go test ./...`)
+    - Check CI: `gh run list --limit 1 --json status,conclusion`
+    - **Autonomous mode**: poll every 30 seconds, up to 20 retries (10 min max).
+      On timeout: log blocker under "Needs human review", surface in completion summary,
+      then proceed.
+    - **Interactive mode**: show status. If `in_progress`: inform user, wait for
+      confirmation to re-check or proceed.
+    - If CI red: log failure, invoke `/gsd:debug`.
+    - **Missing ci.yml rule**: if `.github/workflows/ci.yml` is absent at this step,
+      Claude must NOT invoke `/deploy-checklist`. Log as blocker under "Needs human review",
+      surface missing file to user, stop deployment steps.
+    - Race condition: the post-commit hook (ci-status-check.sh) reflects the last
+      *completed* run, not necessarily this push. This polling loop is the authoritative gate.
 
 18. `/deploy-checklist` — Pre-deployment verification gate.                          **REQUIRED** ← DO NOT SKIP
 
