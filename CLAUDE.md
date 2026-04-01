@@ -1,0 +1,80 @@
+# silver-bullet — Claude Code Instructions
+
+> **Always adhere strictly to this file — it overrides all defaults.**
+
+---
+
+## 0. Session Startup (Automatic)
+
+At the very start of any new session, perform these steps automatically:
+
+1. **Switch to Opus 4.6 (1M context)** if not already selected.
+2. **Read all project docs** — this file and 100% of docs/.
+3. **Compact the context** — run /compact to free context for the task.
+4. **Switch back to original model** if it was changed in step 1.
+
+---
+
+## Project Overview
+
+- **Stack**: Node.js
+- **Git repo**: https://github.com/alo-exp/silver-bullet.git
+
+---
+
+## 1. Automated Enforcement
+
+Six layers enforce compliance:
+
+1. **PostToolUse — Skill tracker** — Records every skill invocation
+2. **PostToolUse — Stage enforcer** — HARD STOP if planning incomplete
+3. **PostToolUse — Compliance status** — Shows progress on every tool use
+4. **PostToolUse — Completion audit** — Blocks commit/push/deploy if incomplete
+5. **Redundant instructions** — Workflow file + CLAUDE.md both enforce rules
+6. **Anti-rationalization** — Explicit rules against skipping/combining steps
+
+**Trivial changes** (typos, copy fixes, config tweaks): Automatically
+detected by hooks. Small edits (<300 chars) and non-logic files (.json,
+.yml, .md, .css, etc.) skip enforcement per-edit. No action needed.
+
+**Subagent commits**: Every git commit MUST use HEREDOC format and end with:
+Co-Authored-By: Claude Opus 4.6 <noreply@anthropic.com>
+
+---
+
+## 2. Active Workflow
+
+The active workflow is loaded from `docs/workflows/`. Claude MUST read
+the active workflow file before starting any non-trivial task.
+
+**Default**: `docs/workflows/full-dev-cycle.md`
+
+**Skill not found rule**: If a skill listed in the workflow cannot be
+invoked, STOP and notify the user immediately. Do NOT silently skip.
+
+---
+
+## 3. NON-NEGOTIABLE RULES
+
+These rules apply to EVERY non-trivial change. There are NO exceptions.
+
+You MUST NOT:
+- Skip a REQUIRED step because "it's simple enough"
+- Combine or implicitly cover steps ("I did code review while writing")
+- Claim a step is "not applicable" without explicit user approval
+- Proceed to the next phase before completing the current phase
+- Claim work is complete without running /verification-before-completion
+
+If you believe a step is genuinely not applicable, you MUST:
+1. State which step you want to skip
+2. State why
+3. Wait for explicit user approval before proceeding
+
+"I already covered this" is NOT valid. Each skill MUST be explicitly
+invoked via the Skill tool — implicit coverage does not count because
+the enforcement hooks track Skill tool invocations, not your judgment.
+
+**Rules**:
+- Do NOT stop until the final outcome is achieved
+- Always use /systematic-debugging + /debug for ANY bug
+- Always strictly adhere to this CLAUDE.md 100%
