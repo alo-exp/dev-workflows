@@ -9,14 +9,6 @@ This skill initializes Silver Bullet enforcement for a project. Follow each phas
 
 **Plugin root**: Determine `PLUGIN_ROOT` from this skill file's own path. This file lives at `${PLUGIN_ROOT}/skills/using-silver-bullet/SKILL.md`, so the plugin root is two directories up from this file's location.
 
-## Allowed Bash Commands
-
-This skill uses the Bash tool ONLY for the following commands:
-`test`, `command`, `basename`, `git`, `ls`, `mkdir`, `touch`
-
-Do NOT run any other Bash commands during this skill's execution.
-If a step requires a command not on this list, STOP and notify the user.
-
 ---
 
 ## Phase −1: Session Init
@@ -137,9 +129,11 @@ test -f "$HOME/.claude/commands/gsd/new-project.md" && echo "EXISTS" || echo "NO
 ```
 
 If `NOT_FOUND`, output exactly:
-> ❌ GSD plugin not found. Install: `npx get-shit-done-cc@^1.30.0`
+> ❌ GSD plugin not found. Install: `npx get-shit-done-cc@latest`
+>
+> Silver Bullet requires GSD. Install it, then re-run `/using-silver-bullet`.
 
-STOP. Do not proceed.
+**HARD STOP. Do NOT proceed under any circumstances.** Do NOT offer to install GSD yourself. Do NOT continue even if the user asks. The user must install GSD manually and re-run this skill.
 
 ### 1.6 v1 incompatibility check
 
@@ -164,6 +158,41 @@ Wait for user confirmation. If "yes", use the Edit tool to remove the offending 
 ## Phase 2: Auto-Detect Project
 
 Gather project metadata automatically, then confirm with the user.
+
+### 2.0 Git repo check
+
+Run via Bash tool:
+```bash
+git rev-parse --is-inside-work-tree 2>/dev/null && echo "GIT_REPO" || echo "NOT_GIT"
+```
+
+If `GIT_REPO` → continue to step 2.1.
+
+If `NOT_GIT`, ask the user:
+> This directory is not a git repository. Choose one:
+> 1. **Clone** — provide an existing repo URL to clone here
+> 2. **Create** — provide a GitHub org/repo name (e.g., `myorg/myrepo`) to create a new repo
+>
+> Which? (clone / create)
+
+**If clone:**
+- Ask: "Repo URL?"
+- Run: `git clone <url> . 2>&1`
+- If it fails, show the error and STOP.
+
+**If create:**
+- Ask: "GitHub org/repo name (e.g., `myorg/myrepo`)?"
+- Run via Bash:
+  ```bash
+  git init && gh repo create <org/repo> --source=. --remote=origin --push 2>&1
+  ```
+- If `gh` is not found, output:
+  > ❌ GitHub CLI (gh) is required to create a repo. Install: `brew install gh` (macOS) / see https://cli.github.com
+  > Then re-run `/using-silver-bullet`.
+  STOP.
+- If the command fails for any other reason, show the error and STOP.
+
+After either clone or create succeeds, continue to step 2.1.
 
 ### 2.1 Detect project name
 
@@ -223,86 +252,8 @@ Detected:
 Look right? (yes / edit)
 ```
 
-- If user says "yes" or equivalent → proceed to step 2.5a.
-- If user says "edit" → ask which fields to change, accept new values, then proceed to step 2.5a.
-
-### 2.5a Sanitize detected values
-
-Before proceeding, sanitize all detected values to prevent template injection:
-
-- **Project name**: Strip newlines, control characters, and any character not in
-  `[a-zA-Z0-9._-]`. Truncate to 64 characters. If the result is empty, fall back
-  to the directory name.
-- **Tech stack**: Strip newlines and control characters. Truncate to 128 characters.
-- **Repo URL**: Must match `^(https?://|git@)[^\n\r]{1,256}$`. If it doesn't match,
-  set to "NONE".
-- **Source pattern**: Must match `^/[a-zA-Z0-9._-]+/$`. If invalid, default to `/src/`.
-
-If any value was modified by sanitization, inform the user:
-> Some detected values contained unexpected characters and were sanitized.
-> Please verify the values above are correct.
-
-### 2.6 Detect project type
-
-Ask the user:
-
-> What type of project is this?
-> 1. **Application** — software product (web app, API, CLI, library, etc.) → uses `full-dev-cycle` workflow
-> 2. **DevOps / Infrastructure** — IaC, CI/CD pipelines, k8s, Terraform, Helm → uses `devops-cycle` workflow
-
-Store the user's answer as `WORKFLOW_TYPE`:
-- Answer "1" / "application" / "app" → `WORKFLOW_TYPE = full-dev-cycle`
-- Answer "2" / "devops" / "infra" / "infrastructure" → `WORKFLOW_TYPE = devops-cycle`
-
-Proceed to step 2.7 if `WORKFLOW_TYPE == devops-cycle`, otherwise skip to Phase 3.
-
-### 2.7 Detect DevOps plugins (devops-cycle only)
-
-Skip this step entirely if `WORKFLOW_TYPE` is `full-dev-cycle`.
-
-Probe for each of the 5 optional DevOps plugins. For each, use the Bash tool to
-check if its skills directory exists. Store the results as `DEVOPS_PLUGINS`.
-
-```bash
-# HashiCorp agent-skills
-ls ~/.claude/plugins/cache/*/agent-skills/*/skills/terraform-code-generation/SKILL.md 2>/dev/null | head -1
-
-# AWS agent-plugins
-ls ~/.claude/plugins/cache/*/agent-plugins/*/skills/deploy-on-aws/SKILL.md 2>/dev/null | head -1
-
-# Pulumi agent-skills
-ls ~/.claude/plugins/cache/*/agent-skills/*/skills/pulumi-best-practices/SKILL.md 2>/dev/null | head -1
-
-# DevOps Claude Skills (ahmedasmar)
-ls ~/.claude/plugins/cache/*/devops-claude-skills/*/skills/iac-terraform/SKILL.md 2>/dev/null | head -1
-
-# wshobson/agents (kubernetes-operations)
-ls ~/.claude/plugins/cache/*/agents/*/plugins/kubernetes-operations/skills/*/SKILL.md 2>/dev/null | head -1
-```
-
-If a probe returns a path → that plugin is detected (`true`). If empty → `false`.
-
-**Fallback detection**: If a Glob probe returns empty but you suspect the plugin is
-installed (e.g., the user says it is), try invoking one of its known skills via the
-Skill tool as a fallback check — similar to how Phase 1.3 checks the Design plugin.
-
-Present a summary to the user:
-
-```
-DevOps plugins detected:
-  ✅ HashiCorp agent-skills (Terraform, Packer)
-  ✅ AWS agent-plugins (deploy, serverless, databases)
-  ❌ Pulumi agent-skills — optional: /plugin marketplace add pulumi/agent-skills
-  ✅ DevOps Claude Skills (Terraform, k8s, CI/CD, monitoring)
-  ❌ wshobson/agents — optional: /plugin marketplace add wshobson/agents
-
-These are optional. The devops-cycle workflow works without them
-but uses them for context-aware enrichment when available.
-```
-
-Store the detection results in `DEVOPS_PLUGINS` for use in Phase 3.4 (config writing).
-
-Proceed to Phase 3.
+- If user says "yes" or equivalent → proceed to Phase 3.
+- If user says "edit" → ask which fields to change, accept new values, then proceed to Phase 3.
 
 ---
 
@@ -317,10 +268,9 @@ If Phase 0 determined this is an update:
 2. If user says "no" → output "No changes made." and exit.
 3. If user says "yes":
    a. Read `.silver-bullet.json` to get the current `project.name` and `project.src_pattern` values.
-   b. Read the template `${PLUGIN_ROOT}/templates/CLAUDE.md.base` using the Read tool. Replace `{{PROJECT_NAME}}` with the project name from config, replace `{{TECH_STACK}}` and `{{GIT_REPO}}` with values from config or re-detect them using Phase 2 steps. Replace `{{ACTIVE_WORKFLOW}}` with the `active_workflow` value from config.
+   b. Read the template `${PLUGIN_ROOT}/templates/CLAUDE.md.base` using the Read tool. Replace `{{PROJECT_NAME}}` with the project name from config, replace `{{TECH_STACK}}` and `{{GIT_REPO}}` with values from config or re-detect them using Phase 2 steps.
    c. Write the rendered `CLAUDE.md` to the project root using the Write tool.
    d. Read `${PLUGIN_ROOT}/templates/workflows/full-dev-cycle.md` and write it to `docs/workflows/full-dev-cycle.md`.
-      Also read `${PLUGIN_ROOT}/templates/workflows/devops-cycle.md` and write it to `docs/workflows/devops-cycle.md` if that file already exists in the project.
    e. Output: "Templates refreshed. Config preserved."
    f. Exit. Do NOT re-run the commit or `/using-superpowers` steps.
 
@@ -348,6 +298,80 @@ Run via Bash tool:
 mkdir -p docs/specs docs/workflows
 ```
 
+#### 3.2.5 CI setup
+
+Check if a GitHub Actions CI workflow exists:
+```bash
+test -d .github/workflows && ls .github/workflows/*.yml 2>/dev/null | head -1
+```
+
+If no CI workflow exists, create `.github/workflows/` and generate `ci.yml` based on the detected stack from Phase 2:
+
+**Node.js** (package.json found):
+```yaml
+name: CI
+on: [push, pull_request]
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: npm ci
+      - run: npm run lint --if-present
+      - run: npm run typecheck --if-present
+      - run: npm test --if-present
+```
+
+**Python** (pyproject.toml found):
+```yaml
+name: CI
+on: [push, pull_request]
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+      - run: pip install -e ".[dev]" || pip install -e .
+      - run: ruff check . || true
+      - run: mypy . || true
+      - run: pytest
+```
+
+**Rust** (Cargo.toml found):
+```yaml
+name: CI
+on: [push, pull_request]
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: cargo clippy
+      - run: cargo test
+```
+
+**Go** (go.mod found):
+```yaml
+name: CI
+on: [push, pull_request]
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+      - run: go vet ./...
+      - run: go test ./...
+```
+
+**Other**: prompt user to specify verify commands. Store in `.silver-bullet.json` under `"verify_commands": ["cmd1", "cmd2"]`.
+
+Also update `.silver-bullet.json` to add a `"verify_commands"` field matching the generated CI commands, for local use by the CI polling gate at step 17.
+
 #### 3.3 Write CLAUDE.md
 
 Read the template file at `${PLUGIN_ROOT}/templates/CLAUDE.md.base` using the Read tool.
@@ -356,7 +380,6 @@ Perform these replacements in the template content:
 - `{{PROJECT_NAME}}` → the detected/confirmed project name
 - `{{TECH_STACK}}` → the detected/confirmed tech stack
 - `{{GIT_REPO}}` → the detected/confirmed repo URL
-- `{{ACTIVE_WORKFLOW}}` → the value of `WORKFLOW_TYPE` from step 2.6 (`full-dev-cycle` or `devops-cycle`)
 
 If user chose **replace** (or no existing CLAUDE.md exists):
 - Write the fully rendered template to `CLAUDE.md` in the project root using the Write tool.
@@ -372,40 +395,15 @@ Read the template file at `${PLUGIN_ROOT}/templates/silver-bullet.config.json.de
 Perform these replacements:
 - `{{PROJECT_NAME}}` → the detected/confirmed project name
 
-Also set:
-- `src_pattern` to the detected/confirmed source pattern (replacing the default `/src/` if different).
-- `active_workflow` to the value of `WORKFLOW_TYPE` from step 2.6 (replacing the default `full-dev-cycle` if `devops-cycle` was selected).
-- If `WORKFLOW_TYPE == devops-cycle`:
-  - Replace `required_planning` with `["blast-radius", "devops-quality-gates"]` (these are the
-    planning gates for IaC work — `quality-gates` is for application work only).
-  - Set each key in the `devops_plugins` section to `true` or `false` based on the
-    detection results from step 2.7:
-  ```json
-  "devops_plugins": {
-    "hashicorp": true/false,
-    "awslabs": true/false,
-    "pulumi": true/false,
-    "devops-skills": true/false,
-    "wshobson": true/false
-  }
-  ```
+Also set `src_pattern` to the detected/confirmed source pattern (replacing the default `/src/` if different).
 
 Write the result to `.silver-bullet.json` in the project root using the Write tool.
 
-#### 3.5 Copy workflow file(s)
+#### 3.5 Copy workflow file
 
-Based on `WORKFLOW_TYPE` from step 2.6:
+Read `${PLUGIN_ROOT}/templates/workflows/full-dev-cycle.md` using the Read tool.
 
-**If `full-dev-cycle`**:
-- Read `${PLUGIN_ROOT}/templates/workflows/full-dev-cycle.md` using the Read tool.
-- Write to `docs/workflows/full-dev-cycle.md` using the Write tool.
-
-**If `devops-cycle`**:
-- Read `${PLUGIN_ROOT}/templates/workflows/devops-cycle.md` using the Read tool.
-- Write to `docs/workflows/devops-cycle.md` using the Write tool.
-- Also read `${PLUGIN_ROOT}/templates/workflows/full-dev-cycle.md` and write to
-  `docs/workflows/full-dev-cycle.md` so it is available if the project adds
-  application code later.
+Write the contents to `docs/workflows/full-dev-cycle.md` using the Write tool.
 
 #### 3.6 Create placeholder docs
 
@@ -437,6 +435,20 @@ TODO — Define testing strategy, coverage goals, and test plan here.
 # CI/CD
 
 TODO — Document CI/CD pipeline configuration and deployment process here.
+```
+
+**`docs/KNOWLEDGE.md`**:
+
+Read `${PLUGIN_ROOT}/templates/KNOWLEDGE.md.base` using the Read tool. Replace `{{PROJECT_NAME}}` with the confirmed project name and `{{GIT_REPO}}` with the confirmed repo URL. Write to `docs/KNOWLEDGE.md`.
+
+**`docs/CHANGELOG.md`** (task log — distinct from root-level CHANGELOG.md if present):
+
+Read `${PLUGIN_ROOT}/templates/CHANGELOG-project.md.base` using the Read tool. Write as-is to `docs/CHANGELOG.md`.
+
+**`docs/sessions/` directory:**
+
+```bash
+mkdir -p docs/sessions && touch docs/sessions/.gitkeep
 ```
 
 #### 3.7 Stage and commit
