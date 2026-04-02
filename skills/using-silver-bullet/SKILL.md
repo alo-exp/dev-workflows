@@ -272,18 +272,29 @@ Look right? (yes / edit)
 
 If Phase 0 determined this is an update:
 
-1. Ask the user:
-   > Silver Bullet already configured. Refresh templates from plugin? (Your `.silver-bullet.json` customizations will be preserved.)
-2. If user says "no" → output "No changes made." and exit.
-3. If user says "yes":
-   a. Read `.silver-bullet.json` to get the current `project.name` and `project.src_pattern` values.
-   b. Read the template `${PLUGIN_ROOT}/templates/CLAUDE.md.base` using the Read tool. Replace `{{PROJECT_NAME}}` with the project name from config, replace `{{TECH_STACK}}` and `{{GIT_REPO}}` with values from config or re-detect them using Phase 2 steps.
-   c. **Backup before overwrite**: If `CLAUDE.md` exists, copy it to `CLAUDE.md.backup` before writing.
-      Write the rendered `CLAUDE.md` to the project root using the Write tool.
-   d. **Backup before overwrite**: If `docs/workflows/full-dev-cycle.md` exists, copy it to `docs/workflows/full-dev-cycle.md.backup`.
-      Read `${PLUGIN_ROOT}/templates/workflows/full-dev-cycle.md` and write it to `docs/workflows/full-dev-cycle.md`.
-   e. Output: "Templates refreshed. Config preserved. Backups: CLAUDE.md.backup, docs/workflows/*.backup"
-   f. Exit. Do NOT re-run the commit or `/using-superpowers` steps.
+1. Invoke `/using-superpowers` via the Skill tool to activate Superpowers skills.
+2. Output:
+   > Silver Bullet already configured. All skills active.
+   > To refresh templates (CLAUDE.md, workflow file), ask explicitly: "refresh silver bullet templates".
+3. Exit. **Do NOT touch any project files.** This is the idempotent path — safe to run at the
+   start of every session without side effects.
+
+**Template refresh (only when user explicitly requests it):**
+
+If the user asks to refresh templates:
+1. List the files that would be updated and what each change achieves, e.g.:
+   > I'll update these files from the plugin templates:
+   > - `CLAUDE.md` — refresh Silver Bullet workflow sections
+   > - `docs/workflows/full-dev-cycle.md` — pull latest workflow steps
+   > Proceed? (yes / no)
+2. Only proceed on explicit "yes".
+4. For `CLAUDE.md`: **never replace** — only update the `## 2. Active Workflow` and Silver Bullet
+   sections using the Edit tool. Read the existing file first, then apply targeted section updates.
+   If a full replace is truly needed, ask a second confirmation: "This will overwrite your entire
+   CLAUDE.md. Are you sure? (yes / no)". Only proceed on explicit "yes".
+5. **Backup before any overwrite**: copy the original to `<file>.backup` first.
+6. Read `.silver-bullet.json` to carry forward `project.name`, `project.src_pattern` customizations.
+7. Output: "Templates refreshed. Backups created at: [list]". Exit.
 
 ### Fresh setup
 
@@ -293,12 +304,15 @@ If this is a fresh setup:
 
 Check if `CLAUDE.md` exists in the project root (use Bash: `test -f CLAUDE.md`).
 
-If it exists, ask the user:
-> Existing CLAUDE.md found. Choose one:
-> 1. **Replace** — overwrite with Silver Bullet template (your content will be lost)
-> 2. **Append** — keep your CLAUDE.md and append only the Active Workflow section
->
-> Which? (replace / append)
+If it exists, **default to Append** — inform the user and proceed unless they object:
+> Existing CLAUDE.md found. I'll append the Silver Bullet Active Workflow section to it.
+> Type "replace" if you want to overwrite the entire file instead (your existing content will be lost).
+
+Wait for the user's response. If no objection → proceed with append.
+
+If user explicitly types "replace": ask once more —
+> This will permanently overwrite your existing CLAUDE.md. Are you sure? (yes / no)
+Only proceed on explicit "yes". On anything else → fall back to append.
 
 Remember the user's choice for step 3.3.
 
@@ -427,18 +441,53 @@ skip it silently — the user's existing content takes priority over placeholder
 
 Create the following files in `docs/` using the Write tool — **only if they do not already exist**. Each placeholder file should contain only a title and a TODO body:
 
-**`docs/Master-PRD.md`**:
+**`docs/PRD-Overview.md`**:
 ```markdown
-# Master PRD
+# Product Requirements Overview
 
-TODO — Add product requirements here.
+This document captures the product vision and high-level requirements.
+It is kept in sync with `.planning/REQUIREMENTS.md` — the authoritative requirements
+source managed by GSD. Update during the FINALIZATION step of each phase.
+
+## Product Vision
+
+TODO — Describe what this product is and who it is for (2–3 sentences).
+
+## Core Value
+
+TODO — The ONE thing that must work above all else.
+
+## Requirement Areas
+
+TODO — High-level groupings of requirements (see `.planning/REQUIREMENTS.md` for details).
+
+## Out of Scope
+
+TODO — What this product explicitly does not do, and why.
 ```
 
 **`docs/Architecture-and-Design.md`**:
 ```markdown
 # Architecture and Design
 
-TODO — Document architecture decisions and system design here.
+This document captures high-level architecture and general design principles only.
+Detailed phase-level designs live in `docs/specs/YYYY-MM-DD-<topic>-design.md`.
+
+## System Overview
+
+TODO — Describe the overall system structure and how major parts relate.
+
+## Core Components
+
+TODO — List major components and their responsibilities (one line each).
+
+## Design Principles
+
+TODO — Architectural constraints and principles that guide all implementation decisions.
+
+## Technology Choices
+
+TODO — Key technology decisions and rationale.
 ```
 
 **`docs/Testing-Strategy-and-Plan.md`**:

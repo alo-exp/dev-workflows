@@ -154,3 +154,37 @@ If Opus permitted: switch to `claude-opus-4-6` for that phase, return to Sonnet 
 **Autonomous mode**: stay Sonnet. Escalate silently to Opus only if a planning step produces
 measurably incomplete output: fewer than 5 lines, contains `TBD`/`[TODO]`/`...` placeholders,
 or a step expected to produce a file produces none. Log escalation as an autonomous decision.
+
+---
+
+## 6. GSD / Superpowers Ownership Rules
+
+GSD is the authoritative execution orchestrator. Superpowers provides design and review
+capabilities only. Where both tools could apply, **GSD wins**.
+
+**Hard rules — no exceptions:**
+
+- **Execution**: Always use `/gsd:execute-phase` (wave-based). NEVER use
+  `superpowers:subagent-driven-development` or `superpowers:executing-plans` for project work.
+- **Planning**: Always use `/gsd:plan-phase`. When Superpowers' `brainstorming` skill offers
+  to hand off to `writing-plans`, **redirect to `/gsd:plan-phase` instead**.
+- **Requirements**: `.planning/REQUIREMENTS.md` is the single source of truth (owned by GSD).
+  Superpowers must NOT create or maintain a separate requirements list.
+- **Design specs**: Save to `docs/specs/YYYY-MM-DD-<topic>-design.md`.
+  Superpowers' default path (`docs/superpowers/specs/`) is overridden — use `docs/specs/`.
+- **Code review**: Superpowers' review skills (`/requesting-code-review`,
+  `/receiving-code-review`, `superpowers:code-reviewer`) are used for review only.
+
+---
+
+## 7. File Safety Rules
+
+These rules apply to ALL file operations, in every context and session mode.
+
+- **Never overwrite, rename, move, or delete** any existing project file without first
+  communicating the objective to the user and obtaining explicit permission.
+- Permission may be requested for a logical group of files in one prompt (e.g., "I need to
+  update these 3 template files to apply the new workflow — proceed?"), but the intent and
+  scope must be clear before any file is touched.
+- **When in doubt: skip and inform**, never act and apologize.
+- This applies to Silver Bullet setup, template refresh, and all agent/subagent operations.

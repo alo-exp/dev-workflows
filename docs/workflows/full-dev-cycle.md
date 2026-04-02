@@ -213,8 +213,9 @@ Write results to `## Skills flagged at discovery` in the session log. **Do not i
 15. `/documentation` — Update or create all project documentation.                   **REQUIRED** ← DO NOT SKIP
     Minimum required files:
     - `README.md` — MUST reflect current version, features, and changes before release
-    - `docs/Master-PRD.md`
-    - `docs/Architecture-and-Design.md`
+    - `docs/PRD-Overview.md` — sync high-level areas from `.planning/REQUIREMENTS.md`
+    - `docs/Architecture-and-Design.md` — high-level architecture and principles only;
+      detailed phase designs live in `docs/specs/`
     - `docs/Testing-Strategy-and-Plan.md`
     - `docs/CICD.md`
 
@@ -318,3 +319,23 @@ Every review loop in this workflow (spec review, plan review, code review, verif
 - For ANY bug encountered during execution: use `/gsd:debug`.
 - For root-cause investigation after a completed, failed, or abandoned session: use `/forensics`.
 - For trivial changes (typos, copy fixes, config tweaks): `touch /tmp/.silver-bullet-trivial`
+
+---
+
+## GSD / Superpowers Ownership Rules
+
+GSD is the authoritative execution orchestrator. Superpowers provides design and review
+capabilities only. Where both tools could apply, GSD wins.
+
+| Concern | Owner | Rule |
+|---------|-------|------|
+| Requirements | GSD | `.planning/REQUIREMENTS.md` is the single source of truth. Superpowers must NOT maintain a separate requirements list. |
+| Planning | GSD | Use `/gsd:plan-phase` for all plans. When Superpowers' `brainstorming` skill offers to hand off to `writing-plans`, **redirect to `/gsd:plan-phase` instead**. |
+| Execution | GSD | Always use `/gsd:execute-phase` (wave-based). **NEVER** use `superpowers:subagent-driven-development` or `superpowers:executing-plans` for project work. |
+| Design specs | Superpowers | Save to `docs/specs/YYYY-MM-DD-<topic>-design.md`. Superpowers' default path (`docs/superpowers/specs/`) is NOT used — always override it. |
+| Code review | Superpowers | `/requesting-code-review`, `/receiving-code-review`, `superpowers:code-reviewer` are used for review only, never for execution. |
+
+**Override Superpowers defaults in every session:**
+- Spec save path: `docs/specs/` (not `docs/superpowers/specs/`)
+- After brainstorming completes: invoke `/gsd:plan-phase` (not `writing-plans`)
+- For execution: `/gsd:execute-phase` (not `subagent-driven-development`)
