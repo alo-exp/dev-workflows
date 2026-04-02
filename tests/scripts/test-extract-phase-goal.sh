@@ -29,8 +29,15 @@ echo "# Implement login validation" > "$TMP/.planning/phase1-CONTEXT.md"
 result=$(cd "$TMP" && "$SCRIPT")
 assert_eq "extracts heading from CONTEXT.md" "Implement login validation" "$result"
 
+# Test 3b: CONTEXT.md with heading that has trailing whitespace
+rm "$TMP/.planning/phase1-CONTEXT.md" 2>/dev/null || true
+printf '# Implement login validation   \n' > "$TMP/.planning/phase1-CONTEXT.md"
+result=$(cd "$TMP" && "$SCRIPT")
+assert_eq "strips trailing whitespace from heading" "Implement login validation" "$result"
+rm "$TMP/.planning/phase1-CONTEXT.md" 2>/dev/null || true
+
 # Test 4: PLAN.md without heading (first non-empty line)
-rm "$TMP/.planning/phase1-CONTEXT.md"
+rm "$TMP/.planning/phase1-CONTEXT.md" 2>/dev/null || true
 printf 'Implement auth middleware\nSome details here\n' > "$TMP/.planning/phase1-PLAN.md"
 result=$(cd "$TMP" && "$SCRIPT")
 assert_eq "extracts first line from PLAN.md" "Implement auth middleware" "$result"

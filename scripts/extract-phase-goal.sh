@@ -16,9 +16,9 @@ done < <(ls -t "$planning_dir"/*-CONTEXT.md "$planning_dir"/*-RESEARCH.md "$plan
 [[ -z "${phase_file:-}" ]] && exit 0
 
 # Extract first heading (strip #) or first non-empty line
-goal=$(grep -m1 '^#' "$phase_file" 2>/dev/null | sed 's/^#* *//' || true)
+goal=$(grep -m1 '^#' "$phase_file" 2>/dev/null | sed 's/^#* *//;s/[[:space:]]*$//' || true)
 if [[ -z "$goal" ]]; then
-  goal=$(grep -m1 -v '^[[:space:]]*$' "$phase_file" 2>/dev/null || true)
+  goal=$(grep -m1 -v '^[[:space:]]*$' "$phase_file" 2>/dev/null | sed 's/[[:space:]]*$//' || true)
 fi
 
 printf '%s' "$goal"
