@@ -2,8 +2,9 @@
 
 ## [Unreleased]
 
-### New: Semantic context compression
+## 0.5.0 (2026-04-03)
 
+### New: Semantic context compression
 - New PostToolUse hook (`hooks/semantic-compress.sh`) that fires on GSD phase transitions and injects ranked context into the next prompt via `hookSpecificOutput.additionalContext`
 - TF-IDF ranking of source and doc file chunks against the active phase goal — highest-relevance chunks are injected, lowest are dropped, keeping context tight
 - Pure shell implementation (awk + sort) — no external dependencies beyond standard POSIX tools
@@ -12,6 +13,20 @@
 - Configurable via `.silver-bullet.json` `semantic_compression` block (enable/disable, chunk size, max chunks injected, min score threshold, include/exclude globs)
 - New scripts: `scripts/extract-phase-goal.sh`, `scripts/tfidf-rank.sh`, `scripts/semantic-compress.sh`
 - 31 tests across 5 test suites covering TF-IDF scoring, caching, phase-goal extraction, hook wiring, and end-to-end integration
+
+### New: Help site
+- Full documentation site at sb.alolabs.dev — Getting Started, Core Concepts, Dev Workflow, DevOps Workflow, Command Reference
+- Full-text search across all help content (TF-IDF JS index, ~50 entries)
+- Nav search on all sub-pages
+- Dark mode support
+
+### Fixes
+- Enforcement count corrected: 8 total enforcement points (Silver Bullet installs 6, GSD adds 2) — was described as 7
+- DevOps quality gates dimension count: 7 IaC-adapted (usability excluded) — was incorrectly described as 8 in some places
+- GSD install command updated to `npx get-shit-done-cc@^1.30.0` in all documentation
+- README: hooks architecture updated to document all 9 hooks (4 enforcement + 4 support + session-start)
+- README: Built-in skills table now lists all 7 Silver Bullet skills (was 3)
+- Help reference: clarified which skills are Silver Bullet's own vs. from Superpowers/Engineering plugins
 
 ## 0.2.0 (2026-04-01)
 

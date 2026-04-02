@@ -8,7 +8,7 @@ Brooks was right then. AI changes the equation now.
 
 Silver Bullet is a Claude Code plugin that orchestrates the best open-source agentic workflows into one enforced process. It combines [GSD](https://github.com/gsd-build/get-shit-done) (multi-agent execution), [Superpowers](https://github.com/obra/superpowers) (code review, branch management), [Engineering](https://github.com/anthropics/knowledge-work-plugins/tree/main/engineering) (testing, docs, deploy), and [Design](https://github.com/anthropics/knowledge-work-plugins/tree/main/design) (design system, UX copy, accessibility) into a single orchestrated workflow — then enforces it with 7 layers of compliance so Claude can never skip steps.
 
-**Current version: v0.4.0** — adds 5 new enforcement rules: mandatory `/requesting-code-review`, CI-must-be-green gate, `/release-notes` skill with GitHub Releases, README-before-release requirement, and non-destructive initialization.
+**Current version: v0.5.0** — semantic context compression (TF-IDF PostToolUse hook), help site launch at [sb.alolabs.dev](https://sb.alolabs.dev), eight enforcement points (up from seven), and full hooks documentation (9 total).
 
 ## How It Works
 
@@ -188,7 +188,11 @@ Skills installed by this plugin that extend the workflow:
 
 | Skill | When to use |
 |-------|-------------|
-| `/quality-gates` | Before planning — checks all 8 quality dimensions |
+| `/using-silver-bullet` | Once per project — initializes CLAUDE.md, config, CI, and docs scaffold |
+| `/quality-gates` | Before planning (dev) — checks all 8 quality dimensions in parallel |
+| `/blast-radius` | Before planning (DevOps) — maps change scope, dependencies, and rollback plan |
+| `/devops-quality-gates` | Before planning (DevOps) — 7 IaC-adapted quality dimensions (usability excluded) |
+| `/devops-skill-router` | During DevOps execution — routes to best available IaC toolchain plugin |
 | `/forensics` | After a completed, failed, or abandoned session — structured post-mortem investigation |
 | `/release-notes` | After `/gsd:ship` — generates release notes and creates GitHub Release |
 
@@ -213,9 +217,11 @@ When a session produces wrong output, stalls, or is abandoned, `/forensics` guid
 
 ---
 
-## Seven Layers of Enforcement
+## Eight Enforcement Points
 
 The plugin doesn't rely on Claude reading instructions. It enforces compliance through hooks that fire automatically:
+
+**Silver Bullet installs 6:**
 
 | Layer | How it works |
 |-------|-------------|
@@ -223,9 +229,15 @@ The plugin doesn't rely on Claude reading instructions. It enforces compliance t
 | **2. Stage enforcer** | `dev-cycle-check.sh` fires on every Edit/Write/Bash. HARD STOP if quality gates incomplete and you're touching source code. |
 | **3. Compliance status** | `compliance-status.sh` fires on every tool use. Shows progress score so Claude always knows where it stands. |
 | **4. Completion audit** | `completion-audit.sh` fires on every Bash command. Blocks `git commit`, `git push`, `gh pr create`, and `deploy` if workflow is incomplete. |
-| **5. GSD workflow guard** | GSD's own hook detects file edits made outside a `/gsd:*` command and warns. |
-| **6. GSD context monitor** | GSD's own hook warns at ≤35% tokens remaining, escalates at ≤25%. |
-| **7. Redundant instructions + anti-rationalization** | CLAUDE.md + workflow file both enforce; explicit rules against skipping, combining, or implicitly covering steps. |
+| **5. Redundant instructions** | CLAUDE.md + workflow file both enforce the same rules, so skipping one doesn't escape enforcement. |
+| **6. Anti-rationalization** | Explicit rules against skipping, combining, or implicitly covering steps. "I covered this while writing" is not valid. |
+
+**GSD adds 2 more:**
+
+| Layer | How it works |
+|-------|-------------|
+| **7. GSD workflow guard** | GSD's own hook detects file edits made outside a `/gsd:*` command and warns. |
+| **8. GSD context monitor** | GSD's own hook warns at ≤35% tokens remaining, escalates at ≤25%. |
 
 ## Customization
 
@@ -340,8 +352,8 @@ It detects the existing config and asks if you want to refresh templates while p
 ## Architecture
 
 ```
-Plugin hooks (fire automatically)          Project files (created by /using-silver-bullet)
-─────────────────────────────────          ───────────────────────────────────────────────
+Enforcement hooks (fire automatically)     Project files (created by /using-silver-bullet)
+──────────────────────────────────────     ───────────────────────────────────────────────
 hooks/record-skill.sh                      .silver-bullet.json (config)
   → records skill invocations              CLAUDE.md (enforcement rules)
                                            docs/workflows/full-dev-cycle.md (20 steps)
@@ -351,11 +363,25 @@ hooks/dev-cycle-check.sh                   docs/workflows/devops-cycle.md (24 st
 hooks/compliance-status.sh                 ─────────────────────────────────
   → progress score on every tool use       /tmp/.silver-bullet-state (skill log)
                                            /tmp/.silver-bullet-trivial (bypass flag)
-hooks/completion-audit.sh
-  → blocks commit/push/deploy
+hooks/completion-audit.sh                  /tmp/.silver-bullet-mode (interactive|autonomous)
+  → blocks commit/push/deploy              /tmp/.silver-bullet-session-log-path
+
+Support hooks (fire automatically)
+───────────────────────────────────
+hooks/semantic-compress.sh
+  → TF-IDF context compression after Skill invocations
+
+hooks/session-log-init.sh
+  → creates session log file on first Bash use
+
+hooks/ci-status-check.sh
+  → verifies CI green before push/deploy proceeds
+
+hooks/timeout-check.sh
+  → monitors for stall conditions
 
 hooks/session-start
-  → injects Superpowers + Design context
+  → injects Superpowers + Design context at session open
 
 External enforcement (GSD's own hooks)
 ──────────────────────────────────────
