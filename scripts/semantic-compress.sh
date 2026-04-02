@@ -68,6 +68,12 @@ if [[ -d "$REPO_ROOT/.planning" ]]; then
   phase_goal=$(cd "$REPO_ROOT" && "$SCRIPTS_DIR/extract-phase-goal.sh" 2>/dev/null || true)
 fi
 
+# If goal is empty AND no planning files exist (dir exists but empty), exit cleanly
+if [[ -z "${phase_goal:-}" ]]; then
+  planning_files=$(ls "$REPO_ROOT/.planning/"*-CONTEXT.md "$REPO_ROOT/.planning/"*-RESEARCH.md "$REPO_ROOT/.planning/"*-PLAN.md 2>/dev/null | head -1 || true)
+  [[ -z "$planning_files" ]] && exit 0
+fi
+
 # Build file lists (no mapfile — bash 3.2 compatible)
 src_root="$REPO_ROOT${src_pattern%/}"
 TEXT_SRC=()
@@ -173,10 +179,10 @@ score_and_add() {
     local rel="${file#$REPO_ROOT/}"
     local key; key=$(printf '%s' "$file" | tr '/: ' '___')
     local cnt=0
-    cnt=$(grep -m1 "^${key}=" "$TMP_COUNTS" 2>/dev/null | cut -d= -f2 || echo 0)
+    cnt=$(grep -Fm1 "^${key}=" "$TMP_COUNTS" 2>/dev/null | cut -d= -f2 || echo 0)
     if [[ $cnt -ge $top_n ]]; then continue; fi
     if add_block "$rel" "$chunk_text" "lines ${start}-${end}"; then
-      grep -v "^${key}=" "$TMP_COUNTS" > "${TMP_COUNTS}.tmp" 2>/dev/null && mv "${TMP_COUNTS}.tmp" "$TMP_COUNTS" || true
+      grep -Fv "^${key}=" "$TMP_COUNTS" > "${TMP_COUNTS}.tmp" 2>/dev/null && mv "${TMP_COUNTS}.tmp" "$TMP_COUNTS" || true
       printf '%s=%s\n' "$key" "$(( cnt + 1 ))" >> "$TMP_COUNTS"
       if [[ "$debug" == "true" ]]; then printf '  chunk: %s lines %s-%s score=%s\n' "$rel" "$start" "$end" "$score" >> "$debug_log"; fi
     fi
