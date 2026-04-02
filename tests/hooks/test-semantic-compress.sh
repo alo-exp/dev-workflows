@@ -26,8 +26,8 @@ assert_eq() {
   else echo "FAIL: $desc"; echo "  expected: [$expected]"; echo "  actual:   [$actual]"; (( FAIL++ )) || true; fi
 }
 
-REPO_ROOT_ORIG="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-HOOK="$REPO_ROOT_ORIG/hooks/semantic-compress.sh"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+HOOK="$SCRIPT_DIR/hooks/semantic-compress.sh"
 TMP=$(mktemp -d)
 trap 'rm -rf "$TMP"' EXIT
 
@@ -58,12 +58,12 @@ assert_contains "context contains phase goal" "authentication middleware" "$cont
 output2=$(cd "$TMP" && REPO_ROOT="$TMP" printf '{"tool_input":{"skill":"superpowers:brainstorming"}}' | "$HOOK")
 assert_eq "non-phase skill: no output" "" "$output2"
 
-# Test 4: second invocation returns valid JSON (cache hit)
-output3=$(cd "$TMP" && REPO_ROOT="$TMP" printf '{"tool_input":{"skill":"gsd:plan-phase"}}' | "$HOOK")
-assert_json_key "cache hit: valid JSON on second call" '.hookSpecificOutput.additionalContext' "$output3"
+# Test 4: cache hit — same input returns identical output
+output3=$(cd "$TMP" && REPO_ROOT="$TMP" printf '{"tool_input":{"skill":"gsd:execute-phase"}}' | "$HOOK")
+assert_eq "cache hit: identical output on second call" "$output" "$output3"
 
 # Test 5: cache invalidation — modify file, output changes
-sleep 1  # ensure mtime differs
+sleep 1  # ensure mtime differs from the prior write for reliable cache invalidation
 printf 'new_function_completely_different() { true; }\n' >> "$TMP/src/auth.sh"
 output4=$(cd "$TMP" && REPO_ROOT="$TMP" printf '{"tool_input":{"skill":"gsd:execute-phase"}}' | "$HOOK")
 context4=$(printf '%s' "$output4" | jq -r '.hookSpecificOutput.additionalContext')
