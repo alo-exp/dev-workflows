@@ -82,6 +82,7 @@ GSD steps MUST be invoked as slash commands in the correct phase order.
 **Rules**:
 - Do NOT stop until the final outcome is achieved
 - Always use `/gsd:debug` for ANY bug encountered during execution
+- Always use `/forensics` for root-cause investigation of completed sessions, abandoned sessions, or verification failures
 - Always strictly adhere to this CLAUDE.md 100%
 
 ## 3a. Review Loop Enforcement
