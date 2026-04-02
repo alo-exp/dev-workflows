@@ -218,12 +218,21 @@ footer a:hover{color:var(--accent-light)}
       <h2 id="hooks">Hooks</h2>
       <p>A <strong>hook</strong> is a shell script that Claude Code runs automatically in response to events — most importantly, after every tool use (<code>PostToolUse</code>). Silver Bullet uses hooks to enforce the workflow without relying on Claude's self-discipline.</p>
 
-      <h3>What Hooks Do</h3>
+      <h3>Enforcement Hooks (4)</h3>
       <ul>
         <li><strong>Skill tracker</strong> — Records which skills have been invoked this session. Used by the completion audit.</li>
         <li><strong>Stage enforcer</strong> — Hard stops if you try to advance to planning before discussion is complete.</li>
         <li><strong>Compliance status</strong> — Shows a progress bar of required steps completed on every tool use.</li>
         <li><strong>Completion audit</strong> — Blocks <code>git commit</code>, <code>git push</code>, and deploy commands if required skills are missing.</li>
+      </ul>
+
+      <h3>Support Hooks (4 + session start)</h3>
+      <ul>
+        <li><strong>Semantic compression</strong> — Runs after each Skill invocation; TF-IDF-ranks your codebase and injects relevant context. See <a href="#semantic-context">Semantic Context Compression</a>.</li>
+        <li><strong>Session log init</strong> — Creates the session log file on first Bash use; stores path in <code>/tmp/.silver-bullet-session-log-path</code>.</li>
+        <li><strong>CI status check</strong> — Intercepts push/deploy Bash commands and verifies CI is green before allowing them to proceed.</li>
+        <li><strong>Timeout check</strong> — Monitors for stall conditions and surfaces a timeout sentinel to break infinite loops.</li>
+        <li><strong>Session start</strong> — Runs once at session open (on <code>startup</code>, <code>/clear</code>, or <code>/compact</code>); injects Superpowers and Design plugin context.</li>
       </ul>
 
       <div class="callout callout-info">
