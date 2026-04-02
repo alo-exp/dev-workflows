@@ -12,10 +12,10 @@ timed-out sessions, step 7 verification failures, and mid-session stalls.
 **If you have an active error with a known cause**, use `superpowers:systematic-debugging`
 instead. `/forensics` is for reconstruction, not live debugging.
 
-**In autonomous mode**: skip the user prompt in Step 1 of triage. Classify from evidence
-alone. If evidence is insufficient, default to Path 3 (General) and note
-"Insufficient evidence for classification — defaulting to general path" as the first
-line of the post-mortem.
+**In autonomous mode**: skip the user prompt in Step 2a of triage. Classify from evidence
+alone. If evidence is insufficient, default to Path 3 (General) and record
+"Insufficient evidence for classification — defaulting to general path" as the opening
+classification note in Evidence Gathered.
 
 ---
 
@@ -24,6 +24,8 @@ line of the post-mortem.
 Walk up from `$PWD` until a `.silver-bullet.json` file is found. All evidence paths
 (`docs/sessions/`, `.planning/`, `docs/forensics/`) are relative to this root.
 The plugin root (where this SKILL.md lives) is irrelevant for evidence gathering.
+If `.silver-bullet.json` is not found after walking to the filesystem root (`/`),
+use `$PWD` as the project root and note "Project root not confirmed" in Evidence Gathered.
 
 ---
 
@@ -34,7 +36,7 @@ The plugin root (where this SKILL.md lives) is irrelevant for evidence gathering
 > "Briefly describe what went wrong. (e.g., 'autonomous session stalled after 20 min',
 > 'task 3 produced wrong output', 'session completed but tests are failing')"
 
-### Step 2b — Evidence quick-scan (run in parallel)
+### Step 2b — Evidence quick-scan (issue all four as simultaneous tool calls)
 
 1. Most recent session log in `<project-root>/docs/sessions/` — glob `docs/sessions/*.md`,
    sort by name descending, take first
@@ -52,7 +54,8 @@ From the user description (or evidence alone in autonomous mode), classify into 
 | **Task-level** | Specific task or phase named; commits present but output is wrong; tests failing after recent commits |
 | **General** | Does not fit neatly into the above; open-ended |
 
-Log the classification as the first line of the post-mortem document.
+Record the classification for inclusion as the first entry in Evidence Gathered when
+writing the post-mortem. Then proceed to the matching path section below.
 
 ---
 
@@ -64,7 +67,7 @@ Log the classification as the first line of the post-mortem document.
    tool use before stall? If the sentinel file is absent, note "No sentinel detected"
    in Evidence Gathered and proceed — absence does not rule out stall; rely on session
    log and git history.
-3. Run `git log --oneline` scoped to session date — how many commits landed vs. planned?
+3. Run `git log --oneline --after="<session-date> 00:00" --before="<session-date> 23:59"` (substitute session date from the session log) — how many commits landed vs. planned?
 4. Read `.planning/ROADMAP.md` to enumerate planned phases. For each phase listed, check
    whether `.planning/{phase}-VERIFICATION.md` exists — its presence indicates the phase
    completed verification; its absence indicates the phase did not complete.
@@ -83,7 +86,7 @@ Log the classification as the first line of the post-mortem document.
 
 ## Path 2 — Task-level (wrong output)
 
-1. Read the session log — find the relevant task in Files changed and Approach
+1. Read the session log — find the relevant task in the `## Files changed` and `## Approach` sections. If the session log is absent or uses a different format without these sections, skip to step 2 and rely on git history alone.
 2. Run `git show <commit>` for each commit from that task — what exactly changed?
 3. Read the plan — glob `.planning/{phase}-*-PLAN.md` (plans are numbered
    `{phase}-{N}-PLAN.md`; if phase is unknown, glob `.planning/*-PLAN.md`) —
@@ -108,7 +111,10 @@ Log the classification as the first line of the post-mortem document.
 4. Ask one targeted follow-up question based on what the evidence shows. In autonomous
    mode, skip this question and proceed directly to step 5 using best-judgment
    classification from the evidence gathered.
-5. Proceed with the most applicable sub-path from Path 1 or Path 2 based on findings
+5. Select sub-path based on findings:
+   - If evidence shows an incomplete session, timeout, or stall → use Path 1
+   - If evidence shows commits were made but output is wrong or tests fail → use Path 2
+   - If both apply, default to Path 1 (session integrity first)
 
 ---
 
@@ -182,4 +188,4 @@ ROOT CAUSE: <one sentence> — <path taken> — <confidence: high/medium/low>
   description only. Note absence in post-mortem.
 - **No planning artifacts**: Skip `.planning/` step; note absence.
 - **`docs/forensics/` directory absent**: Create it with `mkdir -p` before writing.
-- **Slug collision**: glob `<project-root>/docs/forensics/<slug>*.md`; increment suffix.
+- **Slug collision**: glob `<project-root>/docs/forensics/<slug>*.md`; if a match exists, append `-2`, `-3`, etc. until unique. (Same logic as Post-mortem Report step 3.)
