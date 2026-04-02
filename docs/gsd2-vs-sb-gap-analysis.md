@@ -134,7 +134,11 @@ GSD v1 + Silver Bullet is a prompt-enforcement system: PostToolUse hooks, CLAUDE
 
 ## Category 9 — Observability & Reporting
 
-**GSD v1 + SB:** No dashboards, no reports, no metrics. The only record of what happened is Claude Code's chat history.
+**GSD v1 + SB (v0.3.0 update):** v0.3.0 added two observability capabilities:
+- **Session logging** (`session-log-init.sh`) — creates a structured `docs/sessions/YYYY-MM-DD-HH-MM-SS.md` skeleton on every session start, capturing task, approach, files changed, skills run, autonomous decisions, and outcome
+- **`/forensics` skill** — structured post-mortem investigation for completed, abandoned, or stalled sessions; classifies root cause (pre-answer gap / anti-stall / genuine blocker / external kill); saves report to `docs/forensics/`
+
+Still no runtime dashboards, no per-task cost metrics, no HTML build reports, no SQLite audit log.
 
 **GSD-2 only:**
 - Full-screen TUI visualizer with Progress / Dependencies (ASCII DAG) / Metrics (bar charts) / Timeline tabs
@@ -142,9 +146,9 @@ GSD v1 + Silver Bullet is a prompt-enforcement system: PostToolUse hooks, CLAUDE
 - Health widget visible in terminal during auto mode
 - Cost projections updated after each completed slice
 - SQLite-backed state with audit log (actor, trigger reason, per-operation records)
-- Forensics: post-mortem investigation (`/gsd forensics`) when tasks fail
+- Forensics: runtime post-mortem investigation (`/gsd forensics`) with access to full execution state
 
-**Outcome you cannot achieve with v1 + SB:** Share a build report with a client showing exactly what was built, how long it took, what it cost, and what tests passed. Or: diagnose why a task failed 3 sessions ago.
+**Outcome you cannot achieve with v1 + SB:** Share a build report with a client showing exactly what was built, how long it took, what it cost, and what tests passed. GSD-2 forensics can reconstruct failures from runtime state; SB's `/forensics` reconstructs from session logs and git history (instruction-based, not runtime).
 
 ---
 
@@ -178,8 +182,8 @@ GSD v1 + Silver Bullet is a prompt-enforcement system: PostToolUse hooks, CLAUDE
 | Async Slack/Discord unblocking | ❌ Must watch terminal | ✅ Remote question routing |
 | Team multi-developer mode | ❌ Single user | ✅ Concurrent milestone isolation |
 | Build reports (HTML) | ❌ None | ✅ Per-task metrics + DAG |
-| Post-mortem forensics | ❌ None | ✅ Session forensics |
-| Cross-session knowledge base | ❌ None | ✅ KNOWLEDGE.md accumulation |
+| Post-mortem forensics | ✅ `/forensics` skill — session logs + git history (v0.3.0) | ✅ Runtime forensics — full execution state |
+| Cross-session knowledge base | ⚠️ KNOWLEDGE.md template (manually updated at step 15) | ✅ Auto-updated after every task |
 | Semantic context compression | ❌ Full file loading | ✅ TF-IDF ranked chunking |
 
 ---
@@ -190,4 +194,5 @@ GSD v1 + Silver Bullet **enforces** the right workflow on Claude. GSD-2 **is** t
 
 ---
 
-*Generated: 2026-04-02 | Based on GSD-2 v2.58.0 (gsd-pi) and Silver Bullet v0.2.0*
+*Generated: 2026-04-02 | Based on GSD-2 v2.58.0 (gsd-pi) and Silver Bullet v0.3.0*
+*v0.3.0 updates: `/forensics` closes the post-mortem forensics gap; session logging added to observability; KNOWLEDGE.md template partially closes the cross-session knowledge base gap.*
