@@ -175,15 +175,15 @@ footer a:hover{color:var(--accent-light)}
       <ul class="sidebar-nav">
         <li><a href="#skills">Skills</a></li>
         <li><a href="#hooks">Hooks</a></li>
-        <li><a href="#gsd">GSD — the orchestrator</a></li>
+        <li><a href="#gsd">GSD — The Orchestrator</a></li>
         <li><a href="#superpowers">Superpowers</a></li>
-        <li><a href="#ownership">Ownership model</a></li>
-        <li><a href="#quality-gates">Quality gates</a></li>
-        <li><a href="#enforcement">Enforcement layers</a></li>
-        <li><a href="#session-modes">Session modes</a></li>
-        <li><a href="#agents">Agent teams</a></li>
-        <li><a href="#semantic-context">Semantic context</a></li>
-        <li><a href="#file-structure">File structure</a></li>
+        <li><a href="#ownership">Ownership Model</a></li>
+        <li><a href="#quality-gates">Quality Gates</a></li>
+        <li><a href="#enforcement">Enforcement Layers</a></li>
+        <li><a href="#session-modes">Session Modes</a></li>
+        <li><a href="#agents">Agent Teams</a></li>
+        <li><a href="#semantic-context">Semantic Context</a></li>
+        <li><a href="#file-structure">File Structure</a></li>
       </ul>
     </aside>
 
@@ -192,14 +192,14 @@ footer a:hover{color:var(--accent-light)}
       <h2 id="skills">Skills</h2>
       <p>A <strong>skill</strong> is a markdown file that contains a detailed prompt and instructions for Claude to follow when performing a specific task. When you invoke a skill, Claude reads the file and executes its instructions as if it were a step-by-step process guide.</p>
 
-      <h3>How skills are stored</h3>
+      <h3>How Skills Are Stored</h3>
       <p>Skills live in two locations:</p>
       <ul>
         <li><code>~/.claude/skills/</code> — flat <code>.md</code> files, one per skill</li>
         <li><code>~/.claude/plugins/cache/</code> — structured as <code>publisher/plugin/version/skills/skill-name/SKILL.md</code></li>
       </ul>
 
-      <h3>How skills are invoked</h3>
+      <h3>How Skills Are Invoked</h3>
       <p>Inside Claude Code, skills are invoked with the <code>Skill</code> tool using a slash-command shorthand:</p>
       <div class="code-block"><span class="cmd">/quality-gates</span>          <span class="comment"># invokes the quality-gates skill</span>
 <span class="cmd">/gsd:discuss-phase</span>       <span class="comment"># invokes GSD's discuss-phase command</span>
@@ -210,7 +210,7 @@ footer a:hover{color:var(--accent-light)}
         <div class="callout-body"><strong>Implicit coverage does not count.</strong> The enforcement hooks track actual Skill tool invocations. Saying "I already covered this while writing the code" is not valid — each skill must be explicitly invoked. This is intentional: the hooks can only measure what actually happened, not what Claude claims happened.</div>
       </div>
 
-      <h3>Skill discovery</h3>
+      <h3>Skill Discovery</h3>
       <p>At the start of each task, Silver Bullet scans all installed skills and cross-references them against the task description. It surfaces candidates that might apply — for example, flagging <code>/security</code> when auth changes are involved. This prevents relevant skills from being forgotten.</p>
 
       <div class="divider"></div>
@@ -218,7 +218,7 @@ footer a:hover{color:var(--accent-light)}
       <h2 id="hooks">Hooks</h2>
       <p>A <strong>hook</strong> is a shell script that Claude Code runs automatically in response to events — most importantly, after every tool use (<code>PostToolUse</code>). Silver Bullet uses hooks to enforce the workflow without relying on Claude's self-discipline.</p>
 
-      <h3>What hooks do</h3>
+      <h3>What Hooks Do</h3>
       <ul>
         <li><strong>Skill tracker</strong> — Records which skills have been invoked this session. Used by the completion audit.</li>
         <li><strong>Stage enforcer</strong> — Hard stops if you try to advance to planning before discussion is complete.</li>
@@ -231,17 +231,17 @@ footer a:hover{color:var(--accent-light)}
         <div class="callout-body"><strong>Hooks run outside Claude's context.</strong> They're shell scripts executed by Claude Code itself, not by Claude. This means they can't be overridden by Claude's reasoning or instructions — they're a hard system constraint.</div>
       </div>
 
-      <h3>Trivial changes</h3>
+      <h3>Trivial Changes</h3>
       <p>Not every edit needs a full workflow. For small, non-logic changes (typos, copy fixes, config tweaks), you can bypass workflow enforcement with:</p>
       <div class="code-block"><span class="cmd">touch /tmp/.silver-bullet-trivial</span></div>
       <p>This tells the hooks to skip enforcement for the next commit. Use it sparingly — it exists for genuine trivial changes, not as a shortcut for skipping review.</p>
 
       <div class="divider"></div>
 
-      <h2 id="gsd">GSD — the authoritative orchestrator</h2>
+      <h2 id="gsd">GSD — The Authoritative Orchestrator</h2>
       <p><strong>GSD (Get Shit Done)</strong> is the planning and execution engine at the core of Silver Bullet. It manages the complete lifecycle of a development task — from requirements through shipment — using a structured file-based workflow in the <code>.planning/</code> directory.</p>
 
-      <h3>What GSD manages</h3>
+      <h3>What GSD Manages</h3>
       <ul>
         <li><code>.planning/PROJECT.md</code> — Project definition and goals</li>
         <li><code>.planning/REQUIREMENTS.md</code> — Authoritative requirements list (single source of truth)</li>
@@ -251,7 +251,7 @@ footer a:hover{color:var(--accent-light)}
         <li><code>.planning/{phase}-VERIFICATION.md</code> — Goal-backward verification results</li>
       </ul>
 
-      <h3>GSD commands</h3>
+      <h3>GSD Commands</h3>
       <p>GSD is invoked via slash commands that Claude Code resolves to GSD's installed workflows:</p>
       <div class="code-block"><span class="cmd">/gsd:new-project</span>       <span class="comment"># Initialize project with requirements + roadmap</span>
 <span class="cmd">/gsd:discuss-phase</span>    <span class="comment"># Capture decisions for the current phase</span>
@@ -267,7 +267,7 @@ footer a:hover{color:var(--accent-light)}
       <h2 id="superpowers">Superpowers</h2>
       <p><strong>Superpowers</strong> is a design and review plugin that provides skills for brainstorming, system design, code review, and UX copy. In the Silver Bullet workflow, Superpowers fills the <em>design and review</em> role while GSD handles planning and execution.</p>
 
-      <h3>Key Superpowers skills used in Silver Bullet</h3>
+      <h3>Key Superpowers Skills Used in Silver Bullet</h3>
       <ul>
         <li><strong><code>/brainstorming</code></strong> — Explores problem space before planning begins</li>
         <li><strong><code>/system-design</code></strong> — Architecture decisions for new services or components</li>
@@ -279,7 +279,7 @@ footer a:hover{color:var(--accent-light)}
 
       <div class="divider"></div>
 
-      <h2 id="ownership">GSD / Superpowers ownership model</h2>
+      <h2 id="ownership">GSD / Superpowers Ownership Model</h2>
       <p>Both GSD and Superpowers are capable of producing plans, specifications, and executing tasks. Silver Bullet enforces a strict ownership split to prevent duplication and conflicts:</p>
 
       <table class="ownership-table">
@@ -302,7 +302,7 @@ footer a:hover{color:var(--accent-light)}
 
       <div class="divider"></div>
 
-      <h2 id="quality-gates">Quality gates</h2>
+      <h2 id="quality-gates">Quality Gates</h2>
       <p>Quality gates are a mandatory pre-planning step where Claude evaluates the proposed design against 8 quality dimensions. All must pass before planning begins — a single ❌ is a hard stop.</p>
 
       <div class="dims-grid">
@@ -316,57 +316,57 @@ footer a:hover{color:var(--accent-light)}
         <div class="dim-card"><div class="dim-icon">🔌</div><div class="dim-name">Extensibility</div><div class="dim-desc">Open for extension, closed for modification</div></div>
       </div>
 
-      <h3>How quality gates are evaluated</h3>
+      <h3>How Quality Gates Are Evaluated</h3>
       <p>The <code>/quality-gates</code> skill dispatches 8 parallel agents — one per dimension — each in an isolated worktree. Results are synthesised by Claude. The most conservative finding wins: if one agent flags a dimension as ❌, the whole gate fails.</p>
 
-      <h3>DevOps quality gates</h3>
+      <h3>DevOps Quality Gates</h3>
       <p>For infrastructure work, <code>/devops-quality-gates</code> applies the same 8 dimensions with IaC-specific interpretations — focusing on idempotency, drift prevention, least-privilege IAM, and infrastructure reliability instead of application concerns.</p>
 
       <div class="divider"></div>
 
-      <h2 id="enforcement">Enforcement layers</h2>
+      <h2 id="enforcement">Enforcement Layers</h2>
       <p>Silver Bullet uses 6 independent enforcement mechanisms so that no single point of failure can let a substandard session slip through:</p>
 
       <div class="layer-list">
         <div class="layer-card">
           <div class="layer-num">1</div>
           <div>
-            <h4>PostToolUse — Skill tracker</h4>
+            <h4>PostToolUse — Skill Tracker</h4>
             <p>Records every Skill tool invocation in the session state file. The source of truth for which required steps have been completed.</p>
           </div>
         </div>
         <div class="layer-card">
           <div class="layer-num">2</div>
           <div>
-            <h4>PostToolUse — Stage enforcer</h4>
+            <h4>PostToolUse — Stage Enforcer</h4>
             <p>Reads session state and issues a HARD STOP if Claude attempts to advance to the next phase before completing the current one (e.g., starting PLAN before /quality-gates passes).</p>
           </div>
         </div>
         <div class="layer-card">
           <div class="layer-num">3</div>
           <div>
-            <h4>PostToolUse — Compliance status</h4>
+            <h4>PostToolUse — Compliance Status</h4>
             <p>After every tool use, outputs a progress indicator showing which required steps are complete and which are pending. Keeps you informed without being obtrusive.</p>
           </div>
         </div>
         <div class="layer-card">
           <div class="layer-num">4</div>
           <div>
-            <h4>PostToolUse — Completion audit</h4>
+            <h4>PostToolUse — Completion Audit</h4>
             <p>Intercepts every <code>git commit</code>, <code>git push</code>, and deploy command. Checks the skill tracker — if required skills are missing, the command is blocked with a specific list of what's incomplete.</p>
           </div>
         </div>
         <div class="layer-card">
           <div class="layer-num">5</div>
           <div>
-            <h4>Redundant instructions</h4>
+            <h4>Redundant Instructions</h4>
             <p>The workflow is described in both the workflow file (<code>docs/workflows/full-dev-cycle.md</code>) and <code>CLAUDE.md</code>. Even if one file is missing or outdated, the other enforces the same rules.</p>
           </div>
         </div>
         <div class="layer-card">
           <div class="layer-num">6</div>
           <div>
-            <h4>Anti-rationalization</h4>
+            <h4>Anti-Rationalization</h4>
             <p>Explicit rules in CLAUDE.md prohibit Claude from deciding a step is "not applicable" without user approval, or claiming it "already covered" a skill without actually invoking it.</p>
           </div>
         </div>
@@ -374,7 +374,7 @@ footer a:hover{color:var(--accent-light)}
 
       <div class="divider"></div>
 
-      <h2 id="session-modes">Session modes</h2>
+      <h2 id="session-modes">Session Modes</h2>
       <p>Every session begins with a mode selection that controls how much Claude pauses for approval:</p>
 
       <div class="concept-grid">
@@ -392,7 +392,7 @@ footer a:hover{color:var(--accent-light)}
 
       <p>The mode is written to <code>/tmp/.silver-bullet-mode</code> and read by hooks throughout the session. If the file is missing or unreadable at any point, the system defaults to <strong>Interactive</strong>.</p>
 
-      <h3>Autonomous mode safeguards</h3>
+      <h3>Autonomous Mode Safeguards</h3>
       <p>Even in autonomous mode, Silver Bullet has three stall-detection rules to prevent infinite loops:</p>
       <ul>
         <li>The same tool call with identical arguments producing the same result 2+ times consecutively</li>
@@ -403,10 +403,10 @@ footer a:hover{color:var(--accent-light)}
 
       <div class="divider"></div>
 
-      <h2 id="agents">Agent teams</h2>
+      <h2 id="agents">Agent Teams</h2>
       <p>Silver Bullet uses Claude's sub-agent capability to parallelize work. When a phase has independent implementation units (different modules, different quality dimensions), multiple agents run simultaneously in isolated git worktrees.</p>
 
-      <h3>How it works</h3>
+      <h3>How It Works</h3>
       <ol>
         <li>GSD's execute-phase identifies independent tasks within a wave</li>
         <li>Each task is dispatched as a separate agent with <code>isolation: "worktree"</code></li>
@@ -421,14 +421,14 @@ footer a:hover{color:var(--accent-light)}
 
       <div class="divider"></div>
 
-      <h2 id="semantic-context">Semantic context compression</h2>
+      <h2 id="semantic-context">Semantic Context Compression</h2>
       <p>Silver Bullet includes an automatic context optimization system that runs as a PostToolUse hook. It scans your source and documentation files, ranks chunks by relevance to the current phase goal using TF-IDF scoring, and injects the most relevant context into Claude's working memory before each tool use.</p>
       <p>This keeps Claude focused on the right parts of a large codebase without exhausting its context window on irrelevant files. Results are cached between tool uses and invalidated when files change.</p>
       <p>Configure it in <code>.silver-bullet.json</code> under <code>"semantic_compression"</code>.</p>
 
       <div class="divider"></div>
 
-      <h2 id="file-structure">Standard file structure</h2>
+      <h2 id="file-structure">Standard File Structure</h2>
       <p>After <code>/using-silver-bullet</code> initializes a project, you'll find this structure:</p>
       <div class="code-block"><span class="comment"># Project root</span>
 CLAUDE.md                    <span class="comment"># Active workflow + Silver Bullet rules</span>

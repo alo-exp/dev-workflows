@@ -183,21 +183,21 @@ footer a:hover{color:var(--accent-light)}
     <!-- SIDEBAR -->
     <aside class="doc-sidebar">
       <ul class="sidebar-nav">
-        <li><a href="#what-is-aidd">What is AI-driven development?</a></li>
-        <li><a href="#what-is-sb">What Silver Bullet does</a></li>
+        <li><a href="#what-is-aidd">What Is AI-Driven Development?</a></li>
+        <li><a href="#what-is-sb">What Silver Bullet Does</a></li>
         <li><a href="#prerequisites">Prerequisites</a></li>
         <li><a href="#install">Installing Silver Bullet</a></li>
-        <li><a href="#first-project">Your first project</a></li>
-        <li><a href="#session-mode">Choosing a session mode</a></li>
-        <li><a href="#first-run">First workflow run</a></li>
-        <li><a href="#whats-next">What's next</a></li>
+        <li><a href="#first-project">Your First Project</a></li>
+        <li><a href="#session-mode">Choosing a Session Mode</a></li>
+        <li><a href="#first-run">First Workflow Run</a></li>
+        <li><a href="#whats-next">What's Next</a></li>
       </ul>
     </aside>
 
     <!-- MAIN -->
     <article class="doc-content">
 
-      <h2 id="what-is-aidd">What is AI-driven development?</h2>
+      <h2 id="what-is-aidd">What Is AI-Driven Development?</h2>
       <p>AI-driven development means using a large language model (LLM) like Claude as an active collaborator in your software engineering process — not just to autocomplete code, but to plan, execute, verify, review, and ship entire features.</p>
       <p>Instead of asking the AI "write this function for me", you ask it to <strong>manage a complete development workflow</strong>: break down requirements, design the architecture, implement in parallel waves, run tests, review its own code, and open the pull request.</p>
 
@@ -206,7 +206,7 @@ footer a:hover{color:var(--accent-light)}
         <div class="callout-body"><strong>Experienced developer?</strong> Think of Claude as a senior engineer who executes your instructions end-to-end. Silver Bullet is the process framework that keeps it accountable — ensuring it doesn't skip steps, cut corners, or hallucinate its way through code review.</div>
       </div>
 
-      <h3>The difference from traditional AI coding assistants</h3>
+      <h3>The Difference From Traditional AI Coding Assistants</h3>
       <ul>
         <li><strong>Traditional approach:</strong> You prompt → AI writes a snippet → you review → you integrate manually. You remain the orchestrator.</li>
         <li><strong>AI-driven approach:</strong> You define the outcome → AI plans, implements, tests, reviews, and ships → you approve gate decisions and review the final output. The AI is the executor.</li>
@@ -215,7 +215,7 @@ footer a:hover{color:var(--accent-light)}
 
       <div class="divider"></div>
 
-      <h2 id="what-is-sb">What Silver Bullet does</h2>
+      <h2 id="what-is-sb">What Silver Bullet Does</h2>
       <p>Silver Bullet is a <strong>Claude Code plugin</strong> that combines four best-in-class plugins — GSD, Superpowers, Engineering, and Design — into two enforced workflows:</p>
 
       <div class="prereq-grid" style="grid-template-columns:1fr 1fr">
@@ -286,7 +286,7 @@ footer a:hover{color:var(--accent-light)}
         <div class="prereq-card">
           <div class="prereq-icon">🎨</div>
           <div>
-            <h4>Design + Engineering plugins <span class="tag tag-optional">Recommended</span></h4>
+            <h4>Design + Engineering Plugins <span class="tag tag-optional">Recommended</span></h4>
             <p>Extends Superpowers with design system and documentation skills.</p>
             <div class="install-cmd">/plugin install anthropics/knowledge-work-plugins/tree/main/design</div>
           </div>
@@ -306,7 +306,7 @@ footer a:hover{color:var(--accent-light)}
       <div class="code-block"><span class="cmd">/plugin install alo-exp/silver-bullet</span></div>
       <p>This installs the plugin into <code>~/.claude/plugins/cache/silver-bullet/</code> and makes its skills and hooks available immediately.</p>
 
-      <h3>Initialize a project</h3>
+      <h3>Initialize a Project</h3>
       <p>Navigate to your project directory and run:</p>
       <div class="code-block"><span class="cmd">/using-silver-bullet</span></div>
       <p>This command will:</p>
@@ -326,21 +326,21 @@ footer a:hover{color:var(--accent-light)}
 
       <div class="divider"></div>
 
-      <h2 id="first-project">Your first project</h2>
+      <h2 id="first-project">Your First Project</h2>
       <p>Silver Bullet works on both new projects and existing codebases. Here's how to start each type:</p>
 
       <div class="card">
-        <h4>New project</h4>
+        <h4>New Project</h4>
         <p>Create an empty directory with a git repo (<code>git init</code> or clone from GitHub). Run <code>/using-silver-bullet</code> to scaffold, then start with <code>/gsd:new-project</code> to generate requirements and a roadmap.</p>
       </div>
       <div class="card">
-        <h4>Existing codebase</h4>
+        <h4>Existing Codebase</h4>
         <p>Run <code>/using-silver-bullet</code> in your project root. Choose <strong>Append</strong> when asked about your existing <code>CLAUDE.md</code> to preserve your current instructions. Then start a new feature with <code>/gsd:discuss-phase</code>.</p>
       </div>
 
       <div class="divider"></div>
 
-      <h2 id="session-mode">Choosing a session mode</h2>
+      <h2 id="session-mode">Choosing a Session Mode</h2>
       <p>At the start of every session, Silver Bullet asks which mode to run in:</p>
 
       <div class="prereq-grid">
@@ -367,14 +367,14 @@ footer a:hover{color:var(--accent-light)}
 
       <div class="divider"></div>
 
-      <h2 id="first-run">Your first workflow run</h2>
+      <h2 id="first-run">Your First Workflow Run</h2>
       <p>With Silver Bullet installed and a project configured, here's a minimal first run for a new feature:</p>
 
       <ol class="step-list">
         <li>
           <div class="step-num">1</div>
           <div class="step-body">
-            <h4>Open Claude Code and choose session mode</h4>
+            <h4>Open Claude Code and Choose Session Mode</h4>
             <p>Claude will prompt: "Run interactively or autonomously?" Type your choice. This sets the session mode for the duration.</p>
           </div>
         </li>
@@ -409,7 +409,7 @@ footer a:hover{color:var(--accent-light)}
         <li>
           <div class="step-num">6</div>
           <div class="step-body">
-            <h4>Verify, review, and ship</h4>
+            <h4>Verify, Review, and Ship</h4>
             <p>Claude runs verification, code review (including an automated reviewer agent), and finally creates the PR with <code>/gsd:ship</code>.</p>
           </div>
         </li>
@@ -422,7 +422,7 @@ footer a:hover{color:var(--accent-light)}
 
       <div class="divider"></div>
 
-      <h2 id="whats-next">What's next</h2>
+      <h2 id="whats-next">What's Next</h2>
       <p>Now that you understand the basics, dig deeper into how Silver Bullet works:</p>
       <div class="prereq-grid">
         <div class="prereq-card">

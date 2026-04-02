@@ -157,26 +157,26 @@ footer a:hover{color:var(--accent-light)}
     <aside class="doc-sidebar">
       <ul class="sidebar-nav">
         <li class="sidebar-section">Commands</li>
-        <li><a href="#gsd-commands">GSD commands</a></li>
-        <li><a href="#sb-skills">Silver Bullet skills</a></li>
-        <li><a href="#sp-skills">Superpowers skills</a></li>
-        <li><a href="#devops-skills">DevOps skills</a></li>
+        <li><a href="#gsd-commands">GSD Commands</a></li>
+        <li><a href="#sb-skills">Silver Bullet Skills</a></li>
+        <li><a href="#sp-skills">Superpowers Skills</a></li>
+        <li><a href="#devops-skills">DevOps Skills</a></li>
         <li class="sidebar-section">Configuration</li>
         <li><a href="#config">silver-bullet.json</a></li>
-        <li><a href="#session-log">Session log format</a></li>
+        <li><a href="#session-log">Session Log Format</a></li>
         <li class="sidebar-section">Files</li>
-        <li><a href="#planning-files">Planning files</a></li>
-        <li><a href="#docs-files">Docs files</a></li>
-        <li><a href="#temp-files">Temp / state files</a></li>
+        <li><a href="#planning-files">Planning Files</a></li>
+        <li><a href="#docs-files">Docs Files</a></li>
+        <li><a href="#temp-files">Temp / State Files</a></li>
         <li class="sidebar-section">Shortcuts</li>
-        <li><a href="#shortcuts">Useful shortcuts</a></li>
+        <li><a href="#shortcuts">Useful Shortcuts</a></li>
       </ul>
     </aside>
 
     <article class="doc-content">
 
       <!-- GSD COMMANDS -->
-      <h2 id="gsd-commands">GSD commands</h2>
+      <h2 id="gsd-commands">GSD Commands</h2>
       <p>GSD commands are slash commands that resolve to GSD's installed workflow files. All are invoked via the Skill tool inside Claude Code.</p>
 
       <table class="ref-table">
@@ -233,7 +233,7 @@ footer a:hover{color:var(--accent-light)}
       <div class="divider"></div>
 
       <!-- SILVER BULLET SKILLS -->
-      <h2 id="sb-skills">Silver Bullet skills</h2>
+      <h2 id="sb-skills">Silver Bullet Skills</h2>
       <p>Silver Bullet's own skills — quality gates, review, deployment, and session management.</p>
 
       <table class="ref-table">
@@ -295,7 +295,7 @@ footer a:hover{color:var(--accent-light)}
       <div class="divider"></div>
 
       <!-- SUPERPOWERS SKILLS -->
-      <h2 id="sp-skills">Superpowers skills used in Silver Bullet</h2>
+      <h2 id="sp-skills">Superpowers Skills Used in Silver Bullet</h2>
 
       <table class="ref-table">
         <thead><tr><th>Skill</th><th>When</th><th>Description</th></tr></thead>
@@ -346,7 +346,7 @@ footer a:hover{color:var(--accent-light)}
       <div class="divider"></div>
 
       <!-- DEVOPS PLUGIN SKILLS -->
-      <h2 id="devops-skills">DevOps plugin skills (contextual enrichment)</h2>
+      <h2 id="devops-skills">DevOps Plugin Skills (Contextual Enrichment)</h2>
       <p>These skills are optional enrichment — not enforcement gates. They're invoked when a matching DevOps plugin is installed and the IaC toolchain matches.</p>
 
       <table class="ref-table">
@@ -367,7 +367,7 @@ footer a:hover{color:var(--accent-light)}
       <div class="divider"></div>
 
       <!-- CONFIG -->
-      <h2 id="config">.silver-bullet.json configuration</h2>
+      <h2 id="config">.silver-bullet.json Configuration</h2>
       <p>Project-level configuration file in the repo root. Created by <code>/using-silver-bullet</code>.</p>
 
       <div class="code-block">{
@@ -401,7 +401,7 @@ footer a:hover{color:var(--accent-light)}
       <div class="divider"></div>
 
       <!-- SESSION LOG -->
-      <h2 id="session-log">Session log format</h2>
+      <h2 id="session-log">Session Log Format</h2>
       <p>A session log is created at the start of every session at <code>docs/sessions/YYYY-MM-DD-{task-slug}.md</code>. The path is written to <code>/tmp/.silver-bullet-session-log-path</code> for hooks to access.</p>
 
       <div class="code-block"><span class="comment"># Session: {task-slug}</span>
@@ -451,7 +451,7 @@ updated (Architecture patterns, Key decisions) | no changes
       <div class="divider"></div>
 
       <!-- PLANNING FILES -->
-      <h2 id="planning-files">Planning files (.planning/)</h2>
+      <h2 id="planning-files">Planning Files (.planning/)</h2>
       <p>All planning files are managed by GSD. Do not edit them manually unless you know what you're doing.</p>
 
       <table class="ref-table">
@@ -473,7 +473,7 @@ updated (Architecture patterns, Key decisions) | no changes
       <div class="divider"></div>
 
       <!-- DOCS FILES -->
-      <h2 id="docs-files">Documentation files (docs/)</h2>
+      <h2 id="docs-files">Documentation Files (docs/)</h2>
 
       <table class="ref-table">
         <thead><tr><th>File</th><th>Purpose</th></tr></thead>
@@ -495,7 +495,7 @@ updated (Architecture patterns, Key decisions) | no changes
       <div class="divider"></div>
 
       <!-- TEMP FILES -->
-      <h2 id="temp-files">Temp / state files (/tmp/)</h2>
+      <h2 id="temp-files">Temp / State Files (/tmp/)</h2>
       <p>These files live in <code>/tmp/</code> and are cleared between system restarts. They store session state for hooks.</p>
 
       <table class="ref-table">
@@ -512,9 +512,9 @@ updated (Architecture patterns, Key decisions) | no changes
       <div class="divider"></div>
 
       <!-- SHORTCUTS -->
-      <h2 id="shortcuts">Useful shortcuts and patterns</h2>
+      <h2 id="shortcuts">Useful Shortcuts and Patterns</h2>
 
-      <h3>Common command sequences</h3>
+      <h3>Common Command Sequences</h3>
       <div class="code-block"><span class="comment"># Start a new feature on an existing project</span>
 /gsd:discuss-phase   → /quality-gates → /gsd:plan-phase → /gsd:execute-phase
 
@@ -536,7 +536,7 @@ touch /tmp/.silver-bullet-trivial
 <span class="comment"># Full finalization + release sequence</span>
 /testing-strategy → /documentation → /finishing-a-development-branch → /deploy-checklist → /gsd:ship → /release-notes</div>
 
-      <h3>Model routing guidance</h3>
+      <h3>Model Routing Guidance</h3>
       <p>Silver Bullet uses <strong>claude-sonnet-4-6</strong> by default. You're asked about Opus at two transition points only:</p>
       <ul>
         <li>Before the Planning phase begins (Discuss step) — for deeper reasoning on complex architectures</li>
