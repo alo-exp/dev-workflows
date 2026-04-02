@@ -8,7 +8,7 @@ assert_eq() {
   else echo "FAIL: $desc"; echo "  expected: [$expected]"; echo "  actual:   [$actual]"; (( FAIL++ )) || true; fi
 }
 
-HOOK="$(cd "$(dirname "$0")/../.." && pwd)/hooks/semantic-compress.sh"
+HOOK="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)/hooks/semantic-compress.sh"
 
 # Test 1: non-GSD skill → no output, exit 0
 result=$(printf '{"tool_input":{"skill":"superpowers:brainstorming"}}' | "$HOOK" 2>/dev/null || true)
@@ -34,10 +34,9 @@ assert_eq "gsd:research-phase without planning: no output" "" "$result"
 result=$(printf '{"tool_input":{}}' | "$HOOK" 2>/dev/null || true)
 assert_eq "missing skill field: no output" "" "$result"
 
-# Test 7: empty stdin → no crash
+# Test 7: empty stdin → no output, no crash
 result=$(printf '' | "$HOOK" 2>/dev/null || true)
-echo "PASS: empty stdin exits cleanly"
-(( PASS++ )) || true
+assert_eq "empty stdin: no output" "" "$result"
 
 echo ""
 echo "Results: $PASS passed, $FAIL failed"
