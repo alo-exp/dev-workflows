@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Silver Bullet Help Center</title>
+<meta name="description" content="Comprehensive documentation for Silver Bullet — the AI-native process orchestrator for Claude Code. Learn concepts, workflows, and commands.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+:root{
+  --bg-page:#f8f9fc;--bg-card:#ffffff;--bg-code:#f1f5f9;
+  --bg-hero:linear-gradient(135deg,#eef2ff 0%,#f5f3ff 50%,#fdf2f8 100%);
+  --accent:#4f46e5;--accent-light:#6366f1;--accent-glow:rgba(99,102,241,.1);
+  --accent2:#7c3aed;--accent3:#db2777;
+  --green:#059669;--amber:#d97706;--red:#dc2626;--cyan:#0891b2;
+  --text-primary:#0f172a;--text-secondary:#475569;--text-dim:#94a3b8;
+  --border:#e2e8f0;--border-hover:#cbd5e1;
+  --radius:12px;--radius-lg:20px;--radius-sm:8px;
+  --font-sans:'Inter',system-ui,-apple-system,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --shadow-lg:0 20px 60px rgba(0,0,0,.08);
+  --shadow-glow:0 0 40px rgba(99,102,241,.06);
+  --nav-bg:rgba(248,249,252,.9);--nav-mobile-bg:rgba(248,249,252,.98);
+  --section-alt:rgba(241,245,249,.6);
+}
+[data-theme="dark"]{
+  --bg-page:#0a0a0f;--bg-card:#12121a;--bg-code:#1a1a2e;
+  --bg-hero:linear-gradient(135deg,#0a0a1a 0%,#0f0f2e 40%,#1a0a2e 100%);
+  --accent:#6366f1;--accent-light:#818cf8;--accent-glow:rgba(99,102,241,.15);
+  --accent2:#a78bfa;--accent3:#f472b6;
+  --green:#34d399;--amber:#fbbf24;--red:#f87171;--cyan:#22d3ee;
+  --text-primary:#e2e8f0;--text-secondary:#94a3b8;--text-dim:#64748b;
+  --border:#1e293b;--border-hover:#334155;
+  --shadow-lg:0 20px 60px rgba(0,0,0,.4);
+  --shadow-glow:0 0 40px rgba(99,102,241,.08);
+  --nav-bg:rgba(10,10,15,.85);--nav-mobile-bg:rgba(10,10,15,.97);
+  --section-alt:rgba(18,18,26,.4);
+}
+body,nav,.help-card{transition:background .25s,background-color .25s,border-color .25s,color .25s}
+body{font-family:var(--font-sans);background:var(--bg-page);color:var(--text-primary);line-height:1.7;overflow-x:hidden}
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 24px}
+nav .nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{font-weight:800;font-size:1rem;background:linear-gradient(135deg,var(--accent-light),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;letter-spacing:-.02em}
+.nav-breadcrumb{font-size:.85rem;color:var(--text-secondary);display:flex;align-items:center;gap:8px}
+.nav-breadcrumb a{color:var(--text-secondary);text-decoration:none}
+.nav-breadcrumb a:hover{color:var(--accent-light)}
+.nav-breadcrumb .sep{color:var(--text-dim)}
+.nav-right{display:flex;align-items:center;gap:16px}
+.theme-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--text-secondary);font-size:.9rem;transition:all .2s}
+.theme-btn:hover{border-color:var(--accent);color:var(--accent-light)}
+/* HERO */
+.hero{background:var(--bg-hero);padding:120px 24px 80px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,.08) 0%,transparent 70%)}
+.hero .container{position:relative;z-index:1;text-align:center}
+.hero .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.25);border-radius:999px;padding:6px 16px;font-size:.8rem;color:var(--accent-light);font-weight:500;margin-bottom:32px}
+.hero h1{font-size:clamp(2rem,4vw,3rem);font-weight:900;letter-spacing:-.04em;margin-bottom:16px;line-height:1.1}
+.hero p{font-size:1.1rem;color:var(--text-secondary);max-width:560px;margin:0 auto 40px;line-height:1.7}
+/* SEARCH BAR */
+.search-wrap{max-width:480px;margin:0 auto 0;position:relative}
+.search-wrap input{width:100%;padding:14px 20px 14px 48px;border-radius:999px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-primary);font-size:.95rem;font-family:var(--font-sans);outline:none;transition:border-color .2s,box-shadow .2s}
+.search-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,.1)}
+.search-wrap .search-icon{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:var(--text-dim);font-size:1rem}
+/* SECTIONS */
+section{padding:64px 0}
+section:nth-child(even){background:var(--section-alt)}
+.section-label{text-transform:uppercase;font-size:.75rem;font-weight:700;letter-spacing:.12em;color:var(--accent-light);margin-bottom:12px}
+.section-title{font-size:clamp(1.6rem,2.5vw,2rem);font-weight:800;letter-spacing:-.03em;margin-bottom:12px}
+.section-desc{font-size:.95rem;color:var(--text-secondary);max-width:600px;margin-bottom:40px}
+/* HELP CARDS */
+.help-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+@media(max-width:900px){.help-grid{grid-template-columns:1fr}}
+@media(min-width:901px) and (max-width:1100px){.help-grid{grid-template-columns:repeat(2,1fr)}}
+.help-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:32px;transition:all .3s;text-decoration:none;color:inherit;display:block;position:relative;overflow:hidden}
+.help-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--card-accent,linear-gradient(90deg,var(--accent),var(--accent2)));opacity:0;transition:opacity .3s}
+.help-card:hover{border-color:var(--border-hover);box-shadow:var(--shadow-glow);transform:translateY(-4px)}
+.help-card:hover::before{opacity:1}
+.help-card .card-icon{font-size:2rem;margin-bottom:16px}
+.help-card .card-badge{display:inline-block;padding:3px 12px;border-radius:999px;font-size:.7rem;font-weight:700;letter-spacing:.04em;margin-bottom:12px;text-transform:uppercase}
+.help-card h3{font-size:1.1rem;font-weight:700;margin-bottom:8px}
+.help-card p{font-size:.875rem;color:var(--text-secondary);line-height:1.6;margin-bottom:16px}
+.help-card .card-topics{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:5px}
+.help-card .card-topics li{font-size:.8rem;color:var(--text-dim);display:flex;align-items:center;gap:6px}
+.help-card .card-topics li::before{content:'→';color:var(--accent-light);font-weight:700;font-size:.75rem}
+.help-card .card-cta{margin-top:20px;padding-top:16px;border-top:1px solid var(--border);font-size:.82rem;font-weight:600;color:var(--accent-light);display:flex;align-items:center;gap:6px}
+/* QUICK LINKS */
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media(max-width:900px){.quick-grid{grid-template-columns:repeat(2,1fr)}}
+.quick-link{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;text-decoration:none;color:var(--text-secondary);font-size:.85rem;font-weight:500;display:flex;align-items:center;gap:10px;transition:all .2s}
+.quick-link:hover{border-color:var(--accent);color:var(--accent-light);transform:translateX(2px)}
+.quick-link .ql-icon{font-size:1.1rem}
+/* CALLOUT */
+.callout{background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(167,139,250,.05));border:1px solid rgba(99,102,241,.2);border-radius:var(--radius-lg);padding:40px;text-align:center;max-width:680px;margin:0 auto}
+.callout p{font-size:1rem;color:var(--text-secondary);line-height:1.7}
+.callout strong{color:var(--text-primary)}
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:40px 0;color:var(--text-dim);font-size:.85rem}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+footer a{color:var(--text-secondary);text-decoration:none}
+footer a:hover{color:var(--accent-light)}
+.footer-links{display:flex;gap:24px}
+@media(max-width:600px){.footer-inner{flex-direction:column;align-items:flex-start;gap:12px}.footer-links{flex-wrap:wrap;gap:16px}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div style="display:flex;align-items:center;gap:16px">
+      <a href="../index.html" class="nav-logo">Silver Bullet</a>
+      <span class="nav-breadcrumb"><span class="sep">/</span> Help Center</span>
+    </div>
+    <div class="nav-right">
+      <button class="theme-btn" onclick="toggleTheme()" id="theme-btn" title="Toggle theme">🌙</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="badge">📖 Help Center</div>
+    <h1>How can we help you?</h1>
+    <p>Everything you need to get productive with Silver Bullet — from first install to complex DevOps workflows.</p>
+    <div class="search-wrap">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Search topics, commands, concepts…" id="search-input" oninput="filterCards(this.value)">
+    </div>
+  </div>
+</section>
+
+<!-- QUICK LINKS -->
+<section style="padding:40px 0">
+  <div class="container">
+    <div class="quick-grid">
+      <a href="getting-started.html" class="quick-link"><span class="ql-icon">🚀</span> Quick start</a>
+      <a href="concepts.html#skills" class="quick-link"><span class="ql-icon">🧩</span> What are skills?</a>
+      <a href="dev-workflow.html" class="quick-link"><span class="ql-icon">⚙️</span> Dev workflow</a>
+      <a href="reference.html" class="quick-link"><span class="ql-icon">📋</span> Command reference</a>
+      <a href="getting-started.html#install" class="quick-link"><span class="ql-icon">📦</span> Installation</a>
+      <a href="concepts.html#session-modes" class="quick-link"><span class="ql-icon">🎛️</span> Session modes</a>
+      <a href="devops-workflow.html" class="quick-link"><span class="ql-icon">🏗️</span> DevOps workflow</a>
+      <a href="concepts.html#enforcement" class="quick-link"><span class="ql-icon">🔒</span> Enforcement layers</a>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN CARDS -->
+<section>
+  <div class="container">
+    <div class="section-label">Documentation</div>
+    <h2 class="section-title">Browse by topic</h2>
+    <p class="section-desc">Pick where you want to start — or read all sections end-to-end for a complete picture.</p>
+    <div class="help-grid" id="help-grid">
+
+      <a href="getting-started.html" class="help-card" data-keywords="install setup prerequisites beginner first run session mode ai development intro">
+        <div class="card-icon">🚀</div>
+        <span class="card-badge" style="background:rgba(5,150,105,.12);color:var(--green)">Start here</span>
+        <h3>Getting Started</h3>
+        <p>New to Silver Bullet or AI-assisted development? Start here to go from zero to your first enforced workflow session.</p>
+        <ul class="card-topics">
+          <li>What AI-driven development is (and isn't)</li>
+          <li>Prerequisites: Claude Code, GSD, Superpowers</li>
+          <li>Installing Silver Bullet</li>
+          <li>Running your first session</li>
+          <li>Choosing Interactive vs Autonomous mode</li>
+        </ul>
+        <div class="card-cta">Read guide →</div>
+      </a>
+
+      <a href="concepts.html" class="help-card" data-keywords="concepts skills hooks gsd superpowers quality gates session modes enforcement agents">
+        <div class="card-icon">🧠</div>
+        <span class="card-badge" style="background:rgba(99,102,241,.12);color:var(--accent-light)">Fundamentals</span>
+        <h3>Core Concepts</h3>
+        <p>Understand the building blocks: what skills and hooks are, how GSD and Superpowers interact, and why enforcement matters.</p>
+        <ul class="card-topics">
+          <li>Skills and how they're invoked</li>
+          <li>Hooks and automated enforcement</li>
+          <li>GSD vs Superpowers ownership model</li>
+          <li>Quality gates and the 8 dimensions</li>
+          <li>Agent teams and parallelism</li>
+        </ul>
+        <div class="card-cta">Read concepts →</div>
+      </a>
+
+      <a href="dev-workflow.html" class="help-card" data-keywords="software engineering workflow steps discuss plan execute verify code review ship release 20 steps">
+        <div class="card-icon">⚙️</div>
+        <span class="card-badge" style="background:rgba(99,102,241,.12);color:var(--accent-light)">Workflow</span>
+        <h3>Software Engineering Workflow</h3>
+        <p>The complete 20-step application development cycle, from session mode selection through release.</p>
+        <ul class="card-topics">
+          <li>Project initialization with GSD</li>
+          <li>Discuss → Quality Gates → Plan → Execute</li>
+          <li>Verify, Code Review, and acceptance loop</li>
+          <li>Finalization, CI/CD, and deployment</li>
+          <li>Ship and Release steps</li>
+        </ul>
+        <div class="card-cta">Read workflow →</div>
+      </a>
+
+      <a href="devops-workflow.html" class="help-card" data-keywords="devops infrastructure iac terraform kubernetes blast radius incident fast path environment promotion 24 steps">
+        <div class="card-icon">🏗️</div>
+        <span class="card-badge" style="background:rgba(34,211,238,.12);color:var(--cyan)">DevOps</span>
+        <h3>DevOps &amp; IaC Workflow</h3>
+        <p>The 24-step infrastructure workflow with Incident Fast Path, Blast Radius assessment, and Environment Promotion.</p>
+        <ul class="card-topics">
+          <li>Incident Fast Path for emergencies</li>
+          <li>Blast Radius assessment (LOW → CRITICAL)</li>
+          <li>IaC-adapted quality gates</li>
+          <li>Environment promotion: dev → staging → prod</li>
+          <li>DevOps plugin ecosystem integration</li>
+        </ul>
+        <div class="card-cta">Read workflow →</div>
+      </a>
+
+      <a href="reference.html" class="help-card" data-keywords="reference commands gsd skills slash commands config json options file structure">
+        <div class="card-icon">📋</div>
+        <span class="card-badge" style="background:rgba(251,191,36,.12);color:var(--amber)">Reference</span>
+        <h3>Command Reference</h3>
+        <p>Every GSD command, Silver Bullet skill, config option, and file location — all in one place.</p>
+        <ul class="card-topics">
+          <li>All /gsd:* commands with descriptions</li>
+          <li>Silver Bullet skills catalog</li>
+          <li>.silver-bullet.json config options</li>
+          <li>Recommended project file structure</li>
+          <li>Session log and planning file formats</li>
+        </ul>
+        <div class="card-cta">Open reference →</div>
+      </a>
+
+      <div class="help-card" style="border-style:dashed;cursor:default" data-keywords="">
+        <div class="card-icon">🔧</div>
+        <span class="card-badge" style="background:rgba(100,116,139,.1);color:var(--text-dim)">Coming soon</span>
+        <h3>Troubleshooting</h3>
+        <p>Common issues, CI failures, hook errors, and how to diagnose problems with the enforcement system.</p>
+        <ul class="card-topics">
+          <li>Hook failures and shellcheck errors</li>
+          <li>CI gate configuration</li>
+          <li>Skill not found errors</li>
+          <li>Recovery from failed sessions</li>
+        </ul>
+        <div class="card-cta" style="color:var(--text-dim)">Coming soon →</div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- CALLOUT -->
+<section style="padding:64px 0;background:var(--section-alt)">
+  <div class="container">
+    <div class="callout">
+      <div style="font-size:2rem;margin-bottom:12px">💡</div>
+      <p><strong>New to AI-driven development?</strong> Silver Bullet works best when you understand what it's doing and why. Start with <a href="getting-started.html" style="color:var(--accent-light);font-weight:600">Getting Started</a>, then <a href="concepts.html" style="color:var(--accent-light);font-weight:600">Core Concepts</a> before diving into workflows. The more you understand the system, the more you get from it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div><span style="font-weight:700;color:var(--text-secondary)">Silver Bullet</span> Help Center</div>
+      <div style="font-size:.9rem;color:var(--text-secondary)">
+        Innovated at <a href="https://alolabs.dev" target="_blank" style="font-weight:700;background:linear-gradient(135deg,var(--accent-light),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none">&#256;lo Labs</a>
+      </div>
+      <div class="footer-links">
+        <a href="../index.html">Home</a>
+        <a href="https://github.com/alo-exp/silver-bullet" target="_blank">GitHub</a>
+        <a href="https://github.com/alo-exp/silver-bullet/blob/main/LICENSE" target="_blank">MIT License</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function applyTheme(dark){
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+  document.getElementById('theme-btn').textContent=dark?'☀️':'🌙';
+  localStorage.setItem('silver-bullet-theme',dark?'dark':'light');
+}
+function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-theme')!=='dark')}
+(function(){const s=localStorage.getItem('silver-bullet-theme');applyTheme(s?s==='dark':false)})();
+
+function filterCards(q){
+  const cards=document.querySelectorAll('#help-grid .help-card');
+  const term=q.toLowerCase().trim();
+  cards.forEach(c=>{
+    const kw=(c.dataset.keywords||'').toLowerCase();
+    const txt=c.textContent.toLowerCase();
+    c.style.display=(!term||kw.includes(term)||txt.includes(term))?'':'none';
+  });
+}
+</script>
+</body>
+</html>

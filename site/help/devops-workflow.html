@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DevOps &amp; IaC Workflow — Silver Bullet Help</title>
+<meta name="description" content="The complete 24-step Silver Bullet DevOps workflow: Incident Fast Path, Blast Radius, DevOps Quality Gates, IaC execution, Environment Promotion, and Release.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+:root{
+  --bg-page:#f8f9fc;--bg-card:#ffffff;--bg-code:#f1f5f9;
+  --bg-hero:linear-gradient(135deg,#ecfdf5 0%,#f0f9ff 50%,#eff6ff 100%);
+  --accent:#4f46e5;--accent-light:#6366f1;
+  --accent2:#7c3aed;--accent3:#db2777;
+  --green:#059669;--amber:#d97706;--red:#dc2626;--cyan:#0891b2;
+  --text-primary:#0f172a;--text-secondary:#475569;--text-dim:#94a3b8;
+  --border:#e2e8f0;--border-hover:#cbd5e1;
+  --radius:12px;--radius-lg:20px;--radius-sm:8px;
+  --font-sans:'Inter',system-ui,-apple-system,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --shadow-glow:0 0 40px rgba(8,145,178,.06);
+  --nav-bg:rgba(248,249,252,.9);
+}
+[data-theme="dark"]{
+  --bg-page:#0a0a0f;--bg-card:#12121a;--bg-code:#1a1a2e;
+  --bg-hero:linear-gradient(135deg,#010f0a 0%,#020d14 50%,#050a1a 100%);
+  --accent:#6366f1;--accent-light:#818cf8;
+  --accent2:#a78bfa;--accent3:#f472b6;
+  --green:#34d399;--amber:#fbbf24;--red:#f87171;--cyan:#22d3ee;
+  --text-primary:#e2e8f0;--text-secondary:#94a3b8;--text-dim:#64748b;
+  --border:#1e293b;--border-hover:#334155;
+  --shadow-glow:0 0 40px rgba(34,211,238,.06);
+  --nav-bg:rgba(10,10,15,.85);
+}
+body,nav{transition:background .25s,background-color .25s,border-color .25s,color .25s}
+body{font-family:var(--font-sans);background:var(--bg-page);color:var(--text-primary);line-height:1.7;overflow-x:hidden}
+.container{max-width:860px;margin:0 auto;padding:0 24px}
+.container-wide{max-width:1100px;margin:0 auto;padding:0 24px}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 24px}
+nav .nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{font-weight:800;font-size:1rem;background:linear-gradient(135deg,var(--accent-light),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;letter-spacing:-.02em}
+.nav-breadcrumb{font-size:.85rem;color:var(--text-secondary);display:flex;align-items:center;gap:8px}
+.nav-breadcrumb a{color:var(--text-secondary);text-decoration:none}
+.nav-breadcrumb a:hover{color:var(--accent-light)}
+.nav-breadcrumb .sep{color:var(--text-dim)}
+.theme-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--text-secondary);font-size:.9rem;transition:all .2s}
+.theme-btn:hover{border-color:var(--accent);color:var(--accent-light)}
+.page-hero{background:var(--bg-hero);padding:120px 24px 64px;position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;top:-200px;right:-200px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(8,145,178,.08) 0%,transparent 70%)}
+.page-hero .container{position:relative;z-index:1}
+.breadcrumb-nav{font-size:.82rem;color:var(--text-dim);margin-bottom:24px;display:flex;align-items:center;gap:8px}
+.breadcrumb-nav a{color:var(--text-dim);text-decoration:none}
+.breadcrumb-nav a:hover{color:var(--accent-light)}
+.page-hero h1{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;letter-spacing:-.04em;margin-bottom:16px;line-height:1.1}
+.page-hero p{font-size:1rem;color:var(--text-secondary);max-width:560px;line-height:1.7}
+.doc-layout{display:grid;grid-template-columns:220px 1fr;gap:48px;padding:64px 0}
+@media(max-width:768px){.doc-layout{grid-template-columns:1fr}}
+.doc-sidebar{position:sticky;top:88px;height:fit-content}
+.sidebar-nav{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:2px}
+.sidebar-nav li a{display:block;padding:7px 12px;border-radius:var(--radius-sm);font-size:.85rem;color:var(--text-secondary);text-decoration:none;transition:all .15s}
+.sidebar-nav li a:hover{background:var(--bg-code);color:var(--text-primary)}
+.sidebar-nav li a.active{background:rgba(8,145,178,.1);color:var(--cyan);font-weight:600}
+.sidebar-nav .sidebar-section{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);padding:16px 12px 4px}
+@media(max-width:768px){.doc-sidebar{display:none}}
+.doc-content h2{font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:14px;margin-top:48px;padding-top:16px}
+.doc-content h2:first-child{margin-top:0}
+.doc-content h3{font-size:1rem;font-weight:700;margin-bottom:10px;margin-top:24px}
+.doc-content p{margin-bottom:14px;color:var(--text-secondary);line-height:1.8}
+.doc-content ul,.doc-content ol{margin-bottom:14px;padding-left:20px;color:var(--text-secondary)}
+.doc-content li{margin-bottom:5px;line-height:1.7}
+.doc-content strong{color:var(--text-primary)}
+.doc-content code{font-family:var(--font-mono);font-size:.82em;background:var(--bg-code);padding:2px 6px;border-radius:4px;color:var(--cyan)}
+.callout{border-radius:var(--radius);padding:18px 22px;margin-bottom:20px;display:flex;gap:12px;align-items:flex-start}
+.callout-info{background:rgba(8,145,178,.06);border:1px solid rgba(8,145,178,.2)}
+.callout-tip{background:rgba(5,150,105,.06);border:1px solid rgba(5,150,105,.2)}
+.callout-warn{background:rgba(217,119,6,.06);border:1px solid rgba(217,119,6,.2)}
+.callout-stop{background:rgba(220,38,38,.06);border:1px solid rgba(220,38,38,.2)}
+.callout-icon{font-size:1rem;flex-shrink:0;margin-top:2px}
+.callout-body{font-size:.86rem;color:var(--text-secondary);line-height:1.7}
+.callout-body strong{color:var(--text-primary)}
+.divider{height:1px;background:var(--border);margin:36px 0}
+/* STEP CARDS */
+.step-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:12px;display:flex;gap:16px;align-items:flex-start;transition:border-color .2s}
+.step-card:hover{border-color:var(--border-hover)}
+.step-card.required{border-left:3px solid var(--cyan)}
+.step-num{min-width:36px;height:36px;border-radius:50%;color:#fff;font-weight:700;font-size:.82rem;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);flex-shrink:0;margin-top:1px}
+.step-card .step-meta{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.step-card .step-title{font-size:.95rem;font-weight:700;color:var(--text-primary)}
+.step-card .step-desc{font-size:.84rem;color:var(--text-secondary);line-height:1.6}
+.step-card .step-output{font-size:.78rem;color:var(--text-dim);margin-top:6px;font-family:var(--font-mono)}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.badge-required{background:rgba(239,68,68,.1);color:var(--red)}
+.badge-gsd{background:rgba(99,102,241,.12);color:var(--accent-light)}
+.badge-sp{background:rgba(5,150,105,.12);color:var(--green)}
+.badge-cond{background:rgba(251,191,36,.1);color:var(--amber)}
+.badge-devops{background:rgba(8,145,178,.12);color:var(--cyan)}
+/* PHASE HEADERS */
+.phase-header{padding:12px 20px;border-radius:var(--radius-sm);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;margin-top:32px;display:flex;align-items:center;gap:10px}
+/* BLAST RADIUS RATINGS */
+.blast-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:20px}
+@media(max-width:600px){.blast-grid{grid-template-columns:repeat(2,1fr)}}
+.blast-card{border-radius:var(--radius-sm);padding:14px 16px;text-align:center}
+.blast-low{background:rgba(5,150,105,.08);border:1px solid rgba(5,150,105,.2)}
+.blast-medium{background:rgba(217,119,6,.08);border:1px solid rgba(217,119,6,.2)}
+.blast-high{background:rgba(234,88,12,.08);border:1px solid rgba(234,88,12,.2)}
+.blast-critical{background:rgba(220,38,38,.08);border:1px solid rgba(220,38,38,.2)}
+.blast-card .blast-icon{font-size:1.2rem;margin-bottom:6px}
+.blast-card .blast-label{font-size:.75rem;font-weight:800;text-transform:uppercase;letter-spacing:.05em}
+.blast-card .blast-action{font-size:.72rem;margin-top:4px;line-height:1.4}
+/* WAVE ORDER */
+.wave-list{list-style:none;padding:0;margin:0 0 20px;display:flex;flex-direction:column;gap:8px}
+.wave-item{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px 16px;display:flex;align-items:center;gap:12px}
+.wave-num{font-family:var(--font-mono);font-size:.75rem;font-weight:700;color:var(--cyan);background:rgba(8,145,178,.1);padding:2px 8px;border-radius:4px;flex-shrink:0}
+.wave-desc{font-size:.84rem;color:var(--text-secondary)}
+/* PAGE NAV BOTTOM */
+.page-nav-bottom{display:flex;justify-content:space-between;margin-top:56px;padding-top:32px;border-top:1px solid var(--border)}
+.page-nav-bottom a{display:flex;flex-direction:column;gap:4px;text-decoration:none;max-width:220px}
+.pnb-label{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600;color:var(--text-dim)}
+.pnb-title{font-size:.95rem;font-weight:700;color:var(--accent-light)}
+footer{border-top:1px solid var(--border);padding:40px 0;color:var(--text-dim);font-size:.85rem}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+footer a{color:var(--text-secondary);text-decoration:none}
+footer a:hover{color:var(--accent-light)}
+.footer-links{display:flex;gap:24px}
+@media(max-width:600px){.footer-inner{flex-direction:column;align-items:flex-start;gap:12px}.footer-links{flex-wrap:wrap;gap:16px}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div style="display:flex;align-items:center;gap:16px">
+      <a href="../index.html" class="nav-logo">Silver Bullet</a>
+      <span class="nav-breadcrumb"><span class="sep">/</span><a href="index.html">Help</a><span class="sep">/</span> DevOps Workflow</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px">
+      <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">🌙</button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb-nav"><a href="index.html">Help Center</a><span>/</span><span>DevOps Workflow</span></div>
+    <h1>DevOps &amp; IaC Workflow</h1>
+    <p>The 24-step infrastructure workflow with Incident Fast Path, Blast Radius assessment, IaC-adapted quality gates, environment promotion, and production deployment.</p>
+  </div>
+</div>
+
+<div class="container-wide">
+  <div class="doc-layout">
+
+    <aside class="doc-sidebar">
+      <ul class="sidebar-nav">
+        <li class="sidebar-section">Overview</li>
+        <li><a href="#overview">How it differs from Dev</a></li>
+        <li><a href="#yaml-rule">YAML files rule</a></li>
+        <li class="sidebar-section">Special Paths</li>
+        <li><a href="#incident">Incident Fast Path</a></li>
+        <li class="sidebar-section">Per-Phase Loop</li>
+        <li><a href="#discuss">Step 3: Discuss</a></li>
+        <li><a href="#blast-radius">Step 4: Blast Radius</a></li>
+        <li><a href="#devops-gates">Step 5: Quality Gates</a></li>
+        <li><a href="#plan">Step 6: Plan</a></li>
+        <li><a href="#execute">Step 7: Execute</a></li>
+        <li><a href="#verify">Step 8: Verify</a></li>
+        <li><a href="#code-review">Steps 9–11: Code Review</a></li>
+        <li class="sidebar-section">After Phases</li>
+        <li><a href="#promotion">Env Promotion</a></li>
+        <li><a href="#finalization">Finalization</a></li>
+        <li><a href="#deployment">CI/CD + Deploy</a></li>
+        <li><a href="#ship-release">Ship + Release</a></li>
+      </ul>
+    </aside>
+
+    <article class="doc-content">
+
+      <h2 id="overview">How the DevOps workflow differs from Dev</h2>
+      <p>The DevOps workflow follows the same overall structure as the software engineering workflow, but with three important additions:</p>
+      <ul>
+        <li><strong>Incident Fast Path</strong> — An emergency shortcut for active production incidents</li>
+        <li><strong>Blast Radius assessment</strong> — Required before planning any infra change (replaces the application-level quality gate as the first gate)</li>
+        <li><strong>Environment Promotion</strong> — After all phases complete in dev, the workflow must be re-run for staging, then again for production</li>
+      </ul>
+      <p>The per-phase loop order also differs: <strong>Discuss → Blast Radius → DevOps Quality Gates → Plan → Execute → Verify → Code Review</strong>.</p>
+
+      <div class="callout callout-warn" id="yaml-rule">
+        <span class="callout-icon">⚠️</span>
+        <div class="callout-body"><strong>YAML and JSON files are infrastructure code here — not trivial changes.</strong> GitHub Actions workflows, Kubernetes manifests, Helm charts, Terraform files, and CI/CD pipeline definitions MUST follow the full DevOps workflow regardless of file extension. The trivial-change exemption that applies to <code>.yml</code> in the dev workflow does NOT apply here.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- INCIDENT FAST PATH -->
+      <h2 id="incident">Incident Fast Path</h2>
+      <p>Use <strong>only</strong> when responding to an active production incident requiring an emergency change. Skip this section entirely for planned DevOps work.</p>
+
+      <div class="callout callout-stop">
+        <span class="callout-icon">🚨</span>
+        <div class="callout-body"><strong>Fast path criteria:</strong> Active incident with confirmed production impact AND the change cannot wait for the full cycle without extending the outage. Both conditions must be true.</div>
+      </div>
+
+      <h3>Fast path steps</h3>
+      <ol>
+        <li><strong>Document the incident</strong> — What is broken, what the proposed change is, expected outcome.</li>
+        <li><strong>Run <code>/blast-radius</code></strong> — Required even in incidents. A rushed unreviewed change can make incidents worse. If CRITICAL blast radius, escalate to CAB before proceeding.</li>
+        <li><strong>Apply the minimal change</strong> in the lowest affected environment first, verify, then promote.</li>
+        <li><strong>Create a post-incident review task</strong> — Full cycle review of the emergency change after the incident resolves, including <code>/devops-quality-gates</code> retroactively.</li>
+        <li><strong>Commit with <code>[HOTFIX]</code> prefix</strong> and reference the incident ticket.</li>
+      </ol>
+
+      <div class="divider"></div>
+
+      <!-- PROJECT INIT -->
+      <h2>Project Initialization</h2>
+      <p>Runs once per project. Skip if <code>.planning/PROJECT.md</code> already exists.</p>
+
+      <div class="step-card">
+        <div class="step-num" style="background:linear-gradient(135deg,#64748b,#475569)">1</div>
+        <div>
+          <div class="step-meta"><span class="step-title">Worktree decision</span></div>
+          <p class="step-desc">Strongly recommended for DevOps changes that touch production resources. A worktree isolates your IaC changes from the main branch until they're ready to apply.</p>
+        </div>
+      </div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--cyan),#0e7490)">2</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/gsd:new-project</span><span class="badge badge-gsd">GSD</span></div>
+          <p class="step-desc">For DevOps projects, the roadmap phases typically map to infrastructure layers. GSD will ask about target environments, IaC toolchain, state backend, naming conventions, and tagging strategy.</p>
+          <div class="step-output">→ Typical phase order: networking → storage → compute → monitoring → CI/CD</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- PER-PHASE LOOP -->
+      <h2>Per-Phase Loop</h2>
+      <p>Repeat Steps 3–13 for each phase. Use <code>/gsd:next</code> to confirm which phase is current.</p>
+
+      <!-- DISCUSS -->
+      <div class="phase-header" style="background:rgba(8,145,178,.1);color:var(--cyan)" id="discuss">
+        <span>Phase: Discuss</span>
+      </div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--cyan),#0e7490)">3</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/gsd:discuss-phase</span><span class="badge badge-gsd">GSD</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Captures implementation decisions for this infra phase. DevOps-specific topics to cover:</p>
+          <ul style="margin-top:8px;margin-bottom:0;font-size:.84rem;color:var(--text-secondary)">
+            <li>Target environments (dev / staging / prod) and promotion strategy</li>
+            <li>IaC toolchain (Terraform, Pulumi, CDK, Helm, raw manifests)</li>
+            <li>State backend and locking strategy</li>
+            <li>Naming conventions and tagging strategy</li>
+          </ul>
+          <div class="step-output" style="margin-top:8px">→ Produces: .planning/{phase}-CONTEXT.md</div>
+        </div>
+      </div>
+
+      <p>If a matching DevOps plugin skill exists for the IaC toolchain discussed (e.g., HashiCorp's <code>terraform-code-generation</code> for Terraform work, <code>kubernetes-operations</code> for k8s), it can be invoked here for best-practice guidance that feeds into quality gates. This is optional enrichment, not a gate.</p>
+
+      <!-- BLAST RADIUS -->
+      <div class="phase-header" style="background:rgba(217,119,6,.1);color:var(--amber)" id="blast-radius">
+        <span>Phase: Blast Radius</span>
+      </div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--amber),#b45309)">4</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/blast-radius</span><span class="badge badge-devops">DevOps</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Maps change scope, downstream dependencies, failure scenarios, rollback plan, and change window risk. Produces a rating that gates whether the phase can proceed.</p>
+          <div class="step-output" style="margin-top:8px">→ Produces: blast radius rating + rollback plan</div>
+        </div>
+      </div>
+
+      <div class="blast-grid">
+        <div class="blast-card blast-low">
+          <div class="blast-icon">🟢</div>
+          <div class="blast-label" style="color:var(--green)">Low</div>
+          <div class="blast-action" style="color:var(--green)">Proceed normally</div>
+        </div>
+        <div class="blast-card blast-medium">
+          <div class="blast-icon">🟡</div>
+          <div class="blast-label" style="color:var(--amber)">Medium</div>
+          <div class="blast-action" style="color:var(--amber)">Proceed normally</div>
+        </div>
+        <div class="blast-card blast-high">
+          <div class="blast-icon">🟠</div>
+          <div class="blast-label" style="color:#ea580c">High</div>
+          <div class="blast-action" style="color:#ea580c">User approval + runbook required</div>
+        </div>
+        <div class="blast-card blast-critical">
+          <div class="blast-icon">🔴</div>
+          <div class="blast-label" style="color:var(--red)">Critical</div>
+          <div class="blast-action" style="color:var(--red)">HARD STOP — CAB review required</div>
+        </div>
+      </div>
+
+      <!-- DEVOPS QUALITY GATES -->
+      <div class="phase-header" style="background:rgba(220,38,38,.08);color:var(--red)" id="devops-gates">
+        <span>Phase: DevOps Quality Gates</span>
+      </div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--red),#b91c1c)">5</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/devops-quality-gates</span><span class="badge badge-devops">DevOps</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Applies 7 IaC-adapted quality dimensions against the infrastructure design. Same 8-dimension framework as the app workflow, but interpreted for infrastructure: idempotency, least-privilege IAM, drift prevention, and infra reliability instead of application concerns. All dimensions must pass. ❌ is a hard stop.</p>
+        </div>
+      </div>
+
+      <!-- PLAN -->
+      <div class="phase-header" style="background:rgba(99,102,241,.1);color:var(--accent-light)" id="plan">
+        <span>Phase: Plan</span>
+      </div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--accent),var(--accent2))">6</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/gsd:plan-phase</span><span class="badge badge-gsd">GSD</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Both the blast radius report and the quality gate report feed into the plan as hard requirements. For IaC phases, the wave order follows dependency direction:</p>
+          <ul class="wave-list" style="margin-top:12px">
+            <li class="wave-item"><span class="wave-num">Wave 1</span><span class="wave-desc">Networking and IAM — no dependencies on other new resources</span></li>
+            <li class="wave-item"><span class="wave-num">Wave 2</span><span class="wave-desc">Storage and data — depends on networking/IAM</span></li>
+            <li class="wave-item"><span class="wave-num">Wave 3</span><span class="wave-desc">Compute and services — depends on networking + storage</span></li>
+            <li class="wave-item"><span class="wave-num">Wave 4</span><span class="wave-desc">Monitoring and alerting — depends on compute</span></li>
+            <li class="wave-item"><span class="wave-num">Wave 5</span><span class="wave-desc">CI/CD pipeline updates — depends on all above</span></li>
+          </ul>
+          <div class="step-output">→ Produces: .planning/{phase}-RESEARCH.md, .planning/{phase}-{N}-PLAN.md</div>
+        </div>
+      </div>
+
+      <!-- EXECUTE -->
+      <div class="phase-header" style="background:rgba(5,150,105,.1);color:var(--green)" id="execute">
+        <span>Phase: Execute</span>
+      </div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--green),#047857)">7</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/gsd:execute-phase</span><span class="badge badge-gsd">GSD</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Wave-based parallel execution. Each wave applies to the <strong>lowest environment first</strong> (dev or equivalent), verifies health, then moves to the next environment. Never apply to production before verifying in staging. For each resource change within a wave: run plan/dry-run output, confirm before apply, verify resource health after apply, commit atomically per task.</p>
+          <div class="step-output">→ Produces: atomic git commits (one per task), .planning/{phase}-{N}-SUMMARY.md</div>
+        </div>
+      </div>
+
+      <!-- VERIFY -->
+      <div class="phase-header" style="background:rgba(217,119,6,.1);color:var(--amber)" id="verify">
+        <span>Phase: Verify</span>
+      </div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--amber),#b45309)">8</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/gsd:verify-work</span><span class="badge badge-gsd">GSD</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Infrastructure verification — not UAT. For DevOps phases, verify:</p>
+          <ul style="margin-top:8px;margin-bottom:0;font-size:.84rem;color:var(--text-secondary)">
+            <li>Health checks passing on all new/modified resources</li>
+            <li>No configuration drift (plan shows no changes after apply)</li>
+            <li>Monitoring and alerting firing correctly</li>
+            <li>Rollback procedure tested in lower environment</li>
+            <li>Runbook updated to reflect actual applied state</li>
+          </ul>
+          <div class="step-output" style="margin-top:8px">→ Produces: .planning/{phase}-VERIFICATION.md</div>
+        </div>
+      </div>
+
+      <!-- CODE REVIEW -->
+      <div class="phase-header" style="background:rgba(217,119,6,.1);color:var(--amber)" id="code-review">
+        <span>Phase: Code Review</span>
+      </div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--amber),#b45309)">9</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/code-review</span><span class="badge badge-sp">Superpowers</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Peer IaC code quality review with infrastructure-specific focus: hardcoded values that should be variables, missing tags/labels, security groups that are too permissive, resources missing encryption, backups, or monitoring. Plan output is reviewed, not just source files. Followed immediately by <code>superpowers:code-reviewer</code> subagent.</p>
+        </div>
+      </div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--amber),#b45309)">10</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/requesting-code-review</span><span class="badge badge-sp">Superpowers</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Request external or peer review. For IaC, include the plan output as an artifact alongside the source code in the review request.</p>
+        </div>
+      </div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--amber),#b45309)">11</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/receiving-code-review</span><span class="badge badge-sp">Superpowers</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Triage all feedback. Accepted items become the input for post-review execution (Steps 12–13).</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--accent),var(--accent2))">12</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/gsd:plan-phase</span><span class="badge badge-gsd">GSD</span><span class="badge badge-cond">Conditional</span></div>
+          <p class="step-desc">Plan to address accepted review items. Only runs if items were accepted in Step 11.</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--green),#047857)">13</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/gsd:execute-phase</span><span class="badge badge-gsd">GSD</span><span class="badge badge-cond">Conditional</span></div>
+          <p class="step-desc">Implement the review-driven plan with atomic commits. Only runs if items were accepted in Step 11.</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- ENVIRONMENT PROMOTION -->
+      <h2 id="promotion">Environment Promotion</h2>
+      <p>Runs after all phases complete in the lowest environment. Repeat for each tier: dev → staging → production.</p>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">⚠️</span>
+        <div class="callout-body"><strong>Never skip staging.</strong> Infrastructure changes must be verified in staging before production. Monitoring verification and rollback testing are mandatory before the production promotion step.</div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--cyan),#0e7490)">14</div>
+        <div>
+          <div class="step-meta"><span class="step-title">Promote to next environment</span></div>
+          <p class="step-desc">Re-run <code>/gsd:execute-phase</code> targeting the next environment using environment-specific tfvars or values files. Never rewrite infrastructure definitions — only the inputs change between environments.</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--cyan),#0e7490)">15</div>
+        <div>
+          <div class="step-meta"><span class="step-title">Verify promoted environment</span></div>
+          <p class="step-desc">Re-run <code>/gsd:verify-work</code> for the promoted environment. Health checks, drift detection, and monitoring verification are mandatory before promoting to production.</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- FINALIZATION -->
+      <h2 id="finalization">Finalization</h2>
+      <p>Runs once after all phases complete in all environments.</p>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--accent3),#9d174d)">16</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/testing-strategy</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Define the IaC test strategy: unit tests (module validation, policy-as-code with conftest/OPA), integration tests (Terratest, BATS, Helm test), end-to-end tests (smoke tests against deployed environments), and drift detection schedule.</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num" style="background:linear-gradient(135deg,#64748b,#475569)">17</div>
+        <div>
+          <div class="step-meta"><span class="step-title">Tech-debt notes</span></div>
+          <p class="step-desc">Append identified infrastructure debt to <code>docs/tech-debt.md</code>. Format: <code>| Item | Severity | Effort | Phase introduced |</code></p>
+        </div>
+      </div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--accent3),#9d174d)">18</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/documentation</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Update or create all documentation. Minimum required: README, docs/PRD-Overview.md (or docs/Infra-PRD.md for pure infra projects), docs/Architecture-and-Design.md, docs/Testing-Strategy-and-Plan.md, <strong>docs/Runbooks.md</strong> (DevOps-specific: one section per phase/component), docs/CICD.md.</p>
+        </div>
+      </div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--accent3),#9d174d)">19</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/finishing-a-development-branch</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Branch rebase, cleanup, and merge preparation. Same as the app workflow Step 16.</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- DEPLOYMENT -->
+      <h2 id="deployment">CI/CD + Deployment</h2>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">🏗️</span>
+        <div class="callout-body"><strong>Infrastructure pipeline rule:</strong> Infra pipelines must enforce plan → review → apply. Never auto-apply to production. Plan output must be stored as a pipeline artifact for audit.</div>
+      </div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--cyan),#0e7490)">20</div>
+        <div>
+          <div class="step-meta"><span class="step-title">CI/CD pipeline</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">CI must be green before deploying. Check with <code>gh run list --limit 1 --json status,conclusion</code>. In Autonomous mode, polls every 30 seconds up to 10 minutes. If CI is red: fix, re-push, re-check. Do not proceed to Step 21 while CI is failing.</p>
+        </div>
+      </div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--cyan),#0e7490)">21</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/deploy-checklist</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Pre-deployment verification gate with DevOps-specific additions:</p>
+          <ul style="margin-top:8px;margin-bottom:0;font-size:.84rem;color:var(--text-secondary)">
+            <li>Blast radius assessment reviewed and approved</li>
+            <li>Rollback procedure tested in staging</li>
+            <li>On-call engineer notified and available</li>
+            <li>Change window confirmed (off-peak unless incident)</li>
+            <li>Monitoring dashboards open and baselining</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--cyan),#0e7490)">22</div>
+        <div>
+          <div class="step-meta"><span class="step-title">Production apply</span></div>
+          <p class="step-desc">Execute plan in production. Apply one resource group at a time if blast radius is HIGH. Monitor dashboards during apply and for 15 minutes after completion.</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- SHIP + RELEASE -->
+      <h2 id="ship-release">Ship + Release</h2>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--green),#047857)">23</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/gsd:ship</span><span class="badge badge-gsd">GSD</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Creates the pull request. For DevOps work, the PR body includes phase summaries, blast radius ratings, requirement coverage, and post-apply drift detection results.</p>
+          <div class="step-output">→ Produces: pull request with blast radius ratings and infra coverage</div>
+        </div>
+      </div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--accent3),#9d174d)">24</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/release-notes</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Generates release notes and creates the GitHub Release. README must have been updated in Step 18 before this step can proceed. Tag, release notes, and changelog entry are produced.</p>
+          <div class="step-output">→ Produces: git tag, GitHub Release, structured release notes</div>
+        </div>
+      </div>
+
+      <!-- PAGE NAV BOTTOM -->
+      <div class="page-nav-bottom">
+        <a href="dev-workflow.html">
+          <span class="pnb-label">← Previous</span>
+          <span class="pnb-title">Dev Workflow</span>
+        </a>
+        <a href="reference.html">
+          <span class="pnb-label">Next →</span>
+          <span class="pnb-title">Command Reference</span>
+        </a>
+      </div>
+
+    </article>
+  </div>
+</div>
+
+<footer>
+  <div class="container-wide">
+    <div class="footer-inner">
+      <div><span style="font-weight:700;color:var(--text-secondary)">Silver Bullet</span> Help Center</div>
+      <div style="font-size:.9rem;color:var(--text-secondary)">Innovated at <a href="https://alolabs.dev" target="_blank" style="font-weight:700;background:linear-gradient(135deg,var(--accent-light),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none">&#256;lo Labs</a></div>
+      <div class="footer-links">
+        <a href="index.html">Help Home</a>
+        <a href="../index.html">Home</a>
+        <a href="https://github.com/alo-exp/silver-bullet" target="_blank">GitHub</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function applyTheme(dark){document.documentElement.setAttribute('data-theme',dark?'dark':'light');document.getElementById('theme-btn').textContent=dark?'☀️':'🌙';localStorage.setItem('silver-bullet-theme',dark?'dark':'light')}
+function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-theme')!=='dark')}
+(function(){const s=localStorage.getItem('silver-bullet-theme');applyTheme(s?s==='dark':false)})();
+const links=document.querySelectorAll('.sidebar-nav a');
+window.addEventListener('scroll',()=>{let curr='';document.querySelectorAll('[id]').forEach(h=>{if(window.scrollY>=h.offsetTop-120)curr=h.id});links.forEach(l=>{l.classList.toggle('active',l.getAttribute('href')==='#'+curr)})},{passive:true});
+</script>
+</body>
+</html>

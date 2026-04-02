@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Core Concepts — Silver Bullet Help</title>
+<meta name="description" content="Understand Silver Bullet's core concepts: skills, hooks, GSD, Superpowers, quality gates, enforcement layers, and session modes.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+:root{
+  --bg-page:#f8f9fc;--bg-card:#ffffff;--bg-code:#f1f5f9;
+  --bg-hero:linear-gradient(135deg,#eef2ff 0%,#f5f3ff 50%,#fdf2f8 100%);
+  --accent:#4f46e5;--accent-light:#6366f1;--accent-glow:rgba(99,102,241,.1);
+  --accent2:#7c3aed;--accent3:#db2777;
+  --green:#059669;--amber:#d97706;--red:#dc2626;--cyan:#0891b2;
+  --text-primary:#0f172a;--text-secondary:#475569;--text-dim:#94a3b8;
+  --border:#e2e8f0;--border-hover:#cbd5e1;
+  --radius:12px;--radius-lg:20px;--radius-sm:8px;
+  --font-sans:'Inter',system-ui,-apple-system,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --shadow-glow:0 0 40px rgba(99,102,241,.06);
+  --nav-bg:rgba(248,249,252,.9);
+  --section-alt:rgba(241,245,249,.6);
+}
+[data-theme="dark"]{
+  --bg-page:#0a0a0f;--bg-card:#12121a;--bg-code:#1a1a2e;
+  --bg-hero:linear-gradient(135deg,#0a0a1a 0%,#0f0f2e 40%,#1a0a2e 100%);
+  --accent:#6366f1;--accent-light:#818cf8;--accent-glow:rgba(99,102,241,.15);
+  --accent2:#a78bfa;--accent3:#f472b6;
+  --green:#34d399;--amber:#fbbf24;--red:#f87171;--cyan:#22d3ee;
+  --text-primary:#e2e8f0;--text-secondary:#94a3b8;--text-dim:#64748b;
+  --border:#1e293b;--border-hover:#334155;
+  --shadow-glow:0 0 40px rgba(99,102,241,.08);
+  --nav-bg:rgba(10,10,15,.85);
+  --section-alt:rgba(18,18,26,.4);
+}
+body,nav{transition:background .25s,background-color .25s,border-color .25s,color .25s}
+body{font-family:var(--font-sans);background:var(--bg-page);color:var(--text-primary);line-height:1.7;overflow-x:hidden}
+.container{max-width:860px;margin:0 auto;padding:0 24px}
+.container-wide{max-width:1100px;margin:0 auto;padding:0 24px}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 24px}
+nav .nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{font-weight:800;font-size:1rem;background:linear-gradient(135deg,var(--accent-light),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;letter-spacing:-.02em}
+.nav-breadcrumb{font-size:.85rem;color:var(--text-secondary);display:flex;align-items:center;gap:8px}
+.nav-breadcrumb a{color:var(--text-secondary);text-decoration:none}
+.nav-breadcrumb a:hover{color:var(--accent-light)}
+.nav-breadcrumb .sep{color:var(--text-dim)}
+.theme-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--text-secondary);font-size:.9rem;transition:all .2s}
+.theme-btn:hover{border-color:var(--accent);color:var(--accent-light)}
+.page-hero{background:var(--bg-hero);padding:120px 24px 64px;position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;top:-200px;right:-200px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,.08) 0%,transparent 70%)}
+.page-hero .container{position:relative;z-index:1}
+.breadcrumb-nav{font-size:.82rem;color:var(--text-dim);margin-bottom:24px;display:flex;align-items:center;gap:8px}
+.breadcrumb-nav a{color:var(--text-dim);text-decoration:none}
+.breadcrumb-nav a:hover{color:var(--accent-light)}
+.page-hero h1{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;letter-spacing:-.04em;margin-bottom:16px;line-height:1.1}
+.page-hero p{font-size:1rem;color:var(--text-secondary);max-width:560px;line-height:1.7}
+.doc-layout{display:grid;grid-template-columns:220px 1fr;gap:48px;padding:64px 0}
+@media(max-width:768px){.doc-layout{grid-template-columns:1fr}}
+.doc-sidebar{position:sticky;top:88px;height:fit-content}
+.sidebar-nav{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:2px}
+.sidebar-nav li a{display:block;padding:7px 12px;border-radius:var(--radius-sm);font-size:.85rem;color:var(--text-secondary);text-decoration:none;transition:all .15s}
+.sidebar-nav li a:hover{background:var(--bg-code);color:var(--text-primary)}
+.sidebar-nav li a.active{background:rgba(99,102,241,.1);color:var(--accent-light);font-weight:600}
+.sidebar-nav .sidebar-section{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);padding:16px 12px 4px;margin-top:8px}
+@media(max-width:768px){.doc-sidebar{display:none}}
+.doc-content h2{font-size:1.5rem;font-weight:800;letter-spacing:-.03em;margin-bottom:16px;margin-top:48px;padding-top:16px}
+.doc-content h2:first-child{margin-top:0}
+.doc-content h3{font-size:1.05rem;font-weight:700;margin-bottom:10px;margin-top:28px;color:var(--text-primary)}
+.doc-content p{margin-bottom:16px;color:var(--text-secondary);line-height:1.8}
+.doc-content ul,.doc-content ol{margin-bottom:16px;padding-left:20px;color:var(--text-secondary)}
+.doc-content li{margin-bottom:6px;line-height:1.7}
+.doc-content strong{color:var(--text-primary)}
+.doc-content code{font-family:var(--font-mono);font-size:.82em;background:var(--bg-code);padding:2px 6px;border-radius:4px;color:var(--accent-light)}
+.callout{border-radius:var(--radius);padding:20px 24px;margin-bottom:24px;display:flex;gap:14px;align-items:flex-start}
+.callout-info{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2)}
+.callout-tip{background:rgba(5,150,105,.06);border:1px solid rgba(5,150,105,.2)}
+.callout-warn{background:rgba(217,119,6,.06);border:1px solid rgba(217,119,6,.2)}
+.callout-stop{background:rgba(220,38,38,.06);border:1px solid rgba(220,38,38,.2)}
+.callout-icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.callout-body{font-size:.875rem;color:var(--text-secondary);line-height:1.7}
+.callout-body strong{color:var(--text-primary)}
+.code-block{background:var(--bg-code);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px 24px;font-family:var(--font-mono);font-size:.82rem;line-height:1.9;color:var(--text-secondary);overflow-x:auto;margin-bottom:20px}
+.code-block .comment{color:var(--text-dim)}
+.code-block .cmd{color:var(--green)}
+.divider{height:1px;background:var(--border);margin:40px 0}
+/* CONCEPT CARDS */
+.concept-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px}
+@media(max-width:600px){.concept-grid{grid-template-columns:1fr}}
+.concept-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px}
+.concept-card .cc-icon{font-size:1.4rem;margin-bottom:10px}
+.concept-card h4{font-size:.9rem;font-weight:700;margin-bottom:6px}
+.concept-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.5;margin:0}
+/* LAYER CARDS */
+.layer-list{display:flex;flex-direction:column;gap:12px;margin-bottom:24px}
+.layer-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;display:flex;gap:16px;align-items:flex-start}
+.layer-num{min-width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:.8rem;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);flex-shrink:0;margin-top:2px}
+.layer-card h4{font-size:.9rem;font-weight:700;margin-bottom:4px}
+.layer-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.5;margin:0}
+/* QUALITY DIMS */
+.dims-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:24px}
+@media(max-width:700px){.dims-grid{grid-template-columns:repeat(2,1fr)}}
+.dim-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:14px 16px;text-align:center}
+.dim-card .dim-icon{font-size:1.2rem;margin-bottom:6px}
+.dim-card .dim-name{font-size:.8rem;font-weight:700;color:var(--text-primary)}
+.dim-card .dim-desc{font-size:.72rem;color:var(--text-dim);margin-top:3px}
+/* OWNERSHIP TABLE */
+.ownership-table{width:100%;border-collapse:collapse;margin-bottom:24px;font-size:.875rem}
+.ownership-table th{text-align:left;padding:10px 14px;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);border-bottom:2px solid var(--border)}
+.ownership-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text-secondary);line-height:1.5;vertical-align:top}
+.ownership-table td:first-child{font-weight:600;color:var(--text-primary)}
+.owner-gsd{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:700;background:rgba(99,102,241,.12);color:var(--accent-light)}
+.owner-sp{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:700;background:rgba(5,150,105,.12);color:var(--green)}
+/* PAGE NAV BOTTOM */
+.page-nav-bottom{display:flex;justify-content:space-between;margin-top:56px;padding-top:32px;border-top:1px solid var(--border)}
+.page-nav-bottom a{display:flex;flex-direction:column;gap:4px;text-decoration:none;max-width:200px}
+.pnb-label{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600;color:var(--text-dim)}
+.pnb-title{font-size:.95rem;font-weight:700;color:var(--accent-light)}
+footer{border-top:1px solid var(--border);padding:40px 0;color:var(--text-dim);font-size:.85rem}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+footer a{color:var(--text-secondary);text-decoration:none}
+footer a:hover{color:var(--accent-light)}
+.footer-links{display:flex;gap:24px}
+@media(max-width:600px){.footer-inner{flex-direction:column;align-items:flex-start;gap:12px}.footer-links{flex-wrap:wrap;gap:16px}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div style="display:flex;align-items:center;gap:16px">
+      <a href="../index.html" class="nav-logo">Silver Bullet</a>
+      <span class="nav-breadcrumb"><span class="sep">/</span><a href="index.html">Help</a><span class="sep">/</span> Core Concepts</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px">
+      <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">🌙</button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb-nav"><a href="index.html">Help Center</a><span>/</span><span>Core Concepts</span></div>
+    <h1>Core Concepts</h1>
+    <p>The mental models that make Silver Bullet understandable — skills, hooks, quality gates, and why GSD is the authoritative orchestrator.</p>
+  </div>
+</div>
+
+<div class="container-wide">
+  <div class="doc-layout">
+
+    <aside class="doc-sidebar">
+      <ul class="sidebar-nav">
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#hooks">Hooks</a></li>
+        <li><a href="#gsd">GSD — the orchestrator</a></li>
+        <li><a href="#superpowers">Superpowers</a></li>
+        <li><a href="#ownership">Ownership model</a></li>
+        <li><a href="#quality-gates">Quality gates</a></li>
+        <li><a href="#enforcement">Enforcement layers</a></li>
+        <li><a href="#session-modes">Session modes</a></li>
+        <li><a href="#agents">Agent teams</a></li>
+        <li><a href="#semantic-context">Semantic context</a></li>
+        <li><a href="#file-structure">File structure</a></li>
+      </ul>
+    </aside>
+
+    <article class="doc-content">
+
+      <h2 id="skills">Skills</h2>
+      <p>A <strong>skill</strong> is a markdown file that contains a detailed prompt and instructions for Claude to follow when performing a specific task. When you invoke a skill, Claude reads the file and executes its instructions as if it were a step-by-step process guide.</p>
+
+      <h3>How skills are stored</h3>
+      <p>Skills live in two locations:</p>
+      <ul>
+        <li><code>~/.claude/skills/</code> — flat <code>.md</code> files, one per skill</li>
+        <li><code>~/.claude/plugins/cache/</code> — structured as <code>publisher/plugin/version/skills/skill-name/SKILL.md</code></li>
+      </ul>
+
+      <h3>How skills are invoked</h3>
+      <p>Inside Claude Code, skills are invoked with the <code>Skill</code> tool using a slash-command shorthand:</p>
+      <div class="code-block"><span class="cmd">/quality-gates</span>          <span class="comment"># invokes the quality-gates skill</span>
+<span class="cmd">/gsd:discuss-phase</span>       <span class="comment"># invokes GSD's discuss-phase command</span>
+<span class="cmd">/code-review</span>             <span class="comment"># invokes the code-review skill</span></div>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">⚠️</span>
+        <div class="callout-body"><strong>Implicit coverage does not count.</strong> The enforcement hooks track actual Skill tool invocations. Saying "I already covered this while writing the code" is not valid — each skill must be explicitly invoked. This is intentional: the hooks can only measure what actually happened, not what Claude claims happened.</div>
+      </div>
+
+      <h3>Skill discovery</h3>
+      <p>At the start of each task, Silver Bullet scans all installed skills and cross-references them against the task description. It surfaces candidates that might apply — for example, flagging <code>/security</code> when auth changes are involved. This prevents relevant skills from being forgotten.</p>
+
+      <div class="divider"></div>
+
+      <h2 id="hooks">Hooks</h2>
+      <p>A <strong>hook</strong> is a shell script that Claude Code runs automatically in response to events — most importantly, after every tool use (<code>PostToolUse</code>). Silver Bullet uses hooks to enforce the workflow without relying on Claude's self-discipline.</p>
+
+      <h3>What hooks do</h3>
+      <ul>
+        <li><strong>Skill tracker</strong> — Records which skills have been invoked this session. Used by the completion audit.</li>
+        <li><strong>Stage enforcer</strong> — Hard stops if you try to advance to planning before discussion is complete.</li>
+        <li><strong>Compliance status</strong> — Shows a progress bar of required steps completed on every tool use.</li>
+        <li><strong>Completion audit</strong> — Blocks <code>git commit</code>, <code>git push</code>, and deploy commands if required skills are missing.</li>
+      </ul>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">💡</span>
+        <div class="callout-body"><strong>Hooks run outside Claude's context.</strong> They're shell scripts executed by Claude Code itself, not by Claude. This means they can't be overridden by Claude's reasoning or instructions — they're a hard system constraint.</div>
+      </div>
+
+      <h3>Trivial changes</h3>
+      <p>Not every edit needs a full workflow. For small, non-logic changes (typos, copy fixes, config tweaks), you can bypass workflow enforcement with:</p>
+      <div class="code-block"><span class="cmd">touch /tmp/.silver-bullet-trivial</span></div>
+      <p>This tells the hooks to skip enforcement for the next commit. Use it sparingly — it exists for genuine trivial changes, not as a shortcut for skipping review.</p>
+
+      <div class="divider"></div>
+
+      <h2 id="gsd">GSD — the authoritative orchestrator</h2>
+      <p><strong>GSD (Get Shit Done)</strong> is the planning and execution engine at the core of Silver Bullet. It manages the complete lifecycle of a development task — from requirements through shipment — using a structured file-based workflow in the <code>.planning/</code> directory.</p>
+
+      <h3>What GSD manages</h3>
+      <ul>
+        <li><code>.planning/PROJECT.md</code> — Project definition and goals</li>
+        <li><code>.planning/REQUIREMENTS.md</code> — Authoritative requirements list (single source of truth)</li>
+        <li><code>.planning/ROADMAP.md</code> — Phased implementation plan</li>
+        <li><code>.planning/{phase}-CONTEXT.md</code> — Decisions captured in Discuss step</li>
+        <li><code>.planning/{phase}-PLAN.md</code> — Detailed task-level implementation plan</li>
+        <li><code>.planning/{phase}-VERIFICATION.md</code> — Goal-backward verification results</li>
+      </ul>
+
+      <h3>GSD commands</h3>
+      <p>GSD is invoked via slash commands that Claude Code resolves to GSD's installed workflows:</p>
+      <div class="code-block"><span class="cmd">/gsd:new-project</span>       <span class="comment"># Initialize project with requirements + roadmap</span>
+<span class="cmd">/gsd:discuss-phase</span>    <span class="comment"># Capture decisions for the current phase</span>
+<span class="cmd">/gsd:plan-phase</span>       <span class="comment"># Research + create task-level plan</span>
+<span class="cmd">/gsd:execute-phase</span>    <span class="comment"># Wave-based parallel execution</span>
+<span class="cmd">/gsd:verify-work</span>      <span class="comment"># Goal-backward verification</span>
+<span class="cmd">/gsd:ship</span>             <span class="comment"># Create PR with phase summaries</span>
+<span class="cmd">/gsd:next</span>             <span class="comment"># "Where am I?" — advance to next step</span>
+<span class="cmd">/gsd:debug</span>            <span class="comment"># Systematic debugging for any encountered bug</span></div>
+
+      <div class="divider"></div>
+
+      <h2 id="superpowers">Superpowers</h2>
+      <p><strong>Superpowers</strong> is a design and review plugin that provides skills for brainstorming, system design, code review, and UX copy. In the Silver Bullet workflow, Superpowers fills the <em>design and review</em> role while GSD handles planning and execution.</p>
+
+      <h3>Key Superpowers skills used in Silver Bullet</h3>
+      <ul>
+        <li><strong><code>/brainstorming</code></strong> — Explores problem space before planning begins</li>
+        <li><strong><code>/system-design</code></strong> — Architecture decisions for new services or components</li>
+        <li><strong><code>/design-system</code></strong> — UI component and design token decisions (UI work only)</li>
+        <li><strong><code>/ux-copy</code></strong> — User-facing text and messaging decisions (UI work only)</li>
+        <li><strong><code>/code-review</code></strong> — Peer code quality review (security, performance, readability)</li>
+        <li><strong><code>superpowers:code-reviewer</code></strong> — Automated reviewer subagent dispatched after manual review</li>
+      </ul>
+
+      <div class="divider"></div>
+
+      <h2 id="ownership">GSD / Superpowers ownership model</h2>
+      <p>Both GSD and Superpowers are capable of producing plans, specifications, and executing tasks. Silver Bullet enforces a strict ownership split to prevent duplication and conflicts:</p>
+
+      <table class="ownership-table">
+        <thead>
+          <tr><th>Concern</th><th>Owner</th><th>Rule</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Requirements</td><td><span class="owner-gsd">GSD</span></td><td><code>.planning/REQUIREMENTS.md</code> is the single source of truth. Superpowers must not maintain a separate requirements list.</td></tr>
+          <tr><td>Planning</td><td><span class="owner-gsd">GSD</span></td><td>Use <code>/gsd:plan-phase</code> for all plans. When Superpowers' brainstorming offers to hand off to <code>writing-plans</code>, redirect to <code>/gsd:plan-phase</code>.</td></tr>
+          <tr><td>Execution</td><td><span class="owner-gsd">GSD</span></td><td>Always use <code>/gsd:execute-phase</code> (wave-based). Never use <code>superpowers:subagent-driven-development</code> for project work.</td></tr>
+          <tr><td>Design specs</td><td><span class="owner-sp">Superpowers</span></td><td>Save to <code>docs/specs/YYYY-MM-DD-&lt;topic&gt;-design.md</code>. The default Superpowers path (<code>docs/superpowers/specs/</code>) is not used.</td></tr>
+          <tr><td>Code review</td><td><span class="owner-sp">Superpowers</span></td><td><code>/requesting-code-review</code>, <code>/receiving-code-review</code>, and <code>superpowers:code-reviewer</code> are for review only, never execution.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-stop">
+        <span class="callout-icon">🚫</span>
+        <div class="callout-body"><strong>Never use <code>subagent-driven-development</code> for project work.</strong> This Superpowers skill is powerful but operates outside GSD's enforcement model. Using it for execution bypasses quality gates, atomic commits, and verification requirements.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2 id="quality-gates">Quality gates</h2>
+      <p>Quality gates are a mandatory pre-planning step where Claude evaluates the proposed design against 8 quality dimensions. All must pass before planning begins — a single ❌ is a hard stop.</p>
+
+      <div class="dims-grid">
+        <div class="dim-card"><div class="dim-icon">🧩</div><div class="dim-name">Modularity</div><div class="dim-desc">Components are independently replaceable</div></div>
+        <div class="dim-card"><div class="dim-icon">♻️</div><div class="dim-name">Reusability</div><div class="dim-desc">Components shared without modification</div></div>
+        <div class="dim-card"><div class="dim-icon">📈</div><div class="dim-name">Scalability</div><div class="dim-desc">Handles growth without redesign</div></div>
+        <div class="dim-card"><div class="dim-icon">🔒</div><div class="dim-name">Security</div><div class="dim-desc">Defense-in-depth, least privilege</div></div>
+        <div class="dim-card"><div class="dim-icon">🛡️</div><div class="dim-name">Reliability</div><div class="dim-desc">Graceful failures, fault tolerance</div></div>
+        <div class="dim-card"><div class="dim-icon">🎯</div><div class="dim-name">Usability</div><div class="dim-desc">Intuitive APIs and interfaces</div></div>
+        <div class="dim-card"><div class="dim-icon">🧪</div><div class="dim-name">Testability</div><div class="dim-desc">Isolated, fast, deterministic tests</div></div>
+        <div class="dim-card"><div class="dim-icon">🔌</div><div class="dim-name">Extensibility</div><div class="dim-desc">Open for extension, closed for modification</div></div>
+      </div>
+
+      <h3>How quality gates are evaluated</h3>
+      <p>The <code>/quality-gates</code> skill dispatches 8 parallel agents — one per dimension — each in an isolated worktree. Results are synthesised by Claude. The most conservative finding wins: if one agent flags a dimension as ❌, the whole gate fails.</p>
+
+      <h3>DevOps quality gates</h3>
+      <p>For infrastructure work, <code>/devops-quality-gates</code> applies the same 8 dimensions with IaC-specific interpretations — focusing on idempotency, drift prevention, least-privilege IAM, and infrastructure reliability instead of application concerns.</p>
+
+      <div class="divider"></div>
+
+      <h2 id="enforcement">Enforcement layers</h2>
+      <p>Silver Bullet uses 6 independent enforcement mechanisms so that no single point of failure can let a substandard session slip through:</p>
+
+      <div class="layer-list">
+        <div class="layer-card">
+          <div class="layer-num">1</div>
+          <div>
+            <h4>PostToolUse — Skill tracker</h4>
+            <p>Records every Skill tool invocation in the session state file. The source of truth for which required steps have been completed.</p>
+          </div>
+        </div>
+        <div class="layer-card">
+          <div class="layer-num">2</div>
+          <div>
+            <h4>PostToolUse — Stage enforcer</h4>
+            <p>Reads session state and issues a HARD STOP if Claude attempts to advance to the next phase before completing the current one (e.g., starting PLAN before /quality-gates passes).</p>
+          </div>
+        </div>
+        <div class="layer-card">
+          <div class="layer-num">3</div>
+          <div>
+            <h4>PostToolUse — Compliance status</h4>
+            <p>After every tool use, outputs a progress indicator showing which required steps are complete and which are pending. Keeps you informed without being obtrusive.</p>
+          </div>
+        </div>
+        <div class="layer-card">
+          <div class="layer-num">4</div>
+          <div>
+            <h4>PostToolUse — Completion audit</h4>
+            <p>Intercepts every <code>git commit</code>, <code>git push</code>, and deploy command. Checks the skill tracker — if required skills are missing, the command is blocked with a specific list of what's incomplete.</p>
+          </div>
+        </div>
+        <div class="layer-card">
+          <div class="layer-num">5</div>
+          <div>
+            <h4>Redundant instructions</h4>
+            <p>The workflow is described in both the workflow file (<code>docs/workflows/full-dev-cycle.md</code>) and <code>CLAUDE.md</code>. Even if one file is missing or outdated, the other enforces the same rules.</p>
+          </div>
+        </div>
+        <div class="layer-card">
+          <div class="layer-num">6</div>
+          <div>
+            <h4>Anti-rationalization</h4>
+            <p>Explicit rules in CLAUDE.md prohibit Claude from deciding a step is "not applicable" without user approval, or claiming it "already covered" a skill without actually invoking it.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2 id="session-modes">Session modes</h2>
+      <p>Every session begins with a mode selection that controls how much Claude pauses for approval:</p>
+
+      <div class="concept-grid">
+        <div class="concept-card">
+          <div class="cc-icon">🤝</div>
+          <h4>Interactive (default)</h4>
+          <p>Claude pauses at every phase gate. You review and approve each stage. Best for learning the workflow or working on sensitive/complex tasks where human oversight matters at each step.</p>
+        </div>
+        <div class="concept-card">
+          <div class="cc-icon">🚀</div>
+          <h4>Autonomous</h4>
+          <p>Claude drives start-to-finish. Decisions are logged. Genuine blockers are queued and surfaced at the end. Best for well-defined tasks when you want maximum throughput.</p>
+        </div>
+      </div>
+
+      <p>The mode is written to <code>/tmp/.silver-bullet-mode</code> and read by hooks throughout the session. If the file is missing or unreadable at any point, the system defaults to <strong>Interactive</strong>.</p>
+
+      <h3>Autonomous mode safeguards</h3>
+      <p>Even in autonomous mode, Silver Bullet has three stall-detection rules to prevent infinite loops:</p>
+      <ul>
+        <li>The same tool call with identical arguments producing the same result 2+ times consecutively</li>
+        <li>3+ tool calls in one step with no new state change (no file written, no decision made)</li>
+        <li>More than 10 tool calls in one step without writing a file or logging an autonomous decision</li>
+      </ul>
+      <p>On any stall: Claude makes a best-judgment call, moves on, and logs the decision for review.</p>
+
+      <div class="divider"></div>
+
+      <h2 id="agents">Agent teams</h2>
+      <p>Silver Bullet uses Claude's sub-agent capability to parallelize work. When a phase has independent implementation units (different modules, different quality dimensions), multiple agents run simultaneously in isolated git worktrees.</p>
+
+      <h3>How it works</h3>
+      <ol>
+        <li>GSD's execute-phase identifies independent tasks within a wave</li>
+        <li>Each task is dispatched as a separate agent with <code>isolation: "worktree"</code></li>
+        <li>All agents run in parallel (with <code>run_in_background: true</code> in Autonomous mode)</li>
+        <li>After all agents complete, a merge gate resolves any conflicts before the next wave starts</li>
+      </ol>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">💡</span>
+        <div class="callout-body"><strong>Worktree isolation</strong> means each agent works on its own copy of the repository. Changes from one agent can't interfere with another mid-flight — they're only merged once the merge gate runs.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2 id="semantic-context">Semantic context compression</h2>
+      <p>Silver Bullet includes an automatic context optimization system that runs as a PostToolUse hook. It scans your source and documentation files, ranks chunks by relevance to the current phase goal using TF-IDF scoring, and injects the most relevant context into Claude's working memory before each tool use.</p>
+      <p>This keeps Claude focused on the right parts of a large codebase without exhausting its context window on irrelevant files. Results are cached between tool uses and invalidated when files change.</p>
+      <p>Configure it in <code>.silver-bullet.json</code> under <code>"semantic_compression"</code>.</p>
+
+      <div class="divider"></div>
+
+      <h2 id="file-structure">Standard file structure</h2>
+      <p>After <code>/using-silver-bullet</code> initializes a project, you'll find this structure:</p>
+      <div class="code-block"><span class="comment"># Project root</span>
+CLAUDE.md                    <span class="comment"># Active workflow + Silver Bullet rules</span>
+.silver-bullet.json          <span class="comment"># Project config (semantic compression, etc.)</span>
+.github/workflows/ci.yml     <span class="comment"># CI pipeline (auto-generated if absent)</span>
+
+<span class="comment"># Planning (managed by GSD)</span>
+.planning/
+  PROJECT.md                 <span class="comment"># Project goals + metadata</span>
+  REQUIREMENTS.md            <span class="comment"># Authoritative requirements</span>
+  ROADMAP.md                 <span class="comment"># Phase breakdown</span>
+  {phase}-CONTEXT.md         <span class="comment"># Per-phase decisions</span>
+  {phase}-PLAN.md            <span class="comment"># Per-phase task plan</span>
+  {phase}-VERIFICATION.md    <span class="comment"># Verification results</span>
+  .context-cache/            <span class="comment"># Semantic compression cache</span>
+
+<span class="comment"># Documentation (maintained by Silver Bullet)</span>
+docs/
+  PRD-Overview.md            <span class="comment"># High-level requirements (syncs from .planning/)</span>
+  Architecture-and-Design.md <span class="comment"># High-level arch + principles only</span>
+  Testing-Strategy-and-Plan.md
+  CICD.md
+  KNOWLEDGE.md               <span class="comment"># Architectural decisions, gotchas, patterns</span>
+  CHANGELOG.md               <span class="comment"># Task log (newest first)</span>
+  specs/                     <span class="comment"># Detailed design specs (Superpowers)</span>
+  workflows/                 <span class="comment"># Active workflow files</span>
+  sessions/                  <span class="comment"># Per-session logs</span></div>
+
+      <!-- PAGE NAV BOTTOM -->
+      <div class="page-nav-bottom">
+        <a href="getting-started.html">
+          <span class="pnb-label">← Previous</span>
+          <span class="pnb-title">Getting Started</span>
+        </a>
+        <a href="dev-workflow.html">
+          <span class="pnb-label">Next →</span>
+          <span class="pnb-title">Dev Workflow</span>
+        </a>
+      </div>
+
+    </article>
+  </div>
+</div>
+
+<footer>
+  <div class="container-wide">
+    <div class="footer-inner">
+      <div><span style="font-weight:700;color:var(--text-secondary)">Silver Bullet</span> Help Center</div>
+      <div style="font-size:.9rem;color:var(--text-secondary)">Innovated at <a href="https://alolabs.dev" target="_blank" style="font-weight:700;background:linear-gradient(135deg,var(--accent-light),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none">&#256;lo Labs</a></div>
+      <div class="footer-links">
+        <a href="index.html">Help Home</a>
+        <a href="../index.html">Home</a>
+        <a href="https://github.com/alo-exp/silver-bullet" target="_blank">GitHub</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function applyTheme(dark){document.documentElement.setAttribute('data-theme',dark?'dark':'light');document.getElementById('theme-btn').textContent=dark?'☀️':'🌙';localStorage.setItem('silver-bullet-theme',dark?'dark':'light')}
+function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-theme')!=='dark')}
+(function(){const s=localStorage.getItem('silver-bullet-theme');applyTheme(s?s==='dark':false)})();
+const headings=document.querySelectorAll('.doc-content h2[id]');
+const links=document.querySelectorAll('.sidebar-nav a');
+window.addEventListener('scroll',()=>{let curr='';headings.forEach(h=>{if(window.scrollY>=h.offsetTop-100)curr=h.id});links.forEach(l=>{l.classList.toggle('active',l.getAttribute('href')==='#'+curr)})},{passive:true});
+</script>
+</body>
+</html>

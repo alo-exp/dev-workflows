@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Software Engineering Workflow — Silver Bullet Help</title>
+<meta name="description" content="The complete 20-step Silver Bullet software engineering workflow: Discuss, Quality Gates, Plan, Execute, Verify, Code Review, Finalization, CI/CD, Ship, and Release.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+:root{
+  --bg-page:#f8f9fc;--bg-card:#ffffff;--bg-code:#f1f5f9;
+  --bg-hero:linear-gradient(135deg,#eef2ff 0%,#f5f3ff 50%,#fdf2f8 100%);
+  --accent:#4f46e5;--accent-light:#6366f1;
+  --accent2:#7c3aed;--accent3:#db2777;
+  --green:#059669;--amber:#d97706;--red:#dc2626;--cyan:#0891b2;
+  --text-primary:#0f172a;--text-secondary:#475569;--text-dim:#94a3b8;
+  --border:#e2e8f0;--border-hover:#cbd5e1;
+  --radius:12px;--radius-lg:20px;--radius-sm:8px;
+  --font-sans:'Inter',system-ui,-apple-system,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --shadow-glow:0 0 40px rgba(99,102,241,.06);
+  --nav-bg:rgba(248,249,252,.9);
+  --section-alt:rgba(241,245,249,.6);
+}
+[data-theme="dark"]{
+  --bg-page:#0a0a0f;--bg-card:#12121a;--bg-code:#1a1a2e;
+  --bg-hero:linear-gradient(135deg,#0a0a1a 0%,#0f0f2e 40%,#1a0a2e 100%);
+  --accent:#6366f1;--accent-light:#818cf8;
+  --accent2:#a78bfa;--accent3:#f472b6;
+  --green:#34d399;--amber:#fbbf24;--red:#f87171;--cyan:#22d3ee;
+  --text-primary:#e2e8f0;--text-secondary:#94a3b8;--text-dim:#64748b;
+  --border:#1e293b;--border-hover:#334155;
+  --shadow-glow:0 0 40px rgba(99,102,241,.08);
+  --nav-bg:rgba(10,10,15,.85);
+  --section-alt:rgba(18,18,26,.4);
+}
+body,nav{transition:background .25s,background-color .25s,border-color .25s,color .25s}
+body{font-family:var(--font-sans);background:var(--bg-page);color:var(--text-primary);line-height:1.7;overflow-x:hidden}
+.container{max-width:860px;margin:0 auto;padding:0 24px}
+.container-wide{max-width:1100px;margin:0 auto;padding:0 24px}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 24px}
+nav .nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{font-weight:800;font-size:1rem;background:linear-gradient(135deg,var(--accent-light),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;letter-spacing:-.02em}
+.nav-breadcrumb{font-size:.85rem;color:var(--text-secondary);display:flex;align-items:center;gap:8px}
+.nav-breadcrumb a{color:var(--text-secondary);text-decoration:none}
+.nav-breadcrumb a:hover{color:var(--accent-light)}
+.nav-breadcrumb .sep{color:var(--text-dim)}
+.theme-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--text-secondary);font-size:.9rem;transition:all .2s}
+.theme-btn:hover{border-color:var(--accent);color:var(--accent-light)}
+.page-hero{background:var(--bg-hero);padding:120px 24px 64px;position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;top:-200px;right:-200px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,.08) 0%,transparent 70%)}
+.page-hero .container{position:relative;z-index:1}
+.breadcrumb-nav{font-size:.82rem;color:var(--text-dim);margin-bottom:24px;display:flex;align-items:center;gap:8px}
+.breadcrumb-nav a{color:var(--text-dim);text-decoration:none}
+.breadcrumb-nav a:hover{color:var(--accent-light)}
+.page-hero h1{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;letter-spacing:-.04em;margin-bottom:16px;line-height:1.1}
+.page-hero p{font-size:1rem;color:var(--text-secondary);max-width:560px;line-height:1.7}
+.doc-layout{display:grid;grid-template-columns:220px 1fr;gap:48px;padding:64px 0}
+@media(max-width:768px){.doc-layout{grid-template-columns:1fr}}
+.doc-sidebar{position:sticky;top:88px;height:fit-content}
+.sidebar-nav{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:2px}
+.sidebar-nav li a{display:block;padding:7px 12px;border-radius:var(--radius-sm);font-size:.85rem;color:var(--text-secondary);text-decoration:none;transition:all .15s}
+.sidebar-nav li a:hover{background:var(--bg-code);color:var(--text-primary)}
+.sidebar-nav li a.active{background:rgba(99,102,241,.1);color:var(--accent-light);font-weight:600}
+.sidebar-nav .sidebar-section{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);padding:16px 12px 4px}
+@media(max-width:768px){.doc-sidebar{display:none}}
+.doc-content h2{font-size:1.4rem;font-weight:800;letter-spacing:-.03em;margin-bottom:14px;margin-top:48px;padding-top:16px}
+.doc-content h2:first-child{margin-top:0}
+.doc-content h3{font-size:1rem;font-weight:700;margin-bottom:10px;margin-top:24px}
+.doc-content p{margin-bottom:14px;color:var(--text-secondary);line-height:1.8}
+.doc-content ul,.doc-content ol{margin-bottom:14px;padding-left:20px;color:var(--text-secondary)}
+.doc-content li{margin-bottom:5px;line-height:1.7}
+.doc-content strong{color:var(--text-primary)}
+.doc-content code{font-family:var(--font-mono);font-size:.82em;background:var(--bg-code);padding:2px 6px;border-radius:4px;color:var(--accent-light)}
+.callout{border-radius:var(--radius);padding:18px 22px;margin-bottom:20px;display:flex;gap:12px;align-items:flex-start}
+.callout-info{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2)}
+.callout-tip{background:rgba(5,150,105,.06);border:1px solid rgba(5,150,105,.2)}
+.callout-warn{background:rgba(217,119,6,.06);border:1px solid rgba(217,119,6,.2)}
+.callout-stop{background:rgba(220,38,38,.06);border:1px solid rgba(220,38,38,.2)}
+.callout-icon{font-size:1rem;flex-shrink:0;margin-top:2px}
+.callout-body{font-size:.86rem;color:var(--text-secondary);line-height:1.7}
+.callout-body strong{color:var(--text-primary)}
+.divider{height:1px;background:var(--border);margin:36px 0}
+/* STEP CARDS */
+.step-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:12px;display:flex;gap:16px;align-items:flex-start;transition:border-color .2s}
+.step-card:hover{border-color:var(--border-hover)}
+.step-card.required{border-left:3px solid var(--accent)}
+.step-num{min-width:36px;height:36px;border-radius:50%;color:#fff;font-weight:700;font-size:.82rem;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);flex-shrink:0;margin-top:1px}
+.step-card .step-meta{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.step-card .step-title{font-size:.95rem;font-weight:700;color:var(--text-primary)}
+.step-card .step-desc{font-size:.84rem;color:var(--text-secondary);line-height:1.6}
+.step-card .step-output{font-size:.78rem;color:var(--text-dim);margin-top:6px;font-family:var(--font-mono)}
+.badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.badge-required{background:rgba(239,68,68,.1);color:var(--red)}
+.badge-gsd{background:rgba(99,102,241,.12);color:var(--accent-light)}
+.badge-sp{background:rgba(5,150,105,.12);color:var(--green)}
+.badge-cond{background:rgba(251,191,36,.1);color:var(--amber)}
+/* PHASE HEADER */
+.phase-header{padding:12px 20px;border-radius:var(--radius-sm);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;margin-top:32px}
+.phase-init{background:rgba(100,116,139,.1);color:#64748b}
+.phase-discuss{background:rgba(8,145,178,.1);color:var(--cyan)}
+.phase-gates{background:rgba(239,68,68,.08);color:var(--red)}
+.phase-plan{background:rgba(99,102,241,.1);color:var(--accent-light)}
+.phase-exec{background:rgba(5,150,105,.1);color:var(--green)}
+.phase-verify{background:rgba(217,119,6,.1);color:var(--amber)}
+.phase-final{background:rgba(219,39,119,.08);color:var(--accent3)}
+.phase-deploy{background:rgba(8,145,178,.1);color:var(--cyan)}
+.phase-ship{background:rgba(5,150,105,.1);color:var(--green)}
+/* PAGE NAV BOTTOM */
+.page-nav-bottom{display:flex;justify-content:space-between;margin-top:56px;padding-top:32px;border-top:1px solid var(--border)}
+.page-nav-bottom a{display:flex;flex-direction:column;gap:4px;text-decoration:none;max-width:220px}
+.pnb-label{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600;color:var(--text-dim)}
+.pnb-title{font-size:.95rem;font-weight:700;color:var(--accent-light)}
+footer{border-top:1px solid var(--border);padding:40px 0;color:var(--text-dim);font-size:.85rem}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+footer a{color:var(--text-secondary);text-decoration:none}
+footer a:hover{color:var(--accent-light)}
+.footer-links{display:flex;gap:24px}
+@media(max-width:600px){.footer-inner{flex-direction:column;align-items:flex-start;gap:12px}.footer-links{flex-wrap:wrap;gap:16px}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div style="display:flex;align-items:center;gap:16px">
+      <a href="../index.html" class="nav-logo">Silver Bullet</a>
+      <span class="nav-breadcrumb"><span class="sep">/</span><a href="index.html">Help</a><span class="sep">/</span> Dev Workflow</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px">
+      <button class="theme-btn" onclick="toggleTheme()" id="theme-btn">🌙</button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb-nav"><a href="index.html">Help Center</a><span>/</span><span>Dev Workflow</span></div>
+    <h1>Software Engineering Workflow</h1>
+    <p>The complete 20-step application development cycle — from session mode through requirements, planning, parallel execution, verification, code review, and release.</p>
+  </div>
+</div>
+
+<div class="container-wide">
+  <div class="doc-layout">
+
+    <aside class="doc-sidebar">
+      <ul class="sidebar-nav">
+        <li class="sidebar-section">Overview</li>
+        <li><a href="#overview">How the loop works</a></li>
+        <li class="sidebar-section">Steps</li>
+        <li><a href="#step0">Step 0: Session Mode</a></li>
+        <li><a href="#init">Initialization</a></li>
+        <li><a href="#discuss">Step 3: Discuss</a></li>
+        <li><a href="#quality-gates">Step 4: Quality Gates</a></li>
+        <li><a href="#plan">Step 5: Plan</a></li>
+        <li><a href="#execute">Step 6: Execute</a></li>
+        <li><a href="#verify">Step 7: Verify</a></li>
+        <li><a href="#code-review">Steps 8–10: Code Review</a></li>
+        <li><a href="#post-review">Steps 11–12: Post-review</a></li>
+        <li><a href="#finalization">Steps 13–16: Finalization</a></li>
+        <li><a href="#deployment">Step 17: CI/CD</a></li>
+        <li><a href="#deploy-check">Step 18: Deploy Checklist</a></li>
+        <li><a href="#ship">Step 19: Ship</a></li>
+        <li><a href="#release">Step 20: Release</a></li>
+        <li class="sidebar-section">Rules</li>
+        <li><a href="#review-loop">Review loop rule</a></li>
+        <li><a href="#anti-skip">Anti-skip rules</a></li>
+      </ul>
+    </aside>
+
+    <article class="doc-content">
+
+      <h2 id="overview">How the workflow loop works</h2>
+      <p>The Silver Bullet software engineering workflow has three sections:</p>
+      <ol>
+        <li><strong>Project initialization</strong> — runs once per project to produce requirements and a roadmap</li>
+        <li><strong>Per-phase loop</strong> — repeats for every phase in the roadmap (Steps 3–12)</li>
+        <li><strong>Finalization, deployment, and release</strong> — runs once after all phases are complete</li>
+      </ol>
+
+      <p>Within the per-phase loop, every phase follows the same sequence: <strong>Discuss → Quality Gates → Plan → Execute → Verify → Code Review</strong>. The order is a hard constraint enforced by hooks — you cannot start Planning before Quality Gates passes.</p>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">💡</span>
+        <div class="callout-body"><strong>Lost track of where you are?</strong> Type <code>/gsd:next</code> at any point. GSD reads the current state from <code>.planning/</code> and tells you exactly which step to do next.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- STEP 0 -->
+      <h2 id="step0">Step 0: Session Mode</h2>
+      <p>Every session begins with a mode selection. This is mandatory and must happen before any project work.</p>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,#64748b,#475569)">0</div>
+        <div>
+          <div class="step-meta"><span class="step-title">Session Mode Selection</span></div>
+          <p class="step-desc">Claude asks: "Run interactively or autonomously?" Your answer is written to <code>/tmp/.silver-bullet-mode</code> and read by hooks throughout the session.</p>
+          <div class="step-output">→ Writes: /tmp/.silver-bullet-mode</div>
+        </div>
+      </div>
+
+      <p>In <strong>Autonomous mode</strong>, you can also pre-answer common decision points before work begins — model routing choices, worktree preference, and agent team isolation settings. These are read from the session log and applied automatically without interrupting the flow.</p>
+
+      <div class="divider"></div>
+
+      <!-- INITIALIZATION -->
+      <h2 id="init">Project Initialization</h2>
+      <p>Runs <strong>once per project</strong>. Skip entirely if <code>.planning/PROJECT.md</code> already exists.</p>
+
+      <div class="step-card">
+        <div class="step-num" style="background:linear-gradient(135deg,#64748b,#475569)">1</div>
+        <div>
+          <div class="step-meta"><span class="step-title">Worktree decision</span><span class="badge badge-cond">optional</span></div>
+          <p class="step-desc">Decide whether to use a git worktree for this task. Recommended for large features that benefit from isolation. Creates a separate working copy of the repo where changes can't interfere with main.</p>
+        </div>
+      </div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--accent),var(--accent2))">2</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/gsd:new-project</span><span class="badge badge-gsd">GSD</span></div>
+          <p class="step-desc">Kicks off with clarifying questions, ecosystem research, requirements scoping, and roadmap generation. This is where you define what you're building and how it's broken into phases.</p>
+          <div class="step-output">→ Produces: .planning/PROJECT.md, .planning/REQUIREMENTS.md, .planning/ROADMAP.md</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- PER-PHASE LOOP -->
+      <h2>Per-Phase Loop</h2>
+      <p>Repeat Steps 3–12 for each phase in <code>.planning/ROADMAP.md</code>. All phases must complete before moving to Finalization.</p>
+
+      <!-- DISCUSS -->
+      <div class="phase-header phase-discuss">Phase: Discuss</div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--cyan),#0891b2)">3</div>
+        <div>
+          <div class="step-meta"><span class="step-title" id="discuss">/gsd:discuss-phase</span><span class="badge badge-gsd">GSD</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Captures implementation decisions, gray areas, and preferences for this specific phase before any planning begins. Claude asks targeted questions about this phase — not the whole project.</p>
+          <div class="step-output">→ Produces: .planning/{phase}-CONTEXT.md</div>
+        </div>
+      </div>
+
+      <h3>Conditional sub-steps at Discuss</h3>
+      <p>Depending on what this phase involves, additional skills may be required before moving to Quality Gates:</p>
+      <ul>
+        <li><strong>New architectural decision:</strong> Write an ADR inline (title, status, context, decision, consequences)</li>
+        <li><strong>New service or major component:</strong> <code>/system-design</code></li>
+        <li><strong>UI work:</strong> <code>/design-system</code> + <code>/ux-copy</code></li>
+      </ul>
+      <p>If any design sub-steps apply, Claude asks once before beginning them: "Entering Design phase. Use Opus, or stay on Sonnet?"</p>
+
+      <!-- QUALITY GATES -->
+      <div class="phase-header phase-gates" id="quality-gates">Phase: Quality Gates</div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--red),#b91c1c)">4</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/quality-gates</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">All 8 Silver Bullet quality dimensions (modularity, reusability, scalability, security, reliability, usability, testability, extensibility) are evaluated against the current design. Dispatches 8 parallel agents — one per dimension — in isolated worktrees. All must pass. ❌ is a hard stop.</p>
+          <div class="step-output">→ Produces: Quality gate report (all 8 dimensions pass/fail)</div>
+        </div>
+      </div>
+
+      <div class="callout callout-stop">
+        <span class="callout-icon">🚫</span>
+        <div class="callout-body"><strong>Planning cannot start until Quality Gates passes.</strong> This is enforced by the Stage Enforcer hook. Fix any failing dimensions before proceeding — they feed into the plan as hard requirements.</div>
+      </div>
+
+      <!-- PLAN -->
+      <div class="phase-header phase-plan" id="plan">Phase: Plan</div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--accent),var(--accent2))">5</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/gsd:plan-phase</span><span class="badge badge-gsd">GSD</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">GSD researchers the implementation space, then creates a detailed task-level plan. The quality gate report feeds in as hard requirements. After the plan is written, Claude cross-references all installed skills against the plan content to flag any skill gaps.</p>
+          <div class="step-output">→ Produces: .planning/{phase}-RESEARCH.md, .planning/{phase}-{N}-PLAN.md</div>
+        </div>
+      </div>
+
+      <!-- EXECUTE -->
+      <div class="phase-header phase-exec" id="execute">Phase: Execute</div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--green),#047857)">6</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/gsd:execute-phase</span><span class="badge badge-gsd">GSD</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Wave-based parallel execution. GSD splits the plan into waves of independent tasks, dispatches each task as a separate agent in an isolated worktree, then runs a merge gate after each wave before the next begins. TDD principles apply per task. One atomic commit per task.</p>
+          <div class="step-output">→ Produces: atomic git commits (one per task), .planning/{phase}-{N}-SUMMARY.md</div>
+        </div>
+      </div>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">⚠️</span>
+        <div class="callout-body"><strong>Never use <code>superpowers:subagent-driven-development</code> here.</strong> GSD's wave-based execution is the only valid execution mechanism. It tracks commits, enforces atomic changes, and feeds into the verification step.</div>
+      </div>
+
+      <!-- VERIFY -->
+      <div class="phase-header phase-verify" id="verify">Phase: Verify</div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--amber),#b45309)">7</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/gsd:verify-work</span><span class="badge badge-gsd">GSD</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Goal-backward verification against requirements and UAT. Asks: "Does what was built actually achieve the phase goal?" — not just "did all tasks complete?" If verification fails or output looks suspect, invoke <code>/forensics</code> before retrying.</p>
+          <div class="step-output">→ Produces: .planning/{phase}-VERIFICATION.md, .planning/{phase}-UAT.md</div>
+        </div>
+      </div>
+
+      <!-- CODE REVIEW -->
+      <div class="phase-header" style="background:rgba(217,119,6,.1);color:var(--amber)" id="code-review">Phase: Code Review</div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--amber),#b45309)">8</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/code-review</span><span class="badge badge-sp">Superpowers</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Peer code quality review: security, performance, correctness, and readability. Distinct from GSD's goal verification — this reviews the code itself, not whether it achieves the goal. Immediately after, <code>superpowers:code-reviewer</code> is dispatched as an automated reviewer subagent.</p>
+        </div>
+      </div>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">🔄</span>
+        <div class="callout-body"><strong>Review loop rule:</strong> The code-reviewer must be re-dispatched until it explicitly returns "✅ Approved". Never stop because issues look minor. Maximum 3 iterations before surfacing remaining issues to the user for direction.</div>
+      </div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--amber),#b45309)">9</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/requesting-code-review</span><span class="badge badge-sp">Superpowers</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Requests external or peer review. Formats the review request with context, scope, and specific questions for reviewers. This is a human-facing step — it runs sequentially after Step 8 resolves and cannot be parallelized.</p>
+        </div>
+      </div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--amber),#b45309)">10</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/receiving-code-review</span><span class="badge badge-sp">Superpowers</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Triages all feedback from Steps 8 and 9. Each item is explicitly accepted or rejected with reasoning. Accepted items become the input for post-review execution (Steps 11–12).</p>
+        </div>
+      </div>
+
+      <!-- POST-REVIEW -->
+      <div class="phase-header phase-exec" id="post-review">Post-Review Execution (conditional)</div>
+
+      <p>Only runs if items were accepted in Step 10. Otherwise, loop back to Step 3 for the next phase.</p>
+
+      <div class="step-card">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--accent),var(--accent2))">11</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/gsd:plan-phase</span><span class="badge badge-gsd">GSD</span><span class="badge badge-cond">Conditional</span></div>
+          <p class="step-desc">Creates a plan to address the accepted review items. Same planning rigor as Step 5.</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--green),#047857)">12</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/gsd:execute-phase</span><span class="badge badge-gsd">GSD</span><span class="badge badge-cond">Conditional</span></div>
+          <p class="step-desc">Implements the review-driven plan with atomic commits. Same execution model as Step 6.</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- FINALIZATION -->
+      <h2 id="finalization">Finalization</h2>
+      <p>Runs <strong>once</strong> after all phases in the roadmap are complete.</p>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--accent3),#9d174d)">13</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/testing-strategy</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Define the test strategy: test pyramid structure, coverage goals, test classification (unit/integration/E2E), and tooling decisions. This is a design document, not test execution.</p>
+        </div>
+      </div>
+
+      <div class="step-card">
+        <div class="step-num" style="background:linear-gradient(135deg,#64748b,#475569)">14</div>
+        <div>
+          <div class="step-meta"><span class="step-title">Tech-debt notes</span></div>
+          <p class="step-desc">Append any identified tech debt to <code>docs/tech-debt.md</code> using the format: <code>| Item | Severity | Effort | Phase introduced |</code>. Creates the file if needed. This is inline work, no skill invocation required.</p>
+        </div>
+      </div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--accent3),#9d174d)">15</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/documentation</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Update or create all project documentation. Minimum required: README (must reflect current version), docs/PRD-Overview.md, docs/Architecture-and-Design.md, docs/Testing-Strategy-and-Plan.md, docs/CICD.md. Also updates KNOWLEDGE.md and CHANGELOG.md. <strong>README must be updated here before Step 20 (release) can proceed.</strong></p>
+        </div>
+      </div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--accent3),#9d174d)">16</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/finishing-a-development-branch</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Branch rebase, cleanup, and merge preparation. Ensures the branch is ready to ship: rebased on main, no merge conflicts, commits squashed if needed.</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- DEPLOYMENT -->
+      <h2 id="deployment">Deployment</h2>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--cyan),#0e7490)">17</div>
+        <div>
+          <div class="step-meta"><span class="step-title">CI/CD pipeline</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">CI must be green before any deployment step. Run local verify commands first, then check CI status with <code>gh run list</code>. In Interactive mode, Claude shows status and waits for confirmation. In Autonomous mode, Claude polls every 30 seconds up to 10 minutes. If CI is red: fix, re-push, re-check. Do not proceed to Step 18 while CI is failing.</p>
+        </div>
+      </div>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--cyan),#0e7490)" id="deploy-check">18</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/deploy-checklist</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Pre-deployment verification gate. A structured checklist run before any deployment — confirms rollback plan, monitoring, and stakeholder sign-off are in place.</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- SHIP -->
+      <h2 id="ship">Ship</h2>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--green),#047857)">19</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/gsd:ship</span><span class="badge badge-gsd">GSD</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Creates the pull request from the verified, deployed work. The PR body is auto-generated with phase summaries and requirement coverage. Includes links to verification and UAT results.</p>
+          <div class="step-output">→ Produces: pull request with phase summaries and requirement coverage</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- RELEASE -->
+      <h2 id="release">Release</h2>
+
+      <div class="step-card required">
+        <div class="step-num" style="background:linear-gradient(135deg,var(--accent3),#9d174d)">20</div>
+        <div>
+          <div class="step-meta"><span class="step-title">/release-notes</span><span class="badge badge-required">Required</span></div>
+          <p class="step-desc">Generates structured release notes and creates the GitHub Release. README must have been updated in Step 15 — this step checks and blocks if README is stale. Produces a git tag, GitHub Release with features/fixes/breaking changes, and changelog entry.</p>
+          <div class="step-output">→ Produces: git tag, GitHub Release, structured release notes</div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2 id="review-loop">Review loop enforcement rule</h2>
+      <p>Every review loop in the workflow (spec review, plan review, code review, verification) <strong>must iterate until the reviewer explicitly returns ✅ Approved</strong>.</p>
+      <ul>
+        <li>Never stop because issues look minor or "close enough"</li>
+        <li>Never count a round as approved unless the reviewer outputs ✅ Approved</li>
+        <li>Maximum 3 iterations before surfacing to the user — but <strong>must reach that maximum</strong>, not stop early</li>
+        <li>If iteration 3 still returns issues: surface the full issue list and wait for user direction</li>
+      </ul>
+
+      <h2 id="anti-skip">Anti-skip rules</h2>
+      <p>These rules apply to every non-trivial change with no exceptions:</p>
+      <ul>
+        <li>You must not skip a required step because "it's simple enough"</li>
+        <li>You must not combine or implicitly cover steps ("I did code review while writing")</li>
+        <li>You must not claim a step is "not applicable" without explicit user approval</li>
+        <li>You must not proceed to the next phase before completing the current one</li>
+        <li>Every required skill must be explicitly invoked via the Skill tool — implicit coverage does not count</li>
+      </ul>
+
+      <!-- PAGE NAV BOTTOM -->
+      <div class="page-nav-bottom">
+        <a href="concepts.html">
+          <span class="pnb-label">← Previous</span>
+          <span class="pnb-title">Core Concepts</span>
+        </a>
+        <a href="devops-workflow.html">
+          <span class="pnb-label">Next →</span>
+          <span class="pnb-title">DevOps Workflow</span>
+        </a>
+      </div>
+
+    </article>
+  </div>
+</div>
+
+<footer>
+  <div class="container-wide">
+    <div class="footer-inner">
+      <div><span style="font-weight:700;color:var(--text-secondary)">Silver Bullet</span> Help Center</div>
+      <div style="font-size:.9rem;color:var(--text-secondary)">Innovated at <a href="https://alolabs.dev" target="_blank" style="font-weight:700;background:linear-gradient(135deg,var(--accent-light),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none">&#256;lo Labs</a></div>
+      <div class="footer-links">
+        <a href="index.html">Help Home</a>
+        <a href="../index.html">Home</a>
+        <a href="https://github.com/alo-exp/silver-bullet" target="_blank">GitHub</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function applyTheme(dark){document.documentElement.setAttribute('data-theme',dark?'dark':'light');document.getElementById('theme-btn').textContent=dark?'☀️':'🌙';localStorage.setItem('silver-bullet-theme',dark?'dark':'light')}
+function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-theme')!=='dark')}
+(function(){const s=localStorage.getItem('silver-bullet-theme');applyTheme(s?s==='dark':false)})();
+const headings=document.querySelectorAll('.doc-content h2[id], .doc-content .step-card .step-title[id]');
+const links=document.querySelectorAll('.sidebar-nav a');
+window.addEventListener('scroll',()=>{let curr='';document.querySelectorAll('[id]').forEach(h=>{if(window.scrollY>=h.offsetTop-120)curr=h.id});links.forEach(l=>{const href=l.getAttribute('href');l.classList.toggle('active',href==='#'+curr)})},{passive:true});
+</script>
+</body>
+</html>

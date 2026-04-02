@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Getting Started — Silver Bullet Help</title>
+<meta name="description" content="Get started with Silver Bullet. Learn what AI-driven development is, install prerequisites, and run your first enforced workflow session.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+:root{
+  --bg-page:#f8f9fc;--bg-card:#ffffff;--bg-code:#f1f5f9;
+  --bg-hero:linear-gradient(135deg,#eef2ff 0%,#f5f3ff 50%,#fdf2f8 100%);
+  --accent:#4f46e5;--accent-light:#6366f1;--accent-glow:rgba(99,102,241,.1);
+  --accent2:#7c3aed;--accent3:#db2777;
+  --green:#059669;--amber:#d97706;--red:#dc2626;--cyan:#0891b2;
+  --text-primary:#0f172a;--text-secondary:#475569;--text-dim:#94a3b8;
+  --border:#e2e8f0;--border-hover:#cbd5e1;
+  --radius:12px;--radius-lg:20px;--radius-sm:8px;
+  --font-sans:'Inter',system-ui,-apple-system,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --shadow-lg:0 20px 60px rgba(0,0,0,.08);
+  --shadow-glow:0 0 40px rgba(99,102,241,.06);
+  --nav-bg:rgba(248,249,252,.9);
+  --section-alt:rgba(241,245,249,.6);
+}
+[data-theme="dark"]{
+  --bg-page:#0a0a0f;--bg-card:#12121a;--bg-code:#1a1a2e;
+  --bg-hero:linear-gradient(135deg,#0a0a1a 0%,#0f0f2e 40%,#1a0a2e 100%);
+  --accent:#6366f1;--accent-light:#818cf8;--accent-glow:rgba(99,102,241,.15);
+  --accent2:#a78bfa;--accent3:#f472b6;
+  --green:#34d399;--amber:#fbbf24;--red:#f87171;--cyan:#22d3ee;
+  --text-primary:#e2e8f0;--text-secondary:#94a3b8;--text-dim:#64748b;
+  --border:#1e293b;--border-hover:#334155;
+  --shadow-lg:0 20px 60px rgba(0,0,0,.4);
+  --shadow-glow:0 0 40px rgba(99,102,241,.08);
+  --nav-bg:rgba(10,10,15,.85);
+  --section-alt:rgba(18,18,26,.4);
+}
+body,nav{transition:background .25s,background-color .25s,border-color .25s,color .25s}
+body{font-family:var(--font-sans);background:var(--bg-page);color:var(--text-primary);line-height:1.7;overflow-x:hidden}
+.container{max-width:860px;margin:0 auto;padding:0 24px}
+.container-wide{max-width:1100px;margin:0 auto;padding:0 24px}
+/* NAV */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 24px}
+nav .nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{font-weight:800;font-size:1rem;background:linear-gradient(135deg,var(--accent-light),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;letter-spacing:-.02em}
+.nav-breadcrumb{font-size:.85rem;color:var(--text-secondary);display:flex;align-items:center;gap:8px}
+.nav-breadcrumb a{color:var(--text-secondary);text-decoration:none}
+.nav-breadcrumb a:hover{color:var(--accent-light)}
+.nav-breadcrumb .sep{color:var(--text-dim)}
+.nav-right{display:flex;align-items:center;gap:16px}
+.theme-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--text-secondary);font-size:.9rem;transition:all .2s}
+.theme-btn:hover{border-color:var(--accent);color:var(--accent-light)}
+/* PAGE NAV */
+.page-nav{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:40px}
+.page-nav a{padding:6px 16px;border-radius:999px;font-size:.8rem;font-weight:600;border:1px solid var(--border);background:var(--bg-card);color:var(--text-secondary);text-decoration:none;transition:all .2s}
+.page-nav a:hover,.page-nav a.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+/* HERO */
+.page-hero{background:var(--bg-hero);padding:120px 24px 64px;position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;top:-200px;right:-200px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,.08) 0%,transparent 70%)}
+.page-hero .container{position:relative;z-index:1}
+.breadcrumb-nav{font-size:.82rem;color:var(--text-dim);margin-bottom:24px;display:flex;align-items:center;gap:8px}
+.breadcrumb-nav a{color:var(--text-dim);text-decoration:none}
+.breadcrumb-nav a:hover{color:var(--accent-light)}
+.page-hero h1{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;letter-spacing:-.04em;margin-bottom:16px;line-height:1.1}
+.page-hero p{font-size:1rem;color:var(--text-secondary);max-width:560px;line-height:1.7;margin-bottom:0}
+/* LAYOUT */
+.doc-layout{display:grid;grid-template-columns:220px 1fr;gap:48px;padding:64px 0}
+@media(max-width:768px){.doc-layout{grid-template-columns:1fr}}
+.doc-sidebar{position:sticky;top:88px;height:fit-content}
+.sidebar-nav{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:2px}
+.sidebar-nav li a{display:block;padding:7px 12px;border-radius:var(--radius-sm);font-size:.85rem;color:var(--text-secondary);text-decoration:none;transition:all .15s}
+.sidebar-nav li a:hover{background:var(--bg-code);color:var(--text-primary)}
+.sidebar-nav li a.active{background:rgba(99,102,241,.1);color:var(--accent-light);font-weight:600}
+.sidebar-nav .sidebar-section{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);padding:16px 12px 4px;margin-top:8px}
+@media(max-width:768px){.doc-sidebar{display:none}}
+.doc-content h2{font-size:1.5rem;font-weight:800;letter-spacing:-.03em;margin-bottom:16px;margin-top:48px;padding-top:16px}
+.doc-content h2:first-child{margin-top:0}
+.doc-content h3{font-size:1.1rem;font-weight:700;margin-bottom:12px;margin-top:32px;color:var(--text-primary)}
+.doc-content p{margin-bottom:16px;color:var(--text-secondary);line-height:1.8}
+.doc-content ul,.doc-content ol{margin-bottom:16px;padding-left:20px;color:var(--text-secondary)}
+.doc-content li{margin-bottom:6px;line-height:1.7}
+.doc-content strong{color:var(--text-primary)}
+/* COMPONENTS */
+.callout{border-radius:var(--radius);padding:20px 24px;margin-bottom:24px;display:flex;gap:14px;align-items:flex-start}
+.callout-info{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.2)}
+.callout-tip{background:rgba(5,150,105,.06);border:1px solid rgba(5,150,105,.2)}
+.callout-warn{background:rgba(217,119,6,.06);border:1px solid rgba(217,119,6,.2)}
+.callout-icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.callout-body{font-size:.875rem;color:var(--text-secondary);line-height:1.7}
+.callout-body strong{color:var(--text-primary)}
+.code-block{background:var(--bg-code);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px 24px;font-family:var(--font-mono);font-size:.82rem;line-height:1.9;color:var(--text-secondary);overflow-x:auto;margin-bottom:20px;position:relative}
+.code-block .comment{color:var(--text-dim)}
+.code-block .cmd{color:var(--green)}
+.code-block .string{color:var(--amber)}
+.code-label{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);font-family:var(--font-mono);margin-bottom:6px}
+.card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:24px;margin-bottom:16px}
+.card h4{font-size:.95rem;font-weight:700;margin-bottom:8px}
+.card p{font-size:.875rem;color:var(--text-secondary);line-height:1.6;margin:0}
+.step-list{list-style:none;padding:0;margin:0 0 24px;counter-reset:step-counter}
+.step-list li{display:flex;gap:16px;margin-bottom:20px;counter-increment:step-counter}
+.step-num{min-width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;font-weight:700;font-size:.8rem;display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);flex-shrink:0;margin-top:2px}
+.step-body h4{font-size:.95rem;font-weight:700;margin-bottom:6px}
+.step-body p{font-size:.875rem;color:var(--text-secondary);line-height:1.6;margin:0}
+.prereq-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-bottom:24px}
+@media(max-width:600px){.prereq-grid{grid-template-columns:1fr}}
+.prereq-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px;display:flex;gap:12px;align-items:flex-start}
+.prereq-card .prereq-icon{font-size:1.4rem;flex-shrink:0}
+.prereq-card h4{font-size:.9rem;font-weight:700;margin-bottom:4px}
+.prereq-card p{font-size:.8rem;color:var(--text-secondary);line-height:1.5;margin:0}
+.prereq-card .install-cmd{font-family:var(--font-mono);font-size:.75rem;color:var(--green);margin-top:6px}
+.tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;margin-left:8px}
+.tag-required{background:rgba(239,68,68,.1);color:var(--red)}
+.tag-optional{background:rgba(34,211,238,.1);color:var(--cyan)}
+.divider{height:1px;background:var(--border);margin:40px 0}
+/* PAGE NAV BOTTOM */
+.page-nav-bottom{display:flex;justify-content:space-between;margin-top:56px;padding-top:32px;border-top:1px solid var(--border)}
+.page-nav-bottom a{display:flex;flex-direction:column;gap:4px;text-decoration:none;max-width:200px}
+.pnb-label{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600;color:var(--text-dim)}
+.pnb-title{font-size:.95rem;font-weight:700;color:var(--accent-light)}
+/* FOOTER */
+footer{border-top:1px solid var(--border);padding:40px 0;color:var(--text-dim);font-size:.85rem}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+footer a{color:var(--text-secondary);text-decoration:none}
+footer a:hover{color:var(--accent-light)}
+.footer-links{display:flex;gap:24px}
+@media(max-width:600px){.footer-inner{flex-direction:column;align-items:flex-start;gap:12px}.footer-links{flex-wrap:wrap;gap:16px}}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div style="display:flex;align-items:center;gap:16px">
+      <a href="../index.html" class="nav-logo">Silver Bullet</a>
+      <span class="nav-breadcrumb"><span class="sep">/</span><a href="index.html">Help</a><span class="sep">/</span> Getting Started</span>
+    </div>
+    <div class="nav-right">
+      <button class="theme-btn" onclick="toggleTheme()" id="theme-btn" title="Toggle theme">🌙</button>
+    </div>
+  </div>
+</nav>
+
+<!-- PAGE HERO -->
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb-nav">
+      <a href="index.html">Help Center</a>
+      <span>/</span>
+      <span>Getting Started</span>
+    </div>
+    <h1>Getting Started</h1>
+    <p>Everything you need to go from zero to running your first enforced workflow session — even if you're new to AI-assisted development.</p>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="container-wide">
+  <div class="doc-layout">
+
+    <!-- SIDEBAR -->
+    <aside class="doc-sidebar">
+      <ul class="sidebar-nav">
+        <li><a href="#what-is-aidd">What is AI-driven development?</a></li>
+        <li><a href="#what-is-sb">What Silver Bullet does</a></li>
+        <li><a href="#prerequisites">Prerequisites</a></li>
+        <li><a href="#install">Installing Silver Bullet</a></li>
+        <li><a href="#first-project">Your first project</a></li>
+        <li><a href="#session-mode">Choosing a session mode</a></li>
+        <li><a href="#first-run">First workflow run</a></li>
+        <li><a href="#whats-next">What's next</a></li>
+      </ul>
+    </aside>
+
+    <!-- MAIN -->
+    <article class="doc-content">
+
+      <h2 id="what-is-aidd">What is AI-driven development?</h2>
+      <p>AI-driven development means using a large language model (LLM) like Claude as an active collaborator in your software engineering process — not just to autocomplete code, but to plan, execute, verify, review, and ship entire features.</p>
+      <p>Instead of asking the AI "write this function for me", you ask it to <strong>manage a complete development workflow</strong>: break down requirements, design the architecture, implement in parallel waves, run tests, review its own code, and open the pull request.</p>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">💡</span>
+        <div class="callout-body"><strong>Experienced developer?</strong> Think of Claude as a senior engineer who executes your instructions end-to-end. Silver Bullet is the process framework that keeps it accountable — ensuring it doesn't skip steps, cut corners, or hallucinate its way through code review.</div>
+      </div>
+
+      <h3>The difference from traditional AI coding assistants</h3>
+      <ul>
+        <li><strong>Traditional approach:</strong> You prompt → AI writes a snippet → you review → you integrate manually. You remain the orchestrator.</li>
+        <li><strong>AI-driven approach:</strong> You define the outcome → AI plans, implements, tests, reviews, and ships → you approve gate decisions and review the final output. The AI is the executor.</li>
+      </ul>
+      <p>The risk with the second approach is that AI agents drift, skip steps, or produce work that looks right but isn't. Silver Bullet exists to prevent that by enforcing a structured process around every session.</p>
+
+      <div class="divider"></div>
+
+      <h2 id="what-is-sb">What Silver Bullet does</h2>
+      <p>Silver Bullet is a <strong>Claude Code plugin</strong> that combines four best-in-class plugins — GSD, Superpowers, Engineering, and Design — into two enforced workflows:</p>
+
+      <div class="prereq-grid" style="grid-template-columns:1fr 1fr">
+        <div class="prereq-card">
+          <div class="prereq-icon">⚙️</div>
+          <div>
+            <h4>Software Engineering Workflow</h4>
+            <p>20-step process for application development. From requirements through code review, testing, CI/CD, and release.</p>
+          </div>
+        </div>
+        <div class="prereq-card">
+          <div class="prereq-icon">🏗️</div>
+          <div>
+            <h4>DevOps &amp; IaC Workflow</h4>
+            <p>24-step process for infrastructure changes. Includes blast radius assessment, environment promotion, and incident fast path.</p>
+          </div>
+        </div>
+      </div>
+
+      <p>Each workflow is <strong>enforced by hooks</strong> — shell scripts that run after every tool use and block commits or deploys if required steps were skipped. You can't accidentally skip code review or ship without CI being green.</p>
+
+      <div class="divider"></div>
+
+      <h2 id="prerequisites">Prerequisites</h2>
+      <p>Silver Bullet builds on top of several tools. Install them in this order.</p>
+
+      <div class="prereq-grid">
+        <div class="prereq-card">
+          <div class="prereq-icon">🤖</div>
+          <div>
+            <h4>Claude Code <span class="tag tag-required">Required</span></h4>
+            <p>The AI coding assistant that Silver Bullet runs inside. Available as a CLI and IDE extension.</p>
+            <div class="install-cmd">npm install -g @anthropic-ai/claude-code</div>
+          </div>
+        </div>
+        <div class="prereq-card">
+          <div class="prereq-icon">🔧</div>
+          <div>
+            <h4>jq <span class="tag tag-required">Required</span></h4>
+            <p>JSON processor used by Silver Bullet's hooks and semantic compression scripts.</p>
+            <div class="install-cmd">brew install jq  # macOS<br>apt install jq   # Linux</div>
+          </div>
+        </div>
+        <div class="prereq-card">
+          <div class="prereq-icon">📋</div>
+          <div>
+            <h4>GSD (Get Shit Done) <span class="tag tag-required">Required</span></h4>
+            <p>The planning and execution framework. Manages .planning/ directory, roadmaps, and per-phase execution.</p>
+            <div class="install-cmd">npx get-shit-done-cc@latest</div>
+          </div>
+        </div>
+        <div class="prereq-card">
+          <div class="prereq-icon">⚡</div>
+          <div>
+            <h4>Superpowers <span class="tag tag-required">Required</span></h4>
+            <p>Design and review skills. Provides brainstorming, code review, system design, and UX copy capabilities.</p>
+            <div class="install-cmd">/plugin install obra/superpowers</div>
+          </div>
+        </div>
+        <div class="prereq-card">
+          <div class="prereq-icon">🐙</div>
+          <div>
+            <h4>GitHub CLI (gh) <span class="tag tag-optional">Recommended</span></h4>
+            <p>Used for CI checks, PR creation, and release management. Required if using GitHub.</p>
+            <div class="install-cmd">brew install gh<br>gh auth login</div>
+          </div>
+        </div>
+        <div class="prereq-card">
+          <div class="prereq-icon">🎨</div>
+          <div>
+            <h4>Design + Engineering plugins <span class="tag tag-optional">Recommended</span></h4>
+            <p>Extends Superpowers with design system and documentation skills.</p>
+            <div class="install-cmd">/plugin install anthropics/knowledge-work-plugins/tree/main/design</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon">⚠️</span>
+        <div class="callout-body"><strong>GSD is a hard requirement.</strong> Silver Bullet wraps GSD's planning and execution commands. Without GSD installed, <code>/gsd:*</code> commands won't work and the workflow cannot proceed past planning.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2 id="install">Installing Silver Bullet</h2>
+      <p>Once prerequisites are in place, install the plugin from inside Claude Code:</p>
+      <div class="code-label">Inside Claude Code</div>
+      <div class="code-block"><span class="cmd">/plugin install alo-exp/silver-bullet</span></div>
+      <p>This installs the plugin into <code>~/.claude/plugins/cache/silver-bullet/</code> and makes its skills and hooks available immediately.</p>
+
+      <h3>Initialize a project</h3>
+      <p>Navigate to your project directory and run:</p>
+      <div class="code-block"><span class="cmd">/using-silver-bullet</span></div>
+      <p>This command will:</p>
+      <ol>
+        <li>Verify all dependencies are installed</li>
+        <li>Detect your project name, tech stack, and repo URL</li>
+        <li>Create <code>CLAUDE.md</code> with the active workflow configuration</li>
+        <li>Create <code>.silver-bullet.json</code> with project-level config</li>
+        <li>Create the standard docs scaffold (<code>docs/PRD-Overview.md</code>, <code>docs/Architecture-and-Design.md</code>, etc.)</li>
+        <li>Set up CI (GitHub Actions) if not already present</li>
+        <li>Commit everything to git</li>
+      </ol>
+      <div class="callout callout-tip">
+        <span class="callout-icon">✅</span>
+        <div class="callout-body"><strong>Already configured?</strong> Running <code>/using-silver-bullet</code> on a project that already has <code>.silver-bullet.json</code> just activates plugins for the session — it won't overwrite your files.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2 id="first-project">Your first project</h2>
+      <p>Silver Bullet works on both new projects and existing codebases. Here's how to start each type:</p>
+
+      <div class="card">
+        <h4>New project</h4>
+        <p>Create an empty directory with a git repo (<code>git init</code> or clone from GitHub). Run <code>/using-silver-bullet</code> to scaffold, then start with <code>/gsd:new-project</code> to generate requirements and a roadmap.</p>
+      </div>
+      <div class="card">
+        <h4>Existing codebase</h4>
+        <p>Run <code>/using-silver-bullet</code> in your project root. Choose <strong>Append</strong> when asked about your existing <code>CLAUDE.md</code> to preserve your current instructions. Then start a new feature with <code>/gsd:discuss-phase</code>.</p>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2 id="session-mode">Choosing a session mode</h2>
+      <p>At the start of every session, Silver Bullet asks which mode to run in:</p>
+
+      <div class="prereq-grid">
+        <div class="prereq-card">
+          <div class="prereq-icon">🤝</div>
+          <div>
+            <h4>Interactive (default)</h4>
+            <p>Claude pauses at every phase gate for your approval before continuing. Best when you want to review each stage and make decisions at each step. Recommended when you're learning the workflow.</p>
+          </div>
+        </div>
+        <div class="prereq-card">
+          <div class="prereq-icon">🚀</div>
+          <div>
+            <h4>Autonomous</h4>
+            <p>Claude drives the entire workflow start-to-finish, logging decisions and only surfacing genuine blockers at the end. Best for well-defined tasks when you trust the process and want maximum throughput.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout callout-tip">
+        <span class="callout-icon">💡</span>
+        <div class="callout-body"><strong>Recommendation for new users:</strong> Start in <strong>Interactive</strong> mode for your first few sessions. You'll learn what the workflow is doing at each step and build intuition for when to intervene. Switch to Autonomous once you're comfortable.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2 id="first-run">Your first workflow run</h2>
+      <p>With Silver Bullet installed and a project configured, here's a minimal first run for a new feature:</p>
+
+      <ol class="step-list">
+        <li>
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h4>Open Claude Code and choose session mode</h4>
+            <p>Claude will prompt: "Run interactively or autonomously?" Type your choice. This sets the session mode for the duration.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h4>Start with /gsd:discuss-phase</h4>
+            <p>Describe what you want to build. GSD will ask clarifying questions about implementation decisions, edge cases, and preferences. This produces a <code>.planning/{phase}-CONTEXT.md</code> file.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h4>Run /quality-gates</h4>
+            <p>Claude evaluates the design against 8 quality dimensions. All must pass before planning begins. In Interactive mode, Claude will report results and ask how to proceed on failures.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h4>Run /gsd:plan-phase</h4>
+            <p>Claude researches the implementation and creates a detailed task plan. Review it and approve before execution starts.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <h4>Run /gsd:execute-phase</h4>
+            <p>Execution happens in parallel waves. Each wave dispatches independent implementation agents, then merges results. Atomic commits are created per task.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">6</div>
+          <div class="step-body">
+            <h4>Verify, review, and ship</h4>
+            <p>Claude runs verification, code review (including an automated reviewer agent), and finally creates the PR with <code>/gsd:ship</code>.</p>
+          </div>
+        </li>
+      </ol>
+
+      <div class="callout callout-info">
+        <span class="callout-icon">ℹ️</span>
+        <div class="callout-body"><strong>Lost track of where you are?</strong> Run <code>/gsd:next</code> at any point — it reads the current state and tells you exactly which step to do next.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2 id="whats-next">What's next</h2>
+      <p>Now that you understand the basics, dig deeper into how Silver Bullet works:</p>
+      <div class="prereq-grid">
+        <div class="prereq-card">
+          <div class="prereq-icon">🧠</div>
+          <div>
+            <h4><a href="concepts.html" style="color:var(--accent-light);text-decoration:none">Core Concepts →</a></h4>
+            <p>Understand skills, hooks, quality gates, and the GSD/Superpowers ownership model in depth.</p>
+          </div>
+        </div>
+        <div class="prereq-card">
+          <div class="prereq-icon">⚙️</div>
+          <div>
+            <h4><a href="dev-workflow.html" style="color:var(--accent-light);text-decoration:none">Full Dev Workflow →</a></h4>
+            <p>Every step of the 20-step software engineering workflow explained in detail.</p>
+          </div>
+        </div>
+        <div class="prereq-card">
+          <div class="prereq-icon">🏗️</div>
+          <div>
+            <h4><a href="devops-workflow.html" style="color:var(--accent-light);text-decoration:none">DevOps Workflow →</a></h4>
+            <p>Infrastructure and IaC work with blast radius, environment promotion, and incident fast path.</p>
+          </div>
+        </div>
+        <div class="prereq-card">
+          <div class="prereq-icon">📋</div>
+          <div>
+            <h4><a href="reference.html" style="color:var(--accent-light);text-decoration:none">Command Reference →</a></h4>
+            <p>Quick lookup for all commands, skills, config options, and file locations.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- PAGE NAV BOTTOM -->
+      <div class="page-nav-bottom">
+        <div></div>
+        <a href="concepts.html">
+          <span class="pnb-label">Next</span>
+          <span class="pnb-title">Core Concepts →</span>
+        </a>
+      </div>
+
+    </article>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="container-wide">
+    <div class="footer-inner">
+      <div><span style="font-weight:700;color:var(--text-secondary)">Silver Bullet</span> Help Center</div>
+      <div style="font-size:.9rem;color:var(--text-secondary)">
+        Innovated at <a href="https://alolabs.dev" target="_blank" style="font-weight:700;background:linear-gradient(135deg,var(--accent-light),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none">&#256;lo Labs</a>
+      </div>
+      <div class="footer-links">
+        <a href="index.html">Help Home</a>
+        <a href="../index.html">Home</a>
+        <a href="https://github.com/alo-exp/silver-bullet" target="_blank">GitHub</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+function applyTheme(dark){
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+  document.getElementById('theme-btn').textContent=dark?'☀️':'🌙';
+  localStorage.setItem('silver-bullet-theme',dark?'dark':'light');
+}
+function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-theme')!=='dark')}
+(function(){const s=localStorage.getItem('silver-bullet-theme');applyTheme(s?s==='dark':false)})();
+
+// Highlight active sidebar link on scroll
+const headings=document.querySelectorAll('.doc-content h2[id]');
+const links=document.querySelectorAll('.sidebar-nav a');
+window.addEventListener('scroll',()=>{
+  let curr='';
+  headings.forEach(h=>{if(window.scrollY>=h.offsetTop-100)curr=h.id});
+  links.forEach(l=>{
+    l.classList.toggle('active',l.getAttribute('href')==='#'+curr);
+  });
+},{passive:true});
+</script>
+</body>
+</html>
