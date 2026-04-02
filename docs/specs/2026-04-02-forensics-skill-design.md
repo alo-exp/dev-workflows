@@ -1,7 +1,7 @@
 # Silver Bullet — Forensics Skill Design
 
 **Date:** 2026-04-02
-**Scope:** Post-mortem investigation skill for completed or abandoned sessions
+**Scope:** Post-mortem investigation skill for completed sessions, abandoned sessions, verification failures, and mid-session stalls
 **Reference:** `docs/gsd2-vs-sb-gap-analysis.md` (Category 9 — Observability & Reporting)
 **Target workflow:** `docs/workflows/full-dev-cycle.md`
 
@@ -91,7 +91,7 @@ Classification is logged as the first line of the post-mortem document.
 1. Read full session log from `<project-root>/docs/sessions/` — extract Mode, Autonomous decisions, Needs human review, Outcome
 2. Check sentinel artifacts: was `/tmp/.silver-bullet-timeout` set? What was the last tool use before stall?
 3. Run `git log --oneline` scoped to session date — how many commits landed vs. planned?
-4. Read `.planning/ROADMAP.md` — which phases completed, which did not?
+4. Read `.planning/ROADMAP.md` to enumerate planned phases. For each phase listed, check whether `.planning/{phase}-VERIFICATION.md` exists — its presence indicates the phase completed verification; its absence indicates the phase did not complete.
 5. Identify: last confirmed progress point, where execution diverged, whether it was a blocker, stall, or external kill
 6. Classify root cause as one of:
    - *Pre-answer gap* — a decision point was reached with no pre-answer and no autonomous fallback
@@ -118,7 +118,7 @@ Classification is logged as the first line of the post-mortem document.
 1. Read most recent session log fully from `<project-root>/docs/sessions/`
 2. Run `git log --oneline -20` + `git status`
 3. Read any `.planning/` files modified in the last session
-4. Ask one targeted follow-up question based on what the evidence shows
+4. Ask one targeted follow-up question based on what the evidence shows. In autonomous mode, skip this question and proceed directly to step 5 using best-judgment classification from the evidence gathered.
 5. Proceed with the most applicable sub-path from Path 1 or Path 2 based on findings
 
 ### Root cause statement format (all paths)
