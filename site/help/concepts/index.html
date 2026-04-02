@@ -320,12 +320,12 @@ footer a:hover{color:var(--accent-light)}
       <p>The <code>/quality-gates</code> skill dispatches 8 parallel agents — one per dimension — each in an isolated worktree. Results are synthesised by Claude. The most conservative finding wins: if one agent flags a dimension as ❌, the whole gate fails.</p>
 
       <h3>DevOps Quality Gates</h3>
-      <p>For infrastructure work, <code>/devops-quality-gates</code> applies the same 8 dimensions with IaC-specific interpretations — focusing on idempotency, drift prevention, least-privilege IAM, and infrastructure reliability instead of application concerns.</p>
+      <p>For infrastructure work, <code>/devops-quality-gates</code> applies 7 IaC-adapted dimensions (usability is excluded — it's application-specific) — focusing on idempotency, drift prevention, least-privilege IAM, and infrastructure reliability instead of application concerns.</p>
 
       <div class="divider"></div>
 
       <h2 id="enforcement">Enforcement Layers</h2>
-      <p>Silver Bullet uses 6 independent enforcement mechanisms so that no single point of failure can let a substandard session slip through:</p>
+      <p>Silver Bullet installs 6 enforcement mechanisms of its own. GSD adds 2 more — a workflow guard and a context monitor — for 8 independent enforcement points in total:</p>
 
       <div class="layer-list">
         <div class="layer-card">
