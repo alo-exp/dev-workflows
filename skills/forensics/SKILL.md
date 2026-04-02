@@ -28,7 +28,7 @@ detected in [file]" in Evidence Gathered.
 ## Allowed Commands
 
 Shell execution during investigation is limited to:
-- `git log`, `git show`, `git status` (with flags as specified in each path)
+- `git log`, `git show`, `git status`, `git diff` (with flags as specified in each path)
 - `mkdir -p <project-root>/docs/forensics/`
 - Test runners: `npm test`, `pytest`, `cargo test`, `go test ./...`
 
@@ -112,7 +112,7 @@ writing the post-mortem. Then proceed to the matching path section below.
 4. Compare plan intent vs. actual diff — find the divergence point
 5. Run tests if available — but first verify the test script has not been modified in
    the commits under investigation:
-   `git diff <first-suspect-commit>~1..HEAD -- package.json Makefile Cargo.toml`
+   `git diff <first-suspect-commit>~1..HEAD -- package.json Makefile Cargo.toml pyproject.toml`
    If the test script changed in the suspect commits, skip test execution and note
    "Test script modified in suspect commits — skipped" in Evidence Gathered.
    Supported runners: `npm test` / `pytest` / `cargo test` / `go test ./...`.
