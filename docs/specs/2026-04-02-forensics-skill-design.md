@@ -35,13 +35,13 @@ The forensics skill is a SKILL.md that guides Claude through a symptom-driven in
 | `docs/workflows/full-dev-cycle.md` | Modify | Add forensics invocation point in VERIFY section |
 | `templates/workflows/full-dev-cycle.md` | Modify | Same addition (kept in sync with docs/ copy) |
 
-The skill is invoked via the Skill tool as `/forensics` with an optional slug argument (e.g., `/forensics autonomous-stall-2026-04-02`). The slug defaults to `<failure-type>-<YYYY-MM-DD>` if not supplied.
+The skill is invoked via the Skill tool as `/forensics` with an optional slug argument (e.g., `/forensics autonomous-stall-2026-04-02`). The slug defaults to `<failure-type>-<YYYY-MM-DD>` if not supplied. A user-supplied slug is used verbatim; no date suffix is appended.
 
 **Required SKILL.md frontmatter:**
 ```yaml
 ---
 name: forensics
-description: Root-cause investigation for completed sessions, abandoned sessions, or verification failures — classifies failure, walks investigation path, writes report to <project-root>/docs/forensics/
+description: Root-cause investigation for completed sessions, abandoned sessions, verification failures, or mid-session stalls — classifies failure, walks investigation path, writes report to <project-root>/docs/forensics/
 ---
 ```
 
@@ -106,7 +106,7 @@ Classification is logged as the first line of the post-mortem document.
 2. Run `git show <commit>` for each commit from that task — what exactly changed?
 3. Read the plan — glob `.planning/{phase}-*-PLAN.md` (plans are numbered `{phase}-{N}-PLAN.md`; if phase is unknown, glob `.planning/*-PLAN.md`) — what was the task supposed to do?
 4. Compare plan intent vs. actual diff — find the divergence point
-5. Run tests if available (`npm test` / `pytest` / `cargo test` / `go test ./...`) — confirm which assertions fail
+5. Run tests if available (`npm test` / `pytest` / `cargo test` / `go test ./...`) — confirm which assertions fail. If no supported test runner is detected, skip this step and note "No test runner detected" in Evidence Gathered.
 6. Classify root cause as one of:
    - *Plan ambiguity* — task was underspecified, Claude made a best-judgment call that was wrong
    - *Implementation drift* — Claude deviated from the plan without logging an autonomous decision
@@ -139,7 +139,7 @@ Saved to `<project-root>/docs/forensics/YYYY-MM-DD-<slug>.md` after the investig
 # Forensics Report — <slug>
 
 **Date:** YYYY-MM-DD
-**Session log:** docs/sessions/<filename>.md
+**Session log:** <project-root>/docs/sessions/<filename>.md
 **Path taken:** session-level | task-level | general
 **Confidence:** high | medium | low
 
@@ -264,7 +264,7 @@ No new hooks. No new tests (skill is pure markdown instruction; behaviour is ver
 - **No planning artifacts**: Skip `.planning/` step; note absence.
 - **Forensics invoked for a live bug**: The skill cannot reliably distinguish a live bug (active error with known cause) from a verification failure (cause unknown). This is a user responsibility — the SKILL.md includes a note at the top: "If you have an active error with a known cause, use `superpowers:systematic-debugging` instead. Use `/forensics` when the cause is unknown and must be reconstructed." No programmatic check is performed.
 - **`docs/forensics/` directory absent**: Create it before writing the post-mortem.
-- **Slug collision (same slug, same date)**: Append `-2`, `-3` etc.
+- **Slug collision (same slug, same date)**: Before writing, instruct Claude to glob `<project-root>/docs/forensics/<slug>*.md`; if a match exists, increment the suffix: `-2`, `-3`, etc.
 
 ---
 
