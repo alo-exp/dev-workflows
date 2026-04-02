@@ -8,6 +8,8 @@ Brooks was right then. AI changes the equation now.
 
 Silver Bullet is a Claude Code plugin that orchestrates the best open-source agentic workflows into one enforced process. It combines [GSD](https://github.com/gsd-build/get-shit-done) (multi-agent execution), [Superpowers](https://github.com/obra/superpowers) (code review, branch management), [Engineering](https://github.com/anthropics/knowledge-work-plugins/tree/main/engineering) (testing, docs, deploy), and [Design](https://github.com/anthropics/knowledge-work-plugins/tree/main/design) (design system, UX copy, accessibility) into a single orchestrated workflow — then enforces it with 7 layers of compliance so Claude can never skip steps.
 
+**Current version: v0.3.0** — adds the `/forensics` skill for structured post-mortem investigation of failed or stalled sessions.
+
 ## How It Works
 
 When you edit source code without completing the planning phase, you see this:
@@ -174,6 +176,36 @@ Same structure as full-dev-cycle with these additions:
 - **`/devops-quality-gates`** — 7 IaC-adapted quality dimensions (usability excluded)
 - **Environment promotion** section (dev → staging → prod)
 - `.yml`/`.yaml` files are NOT exempt from enforcement (they are infrastructure code)
+
+## Built-in Silver Bullet Skills
+
+Skills installed by this plugin that extend the workflow:
+
+| Skill | When to use |
+|-------|-------------|
+| `/quality-gates` | Before planning — checks all 8 quality dimensions |
+| `/forensics` | After a completed, failed, or abandoned session — structured post-mortem investigation |
+
+### `/forensics`
+
+When a session produces wrong output, stalls, or is abandoned, `/forensics` guides Claude through structured root-cause investigation rather than blind retrying.
+
+**Four invocation contexts:**
+- Session completed but left things broken
+- Session abandoned, timed out, or interrupted
+- `/gsd:verify-work` (step 7) fails or produces suspect output
+- Autonomous session has stalled mid-run
+
+**Three investigation paths:**
+1. **Session-level** — Timeout flag, session log, git history → classifies as pre-answer gap, anti-stall trigger, genuine blocker, external kill, or unknown
+2. **Task-level** — Plan vs. diff comparison, test failures → classifies as plan ambiguity, implementation drift, upstream dependency, or verification gap
+3. **General** — Open-ended; delegates to Path 1 or 2 after one targeted follow-up
+
+**Output:** Saves a `docs/forensics/YYYY-MM-DD-<slug>.md` report with symptom, evidence, root cause, contributing factors, next steps, and prevention.
+
+**Workflow integration:** The step 7 VERIFY gate now instructs Claude to invoke `/forensics` before retrying on any verification failure. The Enforcement Rules section and CLAUDE.md Section 3 both reference it alongside the debugging rule.
+
+---
 
 ## Seven Layers of Enforcement
 
