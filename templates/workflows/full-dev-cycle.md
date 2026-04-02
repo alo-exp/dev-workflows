@@ -33,6 +33,28 @@ Write choice to `/tmp/.silver-bullet-mode`:
 echo "interactive" > /tmp/.silver-bullet-mode   # or "autonomous"
 ```
 
+**If autonomous was chosen**, ask one follow-up before proceeding:
+
+> Any decision points you want to pre-answer? Common ones:
+> - Model routing — Planning phase: Sonnet or Opus?
+> - Model routing — Design phase: Sonnet or Opus?
+> - Worktree: use one for this task, or work on main?
+> - Agent Teams: use worktree isolation, or main worktree throughout?
+> Leave blank to use defaults (Sonnet for both phases, main, isolated).
+
+Write answers into the `## Pre-answers` section of the session log immediately. Format each answer as:
+`- Model routing — Planning: <value>`
+`- Model routing — Design: <value>`
+`- Worktree: <value>`
+`- Agent Teams: <value>`
+
+Omit any key the user left blank (default applies). Read pre-answers mid-session from the log
+at `/tmp/.silver-bullet-session-log-path`, stripping the leading `- ` before splitting on `:`.
+Log each applied pre-answer under "Autonomous decisions" with note `(pre-answered at Step 0)`.
+
+**Fallback**: if the session log or `## Pre-answers` section is unreadable at any point,
+use defaults: Sonnet for both phases, main, isolated.
+
 ---
 
 ## PROJECT INITIALIZATION
@@ -61,6 +83,21 @@ Before DISCUSS begins, ask:
 > Entering Planning phase. Use Opus (claude-opus-4-6) for deeper reasoning, or stay on Sonnet?
 
 Autonomous mode: stay Sonnet; escalate silently only on measurably incomplete planning output.
+
+---
+
+### SKILL DISCOVERY (once per task, before DISCUSS)
+
+Scan installed skills from two sources:
+1. `~/.claude/skills/` — flat `.md` files
+2. `~/.claude/plugins/cache/` — glob `*/*/*/skills/*/SKILL.md` (layout: publisher/plugin/version/skills/skill-name)
+
+Cross-reference the combined list against `all_tracked` in `.silver-bullet.json` and the
+current task description. Surface candidates:
+> Skills that may apply to this task: `/security` — auth changes; `/system-design` — new service
+
+If no matches or both directories absent/empty: log "Skill discovery: no candidates surfaced."
+Write results to `## Skills flagged at discovery` in the session log. **Do not invoke yet.**
 
 ---
 
@@ -102,6 +139,13 @@ Autonomous mode: stay Sonnet; escalate silently only on measurably incomplete pl
 5. `/gsd:plan-phase` — Research → plan → verify plan. Quality gate report from      **REQUIRED** ← DO NOT SKIP
    step 4 feeds into the plan as hard requirements.
    → Produces: `.planning/{phase}-RESEARCH.md`, `.planning/{phase}-{N}-PLAN.md`
+
+   **Skill gap check (post-plan):** After the plan is written, cross-reference all installed
+   skills (both sources, including `all_tracked`) against the plan content. Flag any skill
+   covering a concern not explicitly in the plan.
+   - Interactive: ask whether to add the flagged skill
+   - Autonomous: add to plan or log omission as autonomous decision
+   Write results to `## Skill gap check (post-plan)` in the session log.
 
 ---
 
@@ -226,6 +270,13 @@ Autonomous mode: stay Sonnet; escalate silently only on measurably incomplete pl
 
 19. `/gsd:ship` — Create PR from verified, deployed work.                            **REQUIRED** ← DO NOT SKIP
     → Produces: pull request with phase summaries and requirement coverage.
+
+**Autonomous completion cleanup** (run after outputting structured summary):
+```bash
+rm -f /tmp/.silver-bullet-timeout /tmp/.silver-bullet-sentinel-pid \
+      /tmp/.silver-bullet-session-start-time /tmp/.silver-bullet-timeout-warn-count
+```
+This clears the timeout sentinel so `timeout-check.sh` stops warning.
 
 ---
 
