@@ -31,7 +31,7 @@ Pure shell implementation using `awk` and `sort` — no external dependencies be
 **Output:** Ranked chunks as tab-separated lines: `score\tfile_path\tstart_line\tend_line\tchunk_text`
 
 **Algorithm:**
-1. For each file >3KB, split into ~1KB chunks at paragraph or blank-line boundaries (falls back to fixed line counts if no natural boundaries found)
+1. For each file >3KB, split into ~1KB chunks at blank-line boundaries. If a chunk exceeds 2KB with no blank-line break, force-split at 40-line intervals. No syntax-aware parsing — this is a text-level operation.
 2. Compute term frequency (TF) for each chunk: count of each query term / total terms in chunk
 3. Compute inverse document frequency (IDF) across all chunks: log(total_chunks / chunks_containing_term)
 4. Score each chunk: sum of (TF × IDF) for each query term
@@ -58,14 +58,17 @@ Main orchestrator script called by the hook.
 
 #### 5. Cache layer
 
-Results cached at `.planning/.context-cache/{phase-name}.json`. Cache key is an MD5 hash of: concatenated input file mtimes + phase goal text. If cache is fresh, the hook returns cached output immediately. Cache invalidated when any source file changes or the phase goal changes.
+Results cached at `.planning/.context-cache/{phase-name}.json`. Cache key is a hash of: concatenated input file mtimes + phase goal text. Uses `md5` on macOS, `md5sum` on Linux — the script detects which is available and normalizes the output. If cache is fresh, the hook returns cached output immediately. Cache invalidated when any source file changes or the phase goal changes.
+
+**Staleness tolerance:** The cache is best-effort. If a file is modified between the mtime check and file read, the cache may store slightly stale content. This is acceptable — the context is supplementary, not authoritative, and the cache is invalidated on the next run when mtimes differ.
 
 ### Data Flow
 
 ```
 Skill tool use (GSD phase command)
   → PostToolUse hook fires
-    → semantic-compress.sh
+    → hooks/semantic-compress.sh (gate: is this a GSD phase command?)
+      → scripts/semantic-compress.sh
       → extract-phase-goal.sh → phase goal text
       → glob source files (src_pattern) + docs/**/*.md
       → partition by size (≤3KB full, >3KB chunked)
@@ -108,7 +111,10 @@ New section in `.silver-bullet.json`:
 | `context_budget_kb` | number | `50` | Maximum total output size in KB |
 | `min_file_size_bytes` | number | `3072` | Files below this size are included in full |
 | `chunk_size_bytes` | number | `1024` | Target chunk size for splitting large files |
-| `top_chunks_per_file` | number | `3` | Maximum chunks to select per file |
+| `top_chunks_per_file` | number | `3` | Maximum chunks to select per file (applied before budget trimming — keeps candidate set manageable) |
+| `debug` | boolean | `false` | When true, writes detailed scoring log to `.planning/.context-cache/debug.log` |
+
+**Note:** `src_pattern` is read from the top-level `project.src_pattern` field in `.silver-bullet.json`, not from the `semantic_compression` section.
 
 ## Edge Cases
 
@@ -116,7 +122,7 @@ New section in `.silver-bullet.json`:
 |----------|----------|
 | No `.planning/` files exist | Exit cleanly, no output |
 | No files exceed 3KB | Include everything in full, no TF-IDF needed |
-| Phase goal is empty or generic | Fall back to including file headers + function/class signatures only |
+| Phase goal is empty or generic | Fall back to including the first 30 lines of each file (typically imports, module docstrings, top-level declarations) |
 | Budget exceeded | Prioritize source over docs, then rank by score across all chunks |
 | Binary files in source tree | Skip files that fail `file --mime-type` text check |
 | `.silver-bullet.json` missing compression config | Use defaults |
@@ -127,7 +133,7 @@ New section in `.silver-bullet.json`:
 | File | Type | Purpose |
 |------|------|---------|
 | `hooks/hooks.json` | Modified | Add PostToolUse entry for semantic compression |
-| `hooks/semantic-compress-hook.sh` | New | Thin hook wrapper — checks if skill is a GSD phase command, delegates to `scripts/semantic-compress.sh` |
+| `hooks/semantic-compress.sh` | New | Thin hook wrapper — checks if skill is a GSD phase command, delegates to `scripts/semantic-compress.sh` |
 | `scripts/semantic-compress.sh` | New | Main orchestrator — globs files, partitions, assembles output |
 | `scripts/extract-phase-goal.sh` | New | Reads `.planning/` for current phase goal |
 | `scripts/tfidf-rank.sh` | New | TF-IDF scoring engine (awk + sort) |
@@ -139,7 +145,7 @@ New section in `.silver-bullet.json`:
 - Does not modify source files
 - Does not persist beyond the session — cache is ephemeral
 - Does not run on every tool use — only on GSD phase command invocations
-- Does not require any dependencies beyond standard Unix tools (awk, sort, find, md5/md5sum)
+- Does not require any dependencies beyond standard Unix tools (awk, sort, find, jq) and either `md5` (macOS) or `md5sum` (Linux)
 
 ## Success Criteria
 
