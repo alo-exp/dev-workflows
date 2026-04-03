@@ -2,6 +2,25 @@
 
 ## [Unreleased]
 
+## 0.6.0 (2026-04-03)
+
+### Fix: `/create-release` skill rename (critical)
+- Renamed `skills/release-notes/` → `skills/create-release/` to fix naming collision with Claude Code 2.1.3's built-in `/release-notes` command, which was hijacking invocations and showing Claude Code's own changelog instead of Silver Bullet's release skill
+- Updated 16+ references across hooks, workflows, templates, config files, README, CLAUDE.md, and all help site pages
+
+### Enhanced: Review loop enforcement — double approval required
+- Review loops (spec review, plan review, code review, verification) must now iterate until the reviewer returns ✅ Approved **twice in a row** — a single clean pass is no longer sufficient
+- Completely self-limiting: loop ends naturally on two consecutive clean passes; no maximum cap removed
+- Updated `CLAUDE.md`, `templates/CLAUDE.md.base`, `docs/workflows/full-dev-cycle.md`, `templates/workflows/*.md`, and help site
+
+### Enhanced: CI gate hook is now blocking
+- `hooks/ci-status-check.sh` now emits `blockToolUse: true` on CI failure — Claude must stop all other work immediately and invoke `/gsd:debug`
+- Previously emitted only an advisory warning that could be ignored
+
+### Enhanced: Expanded CI stack detection in `/using-silver-bullet`
+- Detects and generates CI workflow templates for 8 additional stacks: Java/Maven, Java/Gradle, Ruby/RSpec, PHP/Composer, .NET/C#, Elixir/Mix, Swift, Dart/Flutter
+- Go template updated to use `go-version: stable`
+
 ## 0.5.0 (2026-04-03)
 
 ### New: Semantic context compression
