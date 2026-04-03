@@ -179,8 +179,9 @@ Write results to `## Skills flagged at discovery` in the session log. **Do not i
 8. `/code-review` — Peer code quality review (security, perf, correctness,           **REQUIRED** ← DO NOT SKIP
    readability — distinct from GSD's goal verification).
    `superpowers:code-reviewer` — Run code-reviewer subagent immediately after.
-   **Review loop rule**: re-dispatch reviewer until it returns ✅ Approved. Max 3 iterations
-   before surfacing remaining issues to user. Never stop early on "minor" issues.
+   **Review loop rule**: re-dispatch reviewer until it returns ✅ Approved TWICE IN A ROW.
+   A single clean pass is not sufficient. Max 6 iterations before surfacing to user.
+   Never stop early on "minor" issues.
 
 9. `/requesting-code-review` — Request external or peer review.                      **REQUIRED** ← DO NOT SKIP
 
@@ -300,12 +301,12 @@ This clears the timeout sentinel so `timeout-check.sh` stops warning.
 
 ## Review Loop Enforcement
 
-Every review loop in this workflow (spec review, plan review, code review, verification) **MUST iterate until the reviewer returns ✅ Approved**. No exceptions.
+Every review loop in this workflow (spec review, plan review, code review, verification) **MUST iterate until the reviewer returns ✅ Approved TWICE IN A ROW**. A single clean pass is not sufficient. No exceptions.
 
 - Never stop because "issues are minor" or "close enough"
-- Never count a round as approved unless reviewer explicitly outputs `✅ Approved`
-- Maximum 3 iterations before surfacing to user — but MUST reach that maximum, not stop early
-- If iteration 3 still returns issues: surface the issue list to the user and wait for direction
+- Never count a loop as done unless the reviewer outputs `✅ Approved` on two consecutive passes
+- Maximum 6 iterations before surfacing to user — but MUST reach that maximum, not stop early
+- If iteration 6 still has not produced two consecutive clean passes: surface the issue list to the user and wait for direction
 
 ---
 

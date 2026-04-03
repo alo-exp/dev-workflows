@@ -2,8 +2,9 @@
 set -euo pipefail
 
 # PostToolUse hook (matcher: Bash)
-# After git commit/push, checks last completed CI run status and warns if failed.
-# NON-BLOCKING — warning only. Step 17 polling loop is the authoritative gate.
+# After git push, checks last completed CI run status.
+# BLOCKING on failure — outputs blockToolUse:true and instructs immediate /gsd:debug.
+# Non-blocking for in_progress (informational only).
 # Race condition: reflects most recently COMPLETED run, not necessarily this push.
 
 command -v jq >/dev/null 2>&1 || exit 0
@@ -20,19 +21,27 @@ if [[ -n "${GH_STATUS_OVERRIDE:-}" ]]; then
   run_json="$GH_STATUS_OVERRIDE"
 else
   command -v gh >/dev/null 2>&1 || exit 0
-  run_json=$(gh run list --limit 1 --json status,conclusion 2>/dev/null \
+  run_json=$(gh run list --limit 1 --json status,conclusion,name,headBranch 2>/dev/null \
     | jq -r '.[0] // empty' 2>/dev/null) || true
 fi
 
 [[ -z "${run_json:-}" ]] && exit 0
 
 conclusion=$(printf '%s' "$run_json" | jq -r '.conclusion // ""' 2>/dev/null) || true
-status=$(printf '%s' "$run_json" | jq -r '.status // ""' 2>/dev/null) || true
+status=$(printf '%s' "$run_json"    | jq -r '.status // ""'     2>/dev/null) || true
 
 if [[ "$conclusion" == "failure" ]] || [[ "$conclusion" == "cancelled" ]]; then
-  printf '{"hookSpecificOutput":{"message":"⚠️ CI WARNING: Last completed run conclusion=%s. Check before deploying. (Step 17 polling is the authoritative gate.)"}}' \
-    "$conclusion"
+  msg="🛑 CI FAILURE DETECTED — conclusion=${conclusion}.
+
+STOP all other work immediately. Do NOT proceed to any other step.
+Invoke /gsd:debug now to investigate the failing CI run before continuing.
+Run: gh run list --limit 3 --json status,conclusion,name,headBranch
+Then: gh run view <run-id> --log-failed"
+
+  json_msg=$(printf '%s' "$msg" | jq -Rs '.')
+  printf '{"hookSpecificOutput":{"blockToolUse":true,"message":%s}}' "$json_msg"
+
 elif [[ "$status" == "in_progress" ]]; then
-  printf '{"hookSpecificOutput":{"message":"ℹ️ CI in progress. Step 17 will poll for result."}}'
+  printf '{"hookSpecificOutput":{"message":"ℹ️ CI in progress. Step 17 will poll for result before deploy."}}'
 fi
 # success or unknown: silent exit

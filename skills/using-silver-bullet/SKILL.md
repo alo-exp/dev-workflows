@@ -205,14 +205,23 @@ After either clone or create succeeds, continue to step 2.1.
 
 ### 2.1 Detect project name
 
-1. Use the Read tool to check for these files in the project root (in order): `package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, `pom.xml`, `build.gradle`.
+1. Use the Read tool to check for these files in the project root (in order):
+   `package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, `pom.xml`, `build.gradle`,
+   `build.gradle.kts`, `Gemfile`, `composer.json`, `mix.exs`, `Package.swift`,
+   `*.csproj`, `*.sln`, `pubspec.yaml`.
 2. Extract the project name from whichever file exists first:
    - `package.json` → the `"name"` field
    - `pyproject.toml` → `[project] name` or `[tool.poetry] name`
    - `Cargo.toml` → `[package] name`
    - `go.mod` → module path (last segment)
    - `pom.xml` → `<artifactId>`
-   - `build.gradle` → `rootProject.name` if present
+   - `build.gradle` / `build.gradle.kts` → `rootProject.name` if present
+   - `Gemfile` → directory name (Ruby projects rarely name themselves in Gemfile)
+   - `composer.json` → the `"name"` field (last segment after `/`)
+   - `mix.exs` → `app:` value in `project/0`
+   - `Package.swift` → directory name
+   - `*.csproj` / `*.sln` → filename without extension
+   - `pubspec.yaml` → `name:` field
 3. If none of these files exist, use the current directory name as the project name. Run via Bash:
    ```
    basename "$PWD"
@@ -221,12 +230,19 @@ After either clone or create succeeds, continue to step 2.1.
 ### 2.2 Detect tech stack
 
 Based on which manifest file was found, set the tech stack string:
-- `package.json` → Read it and check for key dependencies (e.g., "react", "next", "express", "vue", "angular", "typescript"). Compose a string like "Node.js / TypeScript / React" based on what is found.
+- `package.json` → Read it and check for key dependencies (e.g., "react", "next", "express", "vue", "angular", "typescript", "bun", "deno"). Compose a string like "Node.js / TypeScript / React" based on what is found.
 - `pyproject.toml` → "Python" plus key dependencies (Django, Flask, FastAPI, etc.)
-- `Cargo.toml` → "Rust" plus key dependencies
-- `go.mod` → "Go" plus key dependencies
-- `pom.xml` → "Java / Maven"
-- `build.gradle` → "Java / Gradle" or "Kotlin / Gradle"
+- `Cargo.toml` → "Rust" plus key dependencies (axum, tokio, actix-web, etc.)
+- `go.mod` → "Go" plus key dependencies (gin, echo, fiber, etc.)
+- `pom.xml` → "Java / Maven" plus key deps (Spring Boot, Quarkus, etc.)
+- `build.gradle` → "Java / Gradle" or "Kotlin / Gradle" (check for `kotlin` plugin)
+- `build.gradle.kts` → "Kotlin / Gradle" plus key deps (Ktor, Spring, etc.)
+- `Gemfile` → "Ruby" plus key gems (Rails, Sinatra, Roda, etc.)
+- `composer.json` → "PHP" plus key packages (Laravel, Symfony, WordPress, etc.)
+- `mix.exs` → "Elixir" plus key deps (Phoenix, Ecto, etc.)
+- `Package.swift` → "Swift" plus key deps
+- `*.csproj` / `*.sln` → ".NET / C#" plus target framework (net8.0, net9.0, etc.)
+- `pubspec.yaml` → "Dart / Flutter"
 - If none found → "Unknown — please specify"
 
 ### 2.3 Detect repo URL
@@ -389,8 +405,129 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-go@v5
+        with: { go-version: stable }
       - run: go vet ./...
       - run: go test ./...
+```
+
+**Java / Maven** (pom.xml found):
+```yaml
+name: CI
+on: [push, pull_request]
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { java-version: '21', distribution: temurin }
+      - run: ./mvnw --no-transfer-progress verify
+```
+
+**Java / Kotlin — Gradle** (build.gradle or build.gradle.kts found):
+```yaml
+name: CI
+on: [push, pull_request]
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with: { java-version: '21', distribution: temurin }
+      - run: ./gradlew check
+```
+
+**Ruby** (Gemfile found):
+```yaml
+name: CI
+on: [push, pull_request]
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ruby/setup-ruby@v1
+        with: { bundler-cache: true }
+      - run: bundle exec rubocop --parallel || true
+      - run: bundle exec rspec
+```
+
+**PHP** (composer.json found):
+```yaml
+name: CI
+on: [push, pull_request]
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with: { php-version: '8.3', coverage: none }
+      - run: composer install --no-progress --prefer-dist
+      - run: composer run lint || true
+      - run: composer run test
+```
+
+**.NET / C#** (*.csproj or *.sln found):
+```yaml
+name: CI
+on: [push, pull_request]
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with: { dotnet-version: '9.x' }
+      - run: dotnet build --no-incremental
+      - run: dotnet test --no-build
+```
+
+**Elixir** (mix.exs found):
+```yaml
+name: CI
+on: [push, pull_request]
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
+        with: { elixir-version: '1.17', otp-version: '27' }
+      - run: mix deps.get
+      - run: mix compile --warnings-as-errors
+      - run: mix credo --strict || true
+      - run: mix test
+```
+
+**Swift** (Package.swift found):
+```yaml
+name: CI
+on: [push, pull_request]
+jobs:
+  ci:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: swift build
+      - run: swift test
+```
+
+**Dart / Flutter** (pubspec.yaml found):
+```yaml
+name: CI
+on: [push, pull_request]
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with: { channel: stable }
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
 ```
 
 **Other**: prompt user to specify verify commands. Store in `.silver-bullet.json` under `"verify_commands": ["cmd1", "cmd2"]`.

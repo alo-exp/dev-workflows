@@ -476,12 +476,13 @@ footer a:hover{color:var(--accent-light)}
       <div class="divider"></div>
 
       <h2 id="review-loop">Review Loop Enforcement Rule</h2>
-      <p>Every review loop in the workflow (spec review, plan review, code review, verification) <strong>must iterate until the reviewer explicitly returns ✅ Approved</strong>.</p>
+      <p>Every review loop in the workflow (spec review, plan review, code review, verification) <strong>must iterate until the reviewer returns ✅ Approved TWICE IN A ROW</strong>. A single clean pass is not sufficient.</p>
       <ul>
         <li>Never stop because issues look minor or "close enough"</li>
-        <li>Never count a round as approved unless the reviewer outputs ✅ Approved</li>
-        <li>Maximum 3 iterations before surfacing to the user — but <strong>must reach that maximum</strong>, not stop early</li>
-        <li>If iteration 3 still returns issues: surface the full issue list and wait for user direction</li>
+        <li>Never count a loop as done unless the reviewer outputs ✅ Approved on <strong>two consecutive passes</strong></li>
+        <li>A single ✅ Approved is not sufficient — the next pass must also be clean</li>
+        <li>Maximum 6 iterations before surfacing to the user — but <strong>must reach that maximum</strong>, not stop early</li>
+        <li>If iteration 6 still has not produced two consecutive clean passes: surface the full issue list and wait for user direction</li>
       </ul>
 
       <h2 id="anti-skip">Anti-Skip Rules</h2>
