@@ -85,7 +85,7 @@ var IDX = [
     text:'Wave-based parallel execution. Independent tasks dispatched as agents in isolated worktrees. Merge gate after each wave before next begins. TDD principles per task. One atomic commit per task. Never use superpowers subagent-driven-development.' },
   { page:'Dev Workflow', url:'/help/dev-workflow/', anchor:'verify',
     title:'Step 7 — Verify — /gsd:verify-work',
-    text:'Goal-backward verification against requirements and UAT. Asks whether what was built achieves the phase goal not just did tasks complete. Use /forensics before retrying if verification fails or output is suspect.' },
+    text:'Goal-backward verification against requirements and UAT. Asks whether what was built achieves the phase goal not just did tasks complete. If verification fails invoke /forensics first. If root cause is implementation re-run steps 6-7 only. If root cause is design/plan return to step 3.' },
   { page:'Dev Workflow', url:'/help/dev-workflow/', anchor:'code-review',
     title:'Steps 8–10 — Code review',
     text:'/code-review peer quality review security performance correctness readability. superpowers:code-reviewer automated reviewer subagent dispatched immediately after must return approved TWICE IN A ROW two consecutive passes. Self-limiting loop ends naturally when two clean passes produced. /requesting-code-review external peer. /receiving-code-review triage accept reject.' },
