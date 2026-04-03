@@ -177,6 +177,7 @@ footer a:hover{color:var(--accent-light)}
         <li class="sidebar-section">Overview</li>
         <li><a href="#overview">How It Differs From Dev</a></li>
         <li><a href="#yaml-rule">YAML Files Rule</a></li>
+        <li><a href="#step0">Step 0: Session Mode</a></li>
         <li class="sidebar-section">Special Paths</li>
         <li><a href="#incident">Incident Fast Path</a></li>
         <li class="sidebar-section">Per-Phase Loop</li>
@@ -211,6 +212,20 @@ footer a:hover{color:var(--accent-light)}
       <div class="callout callout-warn" id="yaml-rule">
         <span class="callout-icon">⚠️</span>
         <div class="callout-body"><strong>YAML and JSON files are infrastructure code here — not trivial changes.</strong> GitHub Actions workflows, Kubernetes manifests, Helm charts, Terraform files, and CI/CD pipeline definitions MUST follow the full DevOps workflow regardless of file extension. The trivial-change exemption that applies to <code>.yml</code> in the dev workflow does NOT apply here.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- STEP 0: SESSION MODE -->
+      <h2 id="step0">Step 0 — Session Mode</h2>
+      <p>Every session starts with a mode selection before any project work begins. This is identical to the dev workflow.</p>
+
+      <div class="step-card">
+        <div class="step-num" style="background:linear-gradient(135deg,#64748b,#475569)">0</div>
+        <div>
+          <div class="step-meta"><span class="step-title">Session mode selection</span></div>
+          <p class="step-desc"><strong>Interactive</strong> (default) — pauses at every phase gate for your approval. <strong>Autonomous</strong> — drives start-to-finish, logs decisions, surfaces only genuine blockers at end. Written to <code>/tmp/.silver-bullet-mode</code>. If unreadable, defaults to interactive.</p>
+        </div>
       </div>
 
       <div class="divider"></div>
