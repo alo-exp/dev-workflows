@@ -9,7 +9,7 @@ Every design, plan, and implementation MUST handle current load efficiently AND 
 
 **Why this matters:** Systems that aren't designed to scale hit walls — and those walls always appear at the worst time (launch day, viral moment, enterprise customer onboarding). Retrofitting scalability is 10-100x more expensive than building it in.
 
-**When to invoke:** During PLANNING (after brainstorming, before or alongside writing-plans) and during REVIEW (as part of code review criteria). This skill applies to both new code and modifications to existing code.
+**When to invoke:** During PLANNING (after `/gsd:discuss-phase`, before `/gsd:plan-phase`) and during REVIEW (as part of code review criteria). This skill applies to both new code and modifications to existing code.
 
 ---
 
@@ -112,7 +112,7 @@ If an operation exceeds its budget, it MUST be optimized before shipping. "It wo
 
 ## Applying This Skill
 
-### During Planning (brainstorming / writing-plans)
+### During Planning (/gsd:discuss-phase → /gsd:plan-phase)
 
 Before finalizing any design or plan, run the **Scalability Checklist**:
 
@@ -126,7 +126,7 @@ Before finalizing any design or plan, run the **Scalability Checklist**:
 
 If any item fails: **redesign before proceeding to implementation.**
 
-### During Implementation (executing-plans)
+### During Implementation (/gsd:execute-phase)
 
 As you write code:
 - Run `EXPLAIN` on new queries. Add indexes proactively.

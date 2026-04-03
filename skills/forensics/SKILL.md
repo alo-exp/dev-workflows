@@ -9,7 +9,7 @@ Use this skill when the root cause of a failure is **unknown and must be reconst
 from evidence**. This covers: completed sessions that left things broken, abandoned or
 timed-out sessions, step 7 verification failures, and mid-session stalls.
 
-**If you have an active error with a known cause**, use `superpowers:systematic-debugging`
+**If you have an active error with a known cause**, use `/gsd:debug`
 instead. `/forensics` is for reconstruction, not live debugging.
 
 **In autonomous mode**: skip the user prompt in Step 2a of triage. Classify from evidence

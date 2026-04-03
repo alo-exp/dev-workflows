@@ -84,7 +84,7 @@ GSD steps MUST be invoked as slash commands in the correct phase order.
 - Always use `/gsd:debug` for ANY bug encountered during execution
 - Always use `/forensics` for root-cause investigation of completed sessions, abandoned sessions, or verification failures
 - CI must be green before deployment. When the CI status hook reports failure after a push, STOP all other work immediately and invoke `/gsd:debug` to investigate. Do NOT proceed to any other step until CI is green.
-- README.md MUST be updated to reflect current version, features, and changes before release. /create-release will block if README is stale.
+- `README.md` MUST be updated to reflect current version, features, and changes before release. `/create-release` will block if README is stale.
 - Always strictly adhere to this CLAUDE.md 100%
 
 ## 3a. Review Loop Enforcement
@@ -99,6 +99,8 @@ You MUST NOT:
 - Count a single clean pass as done
 
 The loop is self-limiting: it ends when two consecutive clean passes are produced. Surface to the user only if the reviewer raises an issue it cannot resolve (e.g. requires a decision, a missing dependency, or an external constraint).
+
+---
 
 ## 4. Session Mode
 
