@@ -2,6 +2,36 @@
 
 ## [Unreleased]
 
+## 0.6.1 (2026-04-03)
+
+### Fix: Comprehensive cross-file consistency audit
+- Regenerated `.silver-bullet.json` from v0.2.0 template (was stuck at v0.1.0 with 13 obsolete skill names)
+- Synced `CLAUDE.md` with `templates/CLAUDE.md.base` (7 enforcement layers, GSD/Superpowers ownership rules, file safety rules)
+- Updated all 8 quality dimension skills (`modularity`, `reusability`, `scalability`, `security`, `reliability`, `usability`, `testability`, `extensibility`) from Superpowers-era references to GSD terminology
+- Updated `forensics` skill reference from `superpowers:systematic-debugging` to `/gsd:debug`
+
+### Enhanced: DevOps workflow parity
+- Added Step 0 (SESSION MODE) to `devops-cycle.md` with pre-answer template
+- Added SKILL DISCOVERY section with DevOps-specific examples
+- Added MODEL ROUTING section before DISCUSS phase
+- Added post-plan skill gap check to Step 6
+- Added forensics failure protocol to Step 8 verification
+- Added KNOWLEDGE.md, CHANGELOG.md, and session log to Step 18 finalization
+- Added worktree isolation rule for docs agents to Step 18
+- Added autonomous completion cleanup after Step 24
+
+### Fix: Help site completeness
+- Added DevOps Step 0, code review, and skill discovery sections to help page
+- Added dev-workflow init (Steps 1–2) and post-review (Steps 11–12) to search index
+- Added DevOps Step 0 and code review search entries
+- Fixed duplicate `hooks` anchor for trivial-changes section in concepts page
+- Added `whats-next` search entry for getting-started page
+
+### Fix: Hook and config alignment
+- Reordered `finalization_skills` in `dev-cycle-check.sh` to match `compliance-status.sh` and `completion-audit.sh`
+- Bumped `plugin.json` and `package.json` descriptions to "20-step (app) and 24-step (DevOps)"
+- Fixed `CHANGELOG.md` DevOps step count from 23 to 24
+
 ## 0.6.0 (2026-04-03)
 
 ### Fix: `/create-release` skill rename (critical)
