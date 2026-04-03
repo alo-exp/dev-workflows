@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # PostToolUse hook (matcher: Bash)
-# After git push, checks last completed CI run status.
+# After git commit or push, checks last completed CI run status.
 # BLOCKING on failure — outputs blockToolUse:true and instructs immediate /gsd:debug.
 # Non-blocking for in_progress (informational only).
 # Race condition: reflects most recently COMPLETED run, not necessarily this push.

@@ -10,7 +10,7 @@
 
 ### Enhanced: Review loop enforcement — double approval required
 - Review loops (spec review, plan review, code review, verification) must now iterate until the reviewer returns ✅ Approved **twice in a row** — a single clean pass is no longer sufficient
-- Completely self-limiting: loop ends naturally on two consecutive clean passes; no maximum cap removed
+- Completely self-limiting: loop ends naturally on two consecutive clean passes; maximum iteration cap removed
 - Updated `CLAUDE.md`, `templates/CLAUDE.md.base`, `docs/workflows/full-dev-cycle.md`, `templates/workflows/*.md`, and help site
 
 ### Enhanced: CI gate hook is now blocking
