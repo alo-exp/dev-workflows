@@ -36,7 +36,7 @@ var IDX = [
   { page:'Core Concepts', url:'/help/concepts/', anchor:'hooks',
     title:'Hooks — automated enforcement system',
     text:'Hooks are shell scripts Claude Code runs after every tool use PostToolUse. 4 enforcement hooks: skill tracker compliance status stage enforcer completion audit. 4 support hooks: semantic compression session log init CI status check timeout check. Plus session start hook. Cannot be overridden by Claude reasoning.' },
-  { page:'Core Concepts', url:'/help/concepts/', anchor:'hooks',
+  { page:'Core Concepts', url:'/help/concepts/', anchor:'trivial-changes',
     title:'Trivial change bypass',
     text:'Mark a change trivial to bypass enforcement: touch /tmp/.silver-bullet-trivial. Use only for typos copy fixes config tweaks. Not a shortcut for skipping review.' },
   { page:'Core Concepts', url:'/help/concepts/', anchor:'gsd',

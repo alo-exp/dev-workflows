@@ -240,7 +240,7 @@ footer a:hover{color:var(--accent-light)}
         <div class="callout-body"><strong>Hooks run outside Claude's context.</strong> They're shell scripts executed by Claude Code itself, not by Claude. This means they can't be overridden by Claude's reasoning or instructions — they're a hard system constraint.</div>
       </div>
 
-      <h3>Trivial Changes</h3>
+      <h3 id="trivial-changes">Trivial Changes</h3>
       <p>Not every edit needs a full workflow. For small, non-logic changes (typos, copy fixes, config tweaks), you can bypass workflow enforcement with:</p>
       <div class="code-block"><span class="cmd">touch /tmp/.silver-bullet-trivial</span></div>
       <p>This tells the hooks to skip enforcement for the next commit. Use it sparingly — it exists for genuine trivial changes, not as a shortcut for skipping review.</p>
