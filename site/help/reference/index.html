@@ -165,6 +165,7 @@ footer a:hover{color:var(--accent-light)}
         <li><a href="#config">silver-bullet.json</a></li>
         <li><a href="#session-log">Session Log Format</a></li>
         <li class="sidebar-section">Files</li>
+        <li><a href="#file-structure">Project Root Files</a></li>
         <li><a href="#planning-files">Planning Files</a></li>
         <li><a href="#docs-files">Docs Files</a></li>
         <li><a href="#temp-files">Temp / State Files</a></li>
@@ -447,6 +448,21 @@ updated (Architecture patterns, Key decisions) | no changes
 
 <span class="comment">## Virtual cost</span>
 ~$0.45 (Sonnet, medium complexity)</div>
+
+      <div class="divider"></div>
+
+      <!-- PROJECT ROOT FILES -->
+      <h2 id="file-structure">Project Root Files</h2>
+      <p>These files live in the project root and are created by <code>/using-silver-bullet</code>.</p>
+
+      <table class="ref-table">
+        <thead><tr><th>File</th><th>Owner</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>silver-bullet.md</td><td>Silver Bullet</td><td>Silver Bullet enforcement instructions (sections 0-9). Managed by plugin — do not edit manually. Updated by <code>/using-silver-bullet</code>.</td></tr>
+          <tr><td>CLAUDE.md</td><td>User</td><td>Project-specific Claude instructions. References <code>silver-bullet.md</code> for enforcement rules. User-owned — Silver Bullet only adds a reference line.</td></tr>
+          <tr><td>.silver-bullet.json</td><td>Silver Bullet</td><td>Project-level configuration: project name, source pattern, semantic compression, verify commands, workflow paths.</td></tr>
+        </tbody>
+      </table>
 
       <div class="divider"></div>
 
