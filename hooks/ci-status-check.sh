@@ -35,6 +35,16 @@ fi
 conclusion=$(printf '%s' "$run_json" | jq -r '.conclusion // ""' 2>/dev/null) || true
 status=$(printf '%s' "$run_json"    | jq -r '.status // ""'     2>/dev/null) || true
 
+# Validate extracted values against known-good sets (defense-in-depth)
+case "$conclusion" in
+  success|failure|cancelled|skipped|"") ;;
+  *) conclusion="unknown" ;;
+esac
+case "$status" in
+  completed|in_progress|queued|waiting|"") ;;
+  *) status="unknown" ;;
+esac
+
 if [[ "$conclusion" == "failure" ]] || [[ "$conclusion" == "cancelled" ]]; then
   msg="🛑 CI FAILURE DETECTED — conclusion=${conclusion}.
 

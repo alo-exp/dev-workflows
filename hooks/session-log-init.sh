@@ -13,6 +13,11 @@ umask 0077
 # User-scoped state directory (avoids world-readable /tmp/)
 SB_DIR="${HOME}/.claude/.silver-bullet"
 
+# Validate test overrides (defense-in-depth: reject non-numeric sleep values)
+if [[ -n "${SENTINEL_SLEEP_OVERRIDE:-}" ]] && ! [[ "$SENTINEL_SLEEP_OVERRIDE" =~ ^[0-9]+$ ]]; then
+  SENTINEL_SLEEP_OVERRIDE=600
+fi
+
 command -v jq >/dev/null 2>&1 || exit 0
 
 input=$(cat)
