@@ -221,22 +221,15 @@ When a session produces wrong output, stalls, or is abandoned, `/forensics` guid
 
 The plugin doesn't rely on Claude reading instructions. It enforces compliance through hooks that fire automatically:
 
-**Silver Bullet installs 5:**
-
 | Layer | How it works |
 |-------|-------------|
 | **1. Skill tracker** | `record-skill.sh` fires on every Skill tool invocation. Records completed skills to state file. |
 | **2. Stage enforcer** | `dev-cycle-check.sh` fires on every Edit/Write/Bash. HARD STOP if quality gates incomplete and you're touching source code. |
 | **3. Compliance status** | `compliance-status.sh` fires on every tool use. Shows progress score so Claude always knows where it stands. |
 | **4. Completion audit** | `completion-audit.sh` fires on every Bash command. Blocks `git commit`, `git push`, `gh pr create`, and `deploy` if workflow is incomplete. |
-| **5. Redundant instructions + anti-rationalization** | CLAUDE.md + workflow file both enforce the same rules. Explicit rules against skipping, combining, or implicitly covering steps. |
-
-**GSD adds 2 more:**
-
-| Layer | How it works |
-|-------|-------------|
-| **6. GSD workflow guard** | GSD's own hook detects file edits made outside a `/gsd:*` command and warns. |
-| **7. GSD context monitor** | GSD's own hook warns at ≤35% tokens remaining, escalates at ≤25%. |
+| **5. GSD workflow guard** | GSD's own hook detects file edits made outside a `/gsd:*` command and warns. |
+| **6. GSD context monitor** | GSD's own hook warns at ≤35% tokens remaining, escalates at ≤25%. |
+| **7. Redundant instructions + anti-rationalization** | CLAUDE.md + workflow file both enforce the same rules. Explicit rules against skipping, combining, or implicitly covering steps. |
 
 ## Customization
 

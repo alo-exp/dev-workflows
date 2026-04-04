@@ -52,7 +52,7 @@ var IDX = [
     title:'Quality gates — 8 dimensions',
     text:'Eight quality dimensions: modularity reusability scalability security reliability usability testability extensibility. All must pass before planning. Dispatches 8 parallel agents one per dimension in isolated worktrees. Hard stop on any failure. /quality-gates for app, /devops-quality-gates for IaC.' },
   { page:'Core Concepts', url:'/help/concepts/', anchor:'enforcement',
-    title:'7 enforcement layers — 5 from Silver Bullet, 2 from GSD',
+    title:'7 enforcement layers — 4 PostToolUse hooks, 2 GSD hooks, redundant instructions',
     text:'7 enforcement layers: 1 Skill tracker records invocations. 2 Stage enforcer hard stop if phase out of order. 3 Compliance status shows progress on every tool use. 4 Completion audit blocks git commit push deploy. 5 GSD workflow guard detects edits outside /gsd commands. 6 GSD context monitor warns at low token budget. 7 Redundant instructions plus anti-rationalization.' },
   { page:'Core Concepts', url:'/help/concepts/', anchor:'session-modes',
     title:'Session modes — interactive and autonomous',
