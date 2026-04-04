@@ -5,7 +5,7 @@
 **Active phase:** Phase 1 — Separate silver-bullet.md from CLAUDE.md
 **Current plan:** 01-01 (COMPLETE)
 
-Last activity: 2026-04-05 - Completed quick task 260405-5e0: Close enforcement gaps for skip-risk instructions
+Last activity: 2026-04-05 - Completed quick task 260405-6v2: Bypass-permissions detection and GSD structure
 
 ## Decisions
 
@@ -19,6 +19,7 @@ Last activity: 2026-04-05 - Completed quick task 260405-5e0: Close enforcement g
 | # | Description | Date | Commit | Status | Directory |
 |---|-------------|------|--------|--------|-----------|
 | 260405-5e0 | Close enforcement gaps for skip-risk instructions | 2026-04-05 | f97d109 | Verified | [260405-5e0-close-enforcement-gaps-for-skip-risk-ins](./quick/260405-5e0-close-enforcement-gaps-for-skip-risk-ins/) |
+| 260405-6v2 | Bypass-permissions detection and GSD structure | 2026-04-05 | 045ab74 | Verified | [260405-6v2-bypass-permissions-detection-and-gsd-str](./quick/260405-6v2-bypass-permissions-detection-and-gsd-str/) |
 
 ## Performance Metrics
 
