@@ -189,3 +189,93 @@ These rules apply to ALL file operations, in every context and session mode.
   scope must be clear before any file is touched.
 - **When in doubt: skip and inform**, never act and apologize.
 - This applies to Silver Bullet setup, template refresh, and all agent/subagent operations.
+
+---
+
+## 8. Third-Party Plugin Boundary
+
+Silver Bullet orchestrates four external plugins (GSD, Superpowers, Engineering, Design)
+but **NEVER modifies their skill files**. All behavioral changes MUST be implemented in
+Silver Bullet's own orchestrator layer — CLAUDE.md, workflows, hooks, or Silver Bullet skills.
+
+You MUST NOT:
+- Edit any file under `~/.claude/plugins/cache/` (third-party plugin caches)
+- Modify a Superpowers, Engineering, Design, or GSD skill file to change behavior
+- Fork or patch an upstream skill — wrap it in a Silver Bullet hook or workflow step instead
+
+If a third-party skill's behavior needs adjustment, implement the change as:
+1. A workflow instruction (in `templates/workflows/*.md`) that runs before/after the skill
+2. A hook (in `hooks/`) that intercepts or augments the skill's output
+3. A Silver Bullet skill (in `skills/`) that wraps the third-party skill with additional logic
+
+---
+
+## 9. Pre-Release Quality Gate
+
+Before ANY release (`/create-release`), the following four-stage quality gate MUST
+be completed in order. Each stage has its own completion criteria. Skipping a stage
+or declaring it complete without meeting the criteria violates Section 3.
+
+**IMPORTANT**: This gate runs AFTER the normal workflow finalization steps (testing,
+documentation, branch cleanup, deploy checklist) and BEFORE `/create-release`.
+The `/create-release` skill will not be invoked until all four stages pass.
+
+### Stage 1 — Code Review Triad
+
+Run all three review skills in sequence, then fix all issues. Repeat until clean.
+
+1. Invoke `/requesting-code-review`
+2. Invoke `/code-review` (or `superpowers:code-reviewer`)
+3. Invoke `/receiving-code-review` on the combined feedback from steps 1-2
+4. Fix all accepted issues
+5. **Loop**: repeat steps 1-4 until `/receiving-code-review` produces zero accepted items
+6. Run `/superpowers:verification-before-completion` — verify with fresh evidence
+
+### Stage 2 — Big-Picture Consistency Audit
+
+Review the entire plugin for cross-file inconsistencies, redundancies, and contradictions.
+
+1. Dispatch parallel Explore agents across four dimensions:
+   - Workflows (full-dev-cycle.md vs devops-cycle.md vs CLAUDE.md)
+   - Skills (all SKILL.md files — obsolete references, redundant work, contradictions)
+   - Hooks + config (.sh files, hooks.json, .silver-bullet.json, templates)
+   - Help site + README (HTML pages, search.js, README.md — step counts, paths, versions)
+2. Fix all genuine issues found
+3. **Loop**: repeat until two consecutive audit passes find zero issues
+4. Run `/superpowers:verification-before-completion` — verify with fresh evidence
+
+### Stage 3 — Security Audit (SENTINEL)
+
+Run the SENTINEL v2.3 adversarial security audit against the full plugin.
+
+1. Invoke `/anthropic-skills:audit-security-of-skill` targeting the plugin root
+2. Fix all findings (Critical, High, Medium; Low at discretion)
+3. Re-run the audit
+4. **Loop**: repeat until two consecutive audit passes find zero issues
+5. Run `/superpowers:verification-before-completion` — verify with fresh evidence
+
+### Stage 4 — Public-Facing Content Refresh
+
+Verify and update all user-visible surfaces to reflect the current state.
+
+1. Audit for factual accuracy:
+   - GitHub repo description and topics (`gh repo edit`)
+   - README.md (version, step counts, enforcement layers, state paths, architecture)
+   - Landing page (`site/index.html`)
+   - All help pages (`site/help/*/index.html`)
+   - Search index (`site/help/search.js`)
+   - Compare page (`site/compare/index.html`) if it exists
+2. Fix all discrepancies
+3. Run `/superpowers:verification-before-completion` — verify with fresh evidence
+4. Push and confirm CI green
+
+### Pre-Release Gate Enforcement
+
+The completion audit hook (`hooks/completion-audit.sh`) blocks `/create-release`
+until all required workflow skills are recorded. The four stages above are
+**process requirements** enforced by this CLAUDE.md — Claude MUST execute them
+in order before invoking `/create-release`.
+
+If any stage surfaces a blocker that cannot be resolved (e.g., upstream dependency
+issue, ambiguous design decision), log it under "Needs human review" and surface
+to the user before proceeding to the next stage.
