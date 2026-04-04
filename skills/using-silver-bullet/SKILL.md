@@ -291,8 +291,6 @@ If Phase 0 determined this is an update:
 1. Invoke `/using-superpowers` via the Skill tool to activate Superpowers skills.
 2. Overwrite `silver-bullet.md` from `${PLUGIN_ROOT}/templates/silver-bullet.md.base` with placeholder replacements. Read `.silver-bullet.json` first for `project.name` and other values. This is safe — Silver Bullet owns this file.
    - Replace `{{PROJECT_NAME}}` with the project name from `.silver-bullet.json`
-   - Replace `{{TECH_STACK}}` with the detected tech stack
-   - Replace `{{GIT_REPO}}` with the repo URL from `git remote get-url origin`
    - Replace `{{ACTIVE_WORKFLOW}}` with the active workflow name from `.silver-bullet.json` (default: `full-dev-cycle`)
 3. **Strip any SB-owned sections from CLAUDE.md** (migration from pre-v0.7.0). Check for headings matching `## N. <Known SB Title>` where N is 0–9 (titles: Session Startup, Automated Enforcement, Active Workflow, NON-NEGOTIABLE, Review Loop, Session Mode, Model Routing, GSD, File Safety, Third-Party, Pre-Release). If found, remove these sections (from heading to next `## ` or EOF), preserving all non-SB content. Also remove old-style reference lines that don't mention silver-bullet.md.
 4. Verify `CLAUDE.md` contains a reference line mentioning "silver-bullet.md". If not, add at the very top of the file: `> **Always adhere strictly to this file and silver-bullet.md — they override all defaults.**`
@@ -324,15 +322,13 @@ Write `silver-bullet.md` from `${PLUGIN_ROOT}/templates/silver-bullet.md.base`. 
 
 Perform these placeholder replacements:
 - `{{PROJECT_NAME}}` → the detected/confirmed project name
-- `{{TECH_STACK}}` → the detected/confirmed tech stack
-- `{{GIT_REPO}}` → the detected/confirmed repo URL
 - `{{ACTIVE_WORKFLOW}}` → `full-dev-cycle` (default)
 
 #### 3.1b Handle CLAUDE.md
 
 Check if `CLAUDE.md` exists in the project root (use Bash: `test -f CLAUDE.md`).
 
-**If NO existing CLAUDE.md**: Write from `${PLUGIN_ROOT}/templates/CLAUDE.md.base` with the same placeholder replacements as above. No user interaction needed.
+**If NO existing CLAUDE.md**: Write from `${PLUGIN_ROOT}/templates/CLAUDE.md.base` with placeholder replacements (`{{PROJECT_NAME}}`, `{{TECH_STACK}}`, `{{GIT_REPO}}`). No user interaction needed.
 
 **If existing CLAUDE.md**: First, strip any existing Silver Bullet sections (migration from pre-v0.7.0). Then add the reference line and run conflict detection.
 

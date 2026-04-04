@@ -147,14 +147,24 @@ if [[ "${is_release:-false}" == true ]]; then
   fi
 fi
 
-if [[ -n "$release_missing" ]]; then
+# --- Output result ---
+# Combine both missing-skills and release-gate messages if both apply
+if [[ -n "$missing" && -n "$release_missing" ]]; then
+  missing_lines=""
+  for skill in $missing; do
+    missing_lines="${missing_lines}  ❌ /${skill}\n"
+  done
+  msg=$(printf '🛑 RELEASE BLOCKED — Workflow incomplete AND §9 Quality Gate incomplete.\n\nMissing workflow steps:\n%s\nMissing quality gate stages: %s\n\nComplete ALL workflow steps first, then run the 4-stage quality gate.\nDo NOT proceed with this release.' "$missing_lines" "$release_missing")
+  json_msg=$(printf '%s' "$msg" | jq -Rs '.')
+  printf '{"hookSpecificOutput":{"blockToolUse":true,"message":%s}}' "$json_msg"
+  exit 0
+elif [[ -n "$release_missing" ]]; then
   msg=$(printf '🛑 RELEASE BLOCKED — §9 Pre-Release Quality Gate incomplete.\n\nMissing evidence for: %s\n\nThe 4-stage quality gate (Code Review Triad, Big-Picture Audit, SENTINEL, Content Refresh) must complete before /create-release.\nDo NOT proceed with this release.' "$release_missing")
   json_msg=$(printf '%s' "$msg" | jq -Rs '.')
   printf '{"hookSpecificOutput":{"blockToolUse":true,"message":%s}}' "$json_msg"
   exit 0
 fi
 
-# --- Output result ---
 if [[ -n "$missing" ]]; then
   # Build missing list
   missing_lines=""
