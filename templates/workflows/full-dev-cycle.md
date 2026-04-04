@@ -23,6 +23,11 @@ Use `/gsd:next` at any point to auto-advance to the next GSD step if unsure of c
 
 > Run once at the very start of the session, before any project work.
 
+**Bypass-permissions detection:** If bypass-permissions is detected (all tool calls
+auto-accepted), skip the mode question AND the pre-answers follow-up. Auto-set
+autonomous mode, use all defaults (Sonnet, main, isolated). Log:
+"Step 0 skipped: bypass-permissions detected, autonomous mode with defaults".
+
 Ask:
 > Run this session **interactively** or **autonomously**?
 > - **Interactive** (default) — I pause at decision points and phase gates
@@ -54,6 +59,11 @@ Log each applied pre-answer under "Autonomous decisions" with note `(pre-answere
 
 **Fallback**: if the session log or `## Pre-answers` section is unreadable at any point,
 use defaults: Sonnet for both phases, main, isolated.
+
+**Bypass-permissions shortcut:** If bypass-permissions is detected (all tool calls
+auto-accepted), skip the mode question AND the pre-answers follow-up. Auto-set
+autonomous mode, use all defaults (Sonnet, main, isolated). Log:
+"Step 0 skipped: bypass-permissions detected, autonomous mode with defaults".
 
 ---
 

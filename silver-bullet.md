@@ -129,6 +129,19 @@ this file.
 
 ## 4. Session Mode
 
+**Bypass-permissions detection:** If the session is running with Claude Code's
+"Bypass permissions" toggle enabled (i.e., all tool calls are auto-accepted without
+user confirmation prompts), skip the interactive/autonomous question entirely.
+Auto-set autonomous mode immediately:
+```bash
+echo "autonomous" > ~/.claude/.silver-bullet/mode
+```
+Log: "Autonomous mode auto-set: bypass-permissions detected".
+Also suppress ALL other confirmation-asking behaviors for the remainder of the session
+(e.g., "Proceed? yes/no", phase gate approvals, model routing questions in section 5).
+Use defaults for any skipped questions. Log each suppressed question under
+"Autonomous decisions" with note "(bypass-permissions)".
+
 At the start of every session, before any work begins, ask:
 
 > Run this session **interactively** or **autonomously**?
