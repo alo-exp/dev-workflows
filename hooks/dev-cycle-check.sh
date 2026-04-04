@@ -202,8 +202,8 @@ See CLAUDE.md §8 for details."
   fi
 
   if ! has_skill "code-review"; then
-    # Stage B: all planning done, no code-review
-    printf '{"hookSpecificOutput":{"message":"✅ Planning complete. Remember to run code-review after implementation."}}'
+    # Stage B: all planning done, no code-review — BLOCK source edits
+    printf '{"hookSpecificOutput":{"blockToolUse":true,"message":"🚫 BLOCKED — Code review required before further source edits. Planning is complete but you must run /code-review before editing source code. Non-source operations (reading, commits, skill invocations) are still allowed."}}'
     exit 0
   fi
 

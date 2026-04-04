@@ -87,13 +87,22 @@ case "$state_file" in
   *) state_file="${HOME}/.claude/.silver-bullet/state" ;;
 esac
 
+# Read session mode (default: interactive if missing)
+mode_file="${HOME}/.claude/.silver-bullet/mode"
+if [[ -f "$mode_file" ]]; then
+  mode=$(cat "$mode_file" 2>/dev/null || echo "interactive")
+  mode="${mode:-interactive}"
+else
+  mode="interactive"
+fi
+
 # If no state file exists → early output with zeros
 if [[ ! -f "$state_file" ]]; then
   # Count totals
   plan_total=0
   for _ in $required_planning; do ((plan_total++)) || true; done
-  printf '{"hookSpecificOutput":{"message":"Silver Bullet: 0 steps | PLANNING 0/%d | REVIEW 0/3 | FINALIZATION 0/4 | RELEASE 0/1 | Next: /%s"}}' \
-    "$plan_total" \
+  printf '{"hookSpecificOutput":{"message":"Silver Bullet: 0 steps | Mode: %s | GSD owns execution | PLANNING 0/%d | REVIEW 0/3 | FINALIZATION 0/4 | RELEASE 0/1 | Next: /%s"}}' \
+    "$mode" "$plan_total" \
     "$(printf '%s' "$required_planning" | cut -d' ' -f1)"
   exit 0
 fi
@@ -175,7 +184,7 @@ elif [[ -n "$first_missing_release" ]]; then
 fi
 
 # --- Build output ---
-msg="Silver Bullet: ${total_steps} steps | PLANNING ${plan_done}/${plan_total} | REVIEW ${review_done}/${review_total} | FINALIZATION ${final_done}/${final_total} | RELEASE ${release_done}/${release_total}"
+msg="Silver Bullet: ${total_steps} steps | Mode: ${mode} | GSD owns execution | PLANNING ${plan_done}/${plan_total} | REVIEW ${review_done}/${review_total} | FINALIZATION ${final_done}/${final_total} | RELEASE ${release_done}/${release_total}"
 if [[ -n "$next_skill" ]]; then
   msg="${msg} | Next: /${next_skill}"
 fi
