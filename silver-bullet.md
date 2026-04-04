@@ -226,6 +226,7 @@ Run all three review skills in sequence, then fix all issues. Repeat until clean
 4. Fix all accepted issues
 5. **Loop**: repeat steps 1-4 until `/receiving-code-review` produces zero accepted items
 6. Run `/superpowers:verification-before-completion` — verify with fresh evidence
+7. Record stage completion: `echo "quality-gate-stage-1" >> ~/.claude/.silver-bullet/state`
 
 ### Stage 2 — Big-Picture Consistency Audit
 
@@ -273,10 +274,10 @@ Verify and update all user-visible surfaces to reflect the current state.
 The completion audit hook (`hooks/completion-audit.sh`) blocks `gh release create`
 until all required workflow skills AND quality gate stage markers are recorded in
 the state file (`~/.claude/.silver-bullet/state`). Required markers:
-- Stage 1: `code-review`, `requesting-code-review`, `receiving-code-review` (recorded automatically by record-skill hook)
-- Stage 2: `quality-gate-stage-2` (recorded manually per instructions above)
-- Stage 3: `quality-gate-stage-3` (recorded manually per instructions above)
-- Stage 4: `quality-gate-stage-4` (recorded manually per instructions above)
+- Stage 1: `quality-gate-stage-1` (recorded per instructions above)
+- Stage 2: `quality-gate-stage-2` (recorded per instructions above)
+- Stage 3: `quality-gate-stage-3` (recorded per instructions above)
+- Stage 4: `quality-gate-stage-4` (recorded per instructions above)
 
 If any stage surfaces a blocker that cannot be resolved (e.g., upstream dependency
 issue, ambiguous design decision), log it under "Needs human review" and surface

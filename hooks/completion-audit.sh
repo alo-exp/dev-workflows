@@ -132,21 +132,19 @@ fi
 
 # --- §9 Pre-Release Quality Gate check (only for gh release create) ---
 release_missing=""
-if [[ "${is_release:-false}" == true && -f "$state_file" ]]; then
-  state_contents=$(cat "$state_file")
-  # Stage 1: Code Review Triad evidence (defense-in-depth — also checked by
-  # regular completion gate, but re-checked here in case required_deploy list changes)
-  for rs in code-review requesting-code-review receiving-code-review; do
-    if ! printf '%s\n' "$state_contents" | grep -qx "$rs" 2>/dev/null; then
-      release_missing="${release_missing:+$release_missing }stage1:$rs"
-    fi
-  done
-  # Stage 2-4 evidence: check for quality-gate stage markers
-  for stage in quality-gate-stage-2 quality-gate-stage-3 quality-gate-stage-4; do
-    if ! printf '%s\n' "$state_contents" | grep -qx "$stage" 2>/dev/null; then
-      release_missing="${release_missing:+$release_missing }$stage"
-    fi
-  done
+if [[ "${is_release:-false}" == true ]]; then
+  if [[ -f "$state_file" ]]; then
+    state_contents=$(cat "$state_file")
+    # All 4 stages use explicit markers (symmetric recording)
+    for stage in quality-gate-stage-1 quality-gate-stage-2 quality-gate-stage-3 quality-gate-stage-4; do
+      if ! printf '%s\n' "$state_contents" | grep -qx "$stage" 2>/dev/null; then
+        release_missing="${release_missing:+$release_missing }$stage"
+      fi
+    done
+  else
+    # No state file at all — all stages missing
+    release_missing="quality-gate-stage-1 quality-gate-stage-2 quality-gate-stage-3 quality-gate-stage-4"
+  fi
 fi
 
 if [[ -n "$release_missing" ]]; then

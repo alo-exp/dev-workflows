@@ -368,11 +368,11 @@ Then run conflict detection (step 3.1c).
 
 Scan `CLAUDE.md` for patterns that conflict with `silver-bullet.md` rules. Check for these conflict patterns:
 
-1. **Model routing overrides**: regex `claude-opus|claude-sonnet|model.*routing` (conflicts with SB Section 5)
-2. **Execution preferences**: regex `execute-phase|subagent-driven|executing-plans` (conflicts with SB Section 6)
-3. **Review loop overrides**: regex `review.*loop|approved.*twice|consecutive.*pass` (conflicts with SB Section 3a)
-4. **Workflow overrides**: regex `active.*workflow|workflow.*override` (conflicts with SB Section 2)
-5. **Session mode overrides**: regex `interactive|autonomous.*mode|session.*mode` (conflicts with SB Section 4)
+1. **Model routing overrides**: regex `(always|default|prefer|use).*(claude-opus|claude-sonnet|opus|sonnet)` on directive-like lines (starting with `-`, `>`, `**`, or containing "must"/"always"/"never") (conflicts with SB Section 5)
+2. **Execution preferences**: regex `(always|never|must).*(subagent-driven|executing-plans)` on directive-like lines (conflicts with SB Section 6)
+3. **Review loop overrides**: regex `(skip|disable|no).*(review.*loop|code.review)|approved.*(once|single)` on directive-like lines (conflicts with SB Section 3a)
+4. **Workflow overrides**: regex `(override|replace|ignore).*(workflow|silver.bullet)` on directive-like lines (conflicts with SB Section 2)
+5. **Session mode overrides**: regex `(always|default|must).*(interactive|autonomous).*mode` on directive-like lines (conflicts with SB Section 4)
 
 For each match found, present it to the user interactively:
 ```
