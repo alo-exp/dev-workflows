@@ -359,7 +359,7 @@ hooks/record-skill.sh                      .silver-bullet.json (config)
                                            docs/workflows/full-dev-cycle.md (20 steps)
 hooks/dev-cycle-check.sh                   docs/workflows/devops-cycle.md (24 steps)
   → HARD STOP if planning incomplete
-                                           State files (ephemeral, in /tmp/)
+                                           State files (in ~/.claude/.silver-bullet/)
 hooks/compliance-status.sh                 ─────────────────────────────────
   → progress score on every tool use       ~/.claude/.silver-bullet/state (skill log)
                                            ~/.claude/.silver-bullet/trivial (bypass flag)
