@@ -9,12 +9,15 @@ set -euo pipefail
 # Consume stdin (required to avoid broken pipe)
 cat > /dev/null
 
+# User-scoped state directory
+SB_DIR="${HOME}/.claude/.silver-bullet"
+
 # Mode gate: only act in autonomous mode
-mode_file_content=$(cat "${HOME}"/.claude/.silver-bullet/mode 2>/dev/null || echo "interactive")
+mode_file_content=$(cat "$SB_DIR/mode" 2>/dev/null || echo "interactive")
 [[ "$mode_file_content" != "autonomous" ]] && exit 0
 
 # Check for timeout flag (allow override for testing)
-flag_file="${TIMEOUT_FLAG_OVERRIDE:-"${HOME}"/.claude/.silver-bullet/timeout}"
+flag_file="${TIMEOUT_FLAG_OVERRIDE:-$SB_DIR/timeout}"
 [[ -f "$flag_file" ]] || exit 0
 
 # Platform-aware stat helper: returns file mtime as epoch seconds
@@ -27,13 +30,13 @@ _mtime() {
 }
 
 # Stale-flag check
-session_start=$(cat "${HOME}"/.claude/.silver-bullet/session-start-time 2>/dev/null || echo "")
+session_start=$(cat "$SB_DIR/session-start-time" 2>/dev/null || echo "")
 [[ -z "$session_start" ]] && exit 0
 flag_mtime=$(_mtime "$flag_file") || exit 0
 [[ "$flag_mtime" -lt "$session_start" ]] && exit 0
 
 # Rate-limiting
-count_file=""${HOME}"/.claude/.silver-bullet/timeout-warn-count"
+count_file="$SB_DIR/timeout-warn-count"
 count=0
 if [[ -f "$count_file" ]]; then
   count_mtime=$(_mtime "$count_file") || count_mtime=0
