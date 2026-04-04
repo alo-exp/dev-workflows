@@ -276,8 +276,10 @@ Run all three review skills in sequence, then fix all issues. Repeat until clean
 4. Fix all accepted issues
 5. **Loop**: repeat steps 1-4 until `/receiving-code-review` produces zero accepted items
 6. **MANDATORY — invoke `/superpowers:verification-before-completion`** via the Skill tool.
-   This is NOT optional. The skill MUST be invoked (not just "considered") so that
-   `record-skill.sh` tracks it. Do NOT record the stage marker without invoking this skill first.
+   Running verification commands manually is NOT a substitute for invoking this skill.
+   You need BOTH: (a) run the actual verification commands, AND (b) invoke the skill so
+   `record-skill.sh` tracks it. If you ran tests/CI/checks but did not invoke the skill,
+   you have NOT completed this step. Do NOT record the stage marker until BOTH are done.
 7. Record stage completion: `echo "quality-gate-stage-1" >> ~/.claude/.silver-bullet/state`
 
 ### Stage 2 — Big-Picture Consistency Audit
