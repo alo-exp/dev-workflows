@@ -11,6 +11,22 @@ set -euo pipefail
 command -v jq >/dev/null 2>&1 || exit 0
 
 input=$(cat)
+
+# Detect hook event type (PreToolUse vs PostToolUse)
+hook_event=$(printf '%s' "$input" | jq -r '.hook_event_name // "PostToolUse"')
+
+# Emit a block in the correct format for the hook event type
+emit_block() {
+  local reason="$1"
+  local json_reason
+  json_reason=$(printf '%s' "$reason" | jq -Rs '.')
+  if [[ "$hook_event" == "PreToolUse" ]]; then
+    printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":%s}}' "$json_reason"
+  else
+    printf '{"decision":"block","reason":%s,"hookSpecificOutput":{"message":%s}}' "$json_reason" "$json_reason"
+  fi
+}
+
 cmd=$(printf '%s' "$input" | jq -r '.tool_input.command // ""') || true
 [[ -z "$cmd" ]] && exit 0
 
@@ -52,8 +68,7 @@ Invoke /gsd:debug now to investigate the failing CI run before continuing.
 Run: gh run list --limit 3 --json status,conclusion,name,headBranch
 Then: gh run view <run-id> --log-failed"
 
-  json_msg=$(printf '%s' "$msg" | jq -Rs '.')
-  printf '{"decision":"block","reason":%s,"hookSpecificOutput":{"message":%s}}' "$json_msg" "$json_msg"
+  emit_block "$msg"
 
 elif [[ "$status" == "in_progress" ]]; then
   printf '{"hookSpecificOutput":{"message":"ℹ️ CI in progress. Step 17 will poll for result before deploy."}}'

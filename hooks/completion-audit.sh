@@ -16,6 +16,21 @@ fi
 # Read JSON from stdin
 input=$(cat)
 
+# Detect hook event type (PreToolUse vs PostToolUse)
+hook_event=$(printf '%s' "$input" | jq -r '.hook_event_name // "PostToolUse"')
+
+# Emit a block in the correct format for the hook event type
+emit_block() {
+  local reason="$1"
+  local json_reason
+  json_reason=$(printf '%s' "$reason" | jq -Rs '.')
+  if [[ "$hook_event" == "PreToolUse" ]]; then
+    printf '{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":%s}}' "$json_reason"
+  else
+    printf '{"decision":"block","reason":%s,"hookSpecificOutput":{"message":%s}}' "$json_reason" "$json_reason"
+  fi
+}
+
 # Extract the command being run
 cmd=$(printf '%s' "$input" | jq -r '.tool_input.command // ""')
 [[ -z "$cmd" ]] && exit 0
@@ -165,13 +180,11 @@ if [[ -n "$missing" && -n "$release_missing" ]]; then
     missing_lines="${missing_lines}  ❌ /${skill}\n"
   done
   msg=$(printf '🛑 RELEASE BLOCKED — Workflow incomplete AND §9 Quality Gate incomplete.\n\nMissing workflow steps:\n%s\nMissing quality gate stages: %s\n\nComplete ALL workflow steps first, then run the 4-stage quality gate.\nDo NOT proceed with this release.' "$missing_lines" "$release_missing")
-  json_msg=$(printf '%s' "$msg" | jq -Rs '.')
-  printf '{"decision":"block","reason":%s,"hookSpecificOutput":{"message":%s}}' "$json_msg" "$json_msg"
+  emit_block "$msg"
   exit 0
 elif [[ -n "$release_missing" ]]; then
   msg=$(printf '🛑 RELEASE BLOCKED — §9 Pre-Release Quality Gate incomplete.\n\nMissing evidence for: %s\n\nThe 4-stage quality gate (Code Review Triad, Big-Picture Audit, SENTINEL, Content Refresh) must complete before /create-release.\nDo NOT proceed with this release.' "$release_missing")
-  json_msg=$(printf '%s' "$msg" | jq -Rs '.')
-  printf '{"decision":"block","reason":%s,"hookSpecificOutput":{"message":%s}}' "$json_msg" "$json_msg"
+  emit_block "$msg"
   exit 0
 fi
 
@@ -184,10 +197,7 @@ if [[ -n "$missing" ]]; then
 
   msg=$(printf '🛑 COMPLETION BLOCKED — Workflow incomplete.\n\nYou are attempting to commit/push/deploy but these required steps are missing:\n%sComplete ALL required workflow steps before finalizing.\nDo NOT proceed with this action.' "$missing_lines")
 
-  # Escape for JSON
-  json_msg=$(printf '%s' "$msg" | jq -Rs '.')
-
-  printf '{"decision":"block","reason":%s,"hookSpecificOutput":{"message":%s}}' "$json_msg" "$json_msg"
+  emit_block "$msg"
 else
   printf '{"hookSpecificOutput":{"message":"✅ Workflow compliance verified. Proceed."}}'
 fi
