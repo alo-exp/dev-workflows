@@ -87,6 +87,12 @@ See CLAUDE.md §8 for details."
   # Env var overrides
   state_file="${SILVER_BULLET_STATE_FILE:-$state_file}"
 
+  # Security: validate state file path stays within ~/.claude/ (SB-002/SB-003)
+  case "$state_file" in
+    "$HOME"/.claude/*) ;;
+    *) state_file="${SB_STATE_DIR}/state" ;;
+  esac
+
   # --- Check if file/command matches src_pattern ---
   if [[ -n "$file_path" ]]; then
     # Edit/Write tool — check file path

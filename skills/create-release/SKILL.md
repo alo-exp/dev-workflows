@@ -79,10 +79,10 @@ without asking).
 git log <last-tag>..HEAD --pretty=format:"%h %s" --no-merges
 ```
 
-**Sanitize commit subjects** before use in release notes: escape markdown special
-characters (`*`, `_`, `[`, `]`, `(`, `)`, `#`, `` ` ``, `<`, `>`) with backslash
-prefix, or wrap each description in backtick code spans. This prevents markdown
-injection via crafted commit messages.
+**Sanitize commit subjects** before use in release notes: wrap each commit
+description in backtick code spans (`` `description here` ``). This is the
+**primary and mandatory** sanitization method — it prevents markdown injection
+via crafted commit messages. Do NOT use raw commit text in release notes.
 
 Categorize each commit by its conventional commit prefix:
 

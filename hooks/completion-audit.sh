@@ -84,6 +84,16 @@ fi
 # Env var override for state file
 state_file="${SILVER_BULLET_STATE_FILE:-$state_file}"
 
+# Security: validate paths stay within ~/.claude/ (SB-002/SB-003)
+case "$state_file" in
+  "$HOME"/.claude/*) ;;
+  *) state_file="${SB_STATE_DIR}/state" ;;
+esac
+case "$trivial_file" in
+  "$HOME"/.claude/*) ;;
+  *) trivial_file="${SB_STATE_DIR}/trivial" ;;
+esac
+
 # --- Check trivial file override (reject symlinks for safety) ---
 if [[ -f "$trivial_file" && ! -L "$trivial_file" ]]; then
   exit 0

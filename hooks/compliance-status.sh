@@ -81,6 +81,12 @@ active_workflow=$(printf '%s' "$config_vals" | sed -n '3p')
 # Env var override
 state_file="${SILVER_BULLET_STATE_FILE:-$state_file}"
 
+# Security: validate state file path stays within ~/.claude/ (SB-002/SB-003)
+case "$state_file" in
+  "$HOME"/.claude/*) ;;
+  *) state_file="${HOME}/.claude/.silver-bullet/state" ;;
+esac
+
 # If no state file exists → early output with zeros
 if [[ ! -f "$state_file" ]]; then
   # Count totals

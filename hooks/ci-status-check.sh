@@ -23,10 +23,9 @@ if [[ -n "${GH_STATUS_OVERRIDE:-}" ]]; then
 else
   command -v gh >/dev/null 2>&1 || exit 0
   current_branch=$(git branch --show-current 2>/dev/null || echo "")
-  branch_flag=""
-  [[ -n "$current_branch" ]] && branch_flag="--branch $current_branch"
-  # shellcheck disable=SC2086
-  run_json=$(gh run list --limit 1 $branch_flag --json status,conclusion,name,headBranch 2>/dev/null \
+  branch_args=()
+  [[ -n "$current_branch" ]] && branch_args=(--branch "$current_branch")
+  run_json=$(gh run list --limit 1 "${branch_args[@]}" --json status,conclusion,name,headBranch 2>/dev/null \
     | jq -r '.[0] // empty' 2>/dev/null) || true
 fi
 

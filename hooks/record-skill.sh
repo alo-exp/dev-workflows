@@ -49,6 +49,12 @@ if [[ -z "$STATE_FILE" && -n "$config_file" ]]; then
 fi
 STATE_FILE="${STATE_FILE:-${SB_STATE_DIR}/state}"
 
+# Security: validate state file path stays within ~/.claude/ (SB-002/SB-003)
+case "$STATE_FILE" in
+  "$HOME"/.claude/*) ;;
+  *) STATE_FILE="${SB_STATE_DIR}/state" ;;
+esac
+
 # --- Tracked skills list ---
 DEFAULT_TRACKED="quality-gates blast-radius devops-quality-gates devops-skill-router design-system ux-copy architecture system-design code-review requesting-code-review receiving-code-review testing-strategy documentation finishing-a-development-branch deploy-checklist create-release"
 
