@@ -1,0 +1,9 @@
+{
+  "project_name": "silver-bullet",
+  "version": "0.7.0",
+  "planner_model": "claude-opus-4-6",
+  "researcher_model": "claude-opus-4-6",
+  "checker_model": "claude-sonnet-4-6",
+  "commit_docs": true,
+  "research_enabled": true
+}
