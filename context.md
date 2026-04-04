@@ -22,7 +22,7 @@ Two enforced workflows:
 
 7 enforcement layers: 4 PostToolUse hooks + GSD workflow guard + GSD context monitor + redundant CLAUDE.md instructions
 
-**Current version:** v0.7.3
+**Current version:** v0.7.4
 
 ---
 
