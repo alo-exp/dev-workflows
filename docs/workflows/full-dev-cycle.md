@@ -60,11 +60,6 @@ Log each applied pre-answer under "Autonomous decisions" with note `(pre-answere
 **Fallback**: if the session log or `## Pre-answers` section is unreadable at any point,
 use defaults: Sonnet for both phases, main, isolated.
 
-**Bypass-permissions shortcut:** If bypass-permissions is detected (all tool calls
-auto-accepted), skip the mode question AND the pre-answers follow-up. Auto-set
-autonomous mode, use all defaults (Sonnet, main, isolated). Log:
-"Step 0 skipped: bypass-permissions detected, autonomous mode with defaults".
-
 ---
 
 ## PROJECT INITIALIZATION
