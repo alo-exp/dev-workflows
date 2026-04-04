@@ -16,6 +16,8 @@ At the very start of any new session, perform these steps automatically:
 3. **Compact the context** — run /compact to free context for the task.
 4. **Switch back to original model** if it was changed in step 1.
 
+> **Anti-Skip:** you are violating this rule if you begin work without reading docs/ or skip /compact. Evidence: no Read tool calls for docs/ files in session start.
+
 ---
 
 ## 1. Automated Enforcement
@@ -52,6 +54,8 @@ the active workflow file before starting any non-trivial task.
 **Skill not found rule**: If a skill listed in the workflow cannot be
 invoked, STOP and notify the user immediately. Do NOT silently skip.
 
+> **Anti-Skip:** You are violating this rule if you start a non-trivial task without a Read call to the active workflow file. The compliance-status hook will show your progress — if it shows 0 steps, you have not read the workflow.
+
 ---
 
 ## 3. NON-NEGOTIABLE RULES
@@ -83,6 +87,12 @@ GSD steps MUST be invoked as slash commands in the correct phase order.
 - `README.md` MUST be updated to reflect current version, features, and changes before release. `/create-release` will block if README is stale.
 - Always strictly adhere to this file and CLAUDE.md 100%
 
+> **Anti-Skip:** You are violating this rule if:
+> - You produce source code without a skill invocation recorded in the state file (dev-cycle-check.sh will block you)
+> - You claim "I already covered X" instead of invoking the skill (record-skill.sh tracks invocations, not claims)
+> - You skip /gsd:verify-work at the end (completion-audit.sh will block your commit/push)
+> - You proceed past a review loop with fewer than 2 consecutive approvals
+
 ## 3a. Review Loop Enforcement
 
 Every review loop (spec review, plan review, code review, verification) **MUST iterate until the reviewer returns ✅ Approved TWICE IN A ROW**. A single clean pass is not sufficient — the reviewer must find no issues on two consecutive passes. There are NO exceptions.
@@ -95,6 +105,25 @@ You MUST NOT:
 - Count a single clean pass as done
 
 The loop is self-limiting: it ends when two consecutive clean passes are produced. Surface to the user only if the reviewer raises an issue it cannot resolve (e.g. requires a decision, a missing dependency, or an external constraint).
+
+## 3b. GSD Command Tracking
+
+After completing each GSD command, record a marker in the state file:
+
+```bash
+echo "gsd-discuss" >> ~/.claude/.silver-bullet/state    # after /gsd:discuss-phase
+echo "gsd-plan" >> ~/.claude/.silver-bullet/state       # after /gsd:plan-phase
+echo "gsd-execute" >> ~/.claude/.silver-bullet/state    # after /gsd:execute-phase
+echo "gsd-verify" >> ~/.claude/.silver-bullet/state     # after /gsd:verify-work
+```
+
+These markers enable dev-cycle-check.sh and completion-audit.sh to verify
+GSD commands were actually invoked, not just claimed. The same accepted
+fragility as quality-gate-stage-N markers applies: markers depend on
+Claude compliance, which is reinforced by the anti-skip text throughout
+this file.
+
+> **Anti-Skip:** You are violating this rule if you complete a GSD command without writing its marker. Future enforcement hooks will check for these markers.
 
 ---
 
@@ -132,6 +161,8 @@ and log "Mode fallback: defaulted to interactive" in the session log.
 - On completion: output structured summary (phases done, autonomous decisions, blockers queued,
   agents dispatched, commits made, virtual cost)
 
+> **Anti-Skip:** You are violating this rule if the mode file (~/.claude/.silver-bullet/mode) does not exist when you begin work. The compliance-status hook displays mode on every tool call — if it shows "unknown", you skipped this step.
+
 ---
 
 ## 5. Model Routing
@@ -152,6 +183,8 @@ If Opus permitted: switch to `claude-opus-4-6` for that phase, return to Sonnet 
 measurably incomplete output: fewer than 5 lines, contains `TBD`/`[TODO]`/`...` placeholders,
 or a step expected to produce a file produces none. Log escalation as an autonomous decision.
 
+> **Anti-Skip:** You are violating this rule if you enter Planning or Design phases without offering the Opus upgrade. Evidence: no model switch prompt in conversation before /gsd:discuss-phase or design skill invocation.
+
 ---
 
 ## 6. GSD / Superpowers Ownership Rules
@@ -171,6 +204,8 @@ capabilities only. Where both tools could apply, **GSD wins**.
   Superpowers' default path (`docs/superpowers/specs/`) is overridden — use `docs/specs/`.
 - **Code review**: Superpowers' review skills (`/requesting-code-review`,
   `/receiving-code-review`, `superpowers:code-reviewer`) are used for review only.
+
+> **Anti-Skip:** You are violating this rule if you use superpowers:executing-plans or superpowers:subagent-driven-development for project execution. The compliance-status hook shows "GSD owns execution" as a constant reminder.
 
 ---
 
@@ -287,3 +322,5 @@ the state file (`~/.claude/.silver-bullet/state`). Required markers:
 If any stage surfaces a blocker that cannot be resolved (e.g., upstream dependency
 issue, ambiguous design decision), log it under "Needs human review" and surface
 to the user before proceeding to the next stage.
+
+> **Anti-Skip:** You are violating this rule if you attempt /create-release without all four quality-gate-stage-N markers in the state file. completion-audit.sh will block the release. Each stage requires explicit /superpowers:verification-before-completion invocation — the marker alone is insufficient.
