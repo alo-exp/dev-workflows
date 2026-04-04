@@ -2,6 +2,27 @@
 
 ## [Unreleased]
 
+## 0.6.2 (2026-04-04)
+
+### Fixed
+- Enforcement layer count aligned to 7 across all surfaces (README, landing page, concepts page, compare page, search index, SENTINEL audit)
+- Step counts 19/23 → 20/24 on landing page hero pills, workflow tabs, and compare page
+- Landing page workflow tables completed: added missing step 20 (/create-release) for dev cycle and steps 22-24 for DevOps cycle
+- Landing page layer cards now match CLAUDE.md canonical 7-layer list (was missing Skill Tracker, had Stage Enforcer split into two)
+- Layer ordering aligned to CLAUDE.md canonical sequence across concepts page, search index, and README
+- PreToolUse → PostToolUse in landing page HARD STOP gate description
+- Broken relative link in compare page footer (help/ → ../help/)
+- Stale /tmp/ references in help reference page, search index, and using-silver-bullet skill
+- Test files updated from /tmp/.silver-bullet-* to ~/.claude/.silver-bullet/ paths
+- session-log-init sentinel subshell fully detached from pipeline (fixes test hangs)
+- session-log-init grep pattern updated to match new mode file path
+- SENTINEL audit doc updated: 8→7 layers, post-remediation note added
+- context.md updated: stale step counts, version, and branding
+- Missing Required badge on step 9 (/requesting-code-review) in dev cycle table
+- Stale worktree .claude/worktrees/agent-ad2bff3d removed
+- mkdir -p defense-in-depth added to completion-audit.sh
+- Plugin boundary check changed from substring grep to prefix match
+
 ## 0.6.1 (2026-04-03)
 
 ### Fix: Comprehensive cross-file consistency audit
