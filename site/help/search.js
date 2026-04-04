@@ -53,7 +53,7 @@ var IDX = [
     text:'Eight quality dimensions: modularity reusability scalability security reliability usability testability extensibility. All must pass before planning. Dispatches 8 parallel agents one per dimension in isolated worktrees. Hard stop on any failure. /quality-gates for app, /devops-quality-gates for IaC.' },
   { page:'Core Concepts', url:'/help/concepts/', anchor:'enforcement',
     title:'7 enforcement layers — 5 from Silver Bullet, 2 from GSD',
-    text:'Silver Bullet installs 5: 1 Skill tracker records invocations. 2 Stage enforcer hard stop if phase out of order. 3 Compliance status shows progress on every tool use. 4 Completion audit blocks git commit push deploy. 5 Redundant instructions plus anti-rationalization. GSD adds 2 more: workflow guard and context monitor. 7 total enforcement layers.' },
+    text:'7 enforcement layers: 1 Skill tracker records invocations. 2 Stage enforcer hard stop if phase out of order. 3 Compliance status shows progress on every tool use. 4 Completion audit blocks git commit push deploy. 5 GSD workflow guard detects edits outside /gsd commands. 6 GSD context monitor warns at low token budget. 7 Redundant instructions plus anti-rationalization.' },
   { page:'Core Concepts', url:'/help/concepts/', anchor:'session-modes',
     title:'Session modes — interactive and autonomous',
     text:'Interactive pauses at every phase gate. Autonomous drives start-to-finish logs decisions surfaces blockers at end. Written to ~/.claude/.silver-bullet/mode defaults to interactive if missing. Stall detection: same tool call 2+ times consecutive, 3+ calls no state change, 10+ calls no file written.' },
