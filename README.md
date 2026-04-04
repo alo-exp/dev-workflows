@@ -1,6 +1,6 @@
 # Silver Bullet
 
-**AI-native Software Engineering Process Orchestrator**
+**Agentic Process Orchestrator for AI-native Software Engineering & DevOps**
 
 > *"There is no single development, in either technology or management technique, which by itself promises even one order-of-magnitude improvement..."* — Fred Brooks, 1986
 

@@ -1,4 +1,4 @@
-# SDLC Gap Analysis: Silver Bullet as End-to-End SE Process Orchestrator
+# SDLC Gap Analysis: Silver Bullet as Agentic Process Orchestrator
 
 **Date:** 2026-04-02
 **Version:** v0.2.0
