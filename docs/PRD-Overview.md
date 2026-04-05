@@ -7,16 +7,36 @@ document during the FINALIZATION step of each phase.
 
 ## Product Vision
 
-TODO — Describe what this product is and who it is for (2–3 sentences).
+Silver Bullet is a Claude Code plugin for AI-native software engineers and DevOps practitioners
+who need reliable, step-skipping-proof agentic workflows. It combines GSD, Superpowers,
+Engineering, and Design plugins into a single orchestrated process enforced by 7 compliance layers
+so Claude can never silently skip planning, quality gates, testing, or review steps.
 
 ## Core Value
 
-TODO — The ONE thing that must work above all else. One sentence that drives prioritization.
+Single enforced workflow that eliminates the gap between "what AI should do" and "what AI actually
+does" — 7 compliance layers, zero single-point-of-bypass.
 
 ## Requirement Areas
 
-TODO — High-level groupings of requirements (not detailed specs — see `.planning/REQUIREMENTS.md`).
+### SB-R1: Separate silver-bullet.md from CLAUDE.md *(Complete — Phase 1)*
+All Silver Bullet enforcement instructions live in a dedicated `silver-bullet.md` at project root,
+separate from the user's `CLAUDE.md`. Update mode overwrites only `silver-bullet.md`. Conflict
+detection resolves contradictions between the two files interactively during setup.
+
+### SB-R2: Skill Enforcement Expansion *(Complete — Phase 2)*
+Four gap-filling skills promoted from informal or absent to explicitly enforced workflow gates:
+- `test-driven-development` — REQUIRED in EXECUTE for both full-dev and DevOps workflows
+- `tech-debt` — REQUIRED in FINALIZATION for both workflows (replaces inline prose note)
+- `accessibility-review` — REQUIRED when UI work is present in DISCUSS (WCAG 2.1 AA)
+- `incident-response` — Step 1 of the DevOps Incident Fast Path
+All four skills tracked in `all_tracked`; `test-driven-development` and `tech-debt` enforced via
+`required_deploy` so `completion-audit.sh` blocks commits if they are skipped.
 
 ## Out of Scope
 
-TODO — What this product explicitly does not do, and why.
+- Silver Bullet does not replace GSD, Superpowers, Engineering, or Design — it orchestrates them.
+  It never modifies third-party plugin files.
+- Silver Bullet does not implement project-specific business logic. It enforces workflow process
+  regardless of the underlying project type or tech stack.
+- Silver Bullet does not provide its own multi-agent execution engine — it delegates to GSD.

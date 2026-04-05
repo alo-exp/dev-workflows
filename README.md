@@ -8,7 +8,7 @@ Brooks was right then. AI changes the equation now.
 
 Silver Bullet is a Claude Code plugin that orchestrates the best open-source agentic workflows into one enforced process. It combines [GSD](https://github.com/gsd-build/get-shit-done) (multi-agent execution), [Superpowers](https://github.com/obra/superpowers) (code review, branch management), [Engineering](https://github.com/anthropics/knowledge-work-plugins/tree/main/engineering) (testing, docs, deploy), and [Design](https://github.com/anthropics/knowledge-work-plugins/tree/main/design) (design system, UX copy, accessibility) into a single orchestrated workflow — then enforces it with 7 layers of compliance so Claude can never skip steps.
 
-**Current version: v0.7.6** — Persistent permission mode configuration. Setup configures `defaultMode` in `.claude/settings.local.json` to eliminate repeated permission prompts across sessions.
+**Current version: v0.8.0** — Skill Enforcement Expansion. Four gap-filling skills promoted from informal to explicitly enforced workflow gates: `test-driven-development` (EXECUTE), `tech-debt` (FINALIZATION), `accessibility-review` (UI work), `incident-response` (DevOps Incident Fast Path).
 
 ## How It Works
 
@@ -157,7 +157,7 @@ That's it. Enforcement is now active.
 | # | Step | Source | Required |
 |---|------|--------|----------|
 | 13 | `/testing-strategy` | Engineering | **Yes** |
-| 14 | Tech-debt notes | Inline | No |
+| 14 | `/tech-debt` | Engineering | **Yes** |
 | 15 | `/documentation` | Engineering | **Yes** |
 | 16 | `/finishing-a-development-branch` | Superpowers | **Yes** |
 
@@ -247,10 +247,13 @@ Edit `.silver-bullet.json` in your project root:
   "skills": {
     "required_planning": ["quality-gates"],
     "required_deploy": [
+      "quality-gates",
       "code-review", "requesting-code-review", "receiving-code-review",
       "testing-strategy", "documentation",
       "finishing-a-development-branch", "deploy-checklist",
-      "create-release"
+      "create-release",
+      "verification-before-completion",
+      "test-driven-development", "tech-debt"
     ],
     "all_tracked": [
       "quality-gates", "blast-radius", "devops-quality-gates", "devops-skill-router",
