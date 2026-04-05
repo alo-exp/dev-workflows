@@ -28,3 +28,11 @@ Single enforced workflow that eliminates the gap between "what AI should do" and
 2. `CLAUDE.md.base` reduced to minimal scaffold referencing silver-bullet.md.
 3. Conflict detection runs interactively during setup.
 4. Update mode overwrites silver-bullet.md without confirmation.
+5. Four gap-filling skills are now explicit REQUIRED gates: `test-driven-development` (EXECUTE), `tech-debt` (FINALIZATION), `accessibility-review` (UI work conditional), `incident-response` (DevOps fast path).
+6. `test-driven-development` and `tech-debt` are in `required_deploy` — completion-audit blocks commits if skipped.
+
+## Current State
+
+Phase 2 complete — Skill Enforcement Expansion. Four skills promoted from informal to explicitly enforced.
+
+Last updated: 2026-04-05
