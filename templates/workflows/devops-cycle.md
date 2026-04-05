@@ -200,7 +200,7 @@ before proceeding.
 
 ---
 
-### Model Routing (once per session)
+### MODEL ROUTING (once per session)
 
 Before DISCUSS begins, ask:
 > Entering Planning phase. Use Opus (claude-opus-4-6) for deeper reasoning, or stay on Sonnet?
@@ -209,7 +209,7 @@ Autonomous mode: stay Sonnet; escalate silently only on measurably incomplete pl
 
 ---
 
-### Skill Discovery (once per task, before DISCUSS)
+### SKILL DISCOVERY (once per task, before DISCUSS)
 
 **What it does:** Scans installed skills and cross-references them against the current
 task to surface relevant capabilities before work begins.
@@ -468,7 +468,7 @@ consecutive clean passes -- do not shortcut this.
 
 ---
 
-### Post-Review Execution (only if items were accepted in review)
+### POST-REVIEW EXECUTION (only if items were accepted in Code Review)
 
 **What it does:** Creates and executes a plan to address accepted review items.
 
