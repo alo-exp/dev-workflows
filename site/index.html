@@ -728,6 +728,15 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
       <li><a href="compare/">Compare</a></li>
     </ul>
     <div style="display:flex;align-items:center;gap:10px">
+      <button id="theme-toggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()" style="
+        width:40px;height:40px;border-radius:50%;border:1px solid var(--border);
+        background:var(--bg-card);color:var(--text-secondary);font-size:1.1rem;
+        display:flex;align-items:center;justify-content:center;cursor:pointer;
+        transition:all .2s;flex-shrink:0;
+      " onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent-light)'"
+         onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-secondary)'">
+        <span id="icon-sun" style="display:none"><i data-lucide="sun"></i></span><span id="icon-moon"><i data-lucide="moon"></i></span>
+      </button>
       <a href="https://github.com/alo-exp/silver-bullet" class="nav-cta" target="_blank">GitHub</a>
     </div>
   </div>
@@ -1559,7 +1568,19 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
 <!-- ────── SCRIPTS ────── -->
 <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
 <script>
-document.documentElement.setAttribute('data-theme','dark');
+function applyTheme(dark) {
+  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+  document.getElementById('icon-sun').style.display = dark ? 'none' : '';
+  document.getElementById('icon-moon').style.display = dark ? '' : 'none';
+  localStorage.setItem('silver-bullet-theme', dark ? 'dark' : 'light');
+}
+function toggleTheme() {
+  applyTheme(document.documentElement.getAttribute('data-theme') !== 'dark');
+}
+(function(){
+  const saved = localStorage.getItem('silver-bullet-theme');
+  applyTheme(saved ? saved === 'dark' : true);
+})();
 
 // ── Scroll-triggered fade-in ──
 const observer = new IntersectionObserver((entries) => {
