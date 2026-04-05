@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# PostToolUse hook (matcher: Bash)
+# Pre+PostToolUse hook (matcher: Bash)
 # Detects git commit/push/deploy commands and blocks if workflow is incomplete.
 #
 # TWO-TIER ENFORCEMENT:

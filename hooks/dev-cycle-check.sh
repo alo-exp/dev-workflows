@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# PostToolUse hook (matcher: Edit|Write|Bash)
+# Pre+PostToolUse hook (matcher: Edit|Write|Bash)
 # Enforces four-stage workflow gate — blocks source edits if planning skills incomplete.
 
 # Security: restrict file creation permissions (user-only)

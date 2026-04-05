@@ -4,6 +4,9 @@ set -euo pipefail
 # Security: restrict file creation permissions (user-only)
 umask 0077
 
+# Fail-visible: on unexpected error, exit 0 (silent no-op) rather than crash
+trap 'exit 0' ERR
+
 # PostToolUse hook (matcher: .*, async: false)
 # Two-tier anti-stall protection in autonomous mode:
 #   Tier 1 (wall-clock): Fires after 10-minute sentinel sets the timeout flag

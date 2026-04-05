@@ -202,7 +202,7 @@ cd "$TMPDIR_TEST" && printf '%s' "$input" | bash "$HOOK" >/dev/null 2>/dev/null 
 assert_not_in_state "Edit tool event does not record anything" "Edit"
 teardown
 
-# Test 12: Empty skill name is ignored
+# Test 13: Empty skill name is ignored
 setup
 run_hook "" >/dev/null || true
 # State file should either not exist or be empty

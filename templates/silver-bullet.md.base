@@ -196,22 +196,24 @@ The loop is self-limiting: it ends when two consecutive clean passes are produce
 
 ## 3b. GSD Command Tracking
 
-After completing each GSD command, record a marker in the state file:
+GSD command markers are recorded **automatically** by `record-skill.sh` whenever a
+GSD command is invoked via the Skill tool. No manual state writes are needed or permitted
+— direct writes to the state file are blocked by `dev-cycle-check.sh` tamper detection.
 
-```bash
-echo "gsd-discuss" >> ~/.claude/.silver-bullet/state    # after /gsd:discuss-phase
-echo "gsd-plan" >> ~/.claude/.silver-bullet/state       # after /gsd:plan-phase
-echo "gsd-execute" >> ~/.claude/.silver-bullet/state    # after /gsd:execute-phase
-echo "gsd-verify" >> ~/.claude/.silver-bullet/state     # after /gsd:verify-work
-```
+When a GSD command is invoked via the Skill tool, `record-skill.sh` records the
+`gsd-` prefixed marker automatically:
 
-These markers enable dev-cycle-check.sh and completion-audit.sh to verify
-GSD commands were actually invoked, not just claimed. The same accepted
-fragility as quality-gate-stage-N markers applies: markers depend on
-Claude compliance, which is reinforced by the anti-skip text throughout
-this file.
+| Skill invocation | Recorded marker |
+|---|---|
+| `/gsd:discuss-phase` | `gsd-discuss-phase` |
+| `/gsd:plan-phase` | `gsd-plan-phase` |
+| `/gsd:execute-phase` | `gsd-execute-phase` |
+| `/gsd:verify-work` | `gsd-verify-work` |
+| `/gsd:ship` | `gsd-ship` |
 
-> **Anti-Skip:** You are violating this rule if you complete a GSD command without writing its marker. Future enforcement hooks will check for these markers.
+These markers allow `compliance-status.sh` to display a GSD phase counter (e.g. `GSD 3/5`).
+
+> **Anti-Skip:** You are violating this rule if you invoke a GSD command outside the Skill tool. Markers are recorded only by the PostToolUse:Skill hook — there is no other recording mechanism, and manual state writes are blocked.
 
 ---
 
