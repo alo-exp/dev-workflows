@@ -124,7 +124,7 @@ This will:
 - Check that all 4 plugin dependencies are installed
 - Auto-detect your project name, tech stack, and source directory
 - Ask whether this is an application or DevOps/infrastructure project
-- Create a `CLAUDE.md` with enforcement rules
+- Create `silver-bullet.md` (9-section enforcement guide) and `CLAUDE.md` (project instructions)
 - Create `.silver-bullet.json` with your project config
 - Copy the appropriate workflow file(s) to `docs/workflows/`
 - Create placeholder docs (`docs/PRD-Overview.md`, `docs/Architecture-and-Design.md`, etc.)
@@ -350,7 +350,8 @@ It detects the existing config and asks if you want to refresh templates while p
 Enforcement hooks (fire automatically)     Project files (created by /using-silver-bullet)
 ──────────────────────────────────────     ───────────────────────────────────────────────
 hooks/record-skill.sh                      .silver-bullet.json (config)
-  → records skill invocations              CLAUDE.md (enforcement rules)
+  → records skill invocations              silver-bullet.md (enforcement guide)
+                                           CLAUDE.md (project instructions)
                                            docs/workflows/full-dev-cycle.md (20 steps)
 hooks/dev-cycle-check.sh                   docs/workflows/devops-cycle.md (24 steps)
   → HARD STOP if planning incomplete
