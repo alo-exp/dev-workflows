@@ -241,6 +241,7 @@ footer a:hover{color:var(--accent-light)}
 
       <h3>Fast Path Steps</h3>
       <ol>
+        <li><strong>Invoke <code>/incident-response</code></strong> (<strong>required</strong>) — Establish severity classification, timeline, communication protocol, and rollback trigger criteria before any changes.</li>
         <li><strong>Document the incident</strong> — What is broken, what the proposed change is, expected outcome.</li>
         <li><strong>Run <code>/blast-radius</code></strong> — Required even in incidents. A rushed unreviewed change can make incidents worse. If CRITICAL blast radius, escalate to CAB before proceeding.</li>
         <li><strong>Apply the minimal change</strong> in the lowest affected environment first, verify, then promote.</li>
@@ -380,7 +381,7 @@ footer a:hover{color:var(--accent-light)}
         <div class="step-num" style="background:linear-gradient(135deg,var(--green),#047857)">7</div>
         <div>
           <div class="step-meta"><span class="step-title">/gsd:execute-phase</span><span class="badge badge-gsd">GSD</span><span class="badge badge-required">Required</span></div>
-          <p class="step-desc">Wave-based parallel execution. Each wave applies to the <strong>lowest environment only</strong> (dev or equivalent). Higher environments (staging, production) are promoted in the Environment Promotion section (steps 14–15) after all phases complete. For each resource change within a wave: run plan/dry-run output, confirm before apply, verify resource health after apply, commit atomically per task.</p>
+          <p class="step-desc">Wave-based parallel execution. Each wave applies to the <strong>lowest environment only</strong> (dev or equivalent). Higher environments (staging, production) are promoted in the Environment Promotion section (steps 14–15) after all phases complete. <strong>Before writing IaC implementation: invoke <code>/test-driven-development</code> (required) — red-green-refactor per task (Terratest / conftest / OPA for Terraform; helm test / BATS for Helm).</strong> Commit atomically per task.</p>
           <div class="step-output">→ Produces: atomic git commits (one per task), .planning/{phase}-{N}-SUMMARY.md</div>
         </div>
       </div>

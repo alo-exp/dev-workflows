@@ -271,7 +271,7 @@ footer a:hover{color:var(--accent-light)}
       <ul>
         <li><strong>New architectural decision:</strong> Write an ADR inline (title, status, context, decision, consequences)</li>
         <li><strong>New service or major component:</strong> <code>/system-design</code></li>
-        <li><strong>UI work:</strong> <code>/design-system</code> + <code>/ux-copy</code></li>
+        <li><strong>UI work:</strong> <code>/design-system</code> + <code>/ux-copy</code> + <code>/accessibility-review</code> (WCAG 2.1 AA — <strong>required when UI work is present</strong>)</li>
       </ul>
       <p>If any design sub-steps apply, Claude asks once before beginning them: "Entering Design phase. Use Opus, or stay on Sonnet?"</p>
 
@@ -311,7 +311,7 @@ footer a:hover{color:var(--accent-light)}
         <div class="step-num" style="background:linear-gradient(135deg,var(--green),#047857)">6</div>
         <div>
           <div class="step-meta"><span class="step-title">/gsd:execute-phase</span><span class="badge badge-gsd">GSD</span><span class="badge badge-required">Required</span></div>
-          <p class="step-desc">Wave-based parallel execution. GSD splits the plan into waves of independent tasks, dispatches each task as a separate agent in an isolated worktree, then runs a merge gate after each wave before the next begins. TDD principles apply per task. One atomic commit per task.</p>
+          <p class="step-desc">Wave-based parallel execution. GSD splits the plan into waves of independent tasks, dispatches each task as a separate agent in an isolated worktree, then runs a merge gate after each wave before the next begins. <strong>Before writing implementation code: invoke <code>/test-driven-development</code> (required) — red-green-refactor discipline per task.</strong> One atomic commit per task.</p>
           <div class="step-output">→ Produces: atomic git commits (one per task), .planning/{phase}-{N}-SUMMARY.md</div>
         </div>
       </div>
