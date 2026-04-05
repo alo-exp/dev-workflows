@@ -12,33 +12,45 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
 :root{
-  --bg-page:#f8f9fc;--bg-card:#ffffff;--bg-code:#f1f5f9;
-  --bg-hero:linear-gradient(135deg,#eef2ff 0%,#f5f3ff 50%,#fdf2f8 100%);
-  --accent:#4f46e5;--accent-light:#6366f1;--accent-glow:rgba(99,102,241,.1);
-  --accent2:#7c3aed;--accent3:#db2777;
+  --bg-page:#f3f4f6;
+  --bg-card:#ffffff;
+  --bg-card-hover:#eeeff2;
+  --bg-code:#e9eaed;
+  --bg-hero:linear-gradient(160deg,#c0c6cf 0%,#d4dae3 18%,#e8eaee 38%,#eceef2 52%,#e0e4e9 68%,#d0d5dc 84%,#c4c9d1 100%);
+  --chrome-gradient:linear-gradient(135deg,#374151 0%,#7a8ea0 28%,#d4dce6 50%,#7a8ea0 72%,#374151 100%);
+  --accent:#374151;--accent-light:#6b7280;--accent-glow:rgba(107,114,128,.1);
+  --accent2:#4b5563;--accent3:#6b7280;
   --green:#059669;--amber:#d97706;--red:#dc2626;--cyan:#0891b2;
   --text-primary:#0f172a;--text-secondary:#475569;--text-dim:#94a3b8;
-  --border:#e2e8f0;--border-hover:#cbd5e1;
+  --border:#d1d5db;--border-hover:#9ca3af;
   --radius:12px;--radius-lg:20px;--radius-sm:8px;
   --font-sans:'Inter',system-ui,-apple-system,sans-serif;
   --font-mono:'JetBrains Mono',monospace;
   --shadow-lg:0 20px 60px rgba(0,0,0,.08);
-  --shadow-glow:0 0 40px rgba(99,102,241,.06);
-  --nav-bg:rgba(248,249,252,.9);--nav-mobile-bg:rgba(248,249,252,.98);
-  --section-alt:rgba(241,245,249,.6);
+  --shadow-glow:0 0 40px rgba(107,114,128,.07);
+  --nav-bg:rgba(243,244,246,.9);--nav-mobile-bg:rgba(243,244,246,.98);
+  --section-alt:rgba(236,238,242,.6);
+  --table-row-hover:rgba(107,114,128,.03);
+  --skill-phase-border:rgba(209,213,219,.8);
 }
 [data-theme="dark"]{
-  --bg-page:#0a0a0f;--bg-card:#12121a;--bg-code:#1a1a2e;
-  --bg-hero:linear-gradient(135deg,#0a0a1a 0%,#0f0f2e 40%,#1a0a2e 100%);
-  --accent:#6366f1;--accent-light:#818cf8;--accent-glow:rgba(99,102,241,.15);
-  --accent2:#a78bfa;--accent3:#f472b6;
+  --bg-page:#0c0c0e;
+  --bg-card:#161618;
+  --bg-card-hover:#1e1e21;
+  --bg-code:#1a1a1d;
+  --bg-hero:linear-gradient(160deg,#060608 0%,#0a0a0e 28%,#0f1013 50%,#111316 65%,#0c0d10 82%,#070709 100%);
+  --chrome-gradient:linear-gradient(135deg,#6b7280 0%,#a4b4c2 28%,#dce6ee 50%,#a4b4c2 72%,#6b7280 100%);
+  --accent:#9ca3af;--accent-light:#c8d2da;--accent-glow:rgba(156,163,175,.15);
+  --accent2:#8fa0ad;--accent3:#b0bec8;
   --green:#34d399;--amber:#fbbf24;--red:#f87171;--cyan:#22d3ee;
-  --text-primary:#e2e8f0;--text-secondary:#94a3b8;--text-dim:#64748b;
-  --border:#1e293b;--border-hover:#334155;
-  --shadow-lg:0 20px 60px rgba(0,0,0,.4);
-  --shadow-glow:0 0 40px rgba(99,102,241,.08);
-  --nav-bg:rgba(10,10,15,.85);--nav-mobile-bg:rgba(10,10,15,.97);
-  --section-alt:rgba(18,18,26,.4);
+  --text-primary:#e8eaed;--text-secondary:#9ca3af;--text-dim:#6b7280;
+  --border:#26262a;--border-hover:#38383e;
+  --shadow-lg:0 20px 60px rgba(0,0,0,.5);
+  --shadow-glow:0 0 40px rgba(156,163,175,.07);
+  --nav-bg:rgba(12,12,14,.88);--nav-mobile-bg:rgba(12,12,14,.97);
+  --section-alt:rgba(20,20,23,.5);
+  --table-row-hover:rgba(156,163,175,.03);
+  --skill-phase-border:rgba(38,38,42,.6);
 }
 body,nav,.help-card{transition:background .25s,background-color .25s,border-color .25s,color .25s}
 body{font-family:var(--font-sans);background:var(--bg-page);color:var(--text-primary);line-height:1.7;overflow-x:hidden}
@@ -46,7 +58,7 @@ body{font-family:var(--font-sans);background:var(--bg-page);color:var(--text-pri
 /* NAV */
 nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 24px}
 nav .nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
-.nav-logo{font-weight:800;font-size:1rem;background:linear-gradient(135deg,var(--accent-light),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;letter-spacing:-.02em}
+.nav-logo{font-weight:800;font-size:1rem;background:var(--chrome-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;letter-spacing:-.02em}
 .nav-breadcrumb{font-size:.85rem;color:var(--text-secondary);display:flex;align-items:center;gap:8px}
 .nav-breadcrumb a{color:var(--text-secondary);text-decoration:none}
 .nav-breadcrumb a:hover{color:var(--accent-light)}
@@ -56,15 +68,15 @@ nav .nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;ju
 .theme-btn:hover{border-color:var(--accent);color:var(--accent-light)}
 /* HERO */
 .hero{background:var(--bg-hero);padding:120px 24px 80px;position:relative;overflow:hidden}
-.hero::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(99,102,241,.08) 0%,transparent 70%)}
+.hero::before{content:'';position:absolute;top:-200px;right:-200px;width:600px;height:600px;border-radius:50%;background:radial-gradient(circle,rgba(107,114,128,.08) 0%,transparent 70%)}
 .hero .container{position:relative;z-index:1;text-align:center}
-.hero .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.25);border-radius:999px;padding:6px 16px;font-size:.8rem;color:var(--accent-light);font-weight:500;margin-bottom:32px}
+.hero .badge{display:inline-flex;align-items:center;gap:8px;background:rgba(107,114,128,.1);border:1px solid rgba(107,114,128,.25);border-radius:999px;padding:6px 16px;font-size:.8rem;color:var(--accent-light);font-weight:500;margin-bottom:32px}
 .hero h1{font-size:clamp(2rem,4vw,3rem);font-weight:900;letter-spacing:-.04em;margin-bottom:16px;line-height:1.1}
 .hero p{font-size:1.1rem;color:var(--text-secondary);max-width:560px;margin:0 auto 40px;line-height:1.7}
 /* SEARCH BAR */
 .search-wrap{max-width:480px;margin:0 auto 0;position:relative}
 .search-wrap input{width:100%;padding:14px 20px 14px 48px;border-radius:999px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-primary);font-size:.95rem;font-family:var(--font-sans);outline:none;transition:border-color .2s,box-shadow .2s}
-.search-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(99,102,241,.1)}
+.search-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(107,114,128,.1)}
 .search-wrap .search-icon{position:absolute;left:18px;top:50%;transform:translateY(-50%);color:var(--text-dim);font-size:1rem}
 /* SECTIONS */
 section{padding:64px 0}
@@ -95,7 +107,7 @@ section:nth-child(even){background:var(--section-alt)}
 .quick-link:hover{border-color:var(--accent);color:var(--accent-light);transform:translateX(2px)}
 .quick-link .ql-icon{font-size:1.1rem}
 /* CALLOUT */
-.callout{background:linear-gradient(135deg,rgba(99,102,241,.08),rgba(167,139,250,.05));border:1px solid rgba(99,102,241,.2);border-radius:var(--radius-lg);padding:40px;text-align:center;max-width:680px;margin:0 auto}
+.callout{background:linear-gradient(135deg,rgba(200,210,222,.14),rgba(107,114,128,.07) 50%,rgba(180,194,210,.12));border:1px solid rgba(107,114,128,.2);border-radius:var(--radius-lg);padding:40px;text-align:center;max-width:680px;margin:0 auto}
 .callout p{font-size:1rem;color:var(--text-secondary);line-height:1.7}
 .callout strong{color:var(--text-primary)}
 /* FOOTER */
@@ -126,7 +138,6 @@ footer a:hover{color:var(--accent-light)}
       <span class="nav-breadcrumb"><span class="sep">/</span> Help Center</span>
     </div>
     <div class="nav-right">
-      <button class="theme-btn" onclick="toggleTheme()" id="theme-btn" title="Toggle theme">🌙</button>
     </div>
   </div>
 </nav>
@@ -194,7 +205,7 @@ footer a:hover{color:var(--accent-light)}
 
       <a href="concepts/" class="help-card" data-keywords="concepts skills hooks gsd superpowers quality gates session modes enforcement agents">
         <div class="card-icon">🧠</div>
-        <span class="card-badge" style="background:rgba(99,102,241,.12);color:var(--accent-light)">Fundamentals</span>
+        <span class="card-badge" style="background:rgba(107,114,128,.12);color:var(--accent-light)">Fundamentals</span>
         <h3>Core Concepts</h3>
         <p>Understand the building blocks: what skills and hooks are, how GSD and Superpowers interact, and why enforcement matters.</p>
         <ul class="card-topics">
@@ -209,7 +220,7 @@ footer a:hover{color:var(--accent-light)}
 
       <a href="dev-workflow/" class="help-card" data-keywords="software engineering workflow steps discuss plan execute verify code review ship release 20 steps">
         <div class="card-icon">⚙️</div>
-        <span class="card-badge" style="background:rgba(99,102,241,.12);color:var(--accent-light)">Workflow</span>
+        <span class="card-badge" style="background:rgba(107,114,128,.12);color:var(--accent-light)">Workflow</span>
         <h3>Software Engineering Workflow</h3>
         <p>The complete 20-step application development cycle, from session mode selection through release.</p>
         <ul class="card-topics">
@@ -287,7 +298,7 @@ footer a:hover{color:var(--accent-light)}
     <div class="footer-inner">
       <div><span style="font-weight:700;color:var(--text-secondary)">Silver Bullet</span> Help Center</div>
       <div style="font-size:.9rem;color:var(--text-secondary)">
-        Innovated at <a href="https://alolabs.dev" target="_blank" style="font-weight:700;background:linear-gradient(135deg,var(--accent-light),var(--accent2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none">&#256;lo Labs</a>
+        Innovated at <a href="https://alolabs.dev" target="_blank" style="font-weight:700;background:var(--chrome-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none">&#256;lo Labs</a>
       </div>
       <div class="footer-links">
         <a href="../">Home</a>
@@ -300,13 +311,7 @@ footer a:hover{color:var(--accent-light)}
 
 <script src="search.js"></script>
 <script>
-function applyTheme(dark){
-  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
-  document.getElementById('theme-btn').textContent=dark?'☀️':'🌙';
-  localStorage.setItem('silver-bullet-theme',dark?'dark':'light');
-}
-function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-theme')!=='dark')}
-(function(){const s=localStorage.getItem('silver-bullet-theme');applyTheme(s?s==='dark':false)})();
+document.documentElement.setAttribute('data-theme','dark');
 </script>
 </body>
 </html>

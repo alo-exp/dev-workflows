@@ -203,7 +203,7 @@ nav .nav-cta:hover{
   max-width:800px;margin:0 auto 56px;
 }
 .hero h1 .gradient{
-  background:linear-gradient(to left,#2d3748 0%,#6b7280 30%,#c8d6e0 60%,#eef2f6 80%,#ffffff 100%);
+  background:linear-gradient(to left,#374151 0%,#7a8ea0 50%,#d4dce6 100%);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
 }
 .hero .brooks-block{
@@ -728,15 +728,6 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
       <li><a href="compare/">Compare</a></li>
     </ul>
     <div style="display:flex;align-items:center;gap:10px">
-      <button id="theme-toggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()" style="
-        width:40px;height:40px;border-radius:50%;border:1px solid var(--border);
-        background:var(--bg-card);color:var(--text-secondary);font-size:1.1rem;
-        display:flex;align-items:center;justify-content:center;cursor:pointer;
-        transition:all .2s;flex-shrink:0;
-      " onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent-light)'"
-         onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-secondary)'">
-        <span id="icon-sun"><i data-lucide="sun"></i></span><span id="icon-moon" style="display:none"><i data-lucide="moon"></i></span>
-      </button>
       <a href="https://github.com/alo-exp/silver-bullet" class="nav-cta" target="_blank">GitHub</a>
     </div>
   </div>
@@ -1568,25 +1559,7 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
 <!-- ────── SCRIPTS ────── -->
 <script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
 <script>
-// ── Theme ──
-function applyTheme(dark) {
-  document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-  document.getElementById('icon-sun').style.display = dark ? '' : 'none';
-  document.getElementById('icon-moon').style.display = dark ? 'none' : '';
-  localStorage.setItem('silver-bullet-theme', dark ? 'dark' : 'light');
-}
-function toggleTheme() {
-  applyTheme(document.documentElement.getAttribute('data-theme') !== 'dark');
-}
-// Init: honour saved preference, fall back to system setting
-(function(){
-  const saved = localStorage.getItem('silver-bullet-theme');
-  if (saved) {
-    applyTheme(saved === 'dark');
-  } else {
-    applyTheme(window.matchMedia('(prefers-color-scheme: dark)').matches);
-  }
-})();
+document.documentElement.setAttribute('data-theme','dark');
 
 // ── Scroll-triggered fade-in ──
 const observer = new IntersectionObserver((entries) => {
