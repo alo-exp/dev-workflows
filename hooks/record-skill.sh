@@ -20,8 +20,8 @@ input=$(cat)
 skill=$(printf '%s' "$input" | jq -r '.tool_input.skill // ""')
 [[ -z "$skill" ]] && exit 0
 
-# Strip namespace prefixes (superpowers:, engineering:, design:, etc.)
-skill=$(printf '%s' "$skill" | sed 's/^[a-zA-Z_-]*://')
+# Strip namespace prefixes (superpowers:, engineering:, design:, context7-plugin:, etc.)
+skill=$(printf '%s' "$skill" | sed 's/^[a-zA-Z0-9_-]*://')
 
 # --- Resolve config file by walking up from $PWD ---
 config_file=""

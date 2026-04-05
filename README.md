@@ -257,11 +257,17 @@ Edit `.silver-bullet.json` in your project root:
     ],
     "all_tracked": [
       "quality-gates", "blast-radius", "devops-quality-gates", "devops-skill-router",
-      "design-system", "ux-copy", "architecture", "system-design",
+      "design-system", "ux-copy",
+      "architecture", "system-design",
       "code-review", "requesting-code-review", "receiving-code-review",
       "testing-strategy", "documentation",
       "finishing-a-development-branch", "deploy-checklist",
-      "create-release"
+      "create-release",
+      "modularity", "reusability", "scalability", "security",
+      "reliability", "usability", "testability", "extensibility",
+      "forensics", "using-silver-bullet",
+      "verification-before-completion",
+      "test-driven-development", "tech-debt", "accessibility-review", "incident-response"
     ]
   },
   "devops_plugins": {

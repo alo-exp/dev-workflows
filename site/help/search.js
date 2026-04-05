@@ -104,7 +104,7 @@ var IDX = [
     text:'Only runs if review items were accepted in Step 10. Step 11 /gsd:plan-phase creates plan for accepted review items same rigor as Step 5. Step 12 /gsd:execute-phase implements review-driven plan with atomic commits same model as Step 6. Otherwise loop to next phase.' },
   { page:'Dev Workflow', url:'/help/dev-workflow/', anchor:'finalization',
     title:'Steps 13–16 — Finalization',
-    text:'/testing-strategy test pyramid coverage goals tooling. Tech-debt notes docs/tech-debt.md. /documentation update README PRD-Overview Architecture Testing CICD KNOWLEDGE CHANGELOG. README must be updated here before release step 20. /finishing-a-development-branch rebase cleanup.' },
+    text:'/testing-strategy test pyramid coverage goals tooling. /tech-debt identify categorize prioritize technical debt docs/tech-debt.md required skill invocation. /documentation update README PRD-Overview Architecture Testing CICD KNOWLEDGE CHANGELOG. README must be updated here before release step 20. /finishing-a-development-branch rebase cleanup.' },
   { page:'Dev Workflow', url:'/help/dev-workflow/', anchor:'deployment',
     title:'Step 17 — CI/CD pipeline gate',
     text:'CI must be green before deployment. Run local verify commands then check gh run list. Interactive waits for confirmation. Autonomous polls every 30 seconds up to 10 minutes timeout. If CI red: fix push recheck. Do not proceed to deploy checklist while CI failing.' },
