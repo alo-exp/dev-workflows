@@ -8,7 +8,7 @@ Brooks was right then. AI changes the equation now.
 
 Silver Bullet is a Claude Code plugin that orchestrates the best open-source agentic workflows into one enforced process. It combines [GSD](https://github.com/gsd-build/get-shit-done) (multi-agent execution), [Superpowers](https://github.com/obra/superpowers) (code review, branch management), [Engineering](https://github.com/anthropics/knowledge-work-plugins/tree/main/engineering) (testing, docs, deploy), and [Design](https://github.com/anthropics/knowledge-work-plugins/tree/main/design) (design system, UX copy, accessibility) into one guided workflow with 7 layers of compliance. **You don't need to know GSD** -- Silver Bullet guides you through every step, explains what's happening, and handles errors. Just describe what you want to build.
 
-**Current version: v0.9.0** — GSD-Mainstay Retrofitting. Silver Bullet now guides users through 100% of GSD's process with zero prior GSD knowledge required. Workflow files rewritten as comprehensive orchestration guides with what/expect/fail for every step, GSD process knowledge embedded in enforcement instructions, forensics evolved with GSD-awareness routing, and smooth dev-to-DevOps transitions.
+**Current version: v0.9.1** — Code Review Triad cleanup + E2E test harness. Removes non-invokable `/code-review` step (was a GitHub PR command, never a Skill) from all enforcement gates; workflows are now 19-step (dev) and 23-step (DevOps). Adds `tests/test-app/` — a brownfield Express+SQLite todo app with 28 tests for smoke-testing the full SB workflow end-to-end.
 
 ## How It Works
 
