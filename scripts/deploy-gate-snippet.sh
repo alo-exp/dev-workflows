@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Security: restrict file creation permissions (user-only)
+umask 0077
+
 ###############################################################################
 # Deploy Gate Snippet — Silver Bullet
 #

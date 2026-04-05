@@ -293,7 +293,15 @@ If `NOT_SET`:
 > 2. **bypassPermissions** — approves everything, only for isolated environments
 > 3. **Skip** — keep current permission settings
 
-If user chooses `auto` or `bypassPermissions`:
+If user chooses `bypassPermissions`:
+> ⚠️ **Security confirmation required.** `bypassPermissions` disables all Claude Code permission guardrails permanently for this project.
+> Is this environment **fully isolated** (container, VM, or dedicated CI runner with no access to production systems, credentials, or sensitive files)?
+>
+> Reply **yes** to confirm isolation and proceed, or **no** to use `auto` instead.
+
+Only proceed to write `bypassPermissions` on explicit "yes" confirmation. If the user says "no" or is uncertain, set `auto` instead.
+
+If user chooses `auto` or confirmed `bypassPermissions`:
 - Read `.claude/settings.local.json` (create if absent with `{"permissions":{}}`)
 - Use Edit/Write to set `permissions.defaultMode` to the chosen value
 - This persists across sessions — no more repeated permission prompts

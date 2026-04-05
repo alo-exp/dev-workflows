@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Security: restrict file creation permissions (user-only)
+umask 0077
+
 # PostToolUse hook (matcher: .*, async: false)
 # Checks for ~/.claude/.silver-bullet/timeout flag set by session-log-init.sh sentinel.
 # Emits a non-blocking warning in autonomous mode when the flag is current.

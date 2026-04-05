@@ -3,6 +3,9 @@
 # Exits immediately for non-GSD-phase skills (< 10ms overhead).
 set -euo pipefail
 
+# Security: restrict file creation permissions (user-only)
+umask 0077
+
 command -v jq >/dev/null 2>&1 || exit 0
 
 input=$(cat 2>/dev/null || true)

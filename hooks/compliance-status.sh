@@ -95,6 +95,11 @@ if [[ -f "$mode_file" ]]; then
 else
   mode="interactive"
 fi
+# Validate mode value against allowlist (prevents JSON injection via mode file)
+case "$mode" in
+  interactive|autonomous) ;;
+  *) mode="interactive" ;;
+esac
 
 # If no state file exists → early output with zeros
 if [[ ! -f "$state_file" ]]; then

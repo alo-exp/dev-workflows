@@ -89,6 +89,10 @@ See CLAUDE.md §8 for details."
   if [[ -n "$config_file" ]]; then
     src_pattern=$(jq -r '.project.src_pattern // "/src/"' "$config_file")
     src_exclude_pattern=$(jq -r '.project.src_exclude_pattern // "__tests__|\\.test\\."' "$config_file")
+    # Validate exclude pattern: reject patterns > 200 chars (ReDoS mitigation)
+    if [[ ${#src_exclude_pattern} -gt 200 ]]; then
+      src_exclude_pattern='__tests__|\.test\.'
+    fi
     active_workflow=$(jq -r '.project.active_workflow // "full-dev-cycle"' "$config_file")
     custom_planning=$(jq -r '(.skills.required_planning // []) | join(" ")' "$config_file")
     [[ -n "$custom_planning" ]] && required_planning="$custom_planning"
@@ -105,6 +109,12 @@ See CLAUDE.md §8 for details."
   case "$state_file" in
     "$HOME"/.claude/*) ;;
     *) state_file="${SB_STATE_DIR}/state" ;;
+  esac
+
+  # Security: validate trivial file path stays within ~/.claude/ (SB-002/SB-003)
+  case "$trivial_file" in
+    "$HOME"/.claude/*) ;;
+    *) trivial_file="${SB_STATE_DIR}/trivial" ;;
   esac
 
   # --- Check if file/command matches src_pattern ---
@@ -129,7 +139,7 @@ See CLAUDE.md §8 for details."
   fi
 
   # --- Check trivial file override ---
-  if [[ -f "$trivial_file" ]]; then
+  if [[ -f "$trivial_file" && ! -L "$trivial_file" ]]; then
     exit 0
   fi
 

@@ -145,6 +145,9 @@ Use defaults for any skipped questions. Log each suppressed question under
 **Persistent permission mode**: If the user reports that Claude Code keeps asking
 for permissions despite setting bypass-permissions, the issue is that the UI toggle
 only applies to the current session. To persist it, add to `.claude/settings.local.json`:
+
+> ⚠️ **CAUTION — bypassPermissions:** Only use this setting in a **fully isolated environment** (container, VM, or dedicated CI runner with no access to production systems, credentials, or sensitive files). Verify isolation **before** applying this setting. Misuse in non-isolated environments permanently disables all Claude Code permission guardrails.
+
 ```json
 {"permissions":{"defaultMode":"bypassPermissions"}}
 ```

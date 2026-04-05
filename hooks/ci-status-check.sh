@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+# Security: restrict file creation permissions (user-only)
+umask 0077
+
 # PostToolUse hook (matcher: Bash)
 # After git commit or push, checks last completed CI run status.
 # BLOCKING on failure — outputs decision:block and instructs immediate /gsd:debug.
