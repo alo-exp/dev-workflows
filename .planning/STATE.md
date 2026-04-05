@@ -1,26 +1,27 @@
 ---
 gsd_state_version: 1.0
-milestone: v0.7.0
+milestone: v0.9.0
 milestone_name: milestone
-current_plan: Not started
-status: "Phase 02 shipped — pushed to main, no PR (branching_strategy: none)"
-last_updated: "2026-04-05T01:12:34.667Z"
-last_activity: 2026-04-05
+current_plan: Ready to plan
+status: Ready to plan
+stopped_at: Completed 01-02-PLAN.md
+last_updated: "2026-04-05T03:06:43Z"
+last_activity: 2026-04-05 -- Completed 01-02 devops-cycle.md rewrite
 progress:
-  total_phases: 2
-  completed_phases: 2
-  total_plans: 3
-  completed_plans: 3
+  total_phases: 5
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
 ---
 
 # Project State
 
 **Project:** Silver Bullet
-**Current version:** v0.7.4
-**Active phase:** Phase 2 — Skill Enforcement Expansion
-**Current plan:** Not started
+**Current version:** v0.8.0
+**Active phase:** Phase 1 -- Workflow File Rewrites
+**Current plan:** Ready to plan
 
-Last activity: 2026-04-05
+Last activity: 2026-04-05 -- Completed 01-02 devops-cycle.md rewrite
 
 ## Decisions
 
@@ -31,6 +32,13 @@ Last activity: 2026-04-05
 - §9 Stage 3 is Content Refresh (security runs last as Stage 4), Stage 2 has 5-dimension cross-plugin audit
 - [Phase 02-skill-enforcement-expansion]: test-driven-development and tech-debt added to required_deploy (hard enforcement gates for all dev work)
 - [Phase 02-skill-enforcement-expansion]: accessibility-review and incident-response in all_tracked only (conditional skills — not universally required)
+- [v0.9.0] GSD owns execution, SB owns orchestration + quality enforcement
+- [v0.9.0] Forensics: evolve with GSD-awareness routing, not remove
+- [v0.9.0] 20 core + select utility GSD commands guided; admin commands not guided
+- [v0.9.0] TRANS requirements grouped into Phase 1 with ORCH (workflow files own transition logic)
+- [v0.9.0] DOC-03 (hook verification) grouped with Phase 4 (template parity) not Phase 5 (docs)
+- [01-02]: DevOps cycle 795 lines (above 750 target, within 550-850 range) to accommodate full DevOps coverage
+- [01-02]: Session Mode before Incident Fast Path (session setup first, then emergency path)
 
 ### Quick Tasks Completed
 
@@ -48,3 +56,9 @@ Last activity: 2026-04-05
 | 01    | 01   | 464s     | 4     | 8     |
 | 02    | 02   | 1min     | 2     | 2     |
 | Phase 02-skill-enforcement-expansion P01 | 89 | 3 tasks | 3 files |
+| 01-workflow-file-rewrites | 02 | 9min | 1 | 1 |
+
+## Session Continuity
+
+Last session: 2026-04-05T03:06:43Z
+Stopped at: Completed 01-02-PLAN.md

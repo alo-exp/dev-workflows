@@ -5,7 +5,7 @@
 
 **Requirements:** [SB-R1]
 
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 
 Plans:
 - [x] 01-PLAN.md — Create silver-bullet.md template, simplify CLAUDE.md template, update setup skill, dogfood, update help site
