@@ -684,6 +684,10 @@ footer .footer-links{display:flex;gap:24px}
   .mt-6{margin-top:56px}
   .mb-4{margin-bottom:40px}
 }
+/* ───── LUCIDE ICONS ───── */
+svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;stroke-width:1.5;stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round}
+.nav-toggle svg.lucide{width:1.4rem;height:1.4rem}
+#theme-toggle svg.lucide{width:1.1rem;height:1.1rem}
 </style>
 </head>
 <body>
@@ -692,7 +696,7 @@ footer .footer-links{display:flex;gap:24px}
 <nav>
   <div class="nav-inner">
     <span class="logo">Silver Bullet</span>
-    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')" aria-label="Toggle menu">&#9776;</button>
+    <button class="nav-toggle" onclick="document.querySelector('.nav-links').classList.toggle('active')" aria-label="Toggle menu"><i data-lucide="menu"></i></button>
     <ul class="nav-links">
       <li><a href="#problem">Problem</a></li>
       <li><a href="#solution">How It Works</a></li>
@@ -712,7 +716,7 @@ footer .footer-links{display:flex;gap:24px}
         transition:all .2s;flex-shrink:0;
       " onmouseover="this.style.borderColor='var(--accent)';this.style.color='var(--accent-light)'"
          onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-secondary)'">
-        <span id="theme-icon">&#9728;&#65039;</span>
+        <span id="icon-sun"><i data-lucide="sun"></i></span><span id="icon-moon" style="display:none"><i data-lucide="moon"></i></span>
       </button>
       <a href="https://github.com/alo-exp/silver-bullet" class="nav-cta" target="_blank">GitHub</a>
     </div>
@@ -765,22 +769,22 @@ footer .footer-links{display:flex;gap:24px}
     </div>
     <div class="grid grid-4 mt-6">
       <div class="feature-card fade-in">
-        <div class="feature-icon" style="background:rgba(99,102,241,.12);color:var(--accent-light);font-size:1.6rem">&#9889;</div>
+        <div class="feature-icon" style="background:rgba(99,102,241,.12);color:var(--accent-light);font-size:1.6rem"><i data-lucide="skip-forward"></i></div>
         <h3>Skipped Planning</h3>
         <p>Claude jumps straight to coding. No brainstorming, no spec, no design review. The path of least resistance is always to just start writing code.</p>
       </div>
       <div class="feature-card fade-in">
-        <div class="feature-icon" style="background:rgba(244,114,182,.12);color:var(--accent3);font-size:1.6rem">&#129537;</div>
+        <div class="feature-icon" style="background:rgba(244,114,182,.12);color:var(--accent3);font-size:1.6rem"><i data-lucide="shield-off"></i></div>
         <h3>No Quality Gates</h3>
         <p>Security, scalability, and reliability are afterthoughts &mdash; not enforced checkpoints. Modularity and testability are never considered before implementation.</p>
       </div>
       <div class="feature-card fade-in">
-        <div class="feature-icon" style="background:rgba(52,211,153,.12);color:var(--green);font-size:1.6rem">&#127937;</div>
+        <div class="feature-icon" style="background:rgba(52,211,153,.12);color:var(--green);font-size:1.6rem"><i data-lucide="flag"></i></div>
         <h3>Premature Completion</h3>
         <p>Work is declared &ldquo;done&rdquo; without code review, testing strategy, or verification. Commits happen before the workflow is complete.</p>
       </div>
       <div class="feature-card fade-in">
-        <div class="feature-icon" style="background:rgba(251,191,36,.12);color:var(--amber);font-size:1.6rem">&#128165;</div>
+        <div class="feature-icon" style="background:rgba(251,191,36,.12);color:var(--amber);font-size:1.6rem"><i data-lucide="activity"></i></div>
         <h3>Context Rot</h3>
         <p>As the context window fills, output quality silently degrades. The best workflows in the world mean nothing if the agent is operating on a rotting context.</p>
       </div>
@@ -788,7 +792,7 @@ footer .footer-links{display:flex;gap:24px}
 
     <div class="mt-6">
       <div class="callout fade-in">
-        <div class="callout-icon">&#128161;</div>
+        <div class="callout-icon"><i data-lucide="lightbulb"></i></div>
         <p><strong>The root cause:</strong> Great workflows exist. Great enforcement tools exist. Great execution engines exist. But they&rsquo;ve never been combined into a single, coherent, enforced system &mdash; until Silver Bullet.</p>
       </div>
     </div>
@@ -810,22 +814,22 @@ footer .footer-links{display:flex;gap:24px}
     </div>
     <div class="feature-grid mt-4 fade-in">
       <div class="feature-card">
-        <div class="feature-icon">&#127381;</div>
+        <div class="feature-icon"><i data-lucide="rocket"></i></div>
         <h3>Best Open-Source Execution</h3>
         <p>GSD brings wave-based parallel execution, fresh 200K context per task, atomic per-task commits, and requirements traceability &mdash; the most sophisticated execution engine available.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">&#128203;</div>
+        <div class="feature-icon"><i data-lucide="sparkles"></i></div>
         <h3>Best Community Skills</h3>
         <p>Superpowers, Engineering, and Design plugins contribute peer code review, deploy checklists, testing strategy, design system audits, and UX copy review &mdash; each covering its specialty.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">&#129536;</div>
+        <div class="feature-icon"><i data-lucide="git-branch"></i></div>
         <h3>Two Workflow Modes</h3>
         <p>20-step <strong>full-dev-cycle</strong> for app development with 8 quality dimensions. 24-step <strong>devops-cycle</strong> for IaC/infrastructure with blast radius assessment and 7 IaC-adapted quality gates.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon">&#128274;</div>
+        <div class="feature-icon"><i data-lucide="shield"></i></div>
         <h3>7 Enforcement Layers</h3>
         <p>Silver Bullet&rsquo;s PostToolUse hooks plus GSD&rsquo;s workflow guard and context monitor form seven independent enforcement layers. No single point of bypass.</p>
       </div>
@@ -850,7 +854,7 @@ footer .footer-links{display:flex;gap:24px}
     <div class="ecosystem-grid mt-6">
 
       <div class="ecosystem-card primary-plugin fade-in">
-        <div class="plugin-logo">&#127381;</div>
+        <div class="plugin-logo"><i data-lucide="rocket"></i></div>
         <div class="plugin-name">GSD</div>
         <div class="plugin-role">get-shit-done &mdash; Execution Engine</div>
         <div class="plugin-desc">The most sophisticated agentic execution system in the community. Solves context rot at the architectural level by giving every task a fresh 200K-token context window.</div>
@@ -869,7 +873,7 @@ footer .footer-links{display:flex;gap:24px}
       </div>
 
       <div class="ecosystem-card fade-in">
-        <div class="plugin-logo">&#9889;</div>
+        <div class="plugin-logo"><i data-lucide="zap"></i></div>
         <div class="plugin-name">Superpowers</div>
         <div class="plugin-role">obra/superpowers &mdash; Dev Skills</div>
         <div class="plugin-desc">The community&rsquo;s most-used Claude Code skill set. Covers the human-review workflow that GSD doesn&rsquo;t: peer code review, branch management, and cross-session memory.</div>
@@ -885,7 +889,7 @@ footer .footer-links{display:flex;gap:24px}
       </div>
 
       <div class="ecosystem-card fade-in">
-        <div class="plugin-logo">&#128296;</div>
+        <div class="plugin-logo"><i data-lucide="hammer"></i></div>
         <div class="plugin-name">Engineering</div>
         <div class="plugin-role">Anthropic &mdash; Quality Assurance</div>
         <div class="plugin-desc">Anthropic&rsquo;s engineering best practices plugin. Covers the quality assurance and deployment gates that complete the post-execution workflow.</div>
@@ -901,7 +905,7 @@ footer .footer-links{display:flex;gap:24px}
       </div>
 
       <div class="ecosystem-card fade-in">
-        <div class="plugin-logo">&#127912;</div>
+        <div class="plugin-logo"><i data-lucide="palette"></i></div>
         <div class="plugin-name">Design</div>
         <div class="plugin-role">Anthropic &mdash; UI/UX Validation</div>
         <div class="plugin-desc">Anthropic&rsquo;s design plugin for UI phases. Invoked conditionally when a phase involves user-facing work, covering design system integrity and UX copy quality.</div>
@@ -920,7 +924,7 @@ footer .footer-links{display:flex;gap:24px}
 
     <div class="mt-6">
       <div class="callout fade-in">
-        <div class="callout-icon">&#127760;</div>
+        <div class="callout-icon"><i data-lucide="globe"></i></div>
         <p><strong>Silver Bullet is the orchestration layer.</strong> It defines the order these plugins are invoked, enforces that none are skipped, injects quality gate criteria into GSD&rsquo;s planning agents, and adds the seven-layer compliance enforcement that none of these plugins provide on their own.</p>
       </div>
     </div>
@@ -935,7 +939,7 @@ footer .footer-links{display:flex;gap:24px}
     <div class="devops-grid mt-6">
 
       <div class="devops-card fade-in">
-        <div class="plugin-logo">&#9881;&#65039;</div>
+        <div class="plugin-logo"><i data-lucide="settings-2"></i></div>
         <div class="optional-badge">Optional</div>
         <div class="plugin-name">HashiCorp</div>
         <div class="plugin-role">hashicorp/agent-skills</div>
@@ -949,7 +953,7 @@ footer .footer-links{display:flex;gap:24px}
       </div>
 
       <div class="devops-card fade-in">
-        <div class="plugin-logo">&#9729;&#65039;</div>
+        <div class="plugin-logo"><i data-lucide="cloud"></i></div>
         <div class="optional-badge">Optional</div>
         <div class="plugin-name">AWS Labs</div>
         <div class="plugin-role">awslabs/agent-plugins</div>
@@ -963,7 +967,7 @@ footer .footer-links{display:flex;gap:24px}
       </div>
 
       <div class="devops-card fade-in">
-        <div class="plugin-logo">&#128640;</div>
+        <div class="plugin-logo"><i data-lucide="server"></i></div>
         <div class="optional-badge">Optional</div>
         <div class="plugin-name">Pulumi</div>
         <div class="plugin-role">pulumi/agent-skills</div>
@@ -977,7 +981,7 @@ footer .footer-links{display:flex;gap:24px}
       </div>
 
       <div class="devops-card fade-in">
-        <div class="plugin-logo">&#128295;</div>
+        <div class="plugin-logo"><i data-lucide="wrench"></i></div>
         <div class="optional-badge">Optional</div>
         <div class="plugin-name">DevOps Skills</div>
         <div class="plugin-role">ahmedasmar/devops-claude-skills</div>
@@ -991,7 +995,7 @@ footer .footer-links{display:flex;gap:24px}
       </div>
 
       <div class="devops-card fade-in">
-        <div class="plugin-logo">&#9784;&#65039;</div>
+        <div class="plugin-logo"><i data-lucide="orbit"></i></div>
         <div class="optional-badge">Optional</div>
         <div class="plugin-name">wshobson/agents</div>
         <div class="plugin-role">Kubernetes Operations</div>
@@ -1008,7 +1012,7 @@ footer .footer-links{display:flex;gap:24px}
 
     <div class="mt-6">
       <div class="callout fade-in">
-        <div class="callout-icon">&#128268;</div>
+        <div class="callout-icon"><i data-lucide="plug"></i></div>
         <p><strong>Smart skill routing, not hard dependencies.</strong> Silver Bullet&rsquo;s <code>/devops-skill-router</code> detects which plugins are installed and maps each context (Terraform authoring, k8s troubleshooting, AWS deployment) to the best available skill with automatic fallback chains. No plugin is required &mdash; the workflow runs without them, but is significantly richer with them.</p>
       </div>
     </div>
@@ -1124,17 +1128,17 @@ footer .footer-links{display:flex;gap:24px}
 
     <div class="grid grid-3 mt-6">
       <div class="feature-card fade-in">
-        <div class="feature-icon" style="background:rgba(99,102,241,.12);color:var(--accent-light);font-size:1.6rem">&#129504;</div>
+        <div class="feature-icon" style="background:rgba(99,102,241,.12);color:var(--accent-light);font-size:1.6rem"><i data-lucide="brain"></i></div>
         <h3>Opus: Deep Reasoning</h3>
         <p>Planning, architecture decisions, security audits, verification, and quality gates. Tasks where thoroughness and nuance directly impact project quality.</p>
       </div>
       <div class="feature-card fade-in">
-        <div class="feature-icon" style="background:rgba(52,211,153,.12);color:var(--green);font-size:1.6rem">&#9889;</div>
+        <div class="feature-icon" style="background:rgba(52,211,153,.12);color:var(--green);font-size:1.6rem"><i data-lucide="zap"></i></div>
         <h3>Sonnet: High Throughput</h3>
         <p>Code execution, documentation, research, testing, and codebase mapping. Tasks where speed and volume matter more than maximum depth.</p>
       </div>
       <div class="feature-card fade-in">
-        <div class="feature-icon" style="background:rgba(251,191,36,.12);color:var(--amber);font-size:1.6rem">&#128176;</div>
+        <div class="feature-icon" style="background:rgba(251,191,36,.12);color:var(--amber);font-size:1.6rem"><i data-lucide="coins"></i></div>
         <h3>40&ndash;60% Cost Reduction</h3>
         <p>Running everything on Opus is like using a sports car for grocery runs. Automatic model switching gives each task the right engine &mdash; and keeps your token bill from spiraling.</p>
       </div>
@@ -1142,7 +1146,7 @@ footer .footer-links{display:flex;gap:24px}
 
     <div class="mt-8">
       <div class="callout fade-in" style="max-width:720px">
-        <div class="callout-icon">&#128268;</div>
+        <div class="callout-icon"><i data-lucide="plug-zap"></i></div>
         <p><strong>Automatic, not manual.</strong> Model assignments are baked into each agent definition. When Silver Bullet spawns a planner, it runs on Opus. When it spawns an executor, it runs on Sonnet. No configuration needed &mdash; the routing is built into the system.</p>
       </div>
     </div>
@@ -1222,49 +1226,49 @@ footer .footer-links{display:flex;gap:24px}
     </div>
     <div class="grid grid-4 mt-6">
       <div class="feature-card fade-in">
-        <div class="feature-icon" style="background:rgba(167,139,250,.12);color:var(--accent2)">&#9650;</div>
+        <div class="feature-icon" style="background:rgba(167,139,250,.12);color:var(--accent2)"><i data-lucide="boxes"></i></div>
         <h3>Modularity</h3>
         <p style="font-size:.85rem">Small, focused modules. File size limits. Change locality max 3&ndash;5 files. Single responsibility enforced.</p>
         <span class="tag tag-purple mt-2" style="margin-top:12px;display:inline-block">/quality-gates</span>
       </div>
       <div class="feature-card fade-in">
-        <div class="feature-icon" style="background:rgba(99,102,241,.12);color:var(--accent-light)">&#9854;</div>
+        <div class="feature-icon" style="background:rgba(99,102,241,.12);color:var(--accent-light)"><i data-lucide="copy"></i></div>
         <h3>Reusability</h3>
         <p style="font-size:.85rem">DRY, composable components. Rule of Three. No duplication across the codebase.</p>
         <span class="tag tag-indigo mt-2" style="margin-top:12px;display:inline-block">/quality-gates</span>
       </div>
       <div class="feature-card fade-in">
-        <div class="feature-icon" style="background:rgba(34,211,238,.12);color:var(--cyan)">&#128200;</div>
+        <div class="feature-icon" style="background:rgba(34,211,238,.12);color:var(--cyan)"><i data-lucide="trending-up"></i></div>
         <h3>Scalability</h3>
         <p style="font-size:.85rem">Stateless by default. Indexed queries. Async processing. Resource limits defined upfront.</p>
         <span class="tag tag-cyan mt-2" style="margin-top:12px;display:inline-block">/quality-gates</span>
       </div>
       <div class="feature-card fade-in">
-        <div class="feature-icon" style="background:rgba(244,114,182,.12);color:var(--accent3)">&#129537;</div>
+        <div class="feature-icon" style="background:rgba(244,114,182,.12);color:var(--accent3)"><i data-lucide="shield-check"></i></div>
         <h3>Security</h3>
         <p style="font-size:.85rem">OWASP Top 10. Input validation. Secrets management. Defense in depth. No trust boundaries crossed.</p>
         <span class="tag tag-pink mt-2" style="margin-top:12px;display:inline-block">/quality-gates</span>
       </div>
       <div class="feature-card fade-in">
-        <div class="feature-icon" style="background:rgba(52,211,153,.12);color:var(--green)">&#128994;</div>
+        <div class="feature-icon" style="background:rgba(52,211,153,.12);color:var(--green)"><i data-lucide="heart-pulse"></i></div>
         <h3>Reliability</h3>
         <p style="font-size:.85rem">Fault tolerance. Retries with backoff. Circuit breakers. Graceful degradation under load.</p>
         <span class="tag tag-green mt-2" style="margin-top:12px;display:inline-block">/quality-gates</span>
       </div>
       <div class="feature-card fade-in">
-        <div class="feature-icon" style="background:rgba(251,191,36,.12);color:var(--amber)">&#127919;</div>
+        <div class="feature-icon" style="background:rgba(251,191,36,.12);color:var(--amber)"><i data-lucide="target"></i></div>
         <h3>Usability</h3>
         <p style="font-size:.85rem">Intuitive APIs. Actionable error messages. Accessibility. Progressive disclosure of complexity.</p>
         <span class="tag tag-amber mt-2" style="margin-top:12px;display:inline-block">/quality-gates</span>
       </div>
       <div class="feature-card fade-in">
-        <div class="feature-icon" style="background:rgba(99,102,241,.12);color:var(--accent-light)">&#128299;</div>
+        <div class="feature-icon" style="background:rgba(99,102,241,.12);color:var(--accent-light)"><i data-lucide="flask-conical"></i></div>
         <h3>Testability</h3>
         <p style="font-size:.85rem">Dependency injection. Pure functions. Test seams. Deterministic behavior. No hidden state.</p>
         <span class="tag tag-indigo mt-2" style="margin-top:12px;display:inline-block">/quality-gates</span>
       </div>
       <div class="feature-card fade-in">
-        <div class="feature-icon" style="background:rgba(167,139,250,.12);color:var(--accent2)">&#128268;</div>
+        <div class="feature-icon" style="background:rgba(167,139,250,.12);color:var(--accent2)"><i data-lucide="puzzle"></i></div>
         <h3>Extensibility</h3>
         <p style="font-size:.85rem">Open-closed principle. Plugin architecture. Versioned interfaces. Change without breakage.</p>
         <span class="tag tag-purple mt-2" style="margin-top:12px;display:inline-block">/quality-gates</span>
@@ -1273,7 +1277,7 @@ footer .footer-links{display:flex;gap:24px}
 
     <div class="mt-6">
       <div class="callout fade-in">
-        <div class="callout-icon">&#128165;</div>
+        <div class="callout-icon"><i data-lucide="alert-triangle"></i></div>
         <p><strong>DevOps Cycle: Blast Radius First.</strong> Before quality gates, the devops-cycle requires a <code>/blast-radius</code> assessment &mdash; mapping change scope, downstream dependencies, failure scenarios, and rollback plans. Changes rated HIGH require explicit approval and a runbook. CRITICAL changes are a hard stop requiring CAB review.</p>
       </div>
     </div>
@@ -1505,7 +1509,7 @@ footer .footer-links{display:flex;gap:24px}
 
     <div class="mt-6">
       <div class="callout fade-in">
-        <div class="callout-icon">&#9889;</div>
+        <div class="callout-icon"><i data-lucide="zap"></i></div>
         <p><strong>Enforcement starts immediately.</strong><br>
         After running <code>/using-silver-bullet</code>, hooks are active and the workflow is live. For app projects, the 20-step full-dev-cycle activates. For DevOps projects, the 24-step devops-cycle activates with blast radius assessment, IaC-adapted quality gates, and automatic detection of installed DevOps plugins.</p>
       </div>
@@ -1543,11 +1547,13 @@ footer .footer-links{display:flex;gap:24px}
 </footer>
 
 <!-- ────── SCRIPTS ────── -->
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
 <script>
 // ── Theme ──
 function applyTheme(dark) {
   document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-  document.getElementById('theme-icon').textContent = dark ? '☀️' : '🌙';
+  document.getElementById('icon-sun').style.display = dark ? '' : 'none';
+  document.getElementById('icon-moon').style.display = dark ? 'none' : '';
   localStorage.setItem('silver-bullet-theme', dark ? 'dark' : 'light');
 }
 function toggleTheme() {
@@ -1570,6 +1576,9 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+// ── Lucide icons ──
+lucide.createIcons();
 
 // ── Workflow tab switcher ──
 function switchWorkflow(mode) {
