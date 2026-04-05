@@ -16,7 +16,8 @@
       "testing-strategy", "documentation",
       "finishing-a-development-branch", "deploy-checklist",
       "create-release",
-      "verification-before-completion"
+      "verification-before-completion",
+      "test-driven-development", "tech-debt"
     ],
     "all_tracked": [
       "quality-gates", "blast-radius", "devops-quality-gates", "devops-skill-router",
@@ -29,7 +30,8 @@
       "modularity", "reusability", "scalability", "security",
       "reliability", "usability", "testability", "extensibility",
       "forensics", "using-silver-bullet",
-      "verification-before-completion"
+      "verification-before-completion",
+      "test-driven-development", "tech-debt", "accessibility-review", "incident-response"
     ]
   },
   "devops_plugins": {

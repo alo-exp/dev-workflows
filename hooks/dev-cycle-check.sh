@@ -202,7 +202,7 @@ See CLAUDE.md §8 for details."
   fi
 
   # --- Phase skip detection (after HARD STOP so Stage A always fires first) ---
-  finalization_skills="testing-strategy documentation finishing-a-development-branch deploy-checklist"
+  finalization_skills="testing-strategy tech-debt documentation finishing-a-development-branch deploy-checklist"
   has_finalization=false
   for fs in $finalization_skills; do
     if has_skill "$fs"; then
