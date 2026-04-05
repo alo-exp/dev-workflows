@@ -45,10 +45,10 @@ Plans:
   2. At each workflow transition (e.g., DISCUSS to PLAN, EXECUTE to VERIFY), Claude proactively tells the user what just completed, what comes next, and what to watch for
   3. Claude suggests utility commands based on context -- /gsd:debug when execution fails, /gsd:quick for trivial changes, /gsd:resume-work after session breaks
   4. All existing enforcement rules (sections 0 through 9) remain intact and functional in the restructured file
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 02-01: TBD
+- [ ] 02-01-PLAN.md -- Add GSD process knowledge, hand-holding instructions, utility awareness, and workflow transition guidance to silver-bullet.md; sync template
 
 ### Phase 3: Skill Evolution
 **Goal**: SB forensics becomes GSD-aware, routing workflow-level issues to GSD while retaining its unique session-level capabilities, with zero skill redundancy across the entire SB plugin
@@ -98,7 +98,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Workflow File Rewrites | 0/2 | Not started | - |
-| 2. silver-bullet.md Overhaul | 0/1 | Not started | - |
+| 2. silver-bullet.md Overhaul | 0/1 | Planned | - |
 | 3. Skill Evolution | 0/1 | Not started | - |
 | 4. Template Parity & Hook Verification | 0/1 | Not started | - |
 | 5. Documentation & Public-Facing | 0/1 | Not started | - |
