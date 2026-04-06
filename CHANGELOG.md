@@ -2,6 +2,8 @@
 
 ## [Unreleased]
 
+- **Renamed** `/using-silver-bullet` skill to `/silver:init` — shorter namespaced name
+
 ## 0.11.0 (2026-04-06)
 
 ### Added
@@ -31,7 +33,7 @@
 - Layer ordering aligned to CLAUDE.md canonical sequence across concepts page, search index, and README
 - PreToolUse → PostToolUse in landing page HARD STOP gate description
 - Broken relative link in compare page footer (help/ → ../help/)
-- Stale /tmp/ references in help reference page, search index, and using-silver-bullet skill
+- Stale /tmp/ references in help reference page, search index, and silver:init skill
 - Test files updated from /tmp/.silver-bullet-* to ~/.claude/.silver-bullet/ paths
 - session-log-init sentinel subshell fully detached from pipeline (fixes test hangs)
 - session-log-init grep pattern updated to match new mode file path
@@ -87,7 +89,7 @@
 - `hooks/ci-status-check.sh` now emits `blockToolUse: true` on CI failure — Claude must stop all other work immediately and invoke `/gsd:debug`
 - Previously emitted only an advisory warning that could be ignored
 
-### Enhanced: Expanded CI stack detection in `/using-silver-bullet`
+### Enhanced: Expanded CI stack detection in `/silver:init`
 - Detects and generates CI workflow templates for 8 additional stacks: Java/Maven, Java/Gradle, Ruby/RSpec, PHP/Composer, .NET/C#, Elixir/Mix, Swift, Dart/Flutter
 - Go template updated to use `go-version: stable`
 
@@ -137,13 +139,13 @@
 - Session-start hook injects Design plugin context alongside Superpowers
 
 ### New: Project type detection
-- `/using-silver-bullet` Phase 2.6 asks application vs DevOps/infrastructure
+- `/silver:init` Phase 2.6 asks application vs DevOps/infrastructure
 - Sets `active_workflow` in config to `full-dev-cycle` or `devops-cycle`
 
 ### New: DevOps plugin integration
 - `/devops-skill-router` skill — context-aware routing table mapping IaC toolchain + cloud provider to the best available plugin skill with fallback chains
 - 5 optional DevOps plugins supported: hashicorp/agent-skills, awslabs/agent-plugins, pulumi/agent-skills, ahmedasmar/devops-claude-skills, wshobson/agents
-- `/using-silver-bullet` Phase 2.7 auto-detects which DevOps plugins are installed
+- `/silver:init` Phase 2.7 auto-detects which DevOps plugins are installed
 - `devops-cycle.md` contextual enrichment trigger points at DISCUSS, PLAN, EXECUTE, VERIFY, FINALIZATION
 - `devops_plugins` section added to config for tracking installed plugins
 
@@ -176,5 +178,5 @@
   - `/testability` — dependency injection, pure functions, test seams, deterministic behavior
   - `/extensibility` — open-closed principle, plugin architecture, versioned interfaces
 - Six-layer compliance enforcement system
-- `/using-silver-bullet` setup skill
+- `/silver:init` setup skill
 - Superpowers + Engineering plugin dependency management

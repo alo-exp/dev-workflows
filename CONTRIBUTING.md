@@ -6,7 +6,7 @@ Thank you for your interest in contributing! Silver Bullet is an AI-native proce
 
 1. Fork and clone the repo
 2. Install prerequisites: Claude Code, jq, GSD (`npx get-shit-done-cc@1.30.0`), Superpowers (`/plugin install obra/superpowers`)
-3. Run `/using-silver-bullet` in the cloned repo to activate enforcement
+3. Run `/silver:init` in the cloned repo to activate enforcement
 
 ## Project Structure
 

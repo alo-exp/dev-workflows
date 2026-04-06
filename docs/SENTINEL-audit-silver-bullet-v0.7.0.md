@@ -45,7 +45,7 @@ All are prompt-injection surfaces since they become part of the LLM context. Key
 
 - `create-release/SKILL.md` -- instructs shell commands (git, gh)
 - `forensics/SKILL.md` -- instructs shell commands (git, mkdir, test runners)
-- `using-silver-bullet/SKILL.md` -- instructs file creation and config writes
+- `silver-init/SKILL.md` -- instructs file creation and config writes
 - `devops-skill-router/SKILL.md` -- instructs dynamic skill invocation
 
 ### Templates (7)
@@ -350,11 +350,11 @@ No scope escalation issues found.
 
 **Missing protections**:
 - The 8 quality dimension skills (modularity, reusability, scalability, security, reliability, usability, testability, extensibility) have no Security Boundary section. They are purely advisory and don't instruct shell commands, so risk is lower.
-- `using-silver-bullet/SKILL.md` instructs file creation and config writes but has no explicit untrusted-data disclaimer.
+- `silver-init/SKILL.md` instructs file creation and config writes but has no explicit untrusted-data disclaimer.
 
 **Patch plan**:
 ```
-File: skills/using-silver-bullet/SKILL.md
+File: skills/silver:init/SKILL.md
 Add a Security Boundary section at the top (after the frontmatter):
   ## Security Boundary
   This skill reads project configuration files and git remote URLs.
@@ -391,7 +391,7 @@ The template instructs: "Switch to Opus 4.6 (1M context) if not already selected
 | SB-010 | Pass | No hardcoded secrets in templates | -- |
 | SB-011 | Pass | User-scoped default paths | -- |
 | SB-012 | Pass | Hook matcher scope appropriate | -- |
-| SB-013 | Mixed | SKILL.md prompt injection resistance | Patch plan for using-silver-bullet |
+| SB-013 | Mixed | SKILL.md prompt injection resistance | Patch plan for silver:init |
 | SB-014 | Info | Model switching instruction | By design |
 
 ---
@@ -420,7 +420,7 @@ The primary risk vectors are:
 1. **SB-002 + SB-003** (path validation): Implement path validation for state_file and trivial_file in all hooks. This is the highest-impact fix.
 2. **SB-001** (array-based args): Quick fix, eliminates a shellcheck suppression.
 3. **SB-006** (backtick wrapping): Strengthen commit sanitization instruction.
-4. **SB-013** (Security Boundary in using-silver-bullet): Add untrusted-data section.
+4. **SB-013** (Security Boundary in silver:init): Add untrusted-data section.
 5. **SB-008** (audit logging): Add bypass logging for deploy gate.
 6. Remaining Low/Info findings at discretion.
 

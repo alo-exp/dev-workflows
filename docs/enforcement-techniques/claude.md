@@ -40,7 +40,7 @@ strongest. The table below shows Silver Bullet's implementation status for each 
 
 | Tier | Technique | SB Status | SB Implementation |
 |------|-----------|-----------|-------------------|
-| 1 | CLAUDE.md / system prompt | Implemented | `silver-bullet.md` (sections 0–9) injected into every project via `/using-silver-bullet` |
+| 1 | CLAUDE.md / system prompt | Implemented | `silver-bullet.md` (sections 0–9) injected into every project via `/silver:init` |
 | 2 | `.claude/rules/` scoped rules | Deferred | Hooks compensate; scoped rules add marginal value for SB's flat structure |
 | 3 | Hooks (PreToolUse, PostToolUse, Stop, UserPromptSubmit, SessionStart) | Implemented | 11 hooks registered in `hooks/hooks.json` across 5 event types |
 | 4 | Recursive rule echo (self-reinforcing CLAUDE.md) | Deferred | Hooks fire on every relevant tool use, compensating adequately |
@@ -185,7 +185,7 @@ Fallback: when `CLAUDE_PLUGIN_ROOT` is not set, matches path pattern
 `/silver-bullet[^/]*/hooks/` to catch the same paths.
 
 **Block message:** "Silver Bullet NEVER modifies its own enforcement hooks. This would
-disable process compliance. If you need to reconfigure, use /using-silver-bullet."
+disable process compliance. If you need to reconfigure, use /silver:init."
 
 **Threat mitigated:** T-06-05 (Tampering via unset CLAUDE_PLUGIN_ROOT)
 
@@ -463,7 +463,7 @@ not installed (exits silently).
 | Hook event | N/A — read by Claude at session start |
 
 **What it does:** The primary instruction document injected into each project via
-`/using-silver-bullet`. Contains: session startup protocol, enforcement model overview,
+`/silver:init`. Contains: session startup protocol, enforcement model overview,
 active workflow reference, anti-skip blocks, anti-rationalization text, and workflow
 transition narration requirements.
 

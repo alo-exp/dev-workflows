@@ -43,7 +43,7 @@ git init && git add -A && git commit -m "initial: todo app baseline"
 In Claude Code (with CWD = `tests/test-app/`):
 
 ```
-/using-silver-bullet
+/silver:init
 ```
 
 **Verify these artifacts are created:**

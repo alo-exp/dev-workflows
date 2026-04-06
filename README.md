@@ -109,7 +109,7 @@ your IaC toolchain and cloud provider. None are required — the workflow works 
 | `ahmedasmar/devops-claude-skills` | Terraform/Terragrunt, k8s troubleshooting, AWS cost optimization, CI/CD pipelines, GitOps (ArgoCD/Flux), monitoring/observability |
 | `wshobson/agents` | Kubernetes manifests/Helm/GitOps/security, multi-agent orchestration |
 
-During `/using-silver-bullet` setup, Silver Bullet detects which of these are installed
+During `/silver:init` setup, Silver Bullet detects which of these are installed
 and stores the results in `.silver-bullet.json`. The `devops-cycle` workflow then uses
 the `/devops-skill-router` to invoke the best available skill at each trigger point.
 
@@ -118,7 +118,7 @@ the `/devops-skill-router` to invoke the best available skill at each trigger po
 Open your project in Claude Code and run:
 
 ```
-/using-silver-bullet
+/silver:init
 ```
 
 This will:
@@ -189,7 +189,7 @@ Skills installed by this plugin that extend the workflow:
 
 | Skill | When to use |
 |-------|-------------|
-| `/using-silver-bullet` | Once per project — initializes CLAUDE.md, config, CI, and docs scaffold |
+| `/silver:init` | Once per project — initializes CLAUDE.md, config, CI, and docs scaffold |
 | `/quality-gates` | Before planning (dev) — checks all 8 quality dimensions in parallel |
 | `/blast-radius` | Before planning (DevOps) — maps change scope, dependencies, and rollback plan |
 | `/devops-quality-gates` | Before planning (DevOps) — 7 IaC-adapted quality dimensions (usability excluded) |
@@ -263,7 +263,7 @@ Edit `.silver-bullet.json` in your project root:
       "create-release",
       "modularity", "reusability", "scalability", "security",
       "reliability", "usability", "testability", "extensibility",
-      "forensics", "using-silver-bullet",
+      "forensics", "silver-init",
       "verification-before-completion",
       "test-driven-development", "tech-debt", "accessibility-review", "incident-response",
       "gsd-new-project", "gsd-new-milestone", "gsd-discuss-phase", "gsd-plan-phase",
@@ -330,7 +330,7 @@ This checks the workflow state file and blocks deployment if required skills are
 If the plugin is updated and you want to refresh templates:
 
 ```
-/using-silver-bullet
+/silver:init
 ```
 
 It detects the existing config and asks if you want to refresh templates while preserving your customizations.
@@ -347,16 +347,16 @@ It detects the existing config and asks if you want to refresh templates while p
 
 **"GSD plugin not found"** — Run `npx get-shit-done-cc@1.30.0`.
 
-**Hooks not firing** — Make sure you ran `/using-silver-bullet` in the project. Check that `.silver-bullet.json` exists in your project root.
+**Hooks not firing** — Make sure you ran `/silver:init` in the project. Check that `.silver-bullet.json` exists in your project root.
 
 **Wrong files triggering enforcement** — Edit `src_pattern` in `.silver-bullet.json` to match your project's source directory (e.g., `/app/` or `/lib/`).
 
-**Want to start fresh** — Delete `.silver-bullet.json` and `CLAUDE.md`, then run `/using-silver-bullet` again.
+**Want to start fresh** — Delete `.silver-bullet.json` and `CLAUDE.md`, then run `/silver:init` again.
 
 ## Architecture
 
 ```
-Enforcement hooks (fire automatically)     Project files (created by /using-silver-bullet)
+Enforcement hooks (fire automatically)     Project files (created by /silver:init)
 ──────────────────────────────────────     ───────────────────────────────────────────────
 hooks/record-skill.sh                      .silver-bullet.json (config)
   → records skill invocations              silver-bullet.md (enforcement guide)

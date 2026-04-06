@@ -5,7 +5,7 @@
 ```
     / Static assertions \   JSON config validation, template parity, doc content grep
    / Hook unit tests    \   Bash test scripts per hook in tests/hooks/
-  / Manual smoke tests  \   /using-silver-bullet setup on a fresh project
+  / Manual smoke tests  \   /silver:init setup on a fresh project
 ```
 
 Silver Bullet's test surface is primarily shell hooks and JSON configuration — no application
@@ -20,7 +20,7 @@ server, no database, no frontend. The bulk of coverage is fast static and unit t
 | **Static — doc content grep** | Assert REQUIRED markers and skill names in workflow files | CI step | <1s |
 | **Hook unit — bash** | Each hook exercised with mocked state; verify correct output per scenario | `tests/hooks/test-*.sh` | <5s each |
 | **Script unit — bash/node** | Semantic compress, TF-IDF rank, extract-phase-goal | `tests/scripts/test-*.sh` | <10s each |
-| **Manual smoke** | Run `/using-silver-bullet` on a clean project; verify enforcement activates | Human | 5-10 min |
+| **Manual smoke** | Run `/silver:init` on a clean project; verify enforcement activates | Human | 5-10 min |
 
 ## Coverage Goals
 

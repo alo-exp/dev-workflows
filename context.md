@@ -77,7 +77,7 @@ Two enforced workflows:
 | `docs/Master-PRD.md` | Product requirements |
 | `templates/workflows/full-dev-cycle.md` | 20-step dev workflow |
 | `templates/workflows/devops-cycle.md` | 24-step DevOps workflow |
-| `skills/using-silver-bullet/SKILL.md` | Onboarding skill |
+| `skills/silver:init/SKILL.md` | Onboarding skill |
 | `CLAUDE.md.template` | Template for generated CLAUDE.md |
 
 ---

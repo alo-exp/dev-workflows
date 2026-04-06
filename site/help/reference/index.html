@@ -257,7 +257,7 @@ footer a:hover{color:var(--accent-light)}
 
       <!-- SILVER BULLET SKILLS -->
       <h2 id="sb-skills">Silver Bullet Skills</h2>
-      <p>Skills required by Silver Bullet's workflows. Quality gates, blast radius, forensics, release notes, and <code>/using-silver-bullet</code> are Silver Bullet's own. Deploy checklist, testing strategy, tech debt, documentation, and finishing-a-development-branch come from Superpowers and Engineering plugins that Silver Bullet enforces.</p>
+      <p>Skills required by Silver Bullet's workflows. Quality gates, blast radius, forensics, release notes, and <code>/silver:init</code> are Silver Bullet's own. Deploy checklist, testing strategy, tech debt, documentation, and finishing-a-development-branch come from Superpowers and Engineering plugins that Silver Bullet enforces.</p>
 
       <table class="ref-table">
         <thead><tr><th>Skill</th><th>When</th><th>Description</th></tr></thead>
@@ -323,7 +323,7 @@ footer a:hover{color:var(--accent-light)}
             <td>Root-cause investigation for completed, failed, or abandoned sessions. Use after /gsd:verify-work fails.</td>
           </tr>
           <tr>
-            <td>/using-silver-bullet</td>
+            <td>/silver:init</td>
             <td>Setup</td>
             <td>Initialize or re-activate Silver Bullet for a project. Idempotent on re-run.</td>
           </tr>
@@ -411,7 +411,7 @@ footer a:hover{color:var(--accent-light)}
 
       <!-- CONFIG -->
       <h2 id="config">.silver-bullet.json Configuration</h2>
-      <p>Project-level configuration file in the repo root. Created by <code>/using-silver-bullet</code>.</p>
+      <p>Project-level configuration file in the repo root. Created by <code>/silver:init</code>.</p>
 
       <div class="code-block">{
   <span class="key">"project"</span>: {
@@ -495,12 +495,12 @@ updated (Architecture patterns, Key decisions) | no changes
 
       <!-- PROJECT ROOT FILES -->
       <h2 id="file-structure">Project Root Files</h2>
-      <p>These files live in the project root and are created by <code>/using-silver-bullet</code>.</p>
+      <p>These files live in the project root and are created by <code>/silver:init</code>.</p>
 
       <table class="ref-table">
         <thead><tr><th>File</th><th>Owner</th><th>Description</th></tr></thead>
         <tbody>
-          <tr><td>silver-bullet.md</td><td>Silver Bullet</td><td>Silver Bullet enforcement instructions (sections 0-9). Managed by plugin — do not edit manually. Updated by <code>/using-silver-bullet</code>.</td></tr>
+          <tr><td>silver-bullet.md</td><td>Silver Bullet</td><td>Silver Bullet enforcement instructions (sections 0-9). Managed by plugin — do not edit manually. Updated by <code>/silver:init</code>.</td></tr>
           <tr><td>CLAUDE.md</td><td>User</td><td>Project-specific Claude instructions. References <code>silver-bullet.md</code> for enforcement rules. User-owned — Silver Bullet only adds a reference line.</td></tr>
           <tr><td>.silver-bullet.json</td><td>Silver Bullet</td><td>Project-level configuration: project name, source pattern, semantic compression, verify commands, workflow paths.</td></tr>
         </tbody>

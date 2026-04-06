@@ -202,7 +202,7 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
       <div class="issue-card">
         <h4>Hooks not firing at all</h4>
         <p class="ic-cause"><strong>Cause:</strong> Silver Bullet was not initialized in this project, or <code>.silver-bullet.json</code> is missing from the project root.</p>
-        <p class="ic-fix"><strong>Fix:</strong> Run <code>/using-silver-bullet</code> in your project. This creates the config file and activates enforcement.</p>
+        <p class="ic-fix"><strong>Fix:</strong> Run <code>/silver:init</code> in your project. This creates the config file and activates enforcement.</p>
       </div>
 
       <div class="issue-card">
@@ -267,7 +267,7 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
       <div class="issue-card">
         <h4>No CI workflow exists yet</h4>
         <p class="ic-cause"><strong>Cause:</strong> The project does not have a <code>.github/workflows/ci.yml</code> file. The CI hook gracefully skips when no CI is configured.</p>
-        <p class="ic-fix"><strong>Fix:</strong> Run <code>/using-silver-bullet</code> which auto-generates a CI workflow based on your tech stack (Node, Python, Go, Rust, and 8 more).</p>
+        <p class="ic-fix"><strong>Fix:</strong> Run <code>/silver:init</code> which auto-generates a CI workflow based on your tech stack (Node, Python, Go, Rust, and 8 more).</p>
       </div>
 
       <div class="divider"></div>
@@ -320,13 +320,13 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
       <div class="issue-card">
         <h4>Config is outdated (old skill names, wrong version)</h4>
         <p class="ic-cause"><strong>Cause:</strong> The <code>.silver-bullet.json</code> was created by an older version and has not been regenerated.</p>
-        <p class="ic-fix"><strong>Fix:</strong> Run <code>/using-silver-bullet</code> and choose to refresh the config. It will preserve your project-specific values while updating the schema and skill lists.</p>
+        <p class="ic-fix"><strong>Fix:</strong> Run <code>/silver:init</code> and choose to refresh the config. It will preserve your project-specific values while updating the schema and skill lists.</p>
       </div>
 
       <div class="issue-card">
         <h4>CLAUDE.md conflicts with project instructions</h4>
         <p class="ic-cause"><strong>Cause:</strong> Silver Bullet's <code>CLAUDE.md</code> may override or conflict with your existing project instructions.</p>
-        <p class="ic-fix"><strong>Fix:</strong> During <code>/using-silver-bullet</code> setup, choose <strong>Append</strong> mode for existing projects. This adds Silver Bullet rules below your existing instructions. Both sets of rules will be active.</p>
+        <p class="ic-fix"><strong>Fix:</strong> During <code>/silver:init</code> setup, choose <strong>Append</strong> mode for existing projects. This adds Silver Bullet rules below your existing instructions. Both sets of rules will be active.</p>
       </div>
 
       <div class="divider"></div>

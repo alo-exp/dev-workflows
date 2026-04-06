@@ -18,7 +18,7 @@ under `~/.claude/.silver-bullet/`.
 | Hook scripts | `hooks/*.sh` | PostToolUse/PreToolUse enforcement — fire on every tool call |
 | Skill files | `skills/*/SKILL.md` | Declarative workflow instructions loaded via the Skill tool |
 | Workflow docs | `docs/workflows/` | Full per-session step-by-step procedures (active copies) |
-| Templates | `templates/` | Bootstrap files copied during `/using-silver-bullet` setup |
+| Templates | `templates/` | Bootstrap files copied during `/silver:init` setup |
 | Config | `.silver-bullet.json` | Project-level list of tracked/required skills |
 | State file | `~/.claude/.silver-bullet/state` | Flat file recording invoked skills in this session |
 | Trivial flag | `~/.claude/.silver-bullet/trivial` | Touch-file that suspends enforcement for trivial changes |
