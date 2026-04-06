@@ -78,7 +78,7 @@ state_contents=""
 if [[ -n "$required_deploy_cfg" ]]; then
   required_skills="$required_deploy_cfg"
 else
-  required_skills="quality-gates code-review requesting-code-review receiving-code-review testing-strategy documentation finishing-a-development-branch deploy-checklist create-release verification-before-completion test-driven-development tech-debt"
+  required_skills="quality-gates code-review requesting-code-review receiving-code-review testing-strategy documentation finishing-a-development-branch deploy-checklist create-release verification-before-completion test-driven-development tech-debt review-loop-pass-1 review-loop-pass-2"
 fi
 
 # ── Compute missing skills ────────────────────────────────────────────────────

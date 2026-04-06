@@ -125,7 +125,7 @@ This will:
 - Check that all 4 plugin dependencies are installed
 - Auto-detect your project name, tech stack, and source directory
 - Ask whether this is an application or DevOps/infrastructure project
-- Create `silver-bullet.md` (9-section enforcement guide) and `CLAUDE.md` (project instructions)
+- Create `silver-bullet.md` (10-section enforcement guide) and `CLAUDE.md` (project instructions)
 - Create `.silver-bullet.json` with your project config
 - Copy the appropriate workflow file(s) to `docs/workflows/`
 - Create placeholder docs (`docs/PRD-Overview.md`, `docs/Architecture-and-Design.md`, etc.)
