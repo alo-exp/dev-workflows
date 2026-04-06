@@ -59,6 +59,41 @@ See CLAUDE.md §8 for details."
     exit 0
   fi
 
+  # --- Silver Bullet hook self-protection ─────────────────────────────────────
+  # Block edits to SB's own enforcement hooks. If Claude modifies its own hooks,
+  # it disables the very enforcement mechanisms that ensure process compliance.
+  if [[ -n "${CLAUDE_PLUGIN_ROOT:-}" ]]; then
+    sb_hooks_dir="${CLAUDE_PLUGIN_ROOT}/hooks"
+    if [[ -n "$file_path" ]]; then
+      # Edit/Write targeting hooks directory or hooks.json
+      if [[ "$file_path" == "${sb_hooks_dir}/"* ]] || [[ "$file_path" == "${CLAUDE_PLUGIN_ROOT}/hooks.json" ]]; then
+        emit_block "Silver Bullet NEVER modifies its own enforcement hooks. This would disable process compliance. If you need to reconfigure, use /using-silver-bullet."
+        exit 0
+      fi
+    elif [[ -n "$command_str" ]]; then
+      # Bash write commands targeting hooks directory or hooks.json
+      if printf '%s' "$command_str" | grep -qE "(${sb_hooks_dir}/|${CLAUDE_PLUGIN_ROOT}/hooks\.json)" && \
+         printf '%s' "$command_str" | grep -qE '(>>|\s>[^>&=]|\btee\b|\bcp\b|\bmv\b|\brm\b|\bchmod\b|\bsed\b)'; then
+        emit_block "Silver Bullet NEVER modifies its own enforcement hooks. This would disable process compliance. If you need to reconfigure, use /using-silver-bullet."
+        exit 0
+      fi
+    fi
+  fi
+
+  # Fallback: detect hooks path by pattern if CLAUDE_PLUGIN_ROOT unavailable
+  if [[ -z "${CLAUDE_PLUGIN_ROOT:-}" ]]; then
+    # Check both file_path (Edit/Write) and command_str (Bash) for hooks path pattern
+    if [[ -n "$file_path" ]] && printf '%s' "$file_path" | grep -qE '/silver-bullet[^/]*/hooks/'; then
+      emit_block "Silver Bullet NEVER modifies its own enforcement hooks. This would disable process compliance. If you need to reconfigure, use /using-silver-bullet."
+      exit 0
+    fi
+    if [[ -n "$command_str" ]] && printf '%s' "$command_str" | grep -qE '/silver-bullet[^/]*/hooks/' && \
+       printf '%s' "$command_str" | grep -qE '(>>|\s>[^>&=]|\btee\b|\bcp\b|\bmv\b|\brm\b|\bchmod\b|\bsed\b)'; then
+      emit_block "Silver Bullet NEVER modifies its own enforcement hooks. This would disable process compliance. If you need to reconfigure, use /using-silver-bullet."
+      exit 0
+    fi
+  fi
+
   # --- State file tamper prevention (SB-008) ──────────────────────────────────
   # Block direct Edit/Write to Silver Bullet state files and Bash write patterns.
   # This prevents bypassing enforcement by manipulating the state file directly.
