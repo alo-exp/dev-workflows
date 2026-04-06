@@ -1,5 +1,13 @@
 # Silver Bullet E2E Smoke Test Protocol
 
+> **Automated enforcement tests now exist.** Run `bash tests/run-all-tests.sh` for full
+> automated coverage of all hook enforcement behaviors (unit + integration scenarios).
+> Coverage matrix (`tests/integration/coverage-matrix.sh`) verifies every hook in
+> hooks.json has at least one test. This manual protocol remains for **full-feature
+> workflow validation** -- testing that Claude actually invokes the right skills in the
+> right order during a real session. Enforcement blocking/allowing is tested
+> automatically; this protocol tests the orchestration experience.
+
 Run this before any Silver Bullet release to validate the full workflow works end-to-end on a real project.
 
 **Duration:** ~30-60 minutes (one full-dev-cycle run)
