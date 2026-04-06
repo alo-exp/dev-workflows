@@ -390,7 +390,11 @@ Run all three review skills in sequence, then fix all issues. Repeat until clean
    You need BOTH: (a) run the actual verification commands, AND (b) invoke the skill so
    `record-skill.sh` tracks it. If you ran tests/CI/checks but did not invoke the skill,
    you have NOT completed this step. Do NOT record the stage marker until BOTH are done.
-7. Record stage completion: `echo "quality-gate-stage-1" >> ~/.claude/.silver-bullet/state`
+7. Record stage completion (two writes required — ordering is verified by hooks):
+   ```bash
+   echo "verification-before-completion-stage-1" >> ~/.claude/.silver-bullet/state
+   echo "quality-gate-stage-1" >> ~/.claude/.silver-bullet/state
+   ```
 
 ### Stage 2 — Big-Picture Consistency Audit
 
@@ -406,7 +410,11 @@ Review the entire plugin for cross-file inconsistencies, redundancies, and contr
 3. **Loop**: repeat until two consecutive audit passes find zero issues
 4. **MANDATORY — invoke `/superpowers:verification-before-completion`** via the Skill tool.
    Do NOT record the stage marker without invoking this skill first.
-5. Record stage completion: `echo "quality-gate-stage-2" >> ~/.claude/.silver-bullet/state`
+5. Record stage completion (two writes required — ordering is verified by hooks):
+   ```bash
+   echo "verification-before-completion-stage-2" >> ~/.claude/.silver-bullet/state
+   echo "quality-gate-stage-2" >> ~/.claude/.silver-bullet/state
+   ```
 
 ### Stage 3 — Public-Facing Content Refresh
 
@@ -423,7 +431,11 @@ Verify and update all user-visible surfaces to reflect the current state.
 3. **MANDATORY — invoke `/superpowers:verification-before-completion`** via the Skill tool.
    Do NOT record the stage marker without invoking this skill first.
 4. Push and confirm CI green
-5. Record stage completion: `echo "quality-gate-stage-3" >> ~/.claude/.silver-bullet/state`
+5. Record stage completion (two writes required — ordering is verified by hooks):
+   ```bash
+   echo "verification-before-completion-stage-3" >> ~/.claude/.silver-bullet/state
+   echo "quality-gate-stage-3" >> ~/.claude/.silver-bullet/state
+   ```
 
 ### Stage 4 — Security Audit (SENTINEL)
 
@@ -435,7 +447,11 @@ Run the SENTINEL v2.3 adversarial security audit against the full plugin.
 4. **Loop**: repeat until two consecutive audit passes find zero issues
 5. **MANDATORY — invoke `/superpowers:verification-before-completion`** via the Skill tool.
    Do NOT record the stage marker without invoking this skill first.
-6. Record stage completion: `echo "quality-gate-stage-4" >> ~/.claude/.silver-bullet/state`
+6. Record stage completion (two writes required — ordering is verified by hooks):
+   ```bash
+   echo "verification-before-completion-stage-4" >> ~/.claude/.silver-bullet/state
+   echo "quality-gate-stage-4" >> ~/.claude/.silver-bullet/state
+   ```
 
 ### Pre-Release Gate Enforcement
 

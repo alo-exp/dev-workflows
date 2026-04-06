@@ -123,7 +123,7 @@ To reset the workflow state, remove the file from your terminal (not from Claude
     # Whitelist: quality-gate-stage-N appends are legitimate (§9 pre-release gate recording)
     if printf '%s' "$command_str" | grep -qE '\.claude/[^/]+/(state|branch|trivial)' && \
        printf '%s' "$command_str" | grep -qE '(>>|\s>[^>&=]|\btee\b)' && \
-       ! printf '%s' "$command_str" | grep -qE '\bquality-gate-stage-[1-4]\b'; then
+       ! printf '%s' "$command_str" | grep -qE '\b(quality-gate-stage-[1-4]|verification-before-completion-stage-[1-4])\b'; then
       emit_block "🚫 STATE TAMPER BLOCKED — Writing to Silver Bullet state files bypasses workflow enforcement.
 
 Skills are recorded automatically when invoked via the Skill tool. Do not write to state files directly.
