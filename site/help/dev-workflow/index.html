@@ -301,13 +301,13 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
         <div class="step-num" style="background:linear-gradient(135deg,var(--red),#b91c1c)">4</div>
         <div>
           <div class="step-meta"><span class="step-title">/quality-gates</span><span class="badge badge-required">Required</span></div>
-          <p class="step-desc">All 8 Silver Bullet quality dimensions (modularity, reusability, scalability, security, reliability, usability, testability, extensibility) are evaluated against the current design. Dispatches 8 parallel agents — one per dimension — in isolated worktrees. All must pass. ❌ is a hard stop.</p>
+          <p class="step-desc">All 8 Silver Bullet quality dimensions (modularity, reusability, scalability, security, reliability, usability, testability, extensibility) are evaluated against the current design. Dispatches 8 parallel agents — one per dimension — in isolated worktrees. All must pass. <i data-lucide="x-circle" style="color:var(--red);vertical-align:middle"></i> is a hard stop.</p>
           <div class="step-output">→ Produces: Quality gate report (all 8 dimensions pass/fail)</div>
         </div>
       </div>
 
       <div class="callout callout-stop">
-        <span class="callout-icon">🚫</span>
+        <span class="callout-icon"><i data-lucide="ban"></i></span>
         <div class="callout-body"><strong>Planning cannot start until Quality Gates passes.</strong> This is enforced by the Stage Enforcer hook. Fix any failing dimensions before proceeding — they feed into the plan as hard requirements.</div>
       </div>
 
@@ -372,8 +372,8 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
       </div>
 
       <div class="callout callout-info">
-        <span class="callout-icon">🔄</span>
-        <div class="callout-body"><strong>Review loop rule:</strong> The code-reviewer must be re-dispatched until it returns ✅ Approved on <strong>two consecutive passes</strong>. A single clean pass is not sufficient. The loop is self-limiting — it ends naturally when two consecutive passes are clean. Surface to the user only if the reviewer raises something it cannot resolve.</div>
+        <span class="callout-icon"><i data-lucide="refresh-cw"></i></span>
+        <div class="callout-body"><strong>Review loop rule:</strong> The code-reviewer must be re-dispatched until it returns <i data-lucide="check-circle" style="color:var(--green);vertical-align:middle"></i> Approved on <strong>two consecutive passes</strong>. A single clean pass is not sufficient. The loop is self-limiting — it ends naturally when two consecutive passes are clean. Surface to the user only if the reviewer raises something it cannot resolve.</div>
       </div>
 
       <div class="step-card required">
@@ -495,11 +495,11 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
       <div class="divider"></div>
 
       <h2 id="review-loop">Review Loop Enforcement Rule</h2>
-      <p>Every review loop in the workflow (spec review, plan review, code review, verification) <strong>must iterate until the reviewer returns ✅ Approved TWICE IN A ROW</strong>. A single clean pass is not sufficient.</p>
+      <p>Every review loop in the workflow (spec review, plan review, code review, verification) <strong>must iterate until the reviewer returns <i data-lucide="check-circle" style="color:var(--green);vertical-align:middle"></i> Approved TWICE IN A ROW</strong>. A single clean pass is not sufficient.</p>
       <ul>
         <li>Never stop because issues look minor or "close enough"</li>
-        <li>Never count a loop as done unless the reviewer outputs ✅ Approved on <strong>two consecutive passes</strong></li>
-        <li>A single ✅ Approved is not sufficient — the next pass must also be clean</li>
+        <li>Never count a loop as done unless the reviewer outputs <i data-lucide="check-circle" style="color:var(--green);vertical-align:middle"></i> Approved on <strong>two consecutive passes</strong></li>
+        <li>A single <i data-lucide="check-circle" style="color:var(--green);vertical-align:middle"></i> Approved is not sufficient — the next pass must also be clean</li>
         <li>The loop is self-limiting — it ends naturally when two consecutive passes are clean</li>
         <li>Surface to the user only if the reviewer raises an issue it cannot resolve (missing decision, external dependency, or constraint)</li>
       </ul>

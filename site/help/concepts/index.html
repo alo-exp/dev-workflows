@@ -325,28 +325,28 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
       </table>
 
       <div class="callout callout-stop">
-        <span class="callout-icon">🚫</span>
+        <span class="callout-icon"><i data-lucide="ban"></i></span>
         <div class="callout-body"><strong>Never use <code>subagent-driven-development</code> for project work.</strong> This Superpowers skill is powerful but operates outside GSD's enforcement model. Using it for execution bypasses quality gates, atomic commits, and verification requirements.</div>
       </div>
 
       <div class="divider"></div>
 
       <h2 id="quality-gates">Quality Gates</h2>
-      <p>Quality gates are a mandatory pre-planning step where Claude evaluates the proposed design against 8 quality dimensions. All must pass before planning begins — a single ❌ is a hard stop.</p>
+      <p>Quality gates are a mandatory pre-planning step where Claude evaluates the proposed design against 8 quality dimensions. All must pass before planning begins — a single <i data-lucide="x-circle" style="color:var(--red);vertical-align:middle"></i> is a hard stop.</p>
 
       <div class="dims-grid">
         <div class="dim-card"><div class="dim-icon"><i data-lucide="puzzle"></i></div><div class="dim-name">Modularity</div><div class="dim-desc">Components are independently replaceable</div></div>
-        <div class="dim-card"><div class="dim-icon">♻️</div><div class="dim-name">Reusability</div><div class="dim-desc">Components shared without modification</div></div>
-        <div class="dim-card"><div class="dim-icon">📈</div><div class="dim-name">Scalability</div><div class="dim-desc">Handles growth without redesign</div></div>
+        <div class="dim-card"><div class="dim-icon"><i data-lucide="refresh-cw"></i></div><div class="dim-name">Reusability</div><div class="dim-desc">Components shared without modification</div></div>
+        <div class="dim-card"><div class="dim-icon"><i data-lucide="trending-up"></i></div><div class="dim-name">Scalability</div><div class="dim-desc">Handles growth without redesign</div></div>
         <div class="dim-card"><div class="dim-icon"><i data-lucide="lock"></i></div><div class="dim-name">Security</div><div class="dim-desc">Defense-in-depth, least privilege</div></div>
-        <div class="dim-card"><div class="dim-icon">🛡️</div><div class="dim-name">Reliability</div><div class="dim-desc">Graceful failures, fault tolerance</div></div>
-        <div class="dim-card"><div class="dim-icon">🎯</div><div class="dim-name">Usability</div><div class="dim-desc">Intuitive APIs and interfaces</div></div>
-        <div class="dim-card"><div class="dim-icon">🧪</div><div class="dim-name">Testability</div><div class="dim-desc">Isolated, fast, deterministic tests</div></div>
-        <div class="dim-card"><div class="dim-icon">🔌</div><div class="dim-name">Extensibility</div><div class="dim-desc">Open for extension, closed for modification</div></div>
+        <div class="dim-card"><div class="dim-icon"><i data-lucide="shield"></i></div><div class="dim-name">Reliability</div><div class="dim-desc">Graceful failures, fault tolerance</div></div>
+        <div class="dim-card"><div class="dim-icon"><i data-lucide="target"></i></div><div class="dim-name">Usability</div><div class="dim-desc">Intuitive APIs and interfaces</div></div>
+        <div class="dim-card"><div class="dim-icon"><i data-lucide="flask-conical"></i></div><div class="dim-name">Testability</div><div class="dim-desc">Isolated, fast, deterministic tests</div></div>
+        <div class="dim-card"><div class="dim-icon"><i data-lucide="plug"></i></div><div class="dim-name">Extensibility</div><div class="dim-desc">Open for extension, closed for modification</div></div>
       </div>
 
       <h3>How Quality Gates Are Evaluated</h3>
-      <p>The <code>/quality-gates</code> skill dispatches 8 parallel agents — one per dimension — each in an isolated worktree. Results are synthesised by Claude. The most conservative finding wins: if one agent flags a dimension as ❌, the whole gate fails.</p>
+      <p>The <code>/quality-gates</code> skill dispatches 8 parallel agents — one per dimension — each in an isolated worktree. Results are synthesised by Claude. The most conservative finding wins: if one agent flags a dimension as <i data-lucide="x-circle" style="color:var(--red);vertical-align:middle"></i>, the whole gate fails.</p>
 
       <h3>DevOps Quality Gates</h3>
       <p>For infrastructure work, <code>/devops-quality-gates</code> applies 7 IaC-adapted dimensions (usability is excluded — it's application-specific) — focusing on idempotency, drift prevention, least-privilege IAM, and infrastructure reliability instead of application concerns.</p>
@@ -415,7 +415,7 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
 
       <div class="concept-grid">
         <div class="concept-card">
-          <div class="cc-icon">🤝</div>
+          <div class="cc-icon"><i data-lucide="users"></i></div>
           <h4>Interactive (default)</h4>
           <p>Claude pauses at every phase gate. You review and approve each stage. Best for learning the workflow or working on sensitive/complex tasks where human oversight matters at each step.</p>
         </div>

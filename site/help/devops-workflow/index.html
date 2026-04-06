@@ -256,7 +256,7 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
       <p>Use <strong>only</strong> when responding to an active production incident requiring an emergency change. Skip this section entirely for planned DevOps work.</p>
 
       <div class="callout callout-stop">
-        <span class="callout-icon">🚨</span>
+        <span class="callout-icon"><i data-lucide="siren"></i></span>
         <div class="callout-body"><strong>Fast path criteria:</strong> Active incident with confirmed production impact AND the change cannot wait for the full cycle without extending the outage. Both conditions must be true.</div>
       </div>
 
@@ -337,22 +337,22 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
 
       <div class="blast-grid">
         <div class="blast-card blast-low">
-          <div class="blast-icon">🟢</div>
+          <div class="blast-icon"><span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:var(--green)"></span></div>
           <div class="blast-label" style="color:var(--green)">Low</div>
           <div class="blast-action" style="color:var(--green)">Proceed normally</div>
         </div>
         <div class="blast-card blast-medium">
-          <div class="blast-icon">🟡</div>
+          <div class="blast-icon"><span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:var(--amber)"></span></div>
           <div class="blast-label" style="color:var(--amber)">Medium</div>
           <div class="blast-action" style="color:var(--amber)">Proceed normally</div>
         </div>
         <div class="blast-card blast-high">
-          <div class="blast-icon">🟠</div>
+          <div class="blast-icon"><span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:#ea580c"></span></div>
           <div class="blast-label" style="color:#ea580c">High</div>
           <div class="blast-action" style="color:#ea580c">User approval + runbook required</div>
         </div>
         <div class="blast-card blast-critical">
-          <div class="blast-icon">🔴</div>
+          <div class="blast-icon"><span style="display:inline-block;width:14px;height:14px;border-radius:50%;background:var(--red)"></span></div>
           <div class="blast-label" style="color:var(--red)">Critical</div>
           <div class="blast-action" style="color:var(--red)">HARD STOP — CAB review required</div>
         </div>
@@ -367,7 +367,7 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
         <div class="step-num" style="background:linear-gradient(135deg,var(--red),#b91c1c)">5</div>
         <div>
           <div class="step-meta"><span class="step-title">/devops-quality-gates</span><span class="badge badge-devops">DevOps</span><span class="badge badge-required">Required</span></div>
-          <p class="step-desc">Applies 7 IaC-adapted quality dimensions against the infrastructure design (usability is excluded — it's application-specific). Same base framework as <code>/quality-gates</code>, adapted for infrastructure: idempotency, least-privilege IAM, drift prevention, and infra reliability. All 7 dimensions must pass. ❌ is a hard stop.</p>
+          <p class="step-desc">Applies 7 IaC-adapted quality dimensions against the infrastructure design (usability is excluded — it's application-specific). Same base framework as <code>/quality-gates</code>, adapted for infrastructure: idempotency, least-privilege IAM, drift prevention, and infra reliability. All 7 dimensions must pass. <i data-lucide="x-circle" style="color:var(--red);vertical-align:middle"></i> is a hard stop.</p>
         </div>
       </div>
 
@@ -446,7 +446,7 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
         <div class="step-num" style="background:linear-gradient(135deg,var(--amber),#b45309)">10</div>
         <div>
           <div class="step-meta"><span class="step-title">/requesting-code-review</span><span class="badge badge-sp">Superpowers</span><span class="badge badge-required">Required</span></div>
-          <p class="step-desc">Dispatches <code>superpowers:code-reviewer</code> for IaC peer code quality review: hardcoded values that should be variables, missing tags/labels, security groups that are too permissive, resources missing encryption, backups, or monitoring. Plan output is reviewed, not just source files. Review loop: re-dispatch until ✅ Approved TWICE IN A ROW. Self-limiting.</p>
+          <p class="step-desc">Dispatches <code>superpowers:code-reviewer</code> for IaC peer code quality review: hardcoded values that should be variables, missing tags/labels, security groups that are too permissive, resources missing encryption, backups, or monitoring. Plan output is reviewed, not just source files. Review loop: re-dispatch until <i data-lucide="check-circle" style="color:var(--green);vertical-align:middle"></i> Approved TWICE IN A ROW. Self-limiting.</p>
         </div>
       </div>
 
