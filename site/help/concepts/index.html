@@ -222,7 +222,11 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
       <p>Inside Claude Code, skills are invoked with the <code>Skill</code> tool using a slash-command shorthand:</p>
       <div class="code-block"><span class="cmd">/quality-gates</span>          <span class="comment"># invokes the quality-gates skill</span>
 <span class="cmd">/gsd:discuss-phase</span>       <span class="comment"># invokes GSD's discuss-phase command</span>
-<span class="cmd">/requesting-code-review</span>  <span class="comment"># dispatches code-reviewer subagent for peer review</span></div>
+<span class="cmd">/requesting-code-review</span>  <span class="comment"># dispatches code-reviewer subagent for peer review</span>
+<span class="cmd">/silver</span> quality review   <span class="comment"># routes to the right skill automatically</span></div>
+
+      <h3>The /silver Router</h3>
+      <p><code>/silver</code> is Silver Bullet's smart dispatcher. It accepts freeform natural language, matches your intent against the full routing table of SB skills, and invokes the right one — without you needing to know the exact skill name. For GSD planning and execution work, it delegates to <code>/gsd:do</code> automatically. It's the single entry point for users who don't know which skill to invoke.</p>
 
       <div class="callout callout-warn">
         <span class="callout-icon"><i data-lucide="triangle-alert"></i></span>

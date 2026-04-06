@@ -257,11 +257,16 @@ footer a:hover{color:var(--accent-light)}
 
       <!-- SILVER BULLET SKILLS -->
       <h2 id="sb-skills">Silver Bullet Skills</h2>
-      <p>Skills required by Silver Bullet's workflows. Quality gates, blast radius, forensics, release notes, and <code>/silver:init</code> are Silver Bullet's own. Deploy checklist, testing strategy, tech debt, documentation, and finishing-a-development-branch come from Superpowers and Engineering plugins that Silver Bullet enforces.</p>
+      <p>Skills required by Silver Bullet's workflows. <code>/silver</code> is the smart router — the single entry point that dispatches to any SB or GSD skill. Quality gates, blast radius, forensics, release notes, and <code>/silver:init</code> are Silver Bullet's own. Deploy checklist, testing strategy, tech debt, documentation, and finishing-a-development-branch come from Superpowers and Engineering plugins that Silver Bullet enforces.</p>
 
       <table class="ref-table">
         <thead><tr><th>Skill</th><th>When</th><th>Description</th></tr></thead>
         <tbody>
+          <tr>
+            <td>/silver</td>
+            <td>Anytime</td>
+            <td>Smart router — accepts freeform natural language and dispatches to the most appropriate Silver Bullet or GSD skill. Use when you're unsure which skill to invoke. Delegates GSD planning/execution intent to <code>/gsd:do</code> automatically.</td>
+          </tr>
           <tr>
             <td>/quality-gates<span class="badge-small badge-req">Required</span></td>
             <td>Before Plan</td>
