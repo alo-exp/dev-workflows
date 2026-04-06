@@ -22,7 +22,7 @@ progress:
 **Active phase:** Phase 1 -- Workflow File Rewrites (executed, pending verify)
 **Current plan:** 1
 
-Last activity: 2026-04-06
+Last activity: 2026-04-07 — Completed quick task 260407-1e2: tech debt fixes (DEFAULT_REQUIRED shared lib, 4 new tests, stop-check refactor, config_version)
 
 ## Roadmap Evolution
 
@@ -58,6 +58,7 @@ Last activity: 2026-04-06
 | 260405-80o | Migrate blocking hooks to PreToolUse with permissionDecision:deny | 2026-04-05 | 81a28e6 | Verified | [260405-80o-migrate-blocking-hooks-to-pretooluse-wit](./quick/260405-80o-migrate-blocking-hooks-to-pretooluse-wit/) |
 | 260405-8gd | Revise quality gate §9 — cross-plugin audit dimension and stage reorder | 2026-04-05 | 571caf5 | Verified | [260405-8gd-revise-quality-gate-cross-plugin-audit-p](./quick/260405-8gd-revise-quality-gate-cross-plugin-audit-p/) |
 | 260406-anb | Add automatic model switching to Silver Bullet agent definitions and website | 2026-04-06 | c1beda1 | — | [260406-anb-add-automatic-model-switching-to-silver-](./quick/260406-anb-add-automatic-model-switching-to-silver-/) |
+| 260407-1e2 | Fix v0.11.1 and v0.12.0 tech debt: extract DEFAULT_REQUIRED, add missing tests, refactor stop-check, config versioning, improve messages | 2026-04-06 | b1e848c | — | [260407-1e2-fix-v0-11-1-and-v0-12-0-tech-debt-extrac](./quick/260407-1e2-fix-v0-11-1-and-v0-12-0-tech-debt-extrac/) |
 
 ## Performance Metrics
 
