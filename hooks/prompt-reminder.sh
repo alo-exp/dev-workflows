@@ -94,11 +94,32 @@ for skill in $required_skills; do
   fi
 done
 
+# ── Load core enforcement rules (Tier 2 rule injection — survives compaction) ──
+# Read core-rules.md from the same directory as this script so rules are
+# re-injected before every user prompt, not just at session start.
+script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+core_rules_file="${script_dir}/core-rules.md"
+if [[ ! -f "$core_rules_file" ]] && [[ -n "${CLAUDE_PLUGIN_ROOT:-}" ]]; then
+  core_rules_file="${CLAUDE_PLUGIN_ROOT}/hooks/core-rules.md"
+fi
+
 # ── Emit additionalContext ────────────────────────────────────────────────────
 if [[ -z "$missing_list" ]]; then
-  msg="Silver Bullet: all required skills complete."
+  skill_status="Silver Bullet: all required skills complete."
 else
-  msg="Silver Bullet -- Missing: ${missing_list} (${completed} of ${total} complete)"
+  skill_status="Silver Bullet -- Missing: ${missing_list} (${completed} of ${total} complete)"
+fi
+
+# Prepend core rules if available, then append skill status
+if [[ -f "$core_rules_file" ]]; then
+  core_content=$(cat "$core_rules_file")
+  msg="${core_content}
+
+---
+
+${skill_status}"
+else
+  msg="$skill_status"
 fi
 
 printf '{"hookSpecificOutput":{"additionalContext":%s}}' "$(printf '%s' "$msg" | jq -Rs '.')"
