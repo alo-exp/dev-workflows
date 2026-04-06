@@ -39,7 +39,7 @@
 
 ## Executive Summary
 
-Silver Bullet is a Claude Code plugin with 15 skills, 7 enforcement hooks, 4 utility scripts, and 2 workflow templates. The plugin enforces software engineering process compliance through shell-based PostToolUse hooks that read/write state files in `~/.claude/.silver-bullet/` (user-scoped, 0700 permissions).
+Silver Bullet is a Claude Code plugin with 15 skills, 11 enforcement hooks, 4 utility scripts, and 2 workflow templates. The plugin enforces software engineering process compliance through shell-based PostToolUse hooks that read/write state files in `~/.claude/.silver-bullet/` (user-scoped, 0700 permissions).
 
 **Overall Security Posture:** Acceptable with conditions
 **Deployment Recommendation:** Deploy with mitigations
@@ -461,7 +461,7 @@ CHAIN_CVSS: 7.5 (maximum of individual scores + chain amplification)
 **CWE:** CWE-280 — Improper Handling of Insufficient Permissions
 **Confidence:** CONFIRMED — 7 hook scripts contain `command -v jq >/dev/null 2>&1 || exit 0`
 
-**Description:** Every enforcement hook silently exits 0 when `jq` is unavailable. This disables all 7 enforcement layers without any user notification — the user believes enforcement is active when it is completely absent.
+**Description:** Every enforcement hook silently exits 0 when `jq` is unavailable. This disables all 10 enforcement layers without any user notification — the user believes enforcement is active when it is completely absent.
 
 **Impact:** Silent total bypass of workflow enforcement. User deploys code believing all gates passed.
 

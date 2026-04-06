@@ -6,9 +6,9 @@
 
 Brooks was right then. AI changes the equation now.
 
-Silver Bullet is a Claude Code plugin that orchestrates the best open-source agentic workflows into one enforced process. It combines [GSD](https://github.com/gsd-build/get-shit-done) (multi-agent execution), [Superpowers](https://github.com/obra/superpowers) (code review, branch management), [Engineering](https://github.com/anthropics/knowledge-work-plugins/tree/main/engineering) (testing, docs, deploy), and [Design](https://github.com/anthropics/knowledge-work-plugins/tree/main/design) (design system, UX copy, accessibility) into one guided workflow with 7 layers of compliance. **You don't need to know GSD** -- Silver Bullet guides you through every step, explains what's happening, and handles errors. Just describe what you want to build.
+Silver Bullet is a Claude Code plugin that orchestrates the best open-source agentic workflows into one enforced process. It combines [GSD](https://github.com/gsd-build/get-shit-done) (multi-agent execution), [Superpowers](https://github.com/obra/superpowers) (code review, branch management), [Engineering](https://github.com/anthropics/knowledge-work-plugins/tree/main/engineering) (testing, docs, deploy), and [Design](https://github.com/anthropics/knowledge-work-plugins/tree/main/design) (design system, UX copy, accessibility) into one guided workflow with 10 layers of compliance. **You don't need to know GSD** -- Silver Bullet guides you through every step, explains what's happening, and handles errors. Just describe what you want to build.
 
-**Current version: v0.10.0** — Enforcement hardening: two-tier commit gate, branch-scoped state, tamper detection, GSD namespace tracking, anti-stall protection, 61-test hook test suite added to CI. Fixes 15 major issues identified in comprehensive audit. Includes `tests/test-app/` — a brownfield Express+SQLite todo app with 28 tests for smoke-testing the full SB workflow end-to-end.
+**Current version: v0.11.0** — Deep enforcement hardening: Stop hook + UserPromptSubmit reminder (survive compaction), forbidden-skill enforcement, review-loop proxy gate, stage ordering validation, tamper detection extensions, automatic model switching for agents. 183-test comprehensive E2E harness with full hook coverage and integration scenarios. Closes 16 enforcement audit gaps identified post-v0.10.0.
 
 ## How It Works
 
@@ -212,7 +212,7 @@ When a session produces wrong output, stalls, or is abandoned, `/forensics` guid
 
 ---
 
-## Seven Enforcement Layers
+## Ten Enforcement Layers
 
 The plugin doesn't rely on Claude reading instructions. It enforces compliance through hooks that fire automatically:
 
@@ -222,9 +222,12 @@ The plugin doesn't rely on Claude reading instructions. It enforces compliance t
 | **2. Stage enforcer** | `dev-cycle-check.sh` fires on every Edit/Write/Bash. HARD STOP if quality gates incomplete and you're touching source code. |
 | **3. Compliance status** | `compliance-status.sh` fires on every tool use. Shows progress score so Claude always knows where it stands. |
 | **4. Completion audit** | `completion-audit.sh` fires on every Bash command. Blocks `git commit`, `git push`, `gh pr create`, and `deploy` if workflow is incomplete. |
-| **5. GSD workflow guard** | GSD's own hook detects file edits made outside a `/gsd:*` command and warns. |
-| **6. GSD context monitor** | GSD's own hook warns at ≤35% tokens remaining, escalates at ≤25%. |
-| **7. Redundant instructions + anti-rationalization** | CLAUDE.md + workflow file both enforce the same rules. Explicit rules against skipping, combining, or implicitly covering steps. |
+| **5. CI gate** | `ci-status-check.sh` intercepts `git push`. Blocks if the most recent CI run is failing — broken builds cannot be pushed. |
+| **6. Stop hook** | `stop-check.sh` fires when Claude declares a task complete. Blocks if required skills are missing — survives compaction. |
+| **7. Prompt reminder** | `prompt-reminder.sh` fires on every user prompt. Re-injects missing-skill list and core enforcement rules before Claude processes any message. |
+| **8. Forbidden skill gate** | `forbidden-skill-check.sh` blocks deprecated/forbidden skills before they execute. |
+| **9. GSD workflow guard** | GSD's own hook detects file edits made outside a `/gsd:*` command and warns. |
+| **10. Redundant instructions + anti-rationalization** | CLAUDE.md + workflow file both enforce the same rules. Explicit rules against skipping, combining, or implicitly covering steps. |
 
 ## Customization
 

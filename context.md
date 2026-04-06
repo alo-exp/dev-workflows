@@ -20,9 +20,9 @@ Two enforced workflows:
 - `full-dev-cycle` — 20-step app development workflow with 8 quality dimensions
 - `devops-cycle` — 24-step IaC/DevOps workflow with blast radius assessment and 7 IaC-adapted quality gates
 
-7 enforcement layers: 4 PostToolUse hooks + GSD workflow guard + GSD context monitor + redundant CLAUDE.md instructions
+10 enforcement layers: Stop hook + UserPromptSubmit reminder + forbidden-skill gate + CI gate + 4 Pre+PostToolUse hooks + GSD workflow guard + redundant CLAUDE.md instructions
 
-**Current version:** v0.7.4
+**Current version:** v0.11.0
 
 ---
 
