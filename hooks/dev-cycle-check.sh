@@ -121,7 +121,7 @@ To reset the workflow state, remove the file from your terminal (not from Claude
     # Bash write to .silver-bullet/state, /branch, or /trivial → block
     # Matches: echo x >> path, printf x > path, tee path — but not reads (cat, grep)
     # Whitelist: quality-gate-stage-N appends are legitimate (§9 pre-release gate recording)
-    if printf '%s' "$command_str" | grep -qE '\.silver-bullet/(state|branch|trivial)' && \
+    if printf '%s' "$command_str" | grep -qE '\.claude/[^/]+/(state|branch|trivial)' && \
        printf '%s' "$command_str" | grep -qE '(>>|\s>[^>&=]|\btee\b)' && \
        ! printf '%s' "$command_str" | grep -qE '\bquality-gate-stage-[1-4]\b'; then
       emit_block "🚫 STATE TAMPER BLOCKED — Writing to Silver Bullet state files bypasses workflow enforcement.
@@ -205,6 +205,26 @@ To reset workflow state intentionally, run in your terminal:
     "$HOME"/.claude/*) ;;
     *) trivial_file="${SB_STATE_DIR}/trivial" ;;
   esac
+
+  # --- Mid-session branch mismatch warning (F-09) ---
+  branch_file="${SB_STATE_DIR}/branch"
+  if [[ -f "$branch_file" && ! -L "$branch_file" ]]; then
+    stored_branch=$(cat "$branch_file" 2>/dev/null || true)
+    current_branch=$(git -C "$PWD" rev-parse --abbrev-ref HEAD 2>/dev/null || true)
+    if [[ -n "$stored_branch" && -n "$current_branch" && "$stored_branch" != "$current_branch" ]]; then
+      printf '{"hookSpecificOutput":{"message":"Warning: Branch mismatch -- state recorded for [%s] but current branch is [%s]. Run /compact to reset."}}' "$stored_branch" "$current_branch"
+      # Warning only -- do not exit, let the rest of the hook proceed
+    fi
+  fi
+
+  # --- Destructive command warning (F-04) ---
+  if [[ -n "$command_str" ]] && [[ ! -f "$trivial_file" || -L "$trivial_file" ]]; then
+    if printf '%s' "$command_str" | grep -qE '\b(rm|mv)\b' && \
+       ! printf '%s' "$command_str" | grep -qE "(${plugin_cache}|\.silver-bullet/|/tmp/|\.claude/)"; then
+      printf '{"hookSpecificOutput":{"message":"Warning: Destructive command detected (rm/mv on project files). Verify this is intentional before proceeding."}}'
+      # Warning only -- do not block
+    fi
+  fi
 
   # --- Check if file/command matches src_pattern ---
   if [[ -n "$file_path" ]]; then
