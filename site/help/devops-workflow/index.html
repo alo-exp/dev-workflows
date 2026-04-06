@@ -156,6 +156,7 @@ footer a:hover{color:var(--accent-light)}
 .nsr-title{font-size:.88rem;font-weight:600;color:var(--text-primary)}
 .nsr-excerpt{font-size:.78rem;color:var(--text-dim);line-height:1.4}
 @media(max-width:768px){.nav-search-wrap{display:none}}
+svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;stroke-width:1.5;stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round}
 </style>
 </head>
 <body>
@@ -228,7 +229,7 @@ footer a:hover{color:var(--accent-light)}
       <p>The per-phase loop order also differs: <strong>Discuss → Blast Radius → DevOps Quality Gates → Plan → Execute → Verify → Code Review</strong>.</p>
 
       <div class="callout callout-warn" id="yaml-rule">
-        <span class="callout-icon">⚠️</span>
+        <span class="callout-icon"><i data-lucide="triangle-alert"></i></span>
         <div class="callout-body"><strong>YAML and JSON files are infrastructure code here — not trivial changes.</strong> GitHub Actions workflows, Kubernetes manifests, Helm charts, Terraform files, and CI/CD pipeline definitions MUST follow the full DevOps workflow regardless of file extension. The trivial-change exemption that applies to <code>.yml</code> in the dev workflow does NOT apply here.</div>
       </div>
 
@@ -478,7 +479,7 @@ footer a:hover{color:var(--accent-light)}
       <p>Runs after all phases complete in the lowest environment. Repeat for each tier: dev → staging → production.</p>
 
       <div class="callout callout-warn">
-        <span class="callout-icon">⚠️</span>
+        <span class="callout-icon"><i data-lucide="triangle-alert"></i></span>
         <div class="callout-body"><strong>Never skip staging.</strong> Infrastructure changes must be verified in staging before production. Monitoring verification and rollback testing are mandatory before the production promotion step.</div>
       </div>
 
@@ -542,7 +543,7 @@ footer a:hover{color:var(--accent-light)}
       <h2 id="deployment">CI/CD + Deployment</h2>
 
       <div class="callout callout-info">
-        <span class="callout-icon">🏗️</span>
+        <span class="callout-icon"><i data-lucide="hard-hat"></i></span>
         <div class="callout-body"><strong>Infrastructure pipeline rule:</strong> Infra pipelines must enforce plan → review → apply. Never auto-apply to production. Plan output must be stored as a pipeline artifact for audit.</div>
       </div>
 
@@ -641,6 +642,7 @@ footer a:hover{color:var(--accent-light)}
   </div>
 </footer>
 
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
 <script src="../search.js"></script>
 <script>
 function applyTheme(dark){
@@ -653,6 +655,7 @@ function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-th
 (function(){const s=localStorage.getItem('silver-bullet-theme');applyTheme(s?s==='dark':true)})();
 const links=document.querySelectorAll('.sidebar-nav a');
 window.addEventListener('scroll',()=>{let curr='';document.querySelectorAll('[id]').forEach(h=>{if(window.scrollY>=h.offsetTop-120)curr=h.id});links.forEach(l=>{l.classList.toggle('active',l.getAttribute('href')==='#'+curr)})},{passive:true});
+lucide.createIcons();
 </script>
 </body>
 </html>

@@ -131,6 +131,7 @@ footer a:hover{color:var(--accent-light)}
 .nsr-title{font-size:.88rem;font-weight:600;color:var(--text-primary)}
 .nsr-excerpt{font-size:.78rem;color:var(--text-dim);line-height:1.4}
 @media(max-width:768px){.nav-search-wrap{display:none}}
+svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;stroke-width:1.5;stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round}
 </style>
 </head>
 <body>
@@ -239,7 +240,7 @@ footer a:hover{color:var(--accent-light)}
       </div>
 
       <div class="callout callout-tip">
-        <span class="callout-icon">💡</span>
+        <span class="callout-icon"><i data-lucide="lightbulb"></i></span>
         <div class="callout-body"><strong>Skill discovery:</strong> At the start of each workflow phase, Silver Bullet scans <code>~/.claude/skills/</code> and <code>~/.claude/plugins/cache/</code> to find all available skills. If a skill was recently installed, start a new session for it to be discovered.</div>
       </div>
 
@@ -292,7 +293,7 @@ footer a:hover{color:var(--accent-light)}
       </div>
 
       <div class="callout callout-info">
-        <span class="callout-icon">ℹ️</span>
+        <span class="callout-icon"><i data-lucide="info"></i></span>
         <div class="callout-body"><strong>Session logs:</strong> Every session writes a log to <code>docs/sessions/YYYY-MM-DD-task-slug.md</code>. Check recent session logs to understand what happened before the failure.</div>
       </div>
 
@@ -351,7 +352,7 @@ footer a:hover{color:var(--accent-light)}
       </div>
 
       <div class="callout callout-warn">
-        <span class="callout-icon">⚠️</span>
+        <span class="callout-icon"><i data-lucide="triangle-alert"></i></span>
         <div class="callout-body"><strong>Do not abuse the trivial change bypass.</strong> It exists for genuine typos and copy fixes, not as a shortcut for skipping review. Frequent use defeats the purpose of enforcement.</div>
       </div>
 
@@ -385,6 +386,7 @@ footer a:hover{color:var(--accent-light)}
   </div>
 </footer>
 
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
 <script src="../search.js"></script>
 <script>
 function applyTheme(dark){
@@ -398,6 +400,7 @@ function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-th
 const headings=document.querySelectorAll('.doc-content h2[id]');
 const links=document.querySelectorAll('.sidebar-nav a');
 window.addEventListener('scroll',()=>{let curr='';headings.forEach(h=>{if(window.scrollY>=h.offsetTop-100)curr=h.id});links.forEach(l=>{l.classList.toggle('active',l.getAttribute('href')==='#'+curr)})},{passive:true});
+lucide.createIcons();
 </script>
 </body>
 </html>

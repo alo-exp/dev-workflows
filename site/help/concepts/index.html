@@ -153,6 +153,7 @@ footer a:hover{color:var(--accent-light)}
 .nsr-title{font-size:.88rem;font-weight:600;color:var(--text-primary)}
 .nsr-excerpt{font-size:.78rem;color:var(--text-dim);line-height:1.4}
 @media(max-width:768px){.nav-search-wrap{display:none}}
+svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;stroke-width:1.5;stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round}
 </style>
 </head>
 <body>
@@ -222,7 +223,7 @@ footer a:hover{color:var(--accent-light)}
 <span class="cmd">/requesting-code-review</span>  <span class="comment"># dispatches code-reviewer subagent for peer review</span></div>
 
       <div class="callout callout-warn">
-        <span class="callout-icon">⚠️</span>
+        <span class="callout-icon"><i data-lucide="triangle-alert"></i></span>
         <div class="callout-body"><strong>Implicit coverage does not count.</strong> The enforcement hooks track actual Skill tool invocations. Saying "I already covered this while writing the code" is not valid — each skill must be explicitly invoked. This is intentional: the hooks can only measure what actually happened, not what Claude claims happened.</div>
       </div>
 
@@ -252,7 +253,7 @@ footer a:hover{color:var(--accent-light)}
       </ul>
 
       <div class="callout callout-info">
-        <span class="callout-icon">💡</span>
+        <span class="callout-icon"><i data-lucide="lightbulb"></i></span>
         <div class="callout-body"><strong>Hooks run outside Claude's context.</strong> They're shell scripts executed by Claude Code itself, not by Claude. This means they can't be overridden by Claude's reasoning or instructions — they're a hard system constraint.</div>
       </div>
 
@@ -332,10 +333,10 @@ footer a:hover{color:var(--accent-light)}
       <p>Quality gates are a mandatory pre-planning step where Claude evaluates the proposed design against 8 quality dimensions. All must pass before planning begins — a single ❌ is a hard stop.</p>
 
       <div class="dims-grid">
-        <div class="dim-card"><div class="dim-icon">🧩</div><div class="dim-name">Modularity</div><div class="dim-desc">Components are independently replaceable</div></div>
+        <div class="dim-card"><div class="dim-icon"><i data-lucide="puzzle"></i></div><div class="dim-name">Modularity</div><div class="dim-desc">Components are independently replaceable</div></div>
         <div class="dim-card"><div class="dim-icon">♻️</div><div class="dim-name">Reusability</div><div class="dim-desc">Components shared without modification</div></div>
         <div class="dim-card"><div class="dim-icon">📈</div><div class="dim-name">Scalability</div><div class="dim-desc">Handles growth without redesign</div></div>
-        <div class="dim-card"><div class="dim-icon">🔒</div><div class="dim-name">Security</div><div class="dim-desc">Defense-in-depth, least privilege</div></div>
+        <div class="dim-card"><div class="dim-icon"><i data-lucide="lock"></i></div><div class="dim-name">Security</div><div class="dim-desc">Defense-in-depth, least privilege</div></div>
         <div class="dim-card"><div class="dim-icon">🛡️</div><div class="dim-name">Reliability</div><div class="dim-desc">Graceful failures, fault tolerance</div></div>
         <div class="dim-card"><div class="dim-icon">🎯</div><div class="dim-name">Usability</div><div class="dim-desc">Intuitive APIs and interfaces</div></div>
         <div class="dim-card"><div class="dim-icon">🧪</div><div class="dim-name">Testability</div><div class="dim-desc">Isolated, fast, deterministic tests</div></div>
@@ -417,7 +418,7 @@ footer a:hover{color:var(--accent-light)}
           <p>Claude pauses at every phase gate. You review and approve each stage. Best for learning the workflow or working on sensitive/complex tasks where human oversight matters at each step.</p>
         </div>
         <div class="concept-card">
-          <div class="cc-icon">🚀</div>
+          <div class="cc-icon"><i data-lucide="rocket"></i></div>
           <h4>Autonomous</h4>
           <p>Claude drives start-to-finish. Decisions are logged. Genuine blockers are queued and surfaced at the end. Best for well-defined tasks when you want maximum throughput.</p>
         </div>
@@ -448,7 +449,7 @@ footer a:hover{color:var(--accent-light)}
       </ol>
 
       <div class="callout callout-info">
-        <span class="callout-icon">💡</span>
+        <span class="callout-icon"><i data-lucide="lightbulb"></i></span>
         <div class="callout-body"><strong>Worktree isolation</strong> means each agent works on its own copy of the repository. Changes from one agent can't interfere with another mid-flight — they're only merged once the merge gate runs.</div>
       </div>
 
@@ -520,6 +521,7 @@ docs/
   </div>
 </footer>
 
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
 <script src="../search.js"></script>
 <script>
 function applyTheme(dark){
@@ -533,6 +535,7 @@ function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-th
 const headings=document.querySelectorAll('.doc-content h2[id]');
 const links=document.querySelectorAll('.sidebar-nav a');
 window.addEventListener('scroll',()=>{let curr='';headings.forEach(h=>{if(window.scrollY>=h.offsetTop-100)curr=h.id});links.forEach(l=>{l.classList.toggle('active',l.getAttribute('href')==='#'+curr)})},{passive:true});
+lucide.createIcons();
 </script>
 </body>
 </html>

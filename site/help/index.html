@@ -118,6 +118,7 @@ footer a:hover{color:var(--accent-light)}
 .footer-links{display:flex;gap:24px}
 @media(max-width:600px){.footer-inner{flex-direction:column;align-items:flex-start;gap:12px}.footer-links{flex-wrap:wrap;gap:16px}}
 /* SEARCH RESULTS */
+svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;stroke-width:1.5;stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round}
 #search-results-section{padding:40px 0}
 .sr-list{display:flex;flex-direction:column;gap:12px;max-width:680px;margin:0 auto}
 .sr-item{display:flex;flex-direction:column;gap:4px;padding:20px 24px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);text-decoration:none;color:inherit;transition:all .2s}
@@ -149,11 +150,11 @@ footer a:hover{color:var(--accent-light)}
 <!-- HERO -->
 <section class="hero">
   <div class="container">
-    <div class="badge">📖 Help Center</div>
+    <div class="badge"><i data-lucide="book-open"></i> Help Center</div>
     <h1>How Can We Help You?</h1>
     <p>Everything you need to get productive with Silver Bullet — from first install to complex DevOps workflows.</p>
     <div class="search-wrap">
-      <span class="search-icon">🔍</span>
+      <span class="search-icon"><i data-lucide="search"></i></span>
       <input type="text" placeholder="Search topics, commands, concepts…" id="search-input" autocomplete="off">
     </div>
   </div>
@@ -172,14 +173,14 @@ footer a:hover{color:var(--accent-light)}
 <section style="padding:40px 0">
   <div class="container">
     <div class="quick-grid">
-      <a href="getting-started/" class="quick-link"><span class="ql-icon">🚀</span> Quick start</a>
-      <a href="concepts/#skills" class="quick-link"><span class="ql-icon">🧩</span> What are skills?</a>
-      <a href="dev-workflow/" class="quick-link"><span class="ql-icon">⚙️</span> Dev workflow</a>
-      <a href="reference/" class="quick-link"><span class="ql-icon">📋</span> Command reference</a>
-      <a href="getting-started/#install" class="quick-link"><span class="ql-icon">📦</span> Installation</a>
-      <a href="concepts/#session-modes" class="quick-link"><span class="ql-icon">🎛️</span> Session modes</a>
-      <a href="devops-workflow/" class="quick-link"><span class="ql-icon">🏗️</span> DevOps workflow</a>
-      <a href="concepts/#enforcement" class="quick-link"><span class="ql-icon">🔒</span> Enforcement layers</a>
+      <a href="getting-started/" class="quick-link"><span class="ql-icon"><i data-lucide="rocket"></i></span> Quick start</a>
+      <a href="concepts/#skills" class="quick-link"><span class="ql-icon"><i data-lucide="puzzle"></i></span> What are skills?</a>
+      <a href="dev-workflow/" class="quick-link"><span class="ql-icon"><i data-lucide="settings"></i></span> Dev workflow</a>
+      <a href="reference/" class="quick-link"><span class="ql-icon"><i data-lucide="clipboard-list"></i></span> Command reference</a>
+      <a href="getting-started/#install" class="quick-link"><span class="ql-icon"><i data-lucide="package"></i></span> Installation</a>
+      <a href="concepts/#session-modes" class="quick-link"><span class="ql-icon"><i data-lucide="sliders-horizontal"></i></span> Session modes</a>
+      <a href="devops-workflow/" class="quick-link"><span class="ql-icon"><i data-lucide="hard-hat"></i></span> DevOps workflow</a>
+      <a href="concepts/#enforcement" class="quick-link"><span class="ql-icon"><i data-lucide="lock"></i></span> Enforcement layers</a>
     </div>
   </div>
 </section>
@@ -193,7 +194,7 @@ footer a:hover{color:var(--accent-light)}
     <div class="help-grid" id="help-grid">
 
       <a href="getting-started/" class="help-card" data-keywords="install setup prerequisites beginner first run session mode ai development intro">
-        <div class="card-icon">🚀</div>
+        <div class="card-icon"><i data-lucide="rocket"></i></div>
         <span class="card-badge" style="background:rgba(5,150,105,.12);color:var(--green)">Start here</span>
         <h3>Getting Started</h3>
         <p>New to Silver Bullet or AI-assisted development? Start here to go from zero to your first enforced workflow session.</p>
@@ -208,7 +209,7 @@ footer a:hover{color:var(--accent-light)}
       </a>
 
       <a href="concepts/" class="help-card" data-keywords="concepts skills hooks gsd superpowers quality gates session modes enforcement agents">
-        <div class="card-icon">🧠</div>
+        <div class="card-icon"><i data-lucide="brain"></i></div>
         <span class="card-badge" style="background:rgba(107,114,128,.12);color:var(--accent-light)">Fundamentals</span>
         <h3>Core Concepts</h3>
         <p>Understand the building blocks: what skills and hooks are, how GSD and Superpowers interact, and why enforcement matters.</p>
@@ -223,7 +224,7 @@ footer a:hover{color:var(--accent-light)}
       </a>
 
       <a href="dev-workflow/" class="help-card" data-keywords="software engineering workflow steps discuss plan execute verify code review ship release 20 steps">
-        <div class="card-icon">⚙️</div>
+        <div class="card-icon"><i data-lucide="settings"></i></div>
         <span class="card-badge" style="background:rgba(107,114,128,.12);color:var(--accent-light)">Workflow</span>
         <h3>Software Engineering Workflow</h3>
         <p>The complete 20-step application development cycle, from session mode selection through release.</p>
@@ -238,7 +239,7 @@ footer a:hover{color:var(--accent-light)}
       </a>
 
       <a href="devops-workflow/" class="help-card" data-keywords="devops infrastructure iac terraform kubernetes blast radius incident fast path environment promotion 24 steps">
-        <div class="card-icon">🏗️</div>
+        <div class="card-icon"><i data-lucide="hard-hat"></i></div>
         <span class="card-badge" style="background:rgba(34,211,238,.12);color:var(--cyan)">DevOps</span>
         <h3>DevOps &amp; IaC Workflow</h3>
         <p>The 24-step infrastructure workflow with Incident Fast Path, Blast Radius assessment, and Environment Promotion.</p>
@@ -253,7 +254,7 @@ footer a:hover{color:var(--accent-light)}
       </a>
 
       <a href="reference/" class="help-card" data-keywords="reference commands gsd skills slash commands config json options file structure">
-        <div class="card-icon">📋</div>
+        <div class="card-icon"><i data-lucide="clipboard-list"></i></div>
         <span class="card-badge" style="background:rgba(251,191,36,.12);color:var(--amber)">Reference</span>
         <h3>Command Reference</h3>
         <p>Every GSD command, Silver Bullet skill, config option, and file location — all in one place.</p>
@@ -268,7 +269,7 @@ footer a:hover{color:var(--accent-light)}
       </a>
 
       <a href="troubleshooting/" class="help-card" data-keywords="troubleshoot debug error fix hook skill ci recovery config enforcement">
-        <div class="card-icon">🔧</div>
+        <div class="card-icon"><i data-lucide="wrench"></i></div>
         <span class="card-badge" style="background:rgba(220,38,38,.1);color:var(--red)">6 topics</span>
         <h3>Troubleshooting</h3>
         <p>Common issues, CI failures, hook errors, and how to diagnose problems with the enforcement system.</p>
@@ -290,7 +291,7 @@ footer a:hover{color:var(--accent-light)}
 <section style="padding:64px 0;background:var(--section-alt)">
   <div class="container">
     <div class="callout">
-      <div style="font-size:2rem;margin-bottom:12px">💡</div>
+      <div style="font-size:2rem;margin-bottom:12px"><i data-lucide="lightbulb"></i></div>
       <p><strong>New to AI-driven development?</strong> Silver Bullet works best when you understand what it's doing and why. Start with <a href="getting-started/" style="color:var(--accent-light);font-weight:600">Getting Started</a>, then <a href="concepts/" style="color:var(--accent-light);font-weight:600">Core Concepts</a> before diving into workflows. The more you understand the system, the more you get from it.</p>
     </div>
   </div>
@@ -313,6 +314,7 @@ footer a:hover{color:var(--accent-light)}
   </div>
 </footer>
 
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
 <script src="search.js"></script>
 <script>
 function applyTheme(dark){
@@ -323,6 +325,7 @@ function applyTheme(dark){
 }
 function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-theme')!=='dark')}
 (function(){const s=localStorage.getItem('silver-bullet-theme');applyTheme(s?s==='dark':true)})();
+lucide.createIcons();
 </script>
 </body>
 </html>
