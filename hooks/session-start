@@ -80,8 +80,8 @@ fi
 sp_file=$(ls ~/.claude/plugins/cache/*/superpowers/*/skills/using-superpowers/SKILL.md 2>/dev/null | head -1)
 
 # Locate Design plugin design-system SKILL.md
-design_file=$(ls ~/.claude/plugins/cache/*/design/*/skills/design-system/SKILL.md 2>/dev/null | head -1)
-[[ -z "${design_file:-}" ]] && design_file=$(ls ~/.claude/plugins/cache/*/knowledge-work-plugins/*/design/skills/design-system/SKILL.md 2>/dev/null | head -1)
+design_file=$(ls ~/.claude/plugins/cache/*/design/*/skills/design-system/SKILL.md 2>/dev/null | head -1 || true)
+[[ -z "${design_file:-}" ]] && design_file=$(ls ~/.claude/plugins/cache/*/knowledge-work-plugins/*/design/skills/design-system/SKILL.md 2>/dev/null | head -1 || true)
 
 # Locate SB core-rules.md (rules file installed alongside this hook)
 # This is the SB equivalent of ~/.claude/core-values.yml — re-injected every session
