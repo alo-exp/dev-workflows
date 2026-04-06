@@ -77,7 +77,7 @@ if ! command -v jq >/dev/null 2>&1; then
 fi
 
 # Locate the Superpowers using-superpowers SKILL.md (glob, not find — faster and more restrictive)
-sp_file=$(ls ~/.claude/plugins/cache/*/superpowers/*/skills/using-superpowers/SKILL.md 2>/dev/null | head -1)
+sp_file=$(ls ~/.claude/plugins/cache/*/superpowers/*/skills/using-superpowers/SKILL.md 2>/dev/null | head -1 || true)
 
 # Locate Design plugin design-system SKILL.md
 design_file=$(ls ~/.claude/plugins/cache/*/design/*/skills/design-system/SKILL.md 2>/dev/null | head -1 || true)
@@ -97,7 +97,7 @@ fi
 # Path traversal defense: reject if resolved path escapes plugin directory
 if [[ -f "$core_rules_file" ]]; then
   _resolved_rules="$(cd "$(dirname "$core_rules_file")" && pwd)/$(basename "$core_rules_file")"
-  if [[ "$_resolved_rules" != "${script_dir}"* ]]; then
+  if [[ "$_resolved_rules" != "${script_dir}/"* && "$_resolved_rules" != "${script_dir}" ]]; then
     core_rules_file=""
   fi
 fi

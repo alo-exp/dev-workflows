@@ -74,11 +74,27 @@ fi
 state_contents=""
 [[ -f "$state_file" ]] && state_contents=$(cat "$state_file")
 
+# ── Detect current git branch (for main-branch exemptions) ───────────────────
+current_branch=""
+current_branch=$(git -C "$PWD" rev-parse --abbrev-ref HEAD 2>/dev/null || true)
+if [[ -n "$current_branch" ]] && ! printf '%s' "$current_branch" | grep -qE '^[a-zA-Z0-9/_.-]+$'; then
+  current_branch=""
+fi
+on_main=false
+if [[ "$current_branch" == "main" || "$current_branch" == "master" ]]; then
+  on_main=true
+fi
+
 # ── Build required skills list ────────────────────────────────────────────────
 if [[ -n "$required_deploy_cfg" ]]; then
   required_skills="$required_deploy_cfg"
 else
   required_skills="quality-gates code-review requesting-code-review receiving-code-review testing-strategy documentation finishing-a-development-branch deploy-checklist create-release verification-before-completion test-driven-development tech-debt review-loop-pass-1 review-loop-pass-2"
+fi
+
+# On main/master, finishing-a-development-branch is not applicable
+if [[ "$on_main" == true ]]; then
+  required_skills=$(printf '%s' "$required_skills" | tr ' ' '\n' | grep -v '^finishing-a-development-branch$' | tr '\n' ' ' | sed 's/ $//')
 fi
 
 # ── Compute missing skills ────────────────────────────────────────────────────
@@ -111,7 +127,7 @@ resolved_rules=""
 if [[ -f "$core_rules_file" ]]; then
   resolved_rules="$(cd "$(dirname "$core_rules_file")" && pwd)/$(basename "$core_rules_file")"
 fi
-if [[ -n "$resolved_rules" && "$resolved_rules" != "${script_dir}"* ]]; then
+if [[ -n "$resolved_rules" && "$resolved_rules" != "${script_dir}/"* && "$resolved_rules" != "${script_dir}" ]]; then
   # Path resolved outside plugin directory — reject silently
   core_rules_file=""
 fi
