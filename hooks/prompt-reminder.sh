@@ -86,10 +86,21 @@ if [[ "$current_branch" == "main" || "$current_branch" == "master" ]]; then
 fi
 
 # ── Build required skills list ────────────────────────────────────────────────
+# Source canonical required-skills list (single source of truth — TD-01 fix)
+# shellcheck source=lib/required-skills.sh
+_lib_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/lib" && pwd)"
+if [[ -f "$_lib_dir/required-skills.sh" ]]; then
+  # shellcheck disable=SC1090
+  source "$_lib_dir/required-skills.sh"
+else
+  # Fallback if lib not found (should not happen in correct installs)
+  DEFAULT_REQUIRED="quality-gates code-review requesting-code-review receiving-code-review testing-strategy documentation finishing-a-development-branch deploy-checklist create-release verification-before-completion test-driven-development tech-debt review-loop-pass-1 review-loop-pass-2"
+fi
+
 if [[ -n "$required_deploy_cfg" ]]; then
   required_skills="$required_deploy_cfg"
 else
-  required_skills="quality-gates code-review requesting-code-review receiving-code-review testing-strategy documentation finishing-a-development-branch deploy-checklist create-release verification-before-completion test-driven-development tech-debt review-loop-pass-1 review-loop-pass-2"
+  required_skills="$DEFAULT_REQUIRED"
 fi
 
 # On main/master, finishing-a-development-branch is not applicable
@@ -98,6 +109,8 @@ if [[ "$on_main" == true ]]; then
 fi
 
 # ── Compute missing skills ────────────────────────────────────────────────────
+# O(N) grep calls per prompt -- acceptable for N<=20 skills; if prompt
+# latency exceeds 200ms, optimize with associative array or single awk pass.
 missing_list=""
 total=0
 completed=0

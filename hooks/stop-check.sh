@@ -95,11 +95,21 @@ state_contents=""
 [[ -f "$state_file" ]] && state_contents=$(cat "$state_file")
 
 # ── Build required skills list (Tier 2: full required_deploy list) ────────────
-DEFAULT_REQUIRED="quality-gates code-review requesting-code-review receiving-code-review testing-strategy documentation finishing-a-development-branch deploy-checklist create-release verification-before-completion test-driven-development tech-debt review-loop-pass-1 review-loop-pass-2"
+# Source canonical required-skills list (single source of truth — TD-01 fix)
+# shellcheck source=lib/required-skills.sh
+_lib_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/lib" && pwd)"
+if [[ -f "$_lib_dir/required-skills.sh" ]]; then
+  # shellcheck disable=SC1090
+  source "$_lib_dir/required-skills.sh"
+else
+  # Fallback if lib not found (should not happen in correct installs)
+  DEFAULT_REQUIRED="quality-gates code-review requesting-code-review receiving-code-review testing-strategy documentation finishing-a-development-branch deploy-checklist create-release verification-before-completion test-driven-development tech-debt review-loop-pass-1 review-loop-pass-2"
+  DEVOPS_DEFAULT_REQUIRED="blast-radius devops-quality-gates code-review requesting-code-review receiving-code-review testing-strategy documentation finishing-a-development-branch deploy-checklist create-release verification-before-completion test-driven-development tech-debt review-loop-pass-1 review-loop-pass-2"
+fi
 
 # DevOps workflow substitutes quality-gates with blast-radius + devops-quality-gates
 if [[ "$active_workflow" == "devops-cycle" ]]; then
-  DEFAULT_REQUIRED="blast-radius devops-quality-gates code-review requesting-code-review receiving-code-review testing-strategy documentation finishing-a-development-branch deploy-checklist create-release verification-before-completion test-driven-development tech-debt review-loop-pass-1 review-loop-pass-2"
+  DEFAULT_REQUIRED="$DEVOPS_DEFAULT_REQUIRED"
 fi
 
 # Mandatory finalization skills
@@ -143,6 +153,19 @@ done
 
 # ── Check quality-gate-stage markers (F-16) ───────────────────────────────────
 # Apply when: create-release is in required_skills OR any stage marker is already present
+
+# TD-04: extracted into function for testability and clarity
+check_quality_gate_stages() {
+  local state_contents="$1"
+  local missing_stages=""
+  for i in 1 2 3 4; do
+    if ! printf '%s\n' "$state_contents" | grep -qx "quality-gate-stage-${i}"; then
+      missing_stages="${missing_stages:+$missing_stages, }stage-${i}"
+    fi
+  done
+  printf '%s' "$missing_stages"
+}
+
 release_context=false
 for skill in $required_skills; do
   if [[ "$skill" == "create-release" ]]; then
@@ -161,11 +184,11 @@ fi
 
 release_missing=""
 if [[ "$release_context" == true ]]; then
-  for stage in quality-gate-stage-1 quality-gate-stage-2 quality-gate-stage-3 quality-gate-stage-4; do
-    if ! printf '%s\n' "$state_contents" | grep -qx "$stage" 2>/dev/null; then
-      release_missing="${release_missing:+$release_missing }$stage"
-    fi
-  done
+  release_missing=$(check_quality_gate_stages "$state_contents")
+  # Convert comma-separated "stage-N" to space-separated "quality-gate-stage-N" for output
+  if [[ -n "$release_missing" ]]; then
+    release_missing=$(printf '%s' "$release_missing" | sed 's/stage-/quality-gate-stage-/g; s/, / /g')
+  fi
 fi
 
 # ── Output result ─────────────────────────────────────────────────────────────

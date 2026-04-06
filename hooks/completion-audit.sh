@@ -199,11 +199,21 @@ fi
 # ── TIER 2: Final delivery check (gh pr create / deploy / release) ────────────
 
 # Build required skills list
-DEFAULT_REQUIRED="quality-gates code-review requesting-code-review receiving-code-review testing-strategy documentation finishing-a-development-branch deploy-checklist create-release verification-before-completion test-driven-development tech-debt review-loop-pass-1 review-loop-pass-2"
+# Source canonical required-skills list (single source of truth — TD-01 fix)
+# shellcheck source=lib/required-skills.sh
+_lib_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/lib" && pwd)"
+if [[ -f "$_lib_dir/required-skills.sh" ]]; then
+  # shellcheck disable=SC1090
+  source "$_lib_dir/required-skills.sh"
+else
+  # Fallback if lib not found (should not happen in correct installs)
+  DEFAULT_REQUIRED="quality-gates code-review requesting-code-review receiving-code-review testing-strategy documentation finishing-a-development-branch deploy-checklist create-release verification-before-completion test-driven-development tech-debt review-loop-pass-1 review-loop-pass-2"
+  DEVOPS_DEFAULT_REQUIRED="blast-radius devops-quality-gates code-review requesting-code-review receiving-code-review testing-strategy documentation finishing-a-development-branch deploy-checklist create-release verification-before-completion test-driven-development tech-debt review-loop-pass-1 review-loop-pass-2"
+fi
 
 # DevOps workflow substitutes quality-gates with blast-radius + devops-quality-gates
 if [[ "$active_workflow" == "devops-cycle" ]]; then
-  DEFAULT_REQUIRED="blast-radius devops-quality-gates code-review requesting-code-review receiving-code-review testing-strategy documentation finishing-a-development-branch deploy-checklist create-release verification-before-completion test-driven-development tech-debt review-loop-pass-1 review-loop-pass-2"
+  DEFAULT_REQUIRED="$DEVOPS_DEFAULT_REQUIRED"
 fi
 
 # Merge required_deploy from config + mandatory finalization skills (deduplicated)
