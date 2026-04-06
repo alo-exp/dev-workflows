@@ -24,6 +24,10 @@ progress:
 
 Last activity: 2026-04-06 -- Completed quick task 260406-anb: Add automatic model switching to Silver Bullet agent definitions and website
 
+## Roadmap Evolution
+
+- Phase 6 added: implement enforcement techniques from AI-Native SDLC Playbook and document all enforcement mechanisms
+
 ## Decisions
 
 - silver-bullet.md.base template contains all enforcement sections (0-9) with placeholders
