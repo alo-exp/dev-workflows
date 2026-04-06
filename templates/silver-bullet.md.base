@@ -196,6 +196,24 @@ You MUST NOT:
 
 The loop is self-limiting: it ends when two consecutive clean passes are produced. Surface to the user only if the reviewer raises an issue it cannot resolve (e.g. requires a decision, a missing dependency, or an external constraint).
 
+### Recording Review Loop Progress
+
+After each clean review pass (reviewer returns no issues), record the marker:
+
+```bash
+echo "review-loop-pass-1" >> ~/.claude/.silver-bullet/state
+```
+
+After a SECOND consecutive clean pass, record:
+
+```bash
+echo "review-loop-pass-2" >> ~/.claude/.silver-bullet/state
+```
+
+The completion audit hook requires `review-loop-pass-2` in the state file before allowing PR creation, deploy, or release. This converts the two-consecutive-approvals rule from a documentation-only requirement to a partially mechanical gate.
+
+> **Note:** This is an imperfect proxy — the markers are written by Claude and not independently verified. However, they add friction: Claude must explicitly claim two clean passes occurred, creating an auditable trail.
+
 ## 3b. GSD Command Tracking
 
 GSD command markers are recorded **automatically** by `record-skill.sh` whenever a

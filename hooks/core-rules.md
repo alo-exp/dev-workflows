@@ -27,6 +27,15 @@ Seven enforcement layers are active. Hooks are invocation-based — the hooks tr
 
 Read `docs/workflows/full-dev-cycle.md` before starting any non-trivial task. If a required skill cannot be invoked, STOP and notify the user — do NOT silently skip.
 
+## Review Loop (Section 3a)
+
+Review loop must produce two consecutive clean passes — write review-loop-pass-1 and review-loop-pass-2 markers after each clean pass:
+```bash
+echo "review-loop-pass-1" >> ~/.claude/.silver-bullet/state
+echo "review-loop-pass-2" >> ~/.claude/.silver-bullet/state
+```
+These markers are required by the completion audit hook before PR creation, deploy, or release.
+
 ## Anti-Rationalization
 
 These are invalid excuses:
