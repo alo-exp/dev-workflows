@@ -124,7 +124,7 @@ Plans:
 **Plans:** 4 plans
 
 Plans:
-- [ ] 07-01-PLAN.md -- New forbidden-skill-check.sh hook, SubagentStop registration, stop-check.sh quality-gate-stage check, completion-audit.sh gh pr merge, ci-status-check.sh extended patterns
-- [ ] 07-02-PLAN.md -- dev-cycle-check.sh hardening: plugin cache Bash check, scripting language bypass, branch mismatch warning, generalized tamper regex, destructive command warning
-- [ ] 07-03-PLAN.md -- Stage falsification prevention, stage-after-workflow ordering, compliance-status.sh mtime cache, session-log-init.sh mode fix, src_pattern update
-- [ ] 07-04-PLAN.md -- Review loop proxy enforcement (F-01), test suites for all new enforcement code
+- [x] 07-01-PLAN.md -- New forbidden-skill-check.sh hook, SubagentStop registration, stop-check.sh quality-gate-stage check, completion-audit.sh gh pr merge, ci-status-check.sh extended patterns
+- [x] 07-02-PLAN.md -- dev-cycle-check.sh hardening: plugin cache Bash check, scripting language bypass, branch mismatch warning, generalized tamper regex, destructive command warning
+- [x] 07-03-PLAN.md -- Stage falsification prevention, stage-after-workflow ordering, compliance-status.sh mtime cache, session-log-init.sh mode fix, src_pattern update
+- [x] 07-04-PLAN.md -- Review loop proxy enforcement (F-01), test suites for all new enforcement code
