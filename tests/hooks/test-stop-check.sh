@@ -31,6 +31,20 @@ write_cfg() {
 EOF
 }
 
+write_cfg_with_release() {
+  cat > "$TMPCFG" << EOF
+{
+  "project": { "src_pattern": "/src/", "active_workflow": "full-dev-cycle" },
+  "skills": {
+    "required_planning": ["quality-gates"],
+    "required_deploy": ["quality-gates","code-review","testing-strategy","documentation","finishing-a-development-branch","deploy-checklist","create-release"],
+    "all_tracked": ["quality-gates","code-review"]
+  },
+  "state": { "state_file": "${TMPSTATE}", "trivial_file": "${SB_TEST_DIR}/trivial-test-${TEST_RUN_ID}" }
+}
+EOF
+}
+
 setup() {
   TMPDIR_TEST=$(mktemp -d)
   TMPSTATE="${SB_TEST_DIR}/test-state-${TEST_RUN_ID}"
@@ -51,6 +65,7 @@ setup() {
 teardown() {
   rm -rf "$TMPDIR_TEST"
   rm -f "$TMPSTATE"
+  rm -f "${SB_TEST_DIR}/trivial-test-${TEST_RUN_ID}"
 }
 
 run_hook() {
@@ -177,6 +192,46 @@ deploy-checklist
 EOF
 out=$(run_hook)
 assert_passes "on main branch: all skills except finishing-a-development-branch -> no block" "$out"
+teardown
+
+# Test 6: create-release in required_deploy but quality-gate-stage markers missing -> block
+echo "--- Test 6: quality-gate-stage markers missing when create-release required ---"
+setup
+write_cfg_with_release
+# Provide all workflow skills but no quality-gate-stage markers
+cat > "$TMPSTATE" << 'EOF'
+quality-gates
+code-review
+testing-strategy
+documentation
+finishing-a-development-branch
+deploy-checklist
+create-release
+EOF
+out=$(run_hook)
+assert_blocks "missing quality-gate-stage markers when create-release required -> block" "$out"
+assert_contains "block output mentions quality-gate-stage" "$out" "quality-gate-stage"
+teardown
+
+# Test 7: create-release in required_deploy and all quality-gate-stage markers present -> pass
+echo "--- Test 7: all quality-gate-stage markers present -> pass ---"
+setup
+write_cfg_with_release
+cat > "$TMPSTATE" << 'EOF'
+quality-gates
+code-review
+testing-strategy
+documentation
+finishing-a-development-branch
+deploy-checklist
+create-release
+quality-gate-stage-1
+quality-gate-stage-2
+quality-gate-stage-3
+quality-gate-stage-4
+EOF
+out=$(run_hook)
+assert_passes "all skills + all quality-gate-stage markers present -> no block" "$out"
 teardown
 
 # ── Results ───────────────────────────────────────────────────────────────────

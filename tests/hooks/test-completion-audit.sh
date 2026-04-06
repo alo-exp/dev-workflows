@@ -55,6 +55,7 @@ setup() {
 teardown() {
   rm -rf "$TMPDIR_TEST"
   rm -f "$TMPSTATE"
+  rm -f "${SB_TEST_DIR}/trivial-test-${TEST_RUN_ID}"
 }
 
 run_hook() {
@@ -316,6 +317,38 @@ setup
 touch "${SB_TEST_DIR}/trivial-test-${TEST_RUN_ID}"
 out=$(run_hook "PreToolUse" "git commit -m 'test'")
 assert_passes "trivial file bypasses completion check" "$out"
+teardown
+
+# Test 16: gh pr merge blocked when skills missing (Tier 2 delivery gate)
+echo "--- Group 7: gh pr merge delivery gate ---"
+setup
+# Only planning done
+echo "quality-gates" > "$TMPSTATE"
+out=$(run_hook "PreToolUse" "gh pr merge --squash")
+assert_blocks "gh pr merge blocked with only quality-gates" "$out"
+assert_contains "gh pr merge block mentions COMPLETION BLOCKED" "$out" "COMPLETION BLOCKED"
+teardown
+
+# Test 17: gh pr merge passes when all skills present (including review-loop-pass markers)
+setup
+cat > "$TMPSTATE" << 'EOF'
+quality-gates
+code-review
+requesting-code-review
+receiving-code-review
+testing-strategy
+documentation
+finishing-a-development-branch
+deploy-checklist
+create-release
+verification-before-completion
+test-driven-development
+tech-debt
+review-loop-pass-1
+review-loop-pass-2
+EOF
+out=$(run_hook "PreToolUse" "gh pr merge --squash")
+assert_passes "gh pr merge passes with all skills + review-loop-pass markers" "$out"
 teardown
 
 # ── Results ───────────────────────────────────────────────────────────────────
