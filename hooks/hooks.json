@@ -14,6 +14,16 @@
     ],
     "PreToolUse": [
       {
+        "matcher": "Skill",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/forbidden-skill-check.sh\"",
+            "async": false
+          }
+        ]
+      },
+      {
         "matcher": "Bash",
         "hooks": [
           {
@@ -127,6 +137,18 @@
       }
     ],
     "Stop": [
+      {
+        "matcher": ".*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/stop-check.sh\"",
+            "async": false
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
       {
         "matcher": ".*",
         "hooks": [
