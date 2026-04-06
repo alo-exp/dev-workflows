@@ -8,7 +8,7 @@ Brooks was right then. AI changes the equation now.
 
 Silver Bullet is a Claude Code plugin that orchestrates the best open-source agentic workflows into one enforced process. It combines [GSD](https://github.com/gsd-build/get-shit-done) (multi-agent execution), [Superpowers](https://github.com/obra/superpowers) (code review, branch management), [Engineering](https://github.com/anthropics/knowledge-work-plugins/tree/main/engineering) (testing, docs, deploy), and [Design](https://github.com/anthropics/knowledge-work-plugins/tree/main/design) (design system, UX copy, accessibility) into one guided workflow with 10 layers of compliance. **You don't need to know GSD** -- Silver Bullet guides you through every step, explains what's happening, and handles errors. Just describe what you want to build.
 
-**Current version: v0.11.0** — Deep enforcement hardening: Stop hook + UserPromptSubmit reminder (survive compaction), forbidden-skill enforcement, review-loop proxy gate, stage ordering validation, tamper detection extensions, automatic model switching for agents. 183-test comprehensive E2E harness with full hook coverage and integration scenarios. Closes 16 enforcement audit gaps identified post-v0.10.0.
+**Current version: v0.12.0** — `/silver` smart router skill (single entry point for all SB and GSD skills), `/silver:init` rename, enforcement layer documentation corrected to 10 layers, greedy namespace stripping in record-skill.sh (SENTINEL S6-001), 191-test harness. Full site and help center updated.
 
 ## How It Works
 

@@ -2,8 +2,26 @@
 
 ## [Unreleased]
 
-- **Added** `/silver` dispatcher skill — routes freeform text to the best SB or GSD skill
-- **Renamed** `/using-silver-bullet` skill to `/silver:init` — shorter namespaced name
+## 0.12.0 (2026-04-07)
+
+### Added
+- `/silver` router skill — freeform dispatcher that routes natural language to the right Silver Bullet or GSD skill; delegates GSD intent to `/gsd:do` automatically
+- Ten-layer enforcement model now fully documented in `silver-bullet.md` section 1 (Stop hook, UserPromptSubmit reminder, and Forbidden skill gate layers were previously undocumented)
+
+### Changed
+- Renamed `/using-silver-bullet` skill to `/silver:init` — shorter namespaced name consistent with the `/silver:*` namespace; project-wide update across all docs, site, help center, README, and hooks
+
+### Fixed
+- `record-skill.sh`: greedy namespace stripping loop (mirrors `forbidden-skill-check.sh`) — double-namespaced invocations (e.g., `outer:inner:quality-gates`) were silently untracked (SENTINEL S6-001)
+- `silver-bullet.md` section 1: enforcement layer count corrected from 7 to 10; Stop hook, UserPromptSubmit reminder, and Forbidden skill gate now listed explicitly
+- `site/index.html`: all enforcement layer count references corrected from 7 to 10; architecture section updated with three missing layer cards
+- `site/compare/index.html`: enforcement layer count corrected from 7 to 10
+
+### Tech Debt
+- `hooks/lib/required-skills.sh`: extracted `DEFAULT_REQUIRED` as single source of truth; sourced by `stop-check.sh`, `completion-audit.sh`, `prompt-reminder.sh` with inline fallback (TD-01)
+- `stop-check.sh`: extracted `check_quality_gate_stages()` as testable pure function (TD-04)
+- `templates/silver-bullet.config.json.default`: added `config_version` field (TD-07)
+- Added 4 new tests: double-namespace bypass (forbidden-skill), main-branch filter (prompt-reminder), path traversal defense (prompt-reminder), double-namespace record (record-skill)
 
 ## 0.11.0 (2026-04-06)
 
