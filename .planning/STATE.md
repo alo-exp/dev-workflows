@@ -22,7 +22,7 @@ progress:
 **Active phase:** Phase 1 -- Workflow File Rewrites (executed, pending verify)
 **Current plan:** 1
 
-Last activity: 2026-04-07 — Completed quick task 260407-1e2: tech debt fixes (DEFAULT_REQUIRED shared lib, 4 new tests, stop-check refactor, config_version)
+Last activity: 2026-04-07 — Completed quick task 260407-2a8: Create /silver router skill that routes to best SB or GSD skill
 
 ## Roadmap Evolution
 
@@ -59,6 +59,7 @@ Last activity: 2026-04-07 — Completed quick task 260407-1e2: tech debt fixes (
 | 260405-8gd | Revise quality gate §9 — cross-plugin audit dimension and stage reorder | 2026-04-05 | 571caf5 | Verified | [260405-8gd-revise-quality-gate-cross-plugin-audit-p](./quick/260405-8gd-revise-quality-gate-cross-plugin-audit-p/) |
 | 260406-anb | Add automatic model switching to Silver Bullet agent definitions and website | 2026-04-06 | c1beda1 | — | [260406-anb-add-automatic-model-switching-to-silver-](./quick/260406-anb-add-automatic-model-switching-to-silver-/) |
 | 260407-1e2 | Fix v0.11.1 and v0.12.0 tech debt: extract DEFAULT_REQUIRED, add missing tests, refactor stop-check, config versioning, improve messages | 2026-04-06 | b1e848c | — | [260407-1e2-fix-v0-11-1-and-v0-12-0-tech-debt-extrac](./quick/260407-1e2-fix-v0-11-1-and-v0-12-0-tech-debt-extrac/) |
+| 260407-2a8 | Create /silver router skill that routes to best SB or GSD skill | 2026-04-07 | cec6cb2 | — | [260407-2a8-create-silver-router-skill-that-routes-t](./quick/260407-2a8-create-silver-router-skill-that-routes-t/) |
 
 ## Performance Metrics
 
