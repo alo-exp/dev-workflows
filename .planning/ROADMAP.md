@@ -93,7 +93,7 @@ Plans:
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -104,6 +104,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7
 | 5. Documentation & Public-Facing | 0/1 | Not started | - |
 | 6. Enforcement Techniques | 0/2 | Planned | - |
 | 7. Close Enforcement Audit Gaps | 0/4 | Planned | - |
+| 8. Enforcement Test Harness | 0/2 | Planned | - |
 
 ### Phase 6: Implement Enforcement Techniques from AI-Native SDLC Playbook
 
@@ -128,3 +129,14 @@ Plans:
 - [x] 07-02-PLAN.md -- dev-cycle-check.sh hardening: plugin cache Bash check, scripting language bypass, branch mismatch warning, generalized tamper regex, destructive command warning
 - [x] 07-03-PLAN.md -- Stage falsification prevention, stage-after-workflow ordering, compliance-status.sh mtime cache, session-log-init.sh mode fix, src_pattern update
 - [x] 07-04-PLAN.md -- Review loop proxy enforcement (F-01), test suites for all new enforcement code
+
+### Phase 8: Comprehensive SB enforcement test harness
+
+**Goal:** Automated integration test suite that validates multi-hook enforcement scenarios (planning gates, workflow completion, skill tracking, session management) replacing manual e2e-smoke-test enforcement checks with deterministic JSON-pipe tests
+**Requirements**: ENF-HARNESS-01, ENF-HARNESS-02, ENF-HARNESS-03, ENF-HARNESS-04, ENF-HARNESS-05, ENF-HARNESS-06, ENF-HARNESS-07, ENF-HARNESS-08, ENF-HARNESS-10
+**Depends on:** Phase 7
+**Plans:** 2 plans
+
+Plans:
+- [ ] 08-01-PLAN.md -- Integration test helpers, planning gate scenarios, workflow completion scenarios
+- [ ] 08-02-PLAN.md -- Skill tracking scenarios, session scenarios, unified test runner, smoke test doc update
