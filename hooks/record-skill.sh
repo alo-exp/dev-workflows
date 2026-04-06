@@ -21,11 +21,14 @@ skill=$(printf '%s' "$input" | jq -r '.tool_input.skill // ""')
 [[ -z "$skill" ]] && exit 0
 
 # GSD commands (gsd:discuss-phase, gsd:plan-phase, etc.) are tracked with gsd- prefix
-# Other namespace prefixes (superpowers:, engineering:, design:, etc.) are stripped
+# Other namespace prefixes (superpowers:, engineering:, design:, etc.) are stripped.
+# Greedy loop strips ALL namespace prefixes (handles double-namespace: outer:inner:skill-name).
 if printf '%s' "$skill" | grep -qE '^gsd:'; then
   skill=$(printf '%s' "$skill" | sed 's/^gsd:/gsd-/')
 else
-  skill=$(printf '%s' "$skill" | sed 's/^[a-zA-Z0-9_-]*://')
+  while printf '%s' "$skill" | grep -qE '^[a-zA-Z0-9_-]+:'; do
+    skill=$(printf '%s' "$skill" | sed 's/^[a-zA-Z0-9_-]*://')
+  done
 fi
 
 # --- Resolve config file by walking up from $PWD ---

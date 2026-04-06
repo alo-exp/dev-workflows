@@ -80,6 +80,8 @@ Reason:     {one sentence explaining the match}
 
 **For GSD delegation** — invoke `/gsd:do` via the Skill tool, passing the original `$ARGUMENTS` as arguments. Do NOT attempt to route to individual GSD commands — let `/gsd:do` handle that.
 
+**Security note:** `/silver` only routes to the skills explicitly listed in the routing table above. It never routes to forbidden skills — the forbidden-skill gate (`forbidden-skill-check.sh`) enforces this at the tool layer independently of this routing logic.
+
 ### Routing Priority
 
 1. SB routing table (specific domain matches take precedence)

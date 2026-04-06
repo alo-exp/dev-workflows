@@ -216,6 +216,20 @@ else
 fi
 teardown
 
+# Test 14: Double-namespace stripping (outer:inner:quality-gates → quality-gates)
+echo "--- Group 6: Double-namespace stripping (SENTINEL S6-001) ---"
+setup
+run_hook "outer:inner:quality-gates" >/dev/null
+assert_in_state "double-namespaced skill recorded (outer:inner:quality-gates → quality-gates)" "quality-gates"
+assert_not_in_state "double-namespaced form not recorded verbatim" "outer:inner:quality-gates"
+assert_not_in_state "single-stripped form not recorded" "inner:quality-gates"
+teardown
+
+setup
+run_hook "a:b:c:code-review" >/dev/null
+assert_in_state "triple-namespaced skill recorded (a:b:c:code-review → code-review)" "code-review"
+teardown
+
 # ── Results ───────────────────────────────────────────────────────────────────
 echo ""
 echo "Results: $PASS passed, $FAIL failed"
