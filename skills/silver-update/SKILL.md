@@ -134,7 +134,7 @@ Use AskUserQuestion:
 - Question: "Proceed with installing v<latest-version> at commit <short-sha>?"
 - Options: "A. Yes, install" / "B. Cancel"
 
-If user cancels, remove `$NEW_CACHE` and exit without modifying the registry.
+If user cancels, remove `$NEW_CACHE` safely (only if the path is non-empty and contained within `~/.claude/plugins/cache/`) and exit without modifying the registry.
 
 ### Step 6: Update the plugin registry
 
