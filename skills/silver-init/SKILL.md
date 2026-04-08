@@ -167,6 +167,39 @@ Use AskUserQuestion:
 
 If user selects A, use the Edit tool to remove the offending hook entries from `.claude/settings.json`. If user selects B, STOP.
 
+### 1.6 MultAI plugin
+
+Use the Glob tool to search for:
+`~/.claude/plugins/cache/multai/skills/orchestrator/SKILL.md`
+
+If no file found, output exactly:
+> ❌ MultAI plugin not found. Required for silver:research and multi-AI perspectives.
+> Install: `/plugin install` from the MultAI marketplace
+
+STOP. Do not proceed.
+
+### 1.7 Anthropic Engineering plugin
+
+Use the Glob tool to search for:
+`~/.claude/plugins/cache/engineering/skills/`
+
+If no directory found, display:
+> ⚠️  Anthropic Engineering plugin not found. Recommended for silver:ui (/frontend-design, /testing-strategy) and silver:release (/documentation).
+> Install via the Anthropic Engineering plugin in the marketplace. (Optional — workflows degrade gracefully.)
+
+Continue without stopping.
+
+### 1.8 Anthropic Product Management plugin
+
+Use the Glob tool to search for:
+`~/.claude/plugins/cache/product-management/skills/`
+
+If no directory found, display:
+> ⚠️  Anthropic Product Management plugin not found. Recommended for silver:feature and silver:ui (/product-brainstorming).
+> Install via the Anthropic Product Management plugin in the marketplace. (Optional — workflows degrade gracefully.)
+
+Continue without stopping.
+
 ---
 
 ## Phase 1.5: Version Freshness Check
@@ -238,6 +271,23 @@ No automated update skill exists for these plugins. If the user wants to update 
 > To update Design: `/plugin install anthropics/knowledge-work-plugins/tree/main/design`
 > To update Engineering: `/plugin install anthropics/knowledge-work-plugins/tree/main/engineering`
 
+### 1.5.4 Check MultAI version
+
+Read installed version:
+```bash
+cat "$HOME/.claude/plugins/installed_plugins.json" | jq -r '.plugins["multai@multai"][0].version // "unknown"'
+```
+
+Check latest:
+```bash
+cat "$HOME/.claude/plugins/cache/multai/CHANGELOG.md" 2>/dev/null | grep "^## \[" | head -1
+```
+
+If installed version appears outdated compared to CHANGELOG, display:
+> MultAI v{installed} may not be the latest. To update: `/multai:update`
+
+No AskUserQuestion needed — MultAI update is user-initiated only. Display the notice and continue.
+
 ---
 
 ## Phase 2: Auto-Detect Project
@@ -278,7 +328,36 @@ If `NOT_GIT`, use AskUserQuestion:
 
 After either clone or create succeeds, continue to step 2.1.
 
-### 2.1 Detect project name
+### 2.1 Project type detection
+
+Check whether this is a new project or an existing one:
+```bash
+test -d ".planning" && echo "EXISTING" || echo "NEW"
+```
+
+**If NEW project:**
+Use AskUserQuestion:
+- Question: "No .planning/ directory found. How would you like to initialize this project?"
+- Options:
+  - "A. New project — scaffold with GSD (creates ROADMAP.md, STATE.md, project structure)"
+  - "B. Existing codebase — map it first before scaffolding"
+  - "C. Skip project initialization — I'll handle it manually"
+
+If A: invoke `/gsd-new-project` via the Skill tool. After it completes, continue.
+If B: invoke `/gsd-map-codebase` via the Skill tool, then `/gsd-scan`. After both complete, offer to run `/gsd-new-project`. Then continue.
+If C: continue without project initialization.
+
+**If EXISTING project:**
+Check if codebase intelligence exists:
+```bash
+test -d ".planning/codebase" && echo "INTEL_EXISTS" || echo "NO_INTEL"
+```
+
+If NO_INTEL and project appears brownfield (has source files but no .planning/codebase/):
+Display: "No codebase intelligence found. Running silver:scan to orient planning..."
+Invoke `/gsd-scan` via the Skill tool. After it completes, continue.
+
+### 2.2 Detect project name
 
 1. Use the Read tool to check for these files in the project root (in order):
    `package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`, `pom.xml`, `build.gradle`,
@@ -302,7 +381,7 @@ After either clone or create succeeds, continue to step 2.1.
    basename "$PWD"
    ```
 
-### 2.2 Detect tech stack
+### 2.3 Detect tech stack
 
 Based on which manifest file was found, set the tech stack string:
 - `package.json` → Read it and check for key dependencies (e.g., "react", "next", "express", "vue", "angular", "typescript", "bun", "deno"). Compose a string like "Node.js / TypeScript / React" based on what is found.
@@ -320,14 +399,14 @@ Based on which manifest file was found, set the tech stack string:
 - `pubspec.yaml` → "Dart / Flutter"
 - If none found → "Unknown — please specify"
 
-### 2.3 Detect repo URL
+### 2.4 Detect repo URL
 
 Run via Bash tool:
 ```
 git remote get-url origin 2>/dev/null || echo "NONE"
 ```
 
-### 2.4 Detect source pattern
+### 2.5 Detect source pattern
 
 Use the Bash tool to check which source directories exist:
 ```
@@ -338,7 +417,7 @@ ls -d src/ app/ lib/ 2>/dev/null | head -1
 - If `lib/` exists → source pattern is `/lib/`
 - If none exist → default to `/src/`
 
-### 2.5 Confirm with user
+### 2.6 Confirm with user
 
 Present the detected values to the user:
 
@@ -356,10 +435,10 @@ Use AskUserQuestion:
   - "A. Yes, looks right"
   - "B. Edit values"
 
-- If user selects A → proceed to step 2.6.
-- If user selects B → ask which fields to change, accept new values, then proceed to step 2.6.
+- If user selects A → proceed to step 2.7.
+- If user selects B → ask which fields to change, accept new values, then proceed to step 2.7.
 
-### 2.6 Configure permission mode
+### 2.7 Configure permission mode
 
 Check if `.claude/settings.local.json` has a `permissions.defaultMode` set:
 ```bash
@@ -391,6 +470,8 @@ If user chooses `auto` or confirmed `bypassPermissions`:
 - This persists across sessions — no more repeated permission prompts
 
 If already set to `auto` or `bypassPermissions` → skip silently.
+
+> **Note on Autonomous mode:** If the user selects Autonomous, SB will invoke `gsd-autonomous` at workflow execution steps rather than `gsd-execute-phase`. `gsd-autonomous` handles full phase execution without checkpoints. This preference is stored in §10e of `silver-bullet.md`.
 
 ---
 
