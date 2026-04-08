@@ -147,6 +147,73 @@ Suggest these commands based on context -- do not wait for the user to ask.
 | User asks "where are we?" or "what's left?" | `/gsd:progress` | Rich progress report with next actions |
 | User seems unsure what step is next | `/gsd:next` | Auto-advances to the next logical step |
 
+### 2d. Position Awareness (GSD State Delegation)
+
+**Rule:** SB does NOT maintain its own phase-progress tracking. At every workflow
+transition and step boundary, derive the user's current position from GSD's authoritative
+state — never from the SB state file.
+
+**At each step boundary, read:**
+1. `.planning/STATE.md` — parse YAML front matter for `current_plan`, `status`, `stopped_at`, `progress.total_phases`, `progress.completed_phases`, `progress.total_plans`, `progress.completed_plans`, `progress.percent`
+2. `.planning/ROADMAP.md` — identify current phase name, its goal, and how many plans it contains
+
+**SB state file (`~/.claude/.silver-bullet/state`) is ONLY for:**
+- Quality gate stage markers (`quality-gate-stage-1` through `quality-gate-stage-4`)
+- Skill invocation markers (recorded by `record-skill.sh`)
+- Session mode (`~/.claude/.silver-bullet/mode`)
+- Session init sentinel (`~/.claude/.silver-bullet/session-init`)
+
+These are SB-specific with no GSD equivalent. Never use the SB state file to determine
+which phase or plan the user is on — that information lives in GSD's STATE.md.
+
+### 2e. Progress Banner (Interactive Mode)
+
+At every workflow transition (the transitions listed in the Hand-Holding table above),
+display a progress banner BEFORE the transition narration:
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ PROGRESS: Phase {N} of {total} — {phase_name}
+ Plan {M} of {plans_in_phase} | Overall: {percent}% complete
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+Values come from STATE.md (`progress.*`) and ROADMAP.md (phase name, plan count).
+
+**Within-phase narration:** When inside a phase (between PLAN and VERIFY transitions),
+narrate at each plan boundary:
+
+> Now executing Plan {M} of {N}: {plan_objective_from_PLAN.md}
+> This plan produces: {files_modified summary}
+> After this: {what comes next — next plan, or VERIFY if last plan}
+
+### 2f. Autonomous Commentary
+
+In autonomous mode (when `~/.claude/.silver-bullet/mode` contains `autonomous`),
+do NOT ask questions or pause, but DO output structured commentary at each major step:
+
+**Before each GSD command invocation:**
+```
+— [{timestamp}] Running: {command} | Phase {N}, Plan {M} of {total} —
+```
+
+**After each GSD command completes:**
+```
+— [{timestamp}] Done: {command} | Result: {one-line summary} —
+```
+
+**At phase completion:**
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ PHASE {N} COMPLETE — {phase_name}
+ {completed_phases}/{total_phases} phases done | {percent}%
+ Next: {next_phase_name or "FINALIZE + SHIP"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+This commentary replaces the silence of autonomous mode with structured narration
+so the user can follow along without being asked to act.
+
 ---
 
 ## 3. NON-NEGOTIABLE RULES
@@ -250,11 +317,11 @@ Or for safer auto-approval (recommended for non-isolated environments):
 ```
 This is a Claude Code platform setting, not a Silver Bullet setting.
 
-At the start of every session, before any work begins, ask:
-
-> Run this session **interactively** or **autonomously**?
-> - **Interactive** (default) — I pause at decision points and phase gates
-> - **Autonomous** — I drive start to finish and surface blockers at the end
+At the start of every session, before any work begins, use AskUserQuestion:
+- Question: "Run this session interactively or autonomously?"
+- Options:
+  - "A. Interactive (default) — pause at decision points and phase gates"
+  - "B. Autonomous — drive start to finish, surface blockers at the end"
 
 Write the choice:
 ```bash
