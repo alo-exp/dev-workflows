@@ -30,6 +30,7 @@ Last activity: 2026-04-08
 - Phase 7 added: close all enforcement audit gaps from ENFORCEMENT-AUDIT.md findings F-01 through F-20
 - Phase 8 added: Comprehensive SB enforcement test harness using Claude Code CLI against test-app
 - Phase 9 added: Silver Bullet core improvements: init with GSD+Superpowers, GSD state delegation, guided UX, lettered option bullets
+- Phase 10 added: Create 7 named SB orchestration skill files (silver-feature/bugfix/ui/devops/research/release/fast)
 
 ## Decisions
 

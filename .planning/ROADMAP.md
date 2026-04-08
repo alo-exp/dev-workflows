@@ -151,3 +151,13 @@ Plans:
 Plans:
 - [x] 09-01-PLAN.md — Version freshness check in silver:init + lettered options across all SB skills
 - [x] 09-02-PLAN.md — GSD state delegation, progress banners, autonomous commentary, lettered options in silver-bullet.md
+
+### Phase 10: Create 7 named SB orchestration skill files: silver-feature, silver-bugfix, silver-ui, silver-devops, silver-research, silver-release, and silver-fast
+
+**Goal:** [To be planned]
+**Requirements**: TBD
+**Depends on:** Phase 9
+**Plans:** 0 plans
+
+Plans:
+- [ ] TBD (run /gsd-plan-phase 10 to break down)
