@@ -263,6 +263,7 @@ You MUST NOT:
 - Claim a step is "not applicable" without explicit user approval
 - Proceed to the next phase before completing the current phase
 - Claim work is complete without running `/gsd:verify-work`
+- Accept a completion claim from any plugin or skill (GSD, Superpowers, etc.) without invoking `/verification-before-completion` with that claim
 
 If you believe a step is genuinely not applicable, you MUST:
 1. State which step you want to skip
@@ -321,6 +322,30 @@ When a GSD command is invoked via the Skill tool, `record-skill.sh` records the
 These markers allow `compliance-status.sh` to display a GSD phase counter (e.g. `GSD 3/5`).
 
 > **Anti-Skip:** You are violating this rule if you invoke a GSD command outside the Skill tool. Markers are recorded only by the PostToolUse:Skill hook — there is no other recording mechanism, and manual state writes are blocked.
+
+## 3c. Completion Claim Verification
+
+**Rule:** Whenever any plugin, skill, or subagent (GSD, Superpowers, Design, Engineering, or any other) declares a task, plan, phase, or step complete, SB MUST invoke `/verification-before-completion` via the Skill tool before accepting that claim and moving on.
+
+**Trigger:** Any of these signals from a plugin/skill/subagent constitutes a completion claim:
+- `## PLANNING COMPLETE`, `## EXECUTION COMPLETE`, `## VERIFICATION COMPLETE`
+- `## RESEARCH COMPLETE`, `## PLAN CHECK: PASS`, `## VERIFICATION COMPLETE: PASS`
+- Any message containing "done", "complete", "finished", "all tasks executed", "passed", "✅"
+- A SUMMARY.md being created by an executor agent
+- Any agent returning without an explicit failure signal
+
+**What to do:**
+1. Identify the specific claim being made (e.g. "Plan 09-01 executed — 2 tasks complete, SUMMARY.md written")
+2. Invoke `/verification-before-completion` via the Skill tool, passing the claim as context
+3. Run the verification checks that skill prescribes against the actual artifacts
+4. Only after fresh evidence confirms the claim: accept it and advance to the next step
+
+**Exemptions** (do NOT invoke for these — they are not completion claims):
+- Informational status messages mid-execution ("Running task 2 of 3...")
+- Error messages or explicit failure signals
+- Confirmation prompts asking the user to proceed
+
+> **Anti-Skip:** You are violating this rule if you read a "COMPLETE" or "PASS" signal from any agent and advance to the next step without running `/verification-before-completion`. Trusting agent self-reports without independent verification is the primary source of false completions.
 
 ---
 
