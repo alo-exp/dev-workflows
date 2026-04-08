@@ -1,0 +1,120 @@
+---
+name: silver-release
+description: "SB-orchestrated milestone release: quality-gates → audit → gap-closure (max 2x) → docs → release notes → gsd-ship → gsd-complete-milestone"
+argument-hint: "<version or release description, e.g. v1.2.0>"
+---
+
+# /silver:release — Ship, Version, Publish, Go Live
+
+SB orchestrator for milestone-level publishing. Handles versioned releases, changelogs, documentation, GitHub Releases, and milestone archival.
+
+**Distinction from gsd-ship:** `gsd-ship` inside other workflows = phase-level merge (push branch → create PR → prepare for merge). `silver:release` = milestone-level publishing (versioned release, docs, changelog, GitHub Release, milestone archival). These are different abstraction levels. SB disambiguates "ship" intent at routing time.
+
+**Entry triggers:** "release", "publish", "version", "changelog", "go live", "cut a release", "tag v", "ship to users", "deploy to prod"
+
+Never publishes directly — orchestrates only.
+
+## Pre-flight: Load Preferences
+
+Read `silver-bullet.md §10` to load user workflow preferences before any other step.
+
+```bash
+grep -A 50 "^## 10\. User Workflow Preferences" silver-bullet.md | head -60
+```
+
+Display banner:
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ SILVER BULLET ► RELEASE WORKFLOW
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Release: {$ARGUMENTS or "(version not specified)"}
+```
+
+## Step-Skip Protocol
+
+When the user requests skipping any step:
+1. Explain why the step exists (one sentence)
+2. Offer: A. Accept skip  B. Lightweight alternative  C. Show me what you have
+3. If user chooses A permanently: record in silver-bullet.md §10b and templates/silver-bullet.md.base §10b, commit both.
+
+**Non-skippable gates:** `silver:quality-gates` pre-release (Step 0), `gsd-verify-work` (embedded in milestone audit), `gsd-ship` (Step 7) must succeed before Step 8.
+
+## Step 0: Pre-Release Quality Gates (9 dimensions)
+
+Invoke `silver:quality-gates` via the Skill tool. Purpose: full 9-dimension sweep before any release audit begins — reliability, security, scalability, usability, testability, modularity, reusability, extensibility. Non-skippable.
+
+## Step 1: Cross-Phase UAT
+
+Invoke `gsd-audit-uat` via the Skill tool. Purpose: cross-phase UAT — surface all outstanding gaps before release. This gives a complete picture of the milestone state before deciding whether to ship.
+
+## Step 2: Milestone Completion Audit
+
+Invoke `gsd-audit-milestone` via the Skill tool. Purpose: compare milestone completion vs original intent — are all committed features shipped?
+
+**After audit:** check for gaps.
+
+## Step 2b: Gap-Closure Loop (conditional, max 2 iterations)
+
+**Only if gaps found in Step 2:**
+
+Track iteration count (starts at 0).
+
+**Iteration gate:** If iteration count reaches 2 and gaps remain, do NOT start another iteration. Instead, present to user using AskUserQuestion:
+
+> Release gap limit reached (2 gap-closure iterations completed). Remaining gaps:
+> {list gaps from gsd-audit-milestone output}
+>
+> A. Release anyway — document gaps as known issues, proceed to Step 3
+> B. Extend milestone — defer release, continue work outside this workflow
+> C. Abort release — do not ship, requires manual decision to resume
+
+Wait for user selection. If A: proceed to Step 3 with gaps documented. If B or C: exit workflow.
+
+**When iteration count < 2:**
+
+1. Invoke `gsd-plan-milestone-gaps` via the Skill tool. Purpose: plan the gap closure phases.
+2. Invoke `silver:feature` via the Skill tool for each gap phase.
+3. After gap phases complete, return to Step 0 (full quality gate sweep again).
+4. Increment iteration count.
+5. Re-run Steps 1–2 to check if gaps are resolved.
+
+## Step 3a: Verify Existing Documentation
+
+Invoke `gsd-docs-update` via the Skill tool. Purpose: verify all existing docs are accurate against current codebase — correct any outdated content before generating new docs.
+
+## Step 3b: Generate/Update Documentation
+
+After gsd-docs-update completes (accuracy verified), invoke `/documentation` via the Skill tool. Purpose: generate/update GitHub README, user guide, website help section, and project page. Runs AFTER gsd-docs-update so it generates new content on top of verified accuracy — never generates on stale foundation.
+
+## Step 4: Milestone Summary
+
+Invoke `gsd-milestone-summary` via the Skill tool. Purpose: generate milestone narrative for release notes.
+
+## Step 5: Create Release
+
+Invoke `silver:create-release` via the Skill tool. Purpose: SB-owned release creation (skills/create-release/SKILL.md) — git-history release notes generation + GitHub Release creation with version tag.
+
+## Step 6: PR Branch (ask user)
+
+Ask using AskUserQuestion:
+
+> Would you like a clean PR branch (strips .planning/ commits)?
+>
+> A. Yes — run gsd-pr-branch  B. No — release as-is  C. Save as permanent preference
+
+If A: invoke `gsd-pr-branch` via the Skill tool.
+If C: record in silver-bullet.md §10e and templates/silver-bullet.md.base §10e, commit both.
+
+## Step 7: Ship — Deploy, CI Green, Tag Push
+
+Invoke `gsd-ship` via the Skill tool. Purpose: deploy, ensure CI is green, push the version tag. This MUST succeed before milestone is archived.
+
+**Enforcement:** Do not proceed to Step 8 until gsd-ship confirms CI green and deploy succeeded.
+
+## Step 8: Complete Milestone
+
+**Only after Step 7 (gsd-ship) confirms success:**
+
+Invoke `gsd-complete-milestone` via the Skill tool. Purpose: archive milestone, prepare for next version. This is the final step — milestone is officially closed after this.
