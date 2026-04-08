@@ -62,6 +62,7 @@ Last activity: 2026-04-08
 | 260407-1e2 | Fix v0.11.1 and v0.12.0 tech debt: extract DEFAULT_REQUIRED, add missing tests, refactor stop-check, config versioning, improve messages | 2026-04-06 | b1e848c | — | [260407-1e2-fix-v0-11-1-and-v0-12-0-tech-debt-extrac](./quick/260407-1e2-fix-v0-11-1-and-v0-12-0-tech-debt-extrac/) |
 | 260407-2a8 | Create /silver router skill that routes to best SB or GSD skill | 2026-04-07 | cec6cb2 | — | [260407-2a8-create-silver-router-skill-that-routes-t](./quick/260407-2a8-create-silver-router-skill-that-routes-t/) |
 | 260408-ota | Add auto-update check to Session Start §0 | 2026-04-08 | ae19c87 | Verified | [260408-ota-add-auto-update-check-to-session-start-h](./quick/260408-ota-add-auto-update-check-to-session-start-h/) |
+| 260408-p17 | Enforce /verification-before-completion after every plugin/skill completion claim | 2026-04-08 | 7c0748b | Verified | [260408-p17-after-each-plugin-skill-task-completion-](./quick/260408-p17-after-each-plugin-skill-task-completion-/) |
 
 ## Performance Metrics
 
