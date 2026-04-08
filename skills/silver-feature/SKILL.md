@@ -197,7 +197,7 @@ Invoke `gsd-ship` via the Skill tool. Purpose: push branch, create PR, prepare f
 
 ## Step 16: Episodic Memory
 
-Invoke `episodic-memory` via the Skill tool to record key decisions and lessons from this feature.
+Invoke `episodic-memory:remembering-conversations` via the Skill tool to record key decisions and lessons from this feature.
 
 ## Step 17: Milestone Completion (last phase of milestone only)
 

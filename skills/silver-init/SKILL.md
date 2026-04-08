@@ -483,7 +483,7 @@ If already set to `auto` or `bypassPermissions` → skip silently.
 
 If Phase 0 determined this is an update:
 
-1. Invoke `/using-superpowers` via the Skill tool to activate Superpowers skills.
+1. Invoke `superpowers:using-superpowers` via the Skill tool to activate Superpowers skills.
 2. Overwrite `silver-bullet.md` from `${PLUGIN_ROOT}/templates/silver-bullet.md.base` with placeholder replacements. Read `.silver-bullet.json` first for `project.name` and other values. This is safe — Silver Bullet owns this file.
    - Replace `{{PROJECT_NAME}}` with the project name from `.silver-bullet.json`
    - Replace `{{ACTIVE_WORKFLOW}}` with the active workflow name from `.silver-bullet.json` (default: `full-dev-cycle`)
@@ -914,7 +914,7 @@ If the commit fails due to a pre-commit hook, read the error output, fix the iss
 
 #### 3.8 Activate plugins
 
-Invoke `/using-superpowers` via the Skill tool to establish available Superpowers skills for
+Invoke `superpowers:using-superpowers` via the Skill tool to establish available Superpowers skills for
 the session. GSD commands (`/gsd:*`) and Design plugin skills (`/design:*`) are available
 immediately as slash commands — no activation step required for those.
 

@@ -111,7 +111,11 @@ Invoke `gsd-verify-work` via the Skill tool. Purpose: confirm fix, zero regressi
 
 ## Step 7: Security Review
 
-Invoke `silver:quality-gates` via the Skill tool (security + affected quality dimensions for the changed code). Non-skippable.
+Invoke `silver:security` via the Skill tool. Non-skippable.
+
+## Step 7b: Quality Gates
+
+Invoke `silver:quality-gates` via the Skill tool (affected quality dimensions for the changed code). Non-skippable.
 
 ## Step 8: Ship
 
