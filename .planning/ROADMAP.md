@@ -140,3 +140,14 @@ Plans:
 Plans:
 - [x] 08-01-PLAN.md -- Integration test helpers, planning gate scenarios, workflow completion scenarios
 - [ ] 08-02-PLAN.md -- Skill tracking scenarios, session scenarios, unified test runner, smoke test doc update
+
+### Phase 9: Silver Bullet core improvements: init with GSD+Superpowers, GSD state delegation, guided UX, lettered option bullets
+
+**Goal:** silver:init initializes and updates all dependencies (SB, GSD, Superpowers), SB derives position from GSD STATE.md, users get rich progress narration at every step, and all option prompts use lettered A/B/C format
+**Requirements**: REQ-1, REQ-2, REQ-3, REQ-4
+**Depends on:** Phase 8
+**Plans:** 2 plans
+
+Plans:
+- [ ] 09-01-PLAN.md — Version freshness check in silver:init + lettered options across all SB skills
+- [ ] 09-02-PLAN.md — GSD state delegation, progress banners, autonomous commentary, lettered options in silver-bullet.md
