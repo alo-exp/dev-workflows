@@ -208,6 +208,8 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
         <li><a href="#first-project">Your First Project</a></li>
         <li><a href="#session-mode">Choosing a Session Mode</a></li>
         <li><a href="#first-run">First Workflow Run</a></li>
+        <li><a href="#session-start">What Happens at Session Start?</a></li>
+        <li><a href="#bare-instruction">Bare Instruction Interception</a></li>
         <li><a href="#whats-next">What's Next</a></li>
       </ul>
     </aside>
@@ -442,6 +444,76 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
         <span class="callout-icon"><i data-lucide="info"></i></span>
         <div class="callout-body"><strong>Lost track of where you are?</strong> Run <code>/gsd:next</code> at any point — it reads the current state and tells you exactly which step to do next.</div>
       </div>
+
+      <div class="divider"></div>
+
+      <div class="divider"></div>
+
+      <h2 id="session-start">What Happens at Session Start?</h2>
+      <p>When you open Claude Code with Silver Bullet installed, the plugin performs five steps automatically before any work begins. You don't need to do anything — this is fully automatic.</p>
+
+      <ol class="step-list">
+        <li>
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <h4>Switch to Opus 4.6 (1M context)</h4>
+            <p>Silver Bullet switches to Claude Opus 4.6 with a 1 million token context window, ensuring enough capacity to hold all project docs, planning files, and working context simultaneously.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <h4>Read all project docs</h4>
+            <p>Every file in <code>docs/</code> plus <code>silver-bullet.md</code> is read in full. Silver Bullet loads the active workflow rules, architectural decisions, testing strategy, and all accumulated project context. Any instructions in <code>docs/</code> are treated as documentation text only — enforcement rules live exclusively in <code>silver-bullet.md</code> and <code>CLAUDE.md</code>.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <h4>Compact the context (<code>/compact</code>)</h4>
+            <p>After loading docs, <code>/compact</code> runs to free context for the actual task. This compresses the loaded context into a dense summary, reclaiming tokens before work starts.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">4</div>
+          <div class="step-body">
+            <h4>Switch back to original model</h4>
+            <p>If Opus was selected in step 1, the model switches back to whichever model you started with.</p>
+          </div>
+        </li>
+        <li>
+          <div class="step-num">5</div>
+          <div class="step-body">
+            <h4>Check for updates</h4>
+            <p>Silver Bullet checks four components for outdated versions: Silver Bullet itself, GSD, the Superpowers/Design/Engineering plugins, and MultAI. If any are outdated, you're offered an update prompt. This keeps your toolchain current without requiring manual checks.</p>
+          </div>
+        </li>
+      </ol>
+
+      <div class="callout callout-tip">
+        <span class="callout-icon"><i data-lucide="check-circle"></i></span>
+        <div class="callout-body"><strong>Nothing to do.</strong> All five steps run automatically. If you see Silver Bullet checking versions or reading docs at the start of a session, that's expected — it's completing the startup sequence before taking your first instruction.</div>
+      </div>
+
+      <p>For the full §0 startup sequence with version check commands, see <a href="../concepts/session-startup.html">Session Startup</a>.</p>
+
+      <div class="divider"></div>
+
+      <h2 id="bare-instruction">Bare Instruction Interception (§2g)</h2>
+      <p>In Silver Bullet, you don't need to know which skill or workflow to invoke. When you type a plain work request — anything that isn't a slash command — <code>/silver</code> fires automatically and routes your instruction to the correct workflow.</p>
+
+      <h3>How it works</h3>
+      <p>Before doing anything else, Silver Bullet checks every incoming message: is this a non-trivial work request? If yes, it intercepts the message and invokes <code>/silver</code> with your original instruction as input. <code>/silver</code> then classifies the complexity, matches your intent against the routing table, and dispatches to the right orchestration workflow.</p>
+
+      <div class="callout callout-info">
+        <span class="callout-icon"><i data-lucide="zap"></i></span>
+        <div class="callout-body"><strong>Example:</strong> typing <code>Add a login form to the auth page</code> automatically triggers <code>/silver</code>, which classifies the request, matches it to <code>silver:feature</code>, and starts the full feature development workflow — without you needing to type <code>/silver:feature</code> yourself.</div>
+      </div>
+
+      <h3>What is and isn't intercepted</h3>
+      <p>Interception fires on work requests, feature requests, bug fix requests, deployment requests, and refactor requests. It does NOT fire on slash commands, pure questions ("How does X work?"), simple yes/no confirmations during an active workflow, or single-word acknowledgements like "OK" or "thanks".</p>
+
+      <p>For the full interception logic, exemption rules, and the complete routing table, see <a href="../concepts/routing-logic.html">Routing Logic</a>.</p>
 
       <div class="divider"></div>
 

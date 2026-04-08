@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../../favicon.png">
+<link rel="shortcut icon" href="../../favicon.ico">
+<title>Verification Before Completion — Silver Bullet Help</title>
+<meta name="description" content="How Silver Bullet enforces verification-before-completion: what gsd-verify-work checks, when it fires, and what counts as verified.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+:root{
+  --bg-page:#f3f4f6;
+  --bg-card:#ffffff;
+  --bg-card-hover:#eeeff2;
+  --bg-code:#e9eaed;
+  --bg-hero:linear-gradient(160deg,#c0c6cf 0%,#d4dae3 18%,#e8eaee 38%,#eceef2 52%,#e0e4e9 68%,#d0d5dc 84%,#c4c9d1 100%);
+  --chrome-gradient:linear-gradient(135deg,#374151 0%,#7a8ea0 28%,#d4dce6 50%,#7a8ea0 72%,#374151 100%);
+  --accent:#374151;--accent-light:#6b7280;--accent-glow:rgba(107,114,128,.1);
+  --accent2:#4b5563;--accent3:#6b7280;
+  --green:#059669;--amber:#d97706;--red:#dc2626;--cyan:#0891b2;
+  --text-primary:#0f172a;--text-secondary:#475569;--text-dim:#94a3b8;
+  --border:#d1d5db;--border-hover:#9ca3af;
+  --radius:12px;--radius-lg:20px;--radius-sm:8px;
+  --font-sans:'Inter',system-ui,-apple-system,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --shadow-glow:0 0 40px rgba(107,114,128,.07);
+  --nav-bg:rgba(243,244,246,.9);
+  --section-alt:rgba(236,238,242,.6);
+  --table-row-hover:rgba(107,114,128,.03);
+  --skill-phase-border:rgba(209,213,219,.8);
+}
+[data-theme="dark"]{
+  --bg-page:#0c0c0e;
+  --bg-card:#161618;
+  --bg-card-hover:#1e1e21;
+  --bg-code:#1a1a1d;
+  --bg-hero:linear-gradient(160deg,#060608 0%,#0a0a0e 28%,#0f1013 50%,#111316 65%,#0c0d10 82%,#070709 100%);
+  --chrome-gradient:linear-gradient(135deg,#6b7280 0%,#a4b4c2 28%,#dce6ee 50%,#a4b4c2 72%,#6b7280 100%);
+  --accent:#9ca3af;--accent-light:#c8d2da;--accent-glow:rgba(156,163,175,.15);
+  --accent2:#8fa0ad;--accent3:#b0bec8;
+  --green:#34d399;--amber:#fbbf24;--red:#f87171;--cyan:#22d3ee;
+  --text-primary:#e8eaed;--text-secondary:#9ca3af;--text-dim:#6b7280;
+  --border:#26262a;--border-hover:#38383e;
+  --shadow-glow:0 0 40px rgba(156,163,175,.07);
+  --nav-bg:rgba(12,12,14,.88);
+  --section-alt:rgba(20,20,23,.5);
+  --table-row-hover:rgba(156,163,175,.03);
+  --skill-phase-border:rgba(38,38,42,.6);
+}
+body,nav{transition:background .25s,background-color .25s,border-color .25s,color .25s}
+body{font-family:var(--font-sans);background:var(--bg-page);color:var(--text-primary);line-height:1.7;overflow-x:hidden}
+.container{max-width:860px;margin:0 auto;padding:0 24px}
+.container-wide{max-width:1100px;margin:0 auto;padding:0 24px}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 24px}
+nav .nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{font-weight:800;font-size:1rem;background:var(--chrome-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;letter-spacing:-.02em}
+.nav-breadcrumb{font-size:.85rem;color:var(--text-secondary);display:flex;align-items:center;gap:8px}
+.nav-breadcrumb a{color:var(--text-secondary);text-decoration:none}
+.nav-breadcrumb a:hover{color:var(--accent-light)}
+.nav-breadcrumb .sep{color:var(--text-dim)}
+.theme-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--text-secondary);font-size:.9rem;transition:all .2s}
+.theme-btn:hover{border-color:var(--accent);color:var(--accent-light)}
+.page-hero{background:var(--bg-hero);padding:120px 24px 64px;position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;top:-200px;right:-200px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(107,114,128,.08) 0%,transparent 70%)}
+.page-hero .container{position:relative;z-index:1}
+.breadcrumb-nav{font-size:.82rem;color:var(--text-dim);margin-bottom:24px;display:flex;align-items:center;gap:8px}
+.breadcrumb-nav a{color:var(--text-dim);text-decoration:none}
+.breadcrumb-nav a:hover{color:var(--accent-light)}
+.page-hero h1{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;letter-spacing:-.04em;margin-bottom:16px;line-height:1.1}
+.page-hero p{font-size:1rem;color:var(--text-secondary);max-width:560px;line-height:1.7}
+.doc-layout{display:grid;grid-template-columns:220px 1fr;gap:48px;padding:64px 0}
+@media(max-width:768px){.doc-layout{grid-template-columns:1fr}}
+.doc-sidebar{position:sticky;top:88px;height:fit-content}
+.sidebar-nav{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:2px}
+.sidebar-nav li a{display:block;padding:7px 12px;border-radius:var(--radius-sm);font-size:.85rem;color:var(--text-secondary);text-decoration:none;transition:all .15s}
+.sidebar-nav li a:hover{background:var(--bg-code);color:var(--text-primary)}
+.sidebar-nav li a.active{background:rgba(107,114,128,.1);color:var(--accent-light);font-weight:600}
+.sidebar-nav .sidebar-section{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);padding:16px 12px 4px;margin-top:8px}
+@media(max-width:768px){.doc-sidebar{display:none}}
+.doc-content h2{font-size:1.5rem;font-weight:800;letter-spacing:-.03em;margin-bottom:16px;margin-top:48px;padding-top:16px}
+.doc-content h2:first-child{margin-top:0}
+.doc-content h3{font-size:1.05rem;font-weight:700;margin-bottom:10px;margin-top:28px;color:var(--text-primary)}
+.doc-content p{margin-bottom:16px;color:var(--text-secondary);line-height:1.8}
+.doc-content ul,.doc-content ol{margin-bottom:16px;padding-left:20px;color:var(--text-secondary)}
+.doc-content li{margin-bottom:6px;line-height:1.7}
+.doc-content strong{color:var(--text-primary)}
+.doc-content code{font-family:var(--font-mono);font-size:.82em;background:var(--bg-code);padding:2px 6px;border-radius:4px;color:var(--accent-light)}
+.callout{border-radius:var(--radius);padding:20px 24px;margin-bottom:24px;display:flex;gap:14px;align-items:flex-start}
+.callout-info{background:rgba(107,114,128,.08);border:1px solid rgba(107,114,128,.2)}
+.callout-tip{background:rgba(5,150,105,.06);border:1px solid rgba(5,150,105,.2)}
+.callout-warn{background:rgba(217,119,6,.06);border:1px solid rgba(217,119,6,.2)}
+.callout-stop{background:rgba(220,38,38,.06);border:1px solid rgba(220,38,38,.2)}
+.callout-icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.callout-body{font-size:.875rem;color:var(--text-secondary);line-height:1.7}
+.callout-body strong{color:var(--text-primary)}
+.divider{height:1px;background:var(--border);margin:40px 0}
+/* EXAMPLE BLOCK */
+.example-block{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:16px}
+.example-block h4{font-size:.9rem;font-weight:700;margin-bottom:8px;color:var(--text-primary)}
+.example-block p{font-size:.875rem;color:var(--text-secondary);line-height:1.6;margin:0}
+.example-block p+p{margin-top:8px}
+/* PAGE NAV BOTTOM */
+.page-nav-bottom{display:flex;justify-content:space-between;margin-top:56px;padding-top:32px;border-top:1px solid var(--border)}
+.page-nav-bottom a{display:flex;flex-direction:column;gap:4px;text-decoration:none;max-width:220px}
+.pnb-label{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600;color:var(--text-dim)}
+.pnb-title{font-size:.95rem;font-weight:700;color:var(--accent-light)}
+footer{border-top:1px solid var(--border);padding:40px 0;color:var(--text-dim);font-size:.85rem}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+footer a{color:var(--text-secondary);text-decoration:none}
+footer a:hover{color:var(--accent-light)}
+.footer-links{display:flex;gap:24px}
+@media(max-width:600px){.footer-inner{flex-direction:column;align-items:flex-start;gap:12px}.footer-links{flex-wrap:wrap;gap:16px}}
+/* NAV SEARCH */
+.nav-search-wrap{position:relative}
+.nav-search-input{width:180px;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:var(--bg-code);color:var(--text-primary);font-size:.82rem;font-family:var(--font-sans);outline:none;transition:border-color .2s,width .2s}
+.nav-search-input:focus{border-color:var(--accent);width:240px}
+.nav-search-input::placeholder{color:var(--text-dim)}
+.nav-search-results{position:absolute;top:calc(100% + 8px);right:0;width:340px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 20px 60px rgba(0,0,0,.12);z-index:200;max-height:420px;overflow-y:auto;display:none}
+.nav-search-results.open{display:block}
+.nsr-item{display:flex;flex-direction:column;gap:3px;padding:12px 16px;text-decoration:none;border-bottom:1px solid var(--border);transition:background .15s;color:inherit}
+.nsr-item:last-child{border-bottom:none}
+.nsr-item:hover,.nsr-item.nsr-active{background:var(--bg-code)}
+.nsr-page{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--accent-light)}
+.nsr-title{font-size:.88rem;font-weight:600;color:var(--text-primary)}
+.nsr-excerpt{font-size:.78rem;color:var(--text-dim);line-height:1.4}
+@media(max-width:768px){.nav-search-wrap{display:none}}
+svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;stroke-width:1.5;stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div style="display:flex;align-items:center;gap:16px">
+      <a href="../../" class="nav-logo">Silver Bullet</a>
+      <span class="nav-breadcrumb"><span class="sep">/</span><a href="../">Help</a><span class="sep">/</span><a href="./">Concepts</a><span class="sep">/</span> Verification</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="nav-search-wrap">
+        <input type="text" class="nav-search-input" id="nav-search-input" placeholder="Search docs…" autocomplete="off">
+        <div class="nav-search-results" id="nav-search-results"></div>
+      </div>
+      <button class="theme-btn" onclick="toggleTheme()" id="theme-btn" aria-label="Toggle theme" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;padding:0">
+        <span id="icon-sun" style="display:none"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>
+        <span id="icon-moon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb-nav">
+      <a href="../">Help Center</a>
+      <span>/</span>
+      <a href="./">Concepts</a>
+      <span>/</span>
+      <span>Verification Before Completion</span>
+    </div>
+    <h1>Verification Before Completion</h1>
+    <p>Why Silver Bullet enforces <code>gsd-verify-work</code> as a non-skippable gate, what it actually checks, and when it fires.</p>
+  </div>
+</div>
+
+<div class="container-wide">
+  <div class="doc-layout">
+
+    <aside class="doc-sidebar">
+      <ul class="sidebar-nav">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#what-verification-means">What Verification Means</a></li>
+        <li><a href="#when-it-fires">When It Fires</a></li>
+        <li><a href="#examples">Examples</a></li>
+        <li><a href="#see-also">See Also</a></li>
+      </ul>
+    </aside>
+
+    <article class="doc-content">
+
+      <h2 id="overview">Overview</h2>
+      <p>Silver Bullet enforces <code>gsd-verify-work</code> as a <strong>non-skippable gate</strong> before any workflow completes. This is a §3 rule — it cannot be waived via §10 preferences or the step-skip protocol. It applies unconditionally to every non-trivial workflow that produces code changes.</p>
+      <p>The rule exists because "done" in Silver Bullet means <strong>tests pass and behavior is confirmed</strong> — not "code was written." An implementation that isn't verified isn't done. Shipping unverified work is the most common source of regressions in AI-assisted development, and this gate is the primary defense against it.</p>
+
+      <div class="callout callout-stop">
+        <span class="callout-icon"><i data-lucide="ban"></i></span>
+        <div class="callout-body"><strong>Non-negotiable.</strong> Silver Bullet's §3 rules explicitly prohibit claiming work is complete without running <code>gsd-verify-work</code>, and prohibit accepting a completion claim from any plugin or skill without invoking <code>/verification-before-completion</code> with that claim. The completion audit hook enforces this mechanically — it blocks git commits and pushes if verification has not run.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2 id="what-verification-means">What Verification Means</h2>
+      <p><code>gsd-verify-work</code> performs goal-backward verification: it checks the actual outcome against the requirements and acceptance criteria defined in the GSD plan, rather than checking whether the code looks correct in isolation.</p>
+
+      <h3>What it checks</h3>
+      <ul>
+        <li><strong>Test suite passes</strong> — the automated tests for the changed code run and pass with no failures</li>
+        <li><strong>No regressions</strong> — the existing test suite continues to pass; nothing that worked before is now broken</li>
+        <li><strong>Acceptance criteria met</strong> — the must-have truths from the GSD plan are verified against the actual output</li>
+        <li><strong>Artifacts exist and connect</strong> — files created or modified are in the expected locations and contain expected content</li>
+      </ul>
+
+      <h3>What it does NOT mean</h3>
+      <ul>
+        <li>Manual QA or visual sign-off (that's a separate step if required)</li>
+        <li>Stakeholder approval</li>
+        <li>Performance benchmarking (unless that is an explicit acceptance criterion)</li>
+        <li>Security audit (that is <code>silver:security</code>, a separate non-skippable gate)</li>
+      </ul>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon"><i data-lucide="triangle-alert"></i></span>
+        <div class="callout-body"><strong>Assumption is not evidence.</strong> A completion claim like "the tests should pass" or "this looks correct" does not satisfy verification. The test suite must actually run and the output must show a passing result. Silver Bullet requires observable evidence, not Claude's assessment of likelihood.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2 id="when-it-fires">When It Fires</h2>
+      <p>Verification fires as the penultimate step of every workflow that produces code changes, immediately before the ship step:</p>
+
+      <ul>
+        <li><strong>silver:feature</strong> — Step 9: gsd-verify-work (must pass before Step 10: ship)</li>
+        <li><strong>silver:bugfix</strong> — after TDD regression test passes, gsd-verify-work confirms full suite</li>
+        <li><strong>silver:ui</strong> — after implementation, gsd-verify-work + accessibility check before ship</li>
+        <li><strong>silver:devops</strong> — gsd-verify-work runs against the IaC plan acceptance criteria</li>
+      </ul>
+
+      <h3>Workflows where it is exempt or replaced</h3>
+      <ul>
+        <li><strong>silver:fast</strong> — exempt. Trivial changes go through <code>gsd-fast</code> which has its own lightweight verification appropriate to the scope (≤3 files).</li>
+        <li><strong>silver:research</strong> — no code changes are produced; verification is replaced by the research synthesis and recommendation review step.</li>
+        <li><strong>silver:release</strong> — replaced by the full quality gates suite + UAT audit + milestone audit, which are more comprehensive than single-phase verification.</li>
+      </ul>
+
+      <div class="divider"></div>
+
+      <h2 id="examples">Examples</h2>
+
+      <div class="example-block">
+        <h4>Example 1: silver:feature completes normally</h4>
+        <p>You run <code>/silver:feature Add email notifications for order status changes</code>. The workflow reaches Step 9. <code>gsd-verify-work</code> runs the test suite — all 47 tests pass, including 3 new tests added for the notification feature. Verification produces a VERIFICATION.md file with pass/fail per acceptance criterion. Step 10 (ship) is unblocked.</p>
+      </div>
+
+      <div class="example-block">
+        <h4>Example 2: silver:bugfix with TDD</h4>
+        <p>You run <code>/silver:bugfix Login form throws 500 on empty password field</code>. After root cause is identified, a failing regression test is written first (TDD). The fix is implemented, the regression test passes. Then <code>gsd-verify-work</code> runs the full suite — no other tests regressed. The fix is considered done and ship is unblocked.</p>
+      </div>
+
+      <div class="example-block">
+        <h4>Example 3: Attempting to skip</h4>
+        <p>After execution completes, you type "Skip verification and ship — I'm confident it works." Silver Bullet refuses. The step-skip protocol offers: A. Accept skip (not available for non-skippable gates) / B. Lightweight alternative / C. Show current test results. The only path to shipping is running verification. The completion audit hook will block any git push regardless of what is typed.</p>
+      </div>
+
+      <div class="callout callout-info">
+        <span class="callout-icon"><i data-lucide="lightbulb"></i></span>
+        <div class="callout-body"><strong>Why two-pass review loops also matter.</strong> Verification checks functional correctness. Code review (via <code>/requesting-code-review</code>) checks code quality, security, and maintainability. Both must complete before ship — they cover different concerns and neither replaces the other.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2 id="see-also">See Also</h2>
+      <ul>
+        <li><a href="preferences.html">User Workflow Preferences</a> — the step-skip protocol and which gates are permanently non-skippable</li>
+        <li><a href="../workflows/silver-feature.html">silver:feature workflow</a> — Step 9 (gsd-verify-work) shown in full context</li>
+        <li><a href="../workflows/silver-bugfix.html">silver:bugfix workflow</a> — TDD regression test before verification</li>
+        <li><a href="routing-logic.html">Routing Logic</a> — how /silver classifies requests before reaching the workflow</li>
+      </ul>
+
+      <div class="page-nav-bottom">
+        <a href="routing-logic.html">
+          <span class="pnb-label">← Previous</span>
+          <span class="pnb-title">Routing Logic</span>
+        </a>
+        <a href="./">
+          <span class="pnb-label">Back to</span>
+          <span class="pnb-title">Core Concepts</span>
+        </a>
+      </div>
+
+    </article>
+  </div>
+</div>
+
+<footer>
+  <div class="container-wide">
+    <div class="footer-inner">
+      <div><span style="font-weight:700;color:var(--text-secondary)">Silver Bullet</span> Help Center</div>
+      <div style="font-size:.9rem;color:var(--text-secondary)">Innovated at <a href="https://alolabs.dev" target="_blank" style="font-weight:700;background:var(--chrome-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none">&#256;lo Labs</a></div>
+      <div class="footer-links">
+        <a href="../">Help Home</a>
+        <a href="../../">Home</a>
+        <a href="https://github.com/alo-exp/silver-bullet" target="_blank">GitHub</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<script src="../search.js"></script>
+<script>
+function applyTheme(dark){
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+  document.getElementById('icon-sun').style.display=dark?'none':'';
+  document.getElementById('icon-moon').style.display=dark?'':'none';
+  localStorage.setItem('silver-bullet-theme',dark?'dark':'light');
+}
+function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-theme')!=='dark')}
+(function(){const s=localStorage.getItem('silver-bullet-theme');applyTheme(s?s==='dark':true)})();
+lucide.createIcons();
+</script>
+</body>
+</html>

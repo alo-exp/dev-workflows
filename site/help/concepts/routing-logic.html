@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../../favicon.png">
+<link rel="shortcut icon" href="../../favicon.ico">
+<title>Routing Logic — Silver Bullet Help</title>
+<meta name="description" content="How /silver classifies intent and routes to the correct orchestration workflow. Complexity triage decision tree, full routing table, and bare instruction interception.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+:root{
+  --bg-page:#f3f4f6;
+  --bg-card:#ffffff;
+  --bg-card-hover:#eeeff2;
+  --bg-code:#e9eaed;
+  --bg-hero:linear-gradient(160deg,#c0c6cf 0%,#d4dae3 18%,#e8eaee 38%,#eceef2 52%,#e0e4e9 68%,#d0d5dc 84%,#c4c9d1 100%);
+  --chrome-gradient:linear-gradient(135deg,#374151 0%,#7a8ea0 28%,#d4dce6 50%,#7a8ea0 72%,#374151 100%);
+  --accent:#374151;--accent-light:#6b7280;--accent-glow:rgba(107,114,128,.1);
+  --accent2:#4b5563;--accent3:#6b7280;
+  --green:#059669;--amber:#d97706;--red:#dc2626;--cyan:#0891b2;
+  --text-primary:#0f172a;--text-secondary:#475569;--text-dim:#94a3b8;
+  --border:#d1d5db;--border-hover:#9ca3af;
+  --radius:12px;--radius-lg:20px;--radius-sm:8px;
+  --font-sans:'Inter',system-ui,-apple-system,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --shadow-glow:0 0 40px rgba(107,114,128,.07);
+  --nav-bg:rgba(243,244,246,.9);
+  --section-alt:rgba(236,238,242,.6);
+  --table-row-hover:rgba(107,114,128,.03);
+  --skill-phase-border:rgba(209,213,219,.8);
+}
+[data-theme="dark"]{
+  --bg-page:#0c0c0e;
+  --bg-card:#161618;
+  --bg-card-hover:#1e1e21;
+  --bg-code:#1a1a1d;
+  --bg-hero:linear-gradient(160deg,#060608 0%,#0a0a0e 28%,#0f1013 50%,#111316 65%,#0c0d10 82%,#070709 100%);
+  --chrome-gradient:linear-gradient(135deg,#6b7280 0%,#a4b4c2 28%,#dce6ee 50%,#a4b4c2 72%,#6b7280 100%);
+  --accent:#9ca3af;--accent-light:#c8d2da;--accent-glow:rgba(156,163,175,.15);
+  --accent2:#8fa0ad;--accent3:#b0bec8;
+  --green:#34d399;--amber:#fbbf24;--red:#f87171;--cyan:#22d3ee;
+  --text-primary:#e8eaed;--text-secondary:#9ca3af;--text-dim:#6b7280;
+  --border:#26262a;--border-hover:#38383e;
+  --shadow-glow:0 0 40px rgba(156,163,175,.07);
+  --nav-bg:rgba(12,12,14,.88);
+  --section-alt:rgba(20,20,23,.5);
+  --table-row-hover:rgba(156,163,175,.03);
+  --skill-phase-border:rgba(38,38,42,.6);
+}
+body,nav{transition:background .25s,background-color .25s,border-color .25s,color .25s}
+body{font-family:var(--font-sans);background:var(--bg-page);color:var(--text-primary);line-height:1.7;overflow-x:hidden}
+.container{max-width:860px;margin:0 auto;padding:0 24px}
+.container-wide{max-width:1100px;margin:0 auto;padding:0 24px}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 24px}
+nav .nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{font-weight:800;font-size:1rem;background:var(--chrome-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none;letter-spacing:-.02em}
+.nav-breadcrumb{font-size:.85rem;color:var(--text-secondary);display:flex;align-items:center;gap:8px}
+.nav-breadcrumb a{color:var(--text-secondary);text-decoration:none}
+.nav-breadcrumb a:hover{color:var(--accent-light)}
+.nav-breadcrumb .sep{color:var(--text-dim)}
+.theme-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--text-secondary);font-size:.9rem;transition:all .2s}
+.theme-btn:hover{border-color:var(--accent);color:var(--accent-light)}
+.page-hero{background:var(--bg-hero);padding:120px 24px 64px;position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;top:-200px;right:-200px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(107,114,128,.08) 0%,transparent 70%)}
+.page-hero .container{position:relative;z-index:1}
+.breadcrumb-nav{font-size:.82rem;color:var(--text-dim);margin-bottom:24px;display:flex;align-items:center;gap:8px}
+.breadcrumb-nav a{color:var(--text-dim);text-decoration:none}
+.breadcrumb-nav a:hover{color:var(--accent-light)}
+.page-hero h1{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;letter-spacing:-.04em;margin-bottom:16px;line-height:1.1}
+.page-hero p{font-size:1rem;color:var(--text-secondary);max-width:560px;line-height:1.7}
+.doc-layout{display:grid;grid-template-columns:220px 1fr;gap:48px;padding:64px 0}
+@media(max-width:768px){.doc-layout{grid-template-columns:1fr}}
+.doc-sidebar{position:sticky;top:88px;height:fit-content}
+.sidebar-nav{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:2px}
+.sidebar-nav li a{display:block;padding:7px 12px;border-radius:var(--radius-sm);font-size:.85rem;color:var(--text-secondary);text-decoration:none;transition:all .15s}
+.sidebar-nav li a:hover{background:var(--bg-code);color:var(--text-primary)}
+.sidebar-nav li a.active{background:rgba(107,114,128,.1);color:var(--accent-light);font-weight:600}
+.sidebar-nav .sidebar-section{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);padding:16px 12px 4px;margin-top:8px}
+@media(max-width:768px){.doc-sidebar{display:none}}
+.doc-content h2{font-size:1.5rem;font-weight:800;letter-spacing:-.03em;margin-bottom:16px;margin-top:48px;padding-top:16px}
+.doc-content h2:first-child{margin-top:0}
+.doc-content h3{font-size:1.05rem;font-weight:700;margin-bottom:10px;margin-top:28px;color:var(--text-primary)}
+.doc-content p{margin-bottom:16px;color:var(--text-secondary);line-height:1.8}
+.doc-content ul,.doc-content ol{margin-bottom:16px;padding-left:20px;color:var(--text-secondary)}
+.doc-content li{margin-bottom:6px;line-height:1.7}
+.doc-content strong{color:var(--text-primary)}
+.doc-content code{font-family:var(--font-mono);font-size:.82em;background:var(--bg-code);padding:2px 6px;border-radius:4px;color:var(--accent-light)}
+.callout{border-radius:var(--radius);padding:20px 24px;margin-bottom:24px;display:flex;gap:14px;align-items:flex-start}
+.callout-info{background:rgba(107,114,128,.08);border:1px solid rgba(107,114,128,.2)}
+.callout-tip{background:rgba(5,150,105,.06);border:1px solid rgba(5,150,105,.2)}
+.callout-warn{background:rgba(217,119,6,.06);border:1px solid rgba(217,119,6,.2)}
+.callout-icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.callout-body{font-size:.875rem;color:var(--text-secondary);line-height:1.7}
+.callout-body strong{color:var(--text-primary)}
+.divider{height:1px;background:var(--border);margin:40px 0}
+/* REFERENCE TABLE */
+.ref-table{width:100%;border-collapse:collapse;margin-bottom:24px;font-size:.875rem}
+.ref-table th{text-align:left;padding:10px 14px;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);border-bottom:2px solid var(--border);white-space:nowrap}
+.ref-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text-secondary);line-height:1.5;vertical-align:top}
+.ref-table td:first-child{font-family:var(--font-mono);font-size:.82rem;color:var(--accent-light);white-space:nowrap;font-weight:600}
+.ref-table tr:last-child td{border-bottom:none}
+.ref-table tr:hover td{background:rgba(107,114,128,.02)}
+/* INTERCEPT TABLE — first column is not mono */
+.intercept-table{width:100%;border-collapse:collapse;margin-bottom:24px;font-size:.875rem}
+.intercept-table th{text-align:left;padding:10px 14px;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);border-bottom:2px solid var(--border)}
+.intercept-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text-secondary);line-height:1.5;vertical-align:top}
+.intercept-table tr:last-child td{border-bottom:none}
+.intercept-table tr:hover td{background:rgba(107,114,128,.02)}
+.badge-yes{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:700;background:rgba(5,150,105,.12);color:var(--green)}
+.badge-no{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:700;background:rgba(220,38,38,.1);color:var(--red)}
+/* CODE BLOCK */
+.code-block{background:var(--bg-code);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px 24px;font-family:var(--font-mono);font-size:.82rem;line-height:1.9;color:var(--text-secondary);overflow-x:auto;white-space:pre-wrap;margin-bottom:20px}
+.code-block .comment{color:var(--text-dim)}
+/* PAGE NAV BOTTOM */
+.page-nav-bottom{display:flex;justify-content:space-between;margin-top:56px;padding-top:32px;border-top:1px solid var(--border)}
+.page-nav-bottom a{display:flex;flex-direction:column;gap:4px;text-decoration:none;max-width:220px}
+.pnb-label{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600;color:var(--text-dim)}
+.pnb-title{font-size:.95rem;font-weight:700;color:var(--accent-light)}
+footer{border-top:1px solid var(--border);padding:40px 0;color:var(--text-dim);font-size:.85rem}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+footer a{color:var(--text-secondary);text-decoration:none}
+footer a:hover{color:var(--accent-light)}
+.footer-links{display:flex;gap:24px}
+@media(max-width:600px){.footer-inner{flex-direction:column;align-items:flex-start;gap:12px}.footer-links{flex-wrap:wrap;gap:16px}}
+/* NAV SEARCH */
+.nav-search-wrap{position:relative}
+.nav-search-input{width:180px;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:var(--bg-code);color:var(--text-primary);font-size:.82rem;font-family:var(--font-sans);outline:none;transition:border-color .2s,width .2s}
+.nav-search-input:focus{border-color:var(--accent);width:240px}
+.nav-search-input::placeholder{color:var(--text-dim)}
+.nav-search-results{position:absolute;top:calc(100% + 8px);right:0;width:340px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 20px 60px rgba(0,0,0,.12);z-index:200;max-height:420px;overflow-y:auto;display:none}
+.nav-search-results.open{display:block}
+.nsr-item{display:flex;flex-direction:column;gap:3px;padding:12px 16px;text-decoration:none;border-bottom:1px solid var(--border);transition:background .15s;color:inherit}
+.nsr-item:last-child{border-bottom:none}
+.nsr-item:hover,.nsr-item.nsr-active{background:var(--bg-code)}
+.nsr-page{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--accent-light)}
+.nsr-title{font-size:.88rem;font-weight:600;color:var(--text-primary)}
+.nsr-excerpt{font-size:.78rem;color:var(--text-dim);line-height:1.4}
+@media(max-width:768px){.nav-search-wrap{display:none}}
+svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;stroke-width:1.5;stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div style="display:flex;align-items:center;gap:16px">
+      <a href="../../" class="nav-logo">Silver Bullet</a>
+      <span class="nav-breadcrumb"><span class="sep">/</span><a href="../">Help</a><span class="sep">/</span><a href="./">Concepts</a><span class="sep">/</span> Routing Logic</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="nav-search-wrap">
+        <input type="text" class="nav-search-input" id="nav-search-input" placeholder="Search docs…" autocomplete="off">
+        <div class="nav-search-results" id="nav-search-results"></div>
+      </div>
+      <button class="theme-btn" onclick="toggleTheme()" id="theme-btn" aria-label="Toggle theme" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;padding:0">
+        <span id="icon-sun" style="display:none"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>
+        <span id="icon-moon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb-nav">
+      <a href="../">Help Center</a>
+      <span>/</span>
+      <a href="./">Concepts</a>
+      <span>/</span>
+      <span>Routing Logic</span>
+    </div>
+    <h1>Routing Logic</h1>
+    <p>How <code>/silver</code> classifies every instruction, performs complexity triage, and dispatches to the right orchestration workflow — automatically.</p>
+  </div>
+</div>
+
+<div class="container-wide">
+  <div class="doc-layout">
+
+    <aside class="doc-sidebar">
+      <ul class="sidebar-nav">
+        <li><a href="#overview">Overview</a></li>
+        <li><a href="#bare-instruction">Bare Instruction Interception</a></li>
+        <li><a href="#complexity-triage">Complexity Triage Decision Tree</a></li>
+        <li><a href="#routing-table">Full Routing Table</a></li>
+        <li><a href="#ship-disambiguation">Ship Disambiguation</a></li>
+        <li><a href="#see-also">See Also</a></li>
+      </ul>
+    </aside>
+
+    <article class="doc-content">
+
+      <h2 id="overview">Overview</h2>
+      <p><code>/silver</code> is the single entry point for all Silver Bullet work. You never invoke orchestration workflows directly — you either type a bare instruction or call <code>/silver</code> explicitly, and the router handles classification and dispatch.</p>
+      <p>Every message passing through <code>/silver</code> goes through two sequential steps before work begins:</p>
+      <ol>
+        <li><strong>Bare instruction interception (§2g)</strong> — if your message is a plain work request rather than a slash command, <code>/silver</code> is invoked automatically before anything else happens.</li>
+        <li><strong>Complexity triage</strong> — the router classifies the request as Trivial, Simple, Fuzzy, or Complex to select the right workflow and determine whether an exploration step is needed first.</li>
+      </ol>
+      <p>This design prevents two common failure modes: accidentally skipping orchestration by typing work requests directly, and over-engineering trivial changes with a full workflow pipeline.</p>
+
+      <div class="divider"></div>
+
+      <h2 id="bare-instruction">Bare Instruction Interception (§2g)</h2>
+      <p>Silver Bullet intercepts bare natural-language instructions at the start of every user turn, before any tool use. When you type a plain work request — not a slash command — <code>/silver</code> is invoked automatically.</p>
+
+      <h3>Why interception exists</h3>
+      <p>Without interception, it's easy to accidentally bypass orchestration. If you type "Add a login form" directly, a plain AI assistant would start writing code immediately, skipping quality gates, brainstorming, planning, and all verification steps. Interception makes <code>/silver</code> the mandatory gateway for all non-trivial work.</p>
+
+      <h3>How it works</h3>
+      <ol>
+        <li>User sends a message that is not a slash command</li>
+        <li>Silver Bullet checks: is this a non-trivial work request?</li>
+        <li>If yes: intercept — invoke <code>/silver</code> via the Skill tool, passing the original instruction as arguments</li>
+        <li><code>/silver</code> performs complexity triage and routes to the correct workflow</li>
+        <li>The work proceeds through the full orchestrated pipeline</li>
+      </ol>
+
+      <h3>What gets intercepted vs. exempted</h3>
+      <table class="intercept-table">
+        <thead>
+          <tr><th>Message type</th><th>Intercepted?</th><th>Example</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Work request / change request</td>
+            <td><span class="badge-yes">Yes</span></td>
+            <td>"Add a login form to the auth page"</td>
+          </tr>
+          <tr>
+            <td>Feature request</td>
+            <td><span class="badge-yes">Yes</span></td>
+            <td>"Build a dark mode toggle"</td>
+          </tr>
+          <tr>
+            <td>Bug fix request</td>
+            <td><span class="badge-yes">Yes</span></td>
+            <td>"Fix the crash on the settings page"</td>
+          </tr>
+          <tr>
+            <td>Deployment request</td>
+            <td><span class="badge-yes">Yes</span></td>
+            <td>"Deploy to staging"</td>
+          </tr>
+          <tr>
+            <td>Refactor request</td>
+            <td><span class="badge-yes">Yes</span></td>
+            <td>"Refactor the auth module to use the new token service"</td>
+          </tr>
+          <tr>
+            <td>Slash command</td>
+            <td><span class="badge-no">No</span></td>
+            <td><code>/gsd:plan-phase</code>, <code>/silver:fast</code></td>
+          </tr>
+          <tr>
+            <td>Pure question</td>
+            <td><span class="badge-no">No</span></td>
+            <td>"How does the auth module work?"</td>
+          </tr>
+          <tr>
+            <td>Simple yes/no confirmation</td>
+            <td><span class="badge-no">No</span></td>
+            <td>"Yes, proceed" (during an active workflow)</td>
+          </tr>
+          <tr>
+            <td>Single-word acknowledgement</td>
+            <td><span class="badge-no">No</span></td>
+            <td>"OK", "thanks", "got it"</td>
+          </tr>
+          <tr>
+            <td>Reply while skill is running</td>
+            <td><span class="badge-no">No</span></td>
+            <td>Answering a clarifying question mid-workflow</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon"><i data-lucide="triangle-alert"></i></span>
+        <div class="callout-body"><strong>Anti-skip rule:</strong> Silver Bullet violates its own enforcement design if it reads a non-trivial bare instruction and begins responding or executing work without first invoking <code>/silver</code>. The router exists to ensure every task reaches the right skill — bypassing it defeats the enforcement model.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2 id="complexity-triage">Complexity Triage Decision Tree</h2>
+      <p>Once a message reaches <code>/silver</code> (either via interception or direct invocation), the router classifies it using a 4-way triage. The classification determines which workflow fires and whether a scoping step runs first.</p>
+
+      <h3>The four classifications</h3>
+      <p>Work through these questions in order:</p>
+
+      <div class="code-block">Is the change ≤3 files? Is it a typo, rename, or config tweak?
+  YES → <strong>Trivial</strong> → route to silver:fast (no planning overhead)
+
+Is the intent vague or scope unclear? Would you need to explore before planning?
+  YES → <strong>Fuzzy</strong> → run silver:explore first, then re-classify
+
+Is the scope clear and does it fit within a single phase?
+  YES → <strong>Simple</strong> → route to the correct workflow, skip explore step
+
+Multi-phase, cross-cutting, architectural, or has significant unknowns?
+  YES → <strong>Complex</strong> → full workflow with silver:explore + silver:brainstorm</div>
+
+      <h3>Classification summary</h3>
+      <table class="ref-table">
+        <thead>
+          <tr><th>Classification</th><th>Characteristics</th><th>Route</th><th>Explore step?</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Trivial</td>
+            <td style="font-family:inherit;white-space:normal;font-size:.875rem">≤3 files, typos, renames, config tweaks, one-liners</td>
+            <td style="font-family:inherit;font-size:.875rem"><code>silver:fast</code></td>
+            <td style="font-family:inherit;font-size:.875rem">No</td>
+          </tr>
+          <tr>
+            <td>Simple</td>
+            <td style="font-family:inherit;white-space:normal;font-size:.875rem">Clear scope, single phase, well-understood problem</td>
+            <td style="font-family:inherit;font-size:.875rem">Intent-matched workflow</td>
+            <td style="font-family:inherit;font-size:.875rem">No — skip to workflow</td>
+          </tr>
+          <tr>
+            <td>Fuzzy</td>
+            <td style="font-family:inherit;white-space:normal;font-size:.875rem">Vague intent, unclear scope, needs clarification</td>
+            <td style="font-family:inherit;font-size:.875rem"><code>silver:explore</code> → re-classify</td>
+            <td style="font-family:inherit;font-size:.875rem">Yes — explore first</td>
+          </tr>
+          <tr>
+            <td>Complex</td>
+            <td style="font-family:inherit;white-space:normal;font-size:.875rem">Multi-phase, cross-cutting, architectural, significant unknowns</td>
+            <td style="font-family:inherit;font-size:.875rem">Intent-matched workflow with full pre-work</td>
+            <td style="font-family:inherit;font-size:.875rem">Yes — explore + brainstorm</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-info">
+        <span class="callout-icon"><i data-lucide="info"></i></span>
+        <div class="callout-body"><strong>Trivial changes bypass enforcement.</strong> <code>silver:fast</code> routes directly to <code>gsd-fast</code> with no planning overhead. If the work expands beyond 3 files during execution, Silver Bullet stops and re-routes through <code>/silver</code> for proper classification. §10 routing preferences are not applied to <code>silver:fast</code> by design.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2 id="routing-table">Full Routing Table</h2>
+      <p>After complexity triage confirms the request is not Trivial or Fuzzy, <code>/silver</code> matches intent signals to one of seven orchestration workflows:</p>
+
+      <table class="ref-table">
+        <thead>
+          <tr><th>Workflow</th><th>Entry triggers</th><th>First step</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><a href="../workflows/silver-feature.html" style="color:var(--accent-light)">/silver:feature</a></td>
+            <td style="font-family:inherit;font-size:.875rem">"add X", "build X", "implement X", "new feature", "enhance X", "extend X"</td>
+            <td style="font-family:inherit;font-size:.875rem">silver:intel → product-brainstorming → silver:brainstorm</td>
+          </tr>
+          <tr>
+            <td><a href="../workflows/silver-bugfix.html" style="color:var(--accent-light)">/silver:bugfix</a></td>
+            <td style="font-family:inherit;font-size:.875rem">"bug", "broken", "crash", "error", "regression", "failing test", "not working"</td>
+            <td style="font-family:inherit;font-size:.875rem">SB triage → systematic-debugging → gsd-debug</td>
+          </tr>
+          <tr>
+            <td><a href="../workflows/silver-ui.html" style="color:var(--accent-light)">/silver:ui</a></td>
+            <td style="font-family:inherit;font-size:.875rem">"UI", "frontend", "component", "screen", "design", "interface", "page", "layout"</td>
+            <td style="font-family:inherit;font-size:.875rem">silver:intel → product-brainstorming → silver:brainstorm → gsd-ui-phase</td>
+          </tr>
+          <tr>
+            <td><a href="../workflows/silver-devops.html" style="color:var(--accent-light)">/silver:devops</a></td>
+            <td style="font-family:inherit;font-size:.875rem">"infra", "CI/CD", "deploy", "pipeline", "terraform", "IaC", "kubernetes", "cloud", "ops"</td>
+            <td style="font-family:inherit;font-size:.875rem">silver:intel → silver:blast-radius → silver:devops-skill-router</td>
+          </tr>
+          <tr>
+            <td><a href="../workflows/silver-research.html" style="color:var(--accent-light)">/silver:research</a></td>
+            <td style="font-family:inherit;font-size:.875rem">"how should we", "which technology", "compare X vs Y", "spike", "investigate", "architecture decision"</td>
+            <td style="font-family:inherit;font-size:.875rem">silver:explore → MultAI research → silver:brainstorm</td>
+          </tr>
+          <tr>
+            <td><a href="../workflows/silver-release.html" style="color:var(--accent-light)">/silver:release</a></td>
+            <td style="font-family:inherit;font-size:.875rem">"release", "publish", "version", "go live", "cut a release", "tag v", "ship to users"</td>
+            <td style="font-family:inherit;font-size:.875rem">silver:quality-gates → gsd-audit-uat → gsd-audit-milestone</td>
+          </tr>
+          <tr>
+            <td><a href="../workflows/silver-fast.html" style="color:var(--accent-light)">/silver:fast</a></td>
+            <td style="font-family:inherit;font-size:.875rem">"trivial", "quick fix", "typo", "one-liner", "config value", or complexity triage → Trivial</td>
+            <td style="font-family:inherit;font-size:.875rem">Confirm ≤3 files → gsd-fast</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="divider"></div>
+
+      <h2 id="ship-disambiguation">Ship Disambiguation</h2>
+      <p>The word "ship" is ambiguous in Silver Bullet. It can mean a phase-level merge (a branch PR) or a milestone-level publish (a versioned release). <code>/silver</code> disambiguates at routing time based on signal keywords:</p>
+
+      <table class="ref-table">
+        <thead>
+          <tr><th>Signal in message</th><th>Route</th><th>What it does</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Contains version number (v2.0, 1.4.0, etc.)</td>
+            <td style="font-family:inherit;font-size:.875rem"><code>silver:release</code></td>
+            <td style="font-family:inherit;font-size:.875rem">Milestone publish: quality gates, audit, create GitHub Release, git tag</td>
+          </tr>
+          <tr>
+            <td>Contains "changelog" or "release notes"</td>
+            <td style="font-family:inherit;font-size:.875rem"><code>silver:release</code></td>
+            <td style="font-family:inherit;font-size:.875rem">Milestone publish</td>
+          </tr>
+          <tr>
+            <td>Contains "go live", "to production", "publicly"</td>
+            <td style="font-family:inherit;font-size:.875rem"><code>silver:release</code></td>
+            <td style="font-family:inherit;font-size:.875rem">Milestone publish</td>
+          </tr>
+          <tr>
+            <td>Active phase in progress, no version signal</td>
+            <td style="font-family:inherit;font-size:.875rem"><code>gsd:ship</code></td>
+            <td style="font-family:inherit;font-size:.875rem">Phase-level merge: push branch, create PR</td>
+          </tr>
+          <tr>
+            <td>No active phase, end of milestone</td>
+            <td style="font-family:inherit;font-size:.875rem"><code>silver:release</code></td>
+            <td style="font-family:inherit;font-size:.875rem">Milestone publish</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="callout callout-info">
+        <span class="callout-icon"><i data-lucide="info"></i></span>
+        <div class="callout-body"><strong>These are different scopes.</strong> <code>gsd:ship</code> runs inside any workflow as the final phase-level step (push → PR). <code>silver:release</code> is a dedicated milestone-level workflow that runs quality gates, UAT audit, milestone audit, and then creates a versioned GitHub Release. Running the wrong one at the wrong scope is a common mistake — let <code>/silver</code> disambiguate for you.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2 id="see-also">See Also</h2>
+      <ul>
+        <li><a href="../workflows/silver-feature.html">silver:feature workflow</a> — feature development end-to-end</li>
+        <li><a href="../workflows/silver-bugfix.html">silver:bugfix workflow</a> — triage-first bug investigation</li>
+        <li><a href="../workflows/silver-ui.html">silver:ui workflow</a> — UI/UX with accessibility review</li>
+        <li><a href="../workflows/silver-devops.html">silver:devops workflow</a> — IaC with blast radius assessment</li>
+        <li><a href="../workflows/silver-research.html">silver:research workflow</a> — technology decisions and spikes</li>
+        <li><a href="../workflows/silver-release.html">silver:release workflow</a> — milestone publish</li>
+        <li><a href="../workflows/silver-fast.html">silver:fast workflow</a> — trivial changes bypass</li>
+        <li><a href="../getting-started/">Getting Started</a> — session startup and first workflow run</li>
+        <li><a href="verification.html">Verification Before Completion</a> — the §3 enforcement gate at the end of every workflow</li>
+      </ul>
+
+      <div class="page-nav-bottom">
+        <a href="./">
+          <span class="pnb-label">← Previous</span>
+          <span class="pnb-title">Core Concepts</span>
+        </a>
+        <a href="verification.html">
+          <span class="pnb-label">Next →</span>
+          <span class="pnb-title">Verification Before Completion</span>
+        </a>
+      </div>
+
+    </article>
+  </div>
+</div>
+
+<footer>
+  <div class="container-wide">
+    <div class="footer-inner">
+      <div><span style="font-weight:700;color:var(--text-secondary)">Silver Bullet</span> Help Center</div>
+      <div style="font-size:.9rem;color:var(--text-secondary)">Innovated at <a href="https://alolabs.dev" target="_blank" style="font-weight:700;background:var(--chrome-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none">&#256;lo Labs</a></div>
+      <div class="footer-links">
+        <a href="../">Help Home</a>
+        <a href="../../">Home</a>
+        <a href="https://github.com/alo-exp/silver-bullet" target="_blank">GitHub</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<script src="../search.js"></script>
+<script>
+function applyTheme(dark){
+  document.documentElement.setAttribute('data-theme',dark?'dark':'light');
+  document.getElementById('icon-sun').style.display=dark?'none':'';
+  document.getElementById('icon-moon').style.display=dark?'':'none';
+  localStorage.setItem('silver-bullet-theme',dark?'dark':'light');
+}
+function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-theme')!=='dark')}
+(function(){const s=localStorage.getItem('silver-bullet-theme');applyTheme(s?s==='dark':true)})();
+lucide.createIcons();
+</script>
+</body>
+</html>
