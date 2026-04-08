@@ -53,6 +53,16 @@ At the very start of any new session, perform these steps automatically:
    > To update Engineering: `/plugin install anthropics/knowledge-work-plugins/tree/main/engineering`
    Proceed immediately after displaying — no prompt required.
 
+   **5.4 MultAI**
+   ```bash
+   cat "$HOME/.claude/plugins/installed_plugins.json" | jq -r '.plugins["multai@multai"][0].version // "unknown"'
+   ```
+   Compare to the latest entry in `~/.claude/plugins/cache/multai/CHANGELOG.md`. If installed version is outdated, use AskUserQuestion:
+   - Question: "MultAI v{installed} appears outdated. Update now?"
+   - Options: "A. Yes, run /multai:update" / "B. Skip"
+   If A: invoke `/multai:update` via the Skill tool, then continue.
+   If B or check fails (file missing/unknown): output "Skipping MultAI update." and continue.
+
 > **Anti-Skip:** you are violating this rule if you begin work without reading docs/ or skip /compact. Evidence: no Read tool calls for docs/ files in session start.
 
 ---
