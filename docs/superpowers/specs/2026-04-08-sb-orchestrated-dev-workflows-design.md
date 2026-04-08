@@ -127,7 +127,8 @@ The following plugins must be added as formal SB dependencies, checked at `silve
 | 12 | `gsd-validate-phase` | Nyquist gap filling |
 | 13 | `silver:quality-gates` [pre-ship] | Full sweep |
 | 14 | `silver:finishing-branch` + [ask] `gsd-pr-branch` | Merge/PR decision |
-| 15 | `gsd-ship` + milestone steps if last phase | Ship |
+| 15 | `gsd-ship` | Push branch, create PR, prepare for merge (phase-level) |
+| 16 [last phase of milestone only] | `gsd-audit-uat` → `gsd-audit-milestone` → [gaps] `gsd-plan-milestone-gaps` → back to step 1 of gap phases (max 2 iterations) → `gsd-complete-milestone` | Milestone completion lifecycle — same chain as silver:feature Step 17 |
 
 ---
 
@@ -137,21 +138,25 @@ The following plugins must be added as formal SB dependencies, checked at `silve
 
 > **SB-owned skills used here:** `silver:blast-radius` (maps change scope, failure modes, rollback), `silver:devops-skill-router` (routes to right IaC/cloud skill), `silver:devops-quality-gates` (7 IaC-adapted dimensions). All three are defined in `skills/blast-radius/`, `skills/devops-skill-router/`, `skills/devops-quality-gates/` respectively. See Section 9 for ownership.
 
-**`silver:devops-quality-gates` dimensions (7):** reliability, security, scalability, modularity, testability, observability, change-safety. Usability is omitted (no user-facing interface in IaC). Extensibility is omitted (IaC is declarative, not extensible). These 7 replace the standard 9 for devops workflows.
+**`silver:devops-quality-gates` dimensions (7):** reliability, security, scalability, modularity, testability, observability, change-safety. Usability is omitted (no user-facing interface in IaC). Extensibility is omitted (IaC is declarative, not extensible). These 7 are used at both the pre-plan gate (Step 3) and the pre-ship gate (Step 10) — the standard 9-dimension sweep does not apply to devops workflows.
+
+> **No brainstorming phase:** `silver:devops` omits `/product-brainstorming` and `silver:brainstorm`. Infrastructure changes are driven by operational requirements established upstream (in `silver:feature` or `silver:research`). Blast-radius analysis (Step 1) replaces the product/engineering brainstorm for this workflow class.
 
 | Step | Skill(s) | Purpose |
 |------|----------|---------|
+| 0 | `silver:intel` (gsd-intel) | Orient in codebase — understand current infra topology before blast-radius analysis |
+| 0b | `silver:scan` [if no intel files] | Rapid structure assessment |
 | 1 | `silver:blast-radius` | Map change scope, downstream deps, failure modes, rollback plan |
 | 2 | `silver:devops-skill-router` | Route to right IaC/cloud skill (Terraform, Pulumi, AWS, k8s…) |
-| 3 | `silver:devops-quality-gates` | 7 IaC-adapted quality dimensions |
-| 3b | `silver:security` [always] | Infrastructure security mandatory — runs even though security is in devops-quality-gates, as an independent hard gate |
+| 3 | `silver:devops-quality-gates` | 7 IaC-adapted quality dimensions (pre-plan gate) |
+| 3b | `silver:security` [always] | Infrastructure security mandatory — independent hard gate |
 | 4 | `gsd-discuss-phase` | DevOps phase context → CONTEXT.md |
 | 5 | `gsd-plan-phase` | PLAN.md |
 | 6 | `gsd-execute-phase` [TDD skipped] | Execute — TDD not applicable for infra plans |
 | 7 | `silver:request-review` + `gsd-code-review` + [arch-sig] `gsd-review` + `silver:receive-review` | IaC review |
 | 8 | `gsd-secure-phase` | IaC security + secrets verification |
 | 9 | `gsd-verify-work` | Deployment verification |
-| 10 | `silver:quality-gates` [pre-ship, standard 9] | Full standard sweep pre-deploy |
+| 10 | `silver:devops-quality-gates` [pre-ship] | 7 IaC-adapted dimensions sweep before deploy — same gate as Step 3, not the standard 9 |
 | 11 | `gsd-ship` | Deploy |
 
 ---
@@ -190,8 +195,8 @@ The following plugins must be added as formal SB dependencies, checked at `silve
 | 4 | `gsd-milestone-summary` | Milestone narrative for release notes |
 | 5 | `silver:create-release` | Git-history release notes + GitHub Release creation (SB-owned, defined in `skills/create-release/SKILL.md`) |
 | 6 | [ask user] `gsd-pr-branch` | Clean PR branch? Save preference to §5 |
-| 7 | `gsd-complete-milestone` | Archive milestone, prepare for next version |
-| 8 | `gsd-ship` | Deploy, CI green, tag pushed |
+| 7 | `gsd-ship` | Deploy, CI green, tag pushed — must succeed before milestone is archived |
+| 8 | `gsd-complete-milestone` | Archive milestone, prepare for next version — only after gsd-ship confirms CI green and deploy succeeded |
 
 ---
 
@@ -282,22 +287,23 @@ When an instruction matches multiple workflows:
 | `silver:ui` + `silver:feature` | `silver:ui` | UI is more specific; feature is the fallback |
 | `silver:devops` + `silver:feature` | Ask user | Both equally valid; neither is a subset of the other |
 | `silver:research` + any | `silver:research` first | Research informs the implementation workflow |
+| `silver:fast` + any domain workflow | Check scope first | If truly ≤3 files and self-contained → `silver:fast`. If domain signals are strong (e.g. "quick fix to the deploy pipeline" touches IaC) → route to domain workflow with a note that execution may be lightweight. When ambiguous, ask: "A. Treat as trivial (silver:fast)  B. Route to [domain workflow]" |
 
 ---
 
 ## 7. Testing Skill Chain
 
-Five testing skill invocations form a non-overlapping chain across each feature/UI workflow:
+Five testing skill invocations form a non-overlapping chain across each feature/UI workflow, listed in execution order:
 
-| When | Skill | Purpose |
-|------|-------|---------|
-| Pre-planning quality gate (Step 3) | `silver:testability` (embedded in `silver:quality-gates`) | Design-time: ensures architecture CAN be tested — DI, pure functions, seams, observable state |
-| After spec approval, before writing-plans (Step 2) | `/testing-strategy` | Planning-time: defines WHAT to test and HOW — test levels, tooling, coverage targets, test data strategy |
-| During execution, impl plans only (Step 7a) | `silver:tdd` | Execution-time: red-green-refactor discipline per task |
-| Post-execution, if coverage gaps (Step 10) | `gsd-add-tests` | Gap-filling: generate tests from UAT criteria |
-| Pre-ship quality gate (Step 14) | `silver:testability` (embedded in `silver:quality-gates`) | Final check: shipped code still has testable architecture |
+| Order | When in workflow | Skill | Purpose |
+|-------|-----------------|-------|---------|
+| 1st | After spec approval, before writing-plans (Step 2) | `/testing-strategy` | Planning-time: defines WHAT to test and HOW — test levels, tooling, coverage targets, test data strategy |
+| 2nd | Pre-planning quality gate (Step 3) | `silver:testability` (embedded in `silver:quality-gates`) | Design-time: ensures architecture CAN be tested — DI, pure functions, seams, observable state |
+| 3rd | During execution, impl plans only (Step 7a) | `silver:tdd` | Execution-time: red-green-refactor discipline per task |
+| 4th | Post-execution, if coverage gaps (Step 10) | `gsd-add-tests` | Gap-filling: generate tests from UAT criteria |
+| 5th | Pre-ship quality gate (Step 14) | `silver:testability` (embedded in `silver:quality-gates`) | Final check: shipped code still has testable architecture |
 
-> Note: `silver:testability` is one of the 9 standard quality dimensions — it runs as part of `silver:quality-gates`, not as a separate step. The 9 dimensions are: reliability, security, scalability, usability, testability, modularity, reusability, extensibility, plus `silver:devops-quality-gates` replaces all 9 with its 7 IaC-specific dimensions for devops workflows.
+> Note: `silver:testability` is one of the 9 standard quality dimensions — it runs as part of `silver:quality-gates`, not as a separate step. The 9 dimensions are: reliability, security, scalability, usability, testability, modularity, reusability, extensibility. `silver:devops-quality-gates` replaces all 9 with its 7 IaC-specific dimensions for devops workflows.
 
 ---
 
@@ -313,7 +319,46 @@ A new `§5 User Workflow Preferences` section in `silver-bullet.md` and `templat
 - **§5d MultAI Preferences** — when to always/never trigger MultAI
 - **§5e Mode Preferences** — default session mode, PR branch behavior, TDD enforcement
 
-### 8.2 Capture Protocol
+### 8.2 §5 Entry Schema
+
+Each preference entry written to `silver-bullet.md §5` and `templates/silver-bullet.md.base §5` uses this format:
+
+```markdown
+## 5. User Workflow Preferences
+
+Last updated: YYYY-MM-DD
+
+### 5a. Routing Preferences
+| Work type | Override route | Since |
+|-----------|---------------|-------|
+| [e.g.] Any PR | Always use gsd-review (cross-AI) | 2026-04-08 |
+
+### 5b. Step Skip Preferences
+| Workflow | Step skipped | Condition | Since |
+|----------|-------------|-----------|-------|
+| [e.g.] silver:feature | /product-brainstorming | Scope already in ticket | 2026-04-08 |
+
+### 5c. Tool Preferences
+| Decision point | Preferred tool | Since |
+|----------------|---------------|-------|
+| [e.g.] Code review | Always gsd-review + gsd-code-review | 2026-04-08 |
+
+### 5d. MultAI Preferences
+| Trigger | Disposition | Since |
+|---------|-------------|-------|
+| [e.g.] Tech selection | Always run comparator | 2026-04-08 |
+
+### 5e. Mode Preferences
+| Setting | Value | Since |
+|---------|-------|-------|
+| Default session mode | interactive | 2026-04-08 |
+| PR branch | ask | 2026-04-08 |
+| TDD enforcement | per-plan-type | 2026-04-08 |
+```
+
+An empty §5 (no rows in any table) is valid — it means all workflow defaults apply.
+
+### 8.3 Capture Protocol
 
 When user expresses a preference:
 1. SB identifies the preference type
@@ -321,7 +366,7 @@ When user expresses a preference:
 3. If A: writes to `silver-bullet.md §5` + `templates/silver-bullet.md.base §5`, commits both
 4. Applied silently at every relevant decision point thereafter
 
-### 8.3 Conflict Resolution
+### 8.4 Conflict Resolution
 
 `§5` overrides workflow defaults. Hard gates (`silver:security`, `silver:quality-gates` pre-ship, `gsd-verify-work`) are never overridable.
 
@@ -331,7 +376,7 @@ When user expresses a preference:
 
 | Plugin | Role | Owns |
 |--------|------|------|
-| GSD | Execution backbone | Planning, execution, verification, state, worktrees, shipping, debugging (gsd-debug, gsd-forensics), code review agents (gsd-code-review), UI spec (gsd-ui-phase), milestone lifecycle |
+| GSD | Execution backbone | Planning, execution, verification, state, worktrees, shipping, debugging (gsd-debug, gsd-forensics), code review agents (gsd-code-review), UI spec (gsd-ui-phase), milestone lifecycle, ideation (gsd-explore — wrapped by `silver:explore`) |
 | Superpowers | Craft discipline | Brainstorming (silver:brainstorm), TDD (silver:tdd), code review framing (silver:request-review, silver:receive-review), systematic debugging hypothesis, plan writing (silver:writing-plans), branch finishing (silver:finishing-branch) |
 | SB (Silver Bullet) | Orchestration + quality enforcement | Workflow sequencing, 9 standard quality dimensions (silver:quality-gates), SB-specific forensics (silver:forensics), blast radius (silver:blast-radius), devops routing (silver:devops-skill-router), devops quality gates (silver:devops-quality-gates), release creation (silver:create-release), preference memory, step enforcement, routing |
 | MultAI | Multi-AI intelligence | Landscape research (multai:landscape-researcher), solution research (multai:solution-researcher), 7-AI orchestration (multai:orchestrator), comparison matrices (multai:comparator), consolidation (multai:consolidator) |
