@@ -46,13 +46,12 @@ For any GSD-related input, delegate to `/gsd:do` passing the original text as ar
 
 If input could match two or more destinations with similar confidence, use AskUserQuestion to present the top 2-3 options:
 
-> I'm not sure which skill to use. Which of these best matches what you want to do?
->
-> 1. `/quality-gates` — review all 8 quality dimensions before planning
-> 2. `/blast-radius` — assess risk and change scope for an infrastructure change
-> 3. `/gsd:do` — plan and execute work with GSD
->
-> (Enter the number or name of the skill)
+Use AskUserQuestion:
+- Question: "I'm not sure which skill to use. Which of these best matches what you want to do?"
+- Options (use the top 2-3 matches from the routing table, lettered):
+  - "A. /quality-gates — review all 8 quality dimensions before planning"
+  - "B. /blast-radius — assess risk and change scope for an infrastructure change"
+  - "C. /gsd:do — plan and execute work with GSD"
 
 Wait for selection, then route accordingly.
 

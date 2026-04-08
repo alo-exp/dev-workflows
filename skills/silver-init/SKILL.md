@@ -158,9 +158,85 @@ If any of these strings are found, output:
 > Found references to: [list the matched strings]
 >
 > These must be removed before Silver Bullet v2 can be installed.
-> Remove these entries? (yes / no)
 
-Wait for user confirmation. If "yes", use the Edit tool to remove the offending hook entries from `.claude/settings.json`. If "no", STOP.
+Use AskUserQuestion:
+- Question: "Remove these incompatible v1 hook entries from .claude/settings.json?"
+- Options:
+  - "A. Yes, remove them"
+  - "B. No, stop init"
+
+If user selects A, use the Edit tool to remove the offending hook entries from `.claude/settings.json`. If user selects B, STOP.
+
+---
+
+## Phase 1.5: Version Freshness Check
+
+Run this phase only after all Phase 1 presence checks pass. For each dependency, check if the installed version matches the latest available. If any is outdated, offer to update before proceeding.
+
+### 1.5.1 Check Silver Bullet version
+
+Read installed version:
+```bash
+cat "$HOME/.claude/plugins/installed_plugins.json" | jq -r '.plugins["silver-bullet@silver-bullet"][0].version // "unknown"'
+```
+
+Check latest version:
+```bash
+curl -s https://api.github.com/repos/alo-exp/silver-bullet/releases/latest | grep '"tag_name"' | sed 's/.*"tag_name": *"v\([^"]*\)".*/\1/'
+```
+
+Parse both as semver (MAJOR.MINOR.PATCH) and compare numerically.
+
+If installed < latest, use AskUserQuestion:
+- Question: "Silver Bullet v{installed} is outdated (latest: v{latest}). Update now?"
+- Options:
+  - "A. Yes, update now"
+  - "B. Skip, continue with current version"
+
+If user selects A: invoke `/silver:update` via the Skill tool. After it completes, output "Silver Bullet updated. Continuing init..." and proceed.
+If user selects B: output "Skipping SB update." and proceed.
+If version check fails (curl error, missing file, or either version is "unknown"): output "Could not check SB version (offline?). Continuing..." and proceed.
+
+### 1.5.2 Check GSD version
+
+Read installed version:
+```bash
+cat "$HOME/.claude/get-shit-done/VERSION" 2>/dev/null || echo "unknown"
+```
+
+Check latest version:
+```bash
+npm view get-shit-done-cc version 2>/dev/null || echo "unknown"
+```
+
+Parse both as semver and compare numerically.
+
+If both versions are known and installed < latest, use AskUserQuestion:
+- Question: "GSD v{installed} is outdated (latest: v{latest}). Update now?"
+- Options:
+  - "A. Yes, update now"
+  - "B. Skip, continue with current version"
+
+If user selects A: invoke `/gsd-update` via the Skill tool. After it completes, output "GSD updated. Continuing init..." and proceed.
+If user selects B: output "Skipping GSD update." and proceed.
+If either version is "unknown": output "Could not determine GSD version. Continuing..." and proceed.
+
+### 1.5.3 Check Superpowers / Design / Engineering plugin versions
+
+Read installed versions from `~/.claude/plugins/installed_plugins.json`. Display the installed version of each plugin found:
+
+```bash
+cat "$HOME/.claude/plugins/installed_plugins.json" | jq -r '
+  .plugins | to_entries[] |
+  select(.key | test("^(superpowers|design|engineering)@")) |
+  "\(.key | split("@")[0]): v\(.value[0].version)"
+' 2>/dev/null || echo "Could not read plugin registry"
+```
+
+No automated update skill exists for these plugins. If the user wants to update them:
+> To update Superpowers: `/plugin install obra/superpowers`
+> To update Design: `/plugin install anthropics/knowledge-work-plugins/tree/main/design`
+> To update Engineering: `/plugin install anthropics/knowledge-work-plugins/tree/main/engineering`
 
 ---
 
@@ -177,12 +253,11 @@ git rev-parse --is-inside-work-tree 2>/dev/null && echo "GIT_REPO" || echo "NOT_
 
 If `GIT_REPO` → continue to step 2.1.
 
-If `NOT_GIT`, ask the user:
-> This directory is not a git repository. Choose one:
-> 1. **Clone** — provide an existing repo URL to clone here
-> 2. **Create** — provide a GitHub org/repo name (e.g., `myorg/myrepo`) to create a new repo
->
-> Which? (clone / create)
+If `NOT_GIT`, use AskUserQuestion:
+- Question: "This directory is not a git repository. How would you like to proceed?"
+- Options:
+  - "A. Clone — provide an existing repo URL to clone here"
+  - "B. Create — provide a GitHub org/repo name to create a new repo"
 
 **If clone:**
 - Ask: "Repo URL?"
@@ -273,12 +348,16 @@ Detected:
   Stack:    [stack]
   Repo:     [repo]
   Source:   [pattern]
-
-Look right? (yes / edit)
 ```
 
-- If user says "yes" or equivalent → proceed to step 2.6.
-- If user says "edit" → ask which fields to change, accept new values, then proceed to step 2.6.
+Use AskUserQuestion:
+- Question: "Do these detected values look right?"
+- Options:
+  - "A. Yes, looks right"
+  - "B. Edit values"
+
+- If user selects A → proceed to step 2.6.
+- If user selects B → ask which fields to change, accept new values, then proceed to step 2.6.
 
 ### 2.6 Configure permission mode
 
@@ -288,18 +367,23 @@ test -f .claude/settings.local.json && jq -r '.permissions.defaultMode // "NOT_S
 ```
 
 If `NOT_SET`:
-> Silver Bullet works best with auto-approve permissions. Choose:
-> 1. **auto** (recommended) — auto-approves most tool calls, prompts only for protected paths
-> 2. **bypassPermissions** — approves everything, only for isolated environments
-> 3. **Skip** — keep current permission settings
 
-If user chooses `bypassPermissions`:
-> ⚠️ **Security confirmation required.** `bypassPermissions` disables all Claude Code permission guardrails permanently for this project.
-> Is this environment **fully isolated** (container, VM, or dedicated CI runner with no access to production systems, credentials, or sensitive files)?
->
-> Reply **yes** to confirm isolation and proceed, or **no** to use `auto` instead.
+Use AskUserQuestion:
+- Question: "Silver Bullet works best with auto-approve permissions. Choose a permission mode:"
+- Options:
+  - "A. auto (recommended) — auto-approves most tool calls, prompts only for protected paths"
+  - "B. bypassPermissions — approves everything, only for isolated environments"
+  - "C. Skip — keep current permission settings"
 
-Only proceed to write `bypassPermissions` on explicit "yes" confirmation. If the user says "no" or is uncertain, set `auto` instead.
+If user selects B (bypassPermissions):
+
+Use AskUserQuestion:
+- Question: "⚠️ Security confirmation: bypassPermissions disables all Claude Code permission guardrails permanently for this project. Is this environment fully isolated (container, VM, or dedicated CI runner with no access to production systems, credentials, or sensitive files)?"
+- Options:
+  - "A. Yes, environment is fully isolated — proceed with bypassPermissions"
+  - "B. No, use auto instead"
+
+Only proceed to write `bypassPermissions` if user selects A. If user selects B, set `auto` instead.
 
 If user chooses `auto` or confirmed `bypassPermissions`:
 - Read `.claude/settings.local.json` (create if absent with `{"permissions":{}}`)
@@ -398,14 +482,14 @@ Scan `CLAUDE.md` for patterns that conflict with `silver-bullet.md` rules. Check
 4. **Workflow overrides**: regex `(override|replace|ignore).*(workflow|silver.bullet)` on directive-like lines (conflicts with SB Section 2)
 5. **Session mode overrides**: regex `(always|default|must).*(interactive|autonomous).*mode` on directive-like lines (conflicts with SB Section 4)
 
-For each match found, present it to the user interactively:
-```
-Potential conflict found in CLAUDE.md:
-  Line {N}: {matched text}
-  This may conflict with Silver Bullet's {section name}.
-  Remove this line from CLAUDE.md? (yes / no / skip-all)
-```
-If user says "yes", use Edit tool to remove the line. If "no", leave it. If "skip-all", stop checking further conflicts.
+For each match found, present it to the user interactively using AskUserQuestion:
+- Question: "Potential conflict found in CLAUDE.md:\n  Line {N}: {matched text}\n  This may conflict with Silver Bullet's {section name}. Remove this line?"
+- Options:
+  - "A. Yes, remove this line"
+  - "B. No, keep it"
+  - "C. Skip all remaining conflict checks"
+
+If user selects A, use Edit tool to remove the line. If user selects B, leave it. If user selects C, stop checking further conflicts.
 
 #### 3.2 Create directories
 

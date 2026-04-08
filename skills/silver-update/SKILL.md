@@ -96,8 +96,8 @@ hooks, config) are never touched — only the plugin cache is updated.
 Use AskUserQuestion:
 - Question: "Proceed with update to vA.B.C?"
 - Options:
-  - "Yes, update now" — clone new version and update registry
-  - "No, cancel" — exit without changes
+  - "A. Yes, update now" — clone new version and update registry
+  - "B. No, cancel" — exit without changes
 
 If user cancels, exit.
 
