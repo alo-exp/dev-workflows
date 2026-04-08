@@ -226,14 +226,14 @@ reliability, usability, testability, extensibility, and AI/LLM safety) are evalu
 dimension. Results are synthesized into a single report. Every dimension must pass. Expect 2-5
 minutes.
 
-**Agent Team dispatch**: Dispatch all 8 quality dimensions as a single parallel Agent Team
+**Agent Team dispatch**: Dispatch all 9 quality dimensions as a single parallel Agent Team
 wave -- one agent per dimension, `isolation: "worktree"`. Claude synthesizes results.
 Conflict resolution: more conservative/restrictive finding wins; resolution rationale logged
 in session log. **Autonomous mode:** All dispatches use `run_in_background: true`.
 
 **If it fails:** Read the report to identify which dimension(s) failed. Fix the specific
 design issue in your CONTEXT.md or design artifacts, then re-run `/quality-gates`. Do not
-proceed to PLAN until all 8 dimensions pass. Phase order is a hard constraint: do NOT start
+proceed to PLAN until all 9 dimensions pass. Phase order is a hard constraint: do NOT start
 PLAN before `/quality-gates` completes.
 
 ---
