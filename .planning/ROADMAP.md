@@ -12,11 +12,11 @@ Transform Silver Bullet from an enforcement layer on top of GSD into a complete 
 
 Decimal phases appear between their surrounding integers in numeric order.
 
-- [ ] **Phase 1: Workflow File Rewrites** - Rewrite both workflow files as comprehensive orchestration guides covering all 20 guided GSD commands with error recovery, utility guidance, and dev-to-DevOps transition logic
-- [ ] **Phase 2: silver-bullet.md Overhaul** - Add GSD process knowledge, hand-holding instructions, and utility command awareness to silver-bullet.md while preserving all enforcement rules
-- [ ] **Phase 3: Skill Evolution** - Evolve SB forensics to route GSD-workflow issues to /gsd:forensics while retaining session-level capabilities; verify zero redundancy across all SB skills
-- [ ] **Phase 4: Template Parity & Hook Verification** - Sync templates with updated workflow files and silver-bullet.md; verify all enforcement hooks fire correctly with restructured files
-- [ ] **Phase 5: Documentation & Public-Facing** - Update README and site pages to reflect the new orchestration-first approach
+- [x] **Phase 1: Workflow File Rewrites** - Rewrite both workflow files as comprehensive orchestration guides covering all 20 guided GSD commands with error recovery, utility guidance, and dev-to-DevOps transition logic
+- [x] **Phase 2: silver-bullet.md Overhaul** - Add GSD process knowledge, hand-holding instructions, and utility command awareness to silver-bullet.md while preserving all enforcement rules
+- [x] **Phase 3: Skill Evolution** - Evolve SB forensics to route GSD-workflow issues to /gsd:forensics while retaining session-level capabilities; verify zero redundancy across all SB skills
+- [x] **Phase 4: Template Parity & Hook Verification** - Sync templates with updated workflow files and silver-bullet.md; verify all enforcement hooks fire correctly with restructured files
+- [x] **Phase 5: Documentation & Public-Facing** - Update README and site pages to reflect the new orchestration-first approach
 
 ## Phase Details
 
@@ -33,8 +33,8 @@ Decimal phases appear between their surrounding integers in numeric order.
 **Plans**: TBD
 
 Plans:
-- [ ] 01-01: TBD
-- [ ] 01-02: TBD
+- [x] 01-01: Rewrite full-dev-cycle.md as orchestration guide (commit 8a58d33)
+- [x] 01-02: Rewrite devops-cycle.md as orchestration guide (commit ada025a)
 
 ### Phase 2: silver-bullet.md Overhaul
 **Goal**: Claude has internalized GSD process knowledge within silver-bullet.md so it can guide users through workflow transitions, suggest appropriate utility commands, and explain what is happening -- all without reading GSD plugin files
@@ -48,7 +48,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 02-01-PLAN.md -- Add GSD process knowledge, hand-holding instructions, utility awareness, and workflow transition guidance to silver-bullet.md; sync template
+- [x] 02-01-PLAN.md -- GSD process knowledge, hand-holding, utility awareness, workflow transitions (commit e6bc842)
 
 ### Phase 3: Skill Evolution
 **Goal**: SB forensics becomes GSD-aware, routing workflow-level issues to GSD while retaining its unique session-level capabilities, with zero skill redundancy across the entire SB plugin
@@ -61,7 +61,7 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 03-01: TBD
+- [x] 03-01: SB forensics GSD-awareness routing, zero-dedup audit (commit 206ef79)
 
 ### Phase 4: Template Parity & Hook Verification
 **Goal**: All templates are synchronized with the rewritten source files, and every enforcement hook fires correctly with the restructured workflow files
@@ -75,7 +75,7 @@ Plans:
 **Plans**: TBD
 
 Plans:
-- [ ] 04-01: TBD
+- [x] 04-01: Template parity (byte-identical diffs pass), hooks verified via Phase 8 harness
 
 ### Phase 5: Documentation & Public-Facing
 **Goal**: README and site pages communicate the new orchestration-first approach so users understand SB guides them through GSD without needing any GSD knowledge
@@ -88,7 +88,7 @@ Plans:
 **UI hint**: yes
 
 Plans:
-- [ ] 05-01: TBD
+- [x] 05-01: README updated for orchestration-first approach (commit 7832f05)
 
 ## Progress
 
@@ -97,11 +97,11 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Workflow File Rewrites | 0/2 | Not started | - |
-| 2. silver-bullet.md Overhaul | 0/1 | Planned | - |
-| 3. Skill Evolution | 0/1 | Not started | - |
-| 4. Template Parity & Hook Verification | 0/1 | Not started | - |
-| 5. Documentation & Public-Facing | 0/1 | Not started | - |
+| 1. Workflow File Rewrites | 2/2 | ✓ Complete | 2026-04-05 |
+| 2. silver-bullet.md Overhaul | 1/1 | ✓ Complete | 2026-04-05 |
+| 3. Skill Evolution | 1/1 | ✓ Complete | 2026-04-05 |
+| 4. Template Parity & Hook Verification | 1/1 | ✓ Complete | 2026-04-05 |
+| 5. Documentation & Public-Facing | 1/1 | ✓ Complete | 2026-04-05 |
 | 6. Enforcement Techniques | 2/2 | ✓ Complete | 2026-04-05 |
 | 7. Close Enforcement Audit Gaps | 4/4 | ✓ Complete | 2026-04-05 |
 | 8. Enforcement Test Harness | 2/2 | ✓ Complete | 2026-04-08 |
