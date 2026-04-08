@@ -102,9 +102,9 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 3. Skill Evolution | 0/1 | Not started | - |
 | 4. Template Parity & Hook Verification | 0/1 | Not started | - |
 | 5. Documentation & Public-Facing | 0/1 | Not started | - |
-| 6. Enforcement Techniques | 0/2 | Planned | - |
-| 7. Close Enforcement Audit Gaps | 0/4 | Planned | - |
-| 8. Enforcement Test Harness | 1/2 | In Progress|  |
+| 6. Enforcement Techniques | 2/2 | ✓ Complete | 2026-04-05 |
+| 7. Close Enforcement Audit Gaps | 4/4 | ✓ Complete | 2026-04-05 |
+| 8. Enforcement Test Harness | 2/2 | ✓ Complete | 2026-04-08 |
 
 ### Phase 6: Implement Enforcement Techniques from AI-Native SDLC Playbook
 
@@ -114,8 +114,8 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 **Plans:** 2 plans
 
 Plans:
-- [ ] 06-01-PLAN.md -- Create Stop hook, UserPromptSubmit hook, register in hooks.json, add compactPrompt to config template
-- [ ] 06-02-PLAN.md -- Extend dev-cycle-check.sh hook self-protection, add tests for new hooks, create enforcement techniques reference doc
+- [x] 06-01-PLAN.md -- Create Stop hook, UserPromptSubmit hook, register in hooks.json, add compactPrompt to config template
+- [x] 06-02-PLAN.md -- Extend dev-cycle-check.sh hook self-protection, add tests for new hooks, create enforcement techniques reference doc
 
 ### Phase 7: Close All Enforcement Audit Gaps
 
@@ -139,7 +139,7 @@ Plans:
 
 Plans:
 - [x] 08-01-PLAN.md -- Integration test helpers, planning gate scenarios, workflow completion scenarios
-- [ ] 08-02-PLAN.md -- Skill tracking scenarios, session scenarios, unified test runner, smoke test doc update
+- [x] 08-02-PLAN.md -- Skill tracking scenarios, session scenarios, unified test runner, smoke test doc update
 
 ### Phase 9: Silver Bullet core improvements: init with GSD+Superpowers, GSD state delegation, guided UX, lettered option bullets
 
