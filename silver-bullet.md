@@ -632,7 +632,7 @@ Review the entire plugin for cross-file inconsistencies, redundancies, and contr
    - Workflows (full-dev-cycle.md vs devops-cycle.md vs CLAUDE.md vs silver-bullet.md)
    - Skills (all SKILL.md files — obsolete references, redundant work, contradictions)
    - Hooks + config (.sh files, hooks.json, .silver-bullet.json, templates)
-   - Help site + README (HTML pages, search.js, README.md — step counts, paths, versions)
+   - Help site + README (HTML pages, search.js, README.md — step counts, paths, versions) **+ New-Feature Documentation Inventory:** for each workflow, skill, enforcement layer, or major feature added in this release, verify: (a) a dedicated help page exists under `site/help/`, (b) the page is linked from `site/help/index.html` or the appropriate section hub, (c) the page appears in `site/help/reference/index.html` or the relevant concept page. Missing pages = this dimension fails and Stage 2 loops.
    - Cross-plugin consistency (read 100% of skill content from all 4 dependency plugins — GSD: ~/.claude/get-shit-done/ workflows/references/templates; Superpowers: ~/.claude/plugins/cache/*/superpowers/*/skills/*/SKILL.md; Engineering: ~/.claude/plugins/cache/*/knowledge-work-plugins/*/engineering/skills/*/SKILL.md; Design: ~/.claude/plugins/cache/*/knowledge-work-plugins/*/design/skills/*/SKILL.md — check for contradictions, conflicts, inconsistencies, or redundancies between Silver Bullet instructions and upstream plugin skills)
 2. Fix all genuine issues found
 3. **Loop**: repeat until two consecutive audit passes find zero issues
@@ -644,18 +644,29 @@ Review the entire plugin for cross-file inconsistencies, redundancies, and contr
 
 Verify and update all user-visible surfaces to reflect the current state.
 
-1. Audit for factual accuracy:
+1. Build a **Feature-to-Documentation Coverage Matrix** before touching any files:
+
+   | Feature | Type | Added in v{N} | Help page exists | Linked from nav | Linked from reference | Status |
+   |---------|------|---------------|------------------|-----------------|-----------------------|--------|
+   | [feature] | Workflow/Skill/Enforcement | ✓ | ✓ | ✓ | ✓ | PASS |
+
+   Every feature added in this release needs a row. Any blank cell or FAIL = Stage 3 is not complete until fixed.
+
+2. Audit for factual accuracy:
    - GitHub repo description and topics (`gh repo edit`)
    - README.md (version, step counts, enforcement layers, state paths, architecture)
-   - Landing page (`site/index.html`)
+   - Landing page (`site/index.html`) — **both visible content AND `<head>` metadata:**
+     - Visible: hero section, workflow section, pills, feature cards all reflect current product state
+     - Meta tags: `grep 'og:description\|twitter:description\|meta.*description' site/index.html` — verify no stale references (e.g. old workflow counts, old version numbers)
+     - Consistency: if visible content says "7 workflows", meta tags must too — contradictions between `<head>` and `<body>` are a failure
    - All help pages (`site/help/*/index.html`)
    - Search index (`site/help/search.js`)
    - Compare page (`site/compare/index.html`) if it exists
-2. Fix all discrepancies
-3. **MANDATORY — invoke `/superpowers:verification-before-completion`** via the Skill tool.
+4. Fix all discrepancies
+5. **MANDATORY — invoke `/superpowers:verification-before-completion`** via the Skill tool.
    Do NOT record the stage marker without invoking this skill first.
-4. Push and confirm CI green
-5. Record stage completion: `echo "quality-gate-stage-3" >> ~/.claude/.silver-bullet/state`
+6. Push and confirm CI green
+7. Record stage completion: `echo "quality-gate-stage-3" >> ~/.claude/.silver-bullet/state`
 
 ### Stage 4 — Security Audit (SENTINEL)
 
