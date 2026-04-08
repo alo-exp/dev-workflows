@@ -2,6 +2,26 @@
 
 ## [Unreleased]
 
+## [0.13.2] — 2026-04-09
+
+### Fixed
+- All hooks that used `set -euo pipefail` without an ERR trap now have
+  `trap 'exit 0' ERR` added. Affected files: `hooks/session-start`,
+  `hooks/compliance-status.sh`, `hooks/session-log-init.sh`,
+  `hooks/ensure-model-routing.sh`, `hooks/semantic-compress.sh`,
+  `hooks/record-skill.sh`, `hooks/ci-status-check.sh`,
+  `hooks/dev-cycle-check.sh`. Prevents first-install failures from
+  surfacing nonzero hook exits that cause Claude to reject the plugin.
+- Restored `"hooks": "./hooks/hooks.json"` to `.claude-plugin/plugin.json`
+  so the marketplace registers hooks automatically on install.
+
+### Added
+- `silver:init` Phase 3 step 3.7.5: after project scaffolding, merges SB
+  hook entries from `hooks/hooks.json` into `~/.claude/settings.json` using
+  `python3`. Hook commands are registered with the actual install path
+  substituted for `${CLAUDE_PLUGIN_ROOT}`. Idempotent — re-running init
+  does not add duplicate entries. Also runs during update mode (step 5a).
+
 ## [0.13.1] — 2026-04-09
 
 ### Changed
