@@ -232,7 +232,7 @@ footer a:hover{color:var(--accent-light)}
             <td>Goal-backward verification against requirements + UAT. Produces <code>.planning/{phase}-VERIFICATION.md</code>.</td>
           </tr>
           <tr>
-            <td>/gsd:ship</td>
+            <td>/gsd-ship</td>
             <td>Ship</td>
             <td>Create PR with auto-generated body: phase summaries, requirement coverage, verification links.</td>
           </tr>
@@ -271,7 +271,7 @@ footer a:hover{color:var(--accent-light)}
           <tr>
             <td>/quality-gates<span class="badge-small badge-req">Required</span></td>
             <td>Before Plan</td>
-            <td>8-dimension quality evaluation (modularity, reusability, scalability, security, reliability, usability, testability, extensibility). Dispatches 8 parallel agents. All must pass.</td>
+            <td>9-dimension quality evaluation (modularity, reusability, scalability, security, reliability, usability, testability, extensibility, plus devops-quality-gates for infra-touching changes). Dispatches parallel agents. All must pass.</td>
           </tr>
           <tr>
             <td>/blast-radius<span class="badge-small badge-do">DevOps</span><span class="badge-small badge-req">Required</span></td>
@@ -346,7 +346,7 @@ footer a:hover{color:var(--accent-light)}
           <tr>
             <td><a href="../workflows/silver-ui.html">/silver:ui</a></td>
             <td>UI/UX work</td>
-            <td>UI/UX workflow with mandatory accessibility-review gate. Chains intel → product-brainstorm → accessibility-review → silver:brainstorm → quality-gates → gsd-ui-phase → code review → verify → ship. Routed on "UI", "frontend", "component", "screen", "design", "layout" signals.</td>
+            <td>UI/UX workflow with mandatory gsd-ui-review gate (6-pillar visual audit including WCAG accessibility). Chains intel → product-brainstorm → silver:brainstorm → quality-gates → gsd-ui-phase → gsd-ui-review → code review → verify → ship. Routed on "UI", "frontend", "component", "screen", "design", "layout" signals.</td>
           </tr>
           <tr>
             <td><a href="../workflows/silver-devops.html">/silver:devops</a></td>
@@ -361,7 +361,7 @@ footer a:hover{color:var(--accent-light)}
           <tr>
             <td><a href="../workflows/silver-release.html">/silver:release</a></td>
             <td>Release prep</td>
-            <td>Milestone-level publish workflow (NOT phase-level ship). Chains quality-gates → gsd-audit-uat → gsd-audit-milestone → deploy-checklist → silver:create-release (git tag + GitHub Release) → post-release plugin version check. Routed on version number, "release", "publish", "go live" signals.</td>
+            <td>Milestone-level publish workflow (NOT phase-level ship). Chains quality-gates → silver:security → gsd-audit-uat → gsd-audit-milestone → deploy-checklist → silver:create-release (git tag + GitHub Release) → gsd-ship → gsd-complete-milestone. Routed on version number, "release", "publish", "go live" signals.</td>
           </tr>
           <tr>
             <td><a href="../workflows/silver-fast.html">/silver:fast</a></td>
@@ -398,7 +398,7 @@ footer a:hover{color:var(--accent-light)}
           <tr>
             <td><a href="../workflows/silver-ui.html">/silver:ui</a></td>
             <td>UI, frontend, component, screen, design, interface, layout, animation, responsive</td>
-            <td>Complexity triage → silver:intel → accessibility-review → product-brainstorm</td>
+            <td>Complexity triage → silver:intel → silver:explore (if fuzzy) → product-brainstorm</td>
           </tr>
           <tr>
             <td><a href="../workflows/silver-devops.html">/silver:devops</a></td>
@@ -436,14 +436,14 @@ footer a:hover{color:var(--accent-light)}
       </table>
 
       <h3 id="ship-disambiguation">Ship Disambiguation</h3>
-      <p><code>/silver</code> distinguishes between phase-level ship (<code>gsd:ship</code>) and milestone-level release (<code>silver:release</code>) based on context signals.</p>
+      <p><code>/silver</code> distinguishes between phase-level ship (<code>gsd-ship</code>) and milestone-level release (<code>silver:release</code>) based on context signals.</p>
       <table class="ref-table">
         <thead><tr><th>Signal</th><th>Route</th></tr></thead>
         <tbody>
           <tr><td>Contains version number (v2.0, 1.4.0…)</td><td><code>/silver:release</code></td></tr>
           <tr><td>Contains "changelog" or "release notes"</td><td><code>/silver:release</code></td></tr>
           <tr><td>Contains "go live", "to production", "publicly"</td><td><code>/silver:release</code></td></tr>
-          <tr><td>Active phase in progress, no version signal</td><td><code>/gsd:ship</code> (phase merge)</td></tr>
+          <tr><td>Active phase in progress, no version signal</td><td><code>/gsd-ship</code> (phase merge)</td></tr>
           <tr><td>No active phase, end of milestone</td><td><code>/silver:release</code></td></tr>
         </tbody>
       </table>
@@ -710,7 +710,7 @@ touch ~/.claude/.silver-bullet/trivial
 /opt/homebrew/bin/gh run list --limit 1 --json status,conclusion,name,headBranch
 
 <span class="comment"># Full finalization + release sequence</span>
-/testing-strategy → /documentation → /finishing-a-development-branch → /deploy-checklist → /gsd:ship → /create-release</div>
+/testing-strategy → /documentation → /finishing-a-development-branch → /deploy-checklist → /gsd-ship → /create-release</div>
 
       <h3>Model Routing Guidance</h3>
       <p>Silver Bullet uses <strong>claude-sonnet-4-6</strong> by default. You're asked about Opus at two transition points only:</p>

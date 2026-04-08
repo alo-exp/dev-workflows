@@ -158,7 +158,7 @@ footer a{color:var(--text-secondary);text-decoration:none}footer a:hover{color:v
       <div class="divider"></div>
 
       <h2 id="ship-disambiguation">Ship disambiguation</h2>
-      <p>Silver Bullet distinguishes between phase-level ship (<code>gsd:ship</code>) and milestone-level release (<code>silver:release</code>) based on context signals:</p>
+      <p>Silver Bullet distinguishes between phase-level ship (<code>gsd-ship</code>) and milestone-level release (<code>silver:release</code>) based on context signals:</p>
 
       <table class="ref-table">
         <thead><tr><th>Signal in your message</th><th>Route</th></tr></thead>
@@ -166,7 +166,7 @@ footer a{color:var(--text-secondary);text-decoration:none}footer a:hover{color:v
           <tr><td>Contains version number (v2.0, 1.4.0…)</td><td><code>silver:release</code></td></tr>
           <tr><td>Contains "changelog" or "release notes"</td><td><code>silver:release</code></td></tr>
           <tr><td>Contains "go live", "to production", "publicly"</td><td><code>silver:release</code></td></tr>
-          <tr><td>Active phase in progress, no version signal</td><td><code>gsd:ship</code> (phase merge)</td></tr>
+          <tr><td>Active phase in progress, no version signal</td><td><code>gsd-ship</code> (phase merge)</td></tr>
           <tr><td>No active phase, end of milestone</td><td><code>silver:release</code></td></tr>
         </tbody>
       </table>

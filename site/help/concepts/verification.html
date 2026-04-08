@@ -223,17 +223,17 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
       <p>Verification fires as the penultimate step of every workflow that produces code changes, immediately before the ship step:</p>
 
       <ul>
-        <li><strong>silver:feature</strong> — Step 9: gsd-verify-work (must pass before Step 10: ship)</li>
+        <li><strong>silver:feature</strong> — Step 8: gsd-verify-work (must pass before security review and ship)</li>
         <li><strong>silver:bugfix</strong> — after TDD regression test passes, gsd-verify-work confirms full suite</li>
-        <li><strong>silver:ui</strong> — after implementation, gsd-verify-work + accessibility check before ship</li>
+        <li><strong>silver:ui</strong> — Step 11: gsd-verify-work after implementation; if coverage gaps remain, gsd-add-tests fills them before ship</li>
         <li><strong>silver:devops</strong> — gsd-verify-work runs against the IaC plan acceptance criteria</li>
       </ul>
 
-      <h3>Workflows where it is exempt or replaced</h3>
+      <h3>Workflows where it is exempt or embedded</h3>
       <ul>
         <li><strong>silver:fast</strong> — exempt. Trivial changes go through <code>gsd-fast</code> which has its own lightweight verification appropriate to the scope (≤3 files).</li>
         <li><strong>silver:research</strong> — no code changes are produced; verification is replaced by the research synthesis and recommendation review step.</li>
-        <li><strong>silver:release</strong> — replaced by the full quality gates suite + UAT audit + milestone audit, which are more comprehensive than single-phase verification.</li>
+        <li><strong>silver:release</strong> — gsd-verify-work still runs, embedded within the milestone audit step. Additionally, the full quality gates suite + UAT audit + milestone audit run as higher-level gates.</li>
       </ul>
 
       <div class="divider"></div>
