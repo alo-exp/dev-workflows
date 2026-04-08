@@ -13,6 +13,13 @@
 - §0 session startup: MultAI update check alongside GSD/Superpowers
 - Unified test runner (tests/run-all-tests.sh)
 
+### Fixed
+- silver:release: add standalone silver:security gate (Step 2a) before gap-closure loop; listed in non-skippable gates
+- silver:feature: move gsd-add-tests to Step 8b (after gsd-verify-work, not before); add TDD skip heuristic
+- silver:tdd / silver:scan: add canonical skill parentheticals across feature/bugfix/ui/devops skill files
+- silver/router: note §10 preferences not applied when routing Trivial → silver:fast
+- silver:init: document intentional MultAI hard-STOP vs Engineering/PM soft-warning asymmetry
+
 ### Infrastructure
 - GSD state delegation: SB reads .planning/STATE.md instead of maintaining own state
 
