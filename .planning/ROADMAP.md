@@ -216,7 +216,11 @@ Plans:
   3. If a connector fails mid-ingestion, re-running `silver-ingest` resumes from the last successful artifact in the manifest rather than starting over
   4. User runs `silver-ingest --source-url <repo-url>` in a mobile repo and SB fetches the main repo's SPEC.md, caches it as `.planning/SPEC.main.md` (read-only), and displays the pinned spec-version
   5. When a mobile repo SB session starts and the pinned spec-version does not match the main repo's current version, the session is blocked with a diff of what changed before the user can proceed
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 13-01-PLAN.md -- silver-ingest SKILL.md (JIRA/Figma/Google Docs ingestion + cross-repo fetch)
+- [ ] 13-02-PLAN.md -- Router wiring, session-start version validation, MCP prerequisites
 
 ### Phase 14: Validation, Traceability & UAT Gate
 
