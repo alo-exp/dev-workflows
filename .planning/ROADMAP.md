@@ -27,7 +27,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [ ] **Phase 13: Ingestion & Multi-Repo** - External artifact ingestion via MCP connectors (JIRA, Figma, Google Docs) and cross-repo spec referencing with version pinning
 - [x] **Phase 14: Validation, Traceability & UAT Gate** - Pre-build validation gate, PR-to-spec traceability automation, and UAT as a formal pipeline gate (completed 2026-04-09)
 - [x] **Phase 15: Bug Fixes & Reviewer Framework** - Fix critical v0.14.0 bugs then establish the artifact reviewer framework (interface, loop, state tracking, audit trail) (completed 2026-04-09)
-- [ ] **Phase 16: New Artifact Reviewers** - Create all 8 new artifact reviewer skills for SPEC, DESIGN, REQUIREMENTS, ROADMAP, CONTEXT, RESEARCH, INGESTION_MANIFEST, and UAT
+- [x] **Phase 16: New Artifact Reviewers** - Create all 8 new artifact reviewer skills for SPEC, DESIGN, REQUIREMENTS, ROADMAP, CONTEXT, RESEARCH, INGESTION_MANIFEST, and UAT (completed 2026-04-09)
 - [ ] **Phase 17: Existing Reviewer Formalization & Workflow Wiring** - Formalize plan-checker, code-reviewer, verifier, and security-auditor into the 2-pass framework; wire all reviewers into their producing workflows
 
 ## Phase Details
@@ -124,7 +124,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 13. Ingestion & Multi-Repo | 0/? | Not started | - |
 | 14. Validation, Traceability & UAT Gate | 3/3 | Complete   | 2026-04-09 |
 | 15. Bug Fixes & Reviewer Framework | 2/2 | Complete   | 2026-04-09 |
-| 16. New Artifact Reviewers | 1/2 | In Progress|  |
+| 16. New Artifact Reviewers | 2/2 | Complete   | 2026-04-09 |
 | 17. Existing Reviewer Formalization & Workflow Wiring | 0/? | Not started | - |
 
 ### Phase 6: Implement Enforcement Techniques from AI-Native SDLC Playbook
@@ -279,7 +279,7 @@ Plans:
 
 Plans:
 - [x] 16-01-PLAN.md -- SPEC.md, DESIGN.md, REQUIREMENTS.md, ROADMAP.md reviewer skills
-- [ ] 16-02-PLAN.md -- CONTEXT.md, RESEARCH.md, INGESTION_MANIFEST.md, UAT.md reviewer skills + finalize mapping table
+- [x] 16-02-PLAN.md -- CONTEXT.md, RESEARCH.md, INGESTION_MANIFEST.md, UAT.md reviewer skills + finalize mapping table
 
 ### Phase 17: Existing Reviewer Formalization & Workflow Wiring
 

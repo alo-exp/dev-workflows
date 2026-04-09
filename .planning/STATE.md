@@ -4,15 +4,15 @@ milestone: v0.13.0
 milestone_name: site update
 current_plan: 1
 status: Executing Phase 16
-stopped_at: Completed 16-01-PLAN.md — 4 new artifact reviewer skills
-last_updated: "2026-04-09T12:18:14.612Z"
+stopped_at: Completed 16-02-PLAN.md — 4 new artifact reviewer skills (CONTEXT, RESEARCH, INGESTION_MANIFEST, UAT)
+last_updated: "2026-04-09T12:22:50.945Z"
 last_activity: 2026-04-09
 progress:
   total_phases: 17
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 4
-  completed_plans: 3
-  percent: 75
+  completed_plans: 4
+  percent: 100
 ---
 
 # Project State
@@ -70,6 +70,8 @@ Last activity: 2026-04-09
 - [Phase 15-02]: Reviewer state stored as JSON keyed by 8-char SHA256 of artifact absolute path in ~/.claude/.silver-bullet/review-state/
 - [Phase 16]: SPEC reviewer uses 7 QC checks covering sections, overview quality, user story format, AC testability, assumption status, frontmatter, and source input cross-reference
 - [Phase 16]: ROADMAP reviewer builds full dependency graph to detect circular and backward phase dependencies
+- [Phase 16]: CONTEXT.md reviewer: 6 QC checks enforcing decisions exist, gray areas resolved, decision specificity, no contradictions, deferred ideas separation, Claude's Discretion context
+- [Phase 16]: UAT.md reviewer: QC-1/QC-2 (AC coverage, orphan detection) conditional on spec-path; spec-version mismatch produces distinct findings (missing field vs version mismatch)
 
 ### Quick Tasks Completed
 
@@ -102,8 +104,9 @@ Last activity: 2026-04-09
 | Phase 10 P07 | 5 | 2 tasks | 1 files |
 | Phase 15 P02 | 300 | 2 tasks | 3 files |
 | Phase 16 P01 | 166 | 2 tasks | 5 files |
+| Phase 16 P02 | 186 | 2 tasks | 5 files |
 
 ## Session Continuity
 
-Last session: 2026-04-09T12:18:09.911Z
-Stopped at: Completed 16-01-PLAN.md — 4 new artifact reviewer skills
+Last session: 2026-04-09T12:22:50.940Z
+Stopped at: Completed 16-02-PLAN.md — 4 new artifact reviewer skills (CONTEXT, RESEARCH, INGESTION_MANIFEST, UAT)
