@@ -30,7 +30,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 16: New Artifact Reviewers** - Create all 8 new artifact reviewer skills for SPEC, DESIGN, REQUIREMENTS, ROADMAP, CONTEXT, RESEARCH, INGESTION_MANIFEST, and UAT (completed 2026-04-09)
 - [x] **Phase 17: Existing Reviewer Formalization & Workflow Wiring** - Formalize plan-checker, code-reviewer, verifier, and security-auditor into the 2-pass framework; wire all reviewers into their producing workflows (completed 2026-04-09)
 - [x] **Phase 18: Configurable Review Depth** - Review depth configurable per artifact type via .planning/config.json (deep/standard/quick) with standard as default (completed 2026-04-10)
-- [ ] **Phase 19: Review Analytics** - Review rounds emit structured metrics to JSON Lines file; silver-review-stats skill produces summary reports
+- [x] **Phase 19: Review Analytics** - Review rounds emit structured metrics to JSON Lines file; silver-review-stats skill produces summary reports (completed 2026-04-09)
 - [ ] **Phase 20: Cross-Artifact Consistency** - Cross-artifact reviewer validates SPEC↔REQUIREMENTS↔ROADMAP↔DESIGN alignment; wired into milestone completion
 
 ## Phase Details
@@ -332,7 +332,7 @@ Plans:
 
 Plans:
 - [x] 19-01-PLAN.md — Metrics emission in review loop + analytics file rotation
-- [ ] 19-02-PLAN.md — silver-review-stats skill for summary reports
+- [x] 19-02-PLAN.md — silver-review-stats skill for summary reports
 
 ### Phase 20: Cross-Artifact Consistency
 

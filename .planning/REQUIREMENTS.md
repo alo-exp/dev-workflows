@@ -20,7 +20,7 @@ Requirements for v0.16.0 milestone. Each maps to roadmap phases.
 
 - [x] **ARVW-10a**: Review loop emits per-round metrics (artifact, round number, finding count, pass/fail, duration) at loop completion
 - [x] **ARVW-10b**: Metrics stored as JSON Lines in `.planning/review-analytics.jsonl` — append-only, one JSON object per review round
-- [ ] **ARVW-10c**: `silver-review-stats` skill reads analytics file and produces summary table (pass rates, avg rounds, common findings by artifact type)
+- [x] **ARVW-10c**: `silver-review-stats` skill reads analytics file and produces summary table (pass rates, avg rounds, common findings by artifact type)
 - [x] **ARVW-10d**: Review loop instrumented to record timestamps for round duration calculation
 - [x] **ARVW-10e**: Analytics file rotation — when file exceeds 1000 lines, archive to `.planning/archive/review-analytics-{date}.jsonl`
 
@@ -44,7 +44,7 @@ Requirements for v0.16.0 milestone. Each maps to roadmap phases.
 | ARVW-11f | Phase 18 | Done |
 | ARVW-10a | Phase 19 | Complete |
 | ARVW-10b | Phase 19 | Complete |
-| ARVW-10c | Phase 19 | Pending |
+| ARVW-10c | Phase 19 | Complete |
 | ARVW-10d | Phase 19 | Complete |
 | ARVW-10e | Phase 19 | Complete |
 | ARVW-09a | Phase 20 | Pending |
