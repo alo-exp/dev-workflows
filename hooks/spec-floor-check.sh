@@ -60,7 +60,7 @@ if [[ "$is_plan_phase" == true ]]; then
     exit 0
   fi
   for section in "## Overview" "## Acceptance Criteria"; do
-    if ! grep -q "^${section}$" "$SPEC"; then
+    if ! grep -qE "^${section}[[:space:]]*$" "$SPEC"; then
       emit_block "SPEC FLOOR VIOLATION: .planning/SPEC.md is missing required section: ${section}. Run /silver:spec to complete the spec before planning."
       exit 0
     fi

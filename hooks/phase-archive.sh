@@ -63,7 +63,8 @@ mkdir -p "$ARCHIVE_DIR"
 # Copy all phase directories (cp -r preserves structure; clear runs after we exit 0)
 # Skip if archive already exists (avoid overwriting prior archive on repeated runs)
 if [[ -n "$(ls -A "$ARCHIVE_DIR" 2>/dev/null)" ]]; then
-  printf '{"hookSpecificOutput":{"message":"Phase archive: .planning/archive/%s/ already exists — skipping to avoid overwrite."}}' "$milestone_slug"
+  msg=$(printf 'Phase archive: .planning/archive/%s/ already exists — skipping to avoid overwrite.' "$milestone_slug" | jq -Rs '.')
+  printf '{"hookSpecificOutput":{"message":%s}}' "$msg"
   exit 0
 fi
 
