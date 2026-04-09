@@ -1,14 +1,14 @@
 ---
 gsd_state_version: 1.0
-milestone: v0.14.0
-milestone_name: AI-Driven Spec & Multi-Repo Orchestration
+milestone: v0.15.0
+milestone_name: Granular Artifact Review Rounds
 current_plan: 0
-status: Roadmap defined — ready to plan Phase 12
+status: Defining requirements
 stopped_at: null
 last_updated: "2026-04-09T00:00:00.000Z"
 last_activity: 2026-04-09
 progress:
-  total_phases: 3
+  total_phases: 0
   completed_phases: 0
   total_plans: 0
   completed_plans: 0
@@ -18,8 +18,8 @@ progress:
 # Project State
 
 **Project:** Silver Bullet
-**Current version:** v0.13.2
-**Active phase:** Phase 12 — Spec Foundation (not started)
+**Current version:** v0.14.0
+**Active phase:** Not started (defining requirements)
 **Current plan:** —
 
 Last activity: 2026-04-09

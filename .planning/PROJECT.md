@@ -27,18 +27,23 @@ Single enforced workflow that eliminates the gap between "what AI should do" and
 - ✓ /silver smart router: routes freeform input to best SB or GSD skill — v0.13.0
 - ✓ SB orchestration skill files (silver-feature/bugfix/ui/devops/research/release/fast) — v0.13.0
 - ✓ Website content refresh — v0.13.0
+- ✓ AI-driven spec creation (silver-spec skill) — v0.14.0
+- ✓ JIRA/Figma/Google Docs ingestion (silver-ingest skill) — v0.14.0
+- ✓ Pre-build spec validation (silver-validate skill) — v0.14.0
+- ✓ Spec floor enforcement (spec-floor-check.sh hook) — v0.14.0
+- ✓ PR → spec traceability (pr-traceability.sh hook) — v0.14.0
+- ✓ UAT pipeline gate (uat-gate.sh hook) — v0.14.0
+- ✓ Multi-repo spec referencing with version pinning — v0.14.0
+- ✓ Step non-skip enforcement §3/§3a/§3d — v0.14.0
 
 ### Active
 
-- [ ] AI-driven spec creation: SB guides PM/BA through requirements elicitation, UX flows, design
-- [ ] JIRA ingestion: pull ticket + linked artifacts (Google Docs, PPT, Figma) via MCP connectors
-- [ ] External artifact ingestion: incorporate Google Docs, PPTs, Figma at any point during spec process
-- [ ] Standardized spec output: produce industry-standard .md specs (requirements, design, final spec) in repo
-- [ ] Multi-repo spec referencing: main repo specs as source of truth, mobile repos reference them
-- [ ] Pre-build spec validation: gap analysis, conflict detection, assumption surfacing before implementation
-- [ ] PR → spec traceability: auto-link PRs to spec artefacts that drove implementation
-- [ ] GSD minimum spec floor: enforce minimum viable spec even in fast-path
-- [ ] UAT as formal pipeline gate: verify implementation against original spec
+- [ ] Granular artifact review rounds: every artifact-producing step gets dedicated reviewer with 2-consecutive-clean-pass enforcement
+- [ ] New reviewer skills/agents for 8 artifact types (SPEC, DESIGN, REQUIREMENTS, ROADMAP, CONTEXT, RESEARCH, INGESTION_MANIFEST, UAT)
+- [ ] Existing reviewers formalized into same framework (plan-checker, code-reviewer, verifier, security-auditor)
+- [ ] Workflow integration: producing steps wired to invoke reviewer before completing
+- [ ] v0.14.0 critical bug fixes: shell injection in silver-ingest, heredoc injection in pr-traceability.sh
+- [ ] v0.14.0 verification gaps: Confluence [ARTIFACT MISSING], version mismatch diff
 
 ### Out of Scope
 
@@ -48,22 +53,15 @@ Single enforced workflow that eliminates the gap between "what AI should do" and
 - Building custom integrations for external tools — use Claude Desktop MCP connectors / CLIs
 - Nomadic Care-specific naming conventions or file structures — SB provides generic patterns
 
-## Current Milestone: v0.14.0 AI-Driven Spec & Multi-Repo Orchestration
+## Current Milestone: v0.15.0 Granular Artifact Review Rounds
 
-**Goal:** Transform SB from "plan and execute code" into "drive the entire SDLC from requirements elicitation through implementation" — SB leads spec creation, ingests external artifacts as inputs, and coordinates across repos.
+**Goal:** Every artifact produced by any SB/GSD workflow step gets iterative review rounds with a dedicated reviewer — 2 consecutive clean passes required before the step completes. No artifact ships without structured quality validation.
 
 **Target features:**
-- A: JIRA → SB ingestion (ticket + linked artifacts via MCP connectors)
-- B: AI-driven spec creation (SB guides PM/BA step-by-step through requirements, UX, design)
-- C: External artifact ingestion (Google Docs, PPT, Figma incorporated at any point)
-- D: Standardized spec output (industry-standard .md in repo, no human-authored .md required)
-- E: Multi-repo spec referencing (main repo specs → mobile repo implementation sessions)
-- F: Pre-build validation (gap analysis, conflict detection, assumption surfacing)
-- G: PR → spec traceability (auto-link PRs to spec artefacts)
-- H: GSD minimum spec floor (fast-path requires minimum spec)
-- I: UAT as formal pipeline gate (verify implementation against spec)
-
-**Architecture principle:** Reuse existing plugin skills via orchestration; create new skills only when no dependency covers the capability.
+- A: New artifact reviewers (~8 new skills/agents for SPEC, DESIGN, REQUIREMENTS, ROADMAP, CONTEXT, RESEARCH, INGESTION_MANIFEST, UAT)
+- B: Existing reviewer formalization (plan-checker, code-reviewer, verifier, security-auditor into same 2-pass framework)
+- C: Workflow integration (producing steps wired to invoke reviewer before completing)
+- D: v0.14.0 critical bug fixes (shell injection, heredoc injection, verification gaps)
 
 ## Context
 
@@ -110,4 +108,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-09 after milestone v0.14.0 start*
+*Last updated: 2026-04-09 after milestone v0.15.0 start*
