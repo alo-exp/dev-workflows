@@ -23,124 +23,77 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
 
-/* ───── DESIGN TOKENS — Design A: "Ink" (High-contrast editorial) ───── */
+/* ══════════════════════════════════════════════════════
+   SHARED foreground — identical to Terminal Dark.
+   Only background tokens differ across designs.
+   ══════════════════════════════════════════════════════ */
+[data-design="a"],[data-design="b"],[data-design="c"]{
+  --chrome-gradient:linear-gradient(90deg,#a8a8a8 0%,#ffffff 9%,#c0c0c0 18%,#909090 27%,#efefef 36%,#ffffff 43%,#cccccc 51%,#909090 59%,#e8e8e8 68%,#b8b8b8 76%,#888888 86%,#a0a0a0 100%);
+  --accent:#00ff41;
+  --accent-light:#39ff66;
+  --accent-glow:rgba(0,255,65,0.18);
+  --accent2:#00ccff;
+  --accent3:#a855f7;
+  --green:#00ff41;
+  --amber:#ffaa00;
+  --red:#ff4466;
+  --cyan:#00ccff;
+  --text-primary:#c8f0d8;
+  --text-secondary:#7abf90;
+  --text-dim:#4a7a5c;
+  --border:#112218;
+  --border-hover:#1a3824;
+  --radius:8px;
+  --radius-lg:14px;
+  --radius-sm:4px;
+  --font-sans:'Space Grotesk',system-ui,sans-serif;
+  --font-mono:'Fira Code',monospace;
+  --shadow-glow:0 0 40px rgba(0,255,65,.06);
+  --table-row-hover:rgba(0,255,65,.02);
+  --skill-phase-border:rgba(17,34,24,.9);
+  --btn-gradient:linear-gradient(135deg,#00cc33 0%,#009922 50%,#00cc33 100%);
+  --btn-gradient-hover:linear-gradient(135deg,#00ff41 0%,#00cc33 50%,#00ff41 100%);
+  --hero-glow:rgba(0,255,65,0.06);
+  --card-top:rgba(0,255,65,0.6);
+}
+
+/* ───── Design A: "Dusk" — subtle lift, deep forest green ───── */
 [data-design="a"]{
-  --bg-page:#f6f8fa;
-  --bg-card:#ffffff;
-  --bg-card-hover:#f3f5f7;
-  --bg-code:#eef1f5;
-  --bg-hero:linear-gradient(160deg,#dde3ea 0%,#e8edf3 25%,#f2f5f9 48%,#f4f6fa 62%,#eceff4 80%,#e4eaf0 100%);
-  --chrome-gradient:linear-gradient(90deg,#1a1a2e 0%,#16213e 9%,#0f3460 18%,#1a1a2e 27%,#16213e 36%,#0f3460 43%,#1a1a2e 51%,#0f3460 59%,#16213e 68%,#1a1a2e 76%,#0f3460 86%,#1a1a2e 100%);
-  --accent:#0969da;
-  --accent-light:#0550ae;
-  --accent-glow:rgba(9,105,218,.12);
-  --accent2:#0891b2;
-  --accent3:#8250df;
-  --green:#1a7f37;
-  --amber:#9a6700;
-  --red:#cf222e;
-  --cyan:#0891b2;
-  --text-primary:#0d1117;
-  --text-secondary:#57606a;
-  --text-dim:#8c959f;
-  --border:#d0d7de;
-  --border-hover:#8c959f;
-  --radius:8px;
-  --radius-lg:14px;
-  --radius-sm:4px;
-  --font-sans:'Space Grotesk',system-ui,sans-serif;
-  --font-mono:'Fira Code',monospace;
-  --shadow-lg:0 20px 60px rgba(0,0,0,.08);
-  --shadow-glow:0 0 40px rgba(9,105,218,.06);
-  --nav-bg:rgba(246,248,250,.92);
-  --nav-mobile-bg:rgba(246,248,250,.99);
-  --section-alt:rgba(234,238,242,.6);
-  --table-row-hover:rgba(9,105,218,.02);
-  --skill-phase-border:rgba(208,215,222,.8);
-  --btn-gradient:linear-gradient(135deg,#0969da 0%,#0550ae 50%,#0969da 100%);
-  --btn-gradient-hover:linear-gradient(135deg,#1f7aec 0%,#0969da 50%,#1f7aec 100%);
-  --hero-glow:rgba(9,105,218,.05);
-  --card-top:rgba(9,105,218,.5);
+  --bg-page:#0e1a12;
+  --bg-card:#162018;
+  --bg-card-hover:#1c2a20;
+  --bg-code:#0a1410;
+  --bg-hero:linear-gradient(160deg,#060e08 0%,#0a1610 25%,#0e1c14 48%,#101e16 62%,#0c1810 80%,#080e0a 100%);
+  --shadow-lg:0 20px 60px rgba(0,0,0,.6);
+  --nav-bg:rgba(14,26,18,.92);
+  --nav-mobile-bg:rgba(14,26,18,.99);
+  --section-alt:rgba(16,26,18,.7);
 }
 
-/* ───── DESIGN TOKENS — Design B: "Slate" (Modern SaaS neutral) ───── */
+/* ───── Design B: "Dusk Mid" — medium dark, visible warmth ───── */
 [data-design="b"]{
-  --bg-page:#f8fafc;
-  --bg-card:#ffffff;
-  --bg-card-hover:#f1f5f9;
-  --bg-code:#f1f5f9;
-  --bg-hero:linear-gradient(160deg,#e2e8f0 0%,#edf2f7 25%,#f5f7fa 48%,#f7f9fb 62%,#eef2f7 80%,#e8edf4 100%);
-  --chrome-gradient:linear-gradient(90deg,#1e293b 0%,#334155 9%,#64748b 18%,#1e293b 27%,#475569 36%,#64748b 43%,#334155 51%,#1e293b 59%,#475569 68%,#334155 76%,#1e293b 86%,#334155 100%);
-  --accent:#6366f1;
-  --accent-light:#4f46e5;
-  --accent-glow:rgba(99,102,241,.12);
-  --accent2:#06b6d4;
-  --accent3:#ec4899;
-  --green:#059669;
-  --amber:#d97706;
-  --red:#dc2626;
-  --cyan:#06b6d4;
-  --text-primary:#0f172a;
-  --text-secondary:#475569;
-  --text-dim:#94a3b8;
-  --border:#e2e8f0;
-  --border-hover:#94a3b8;
-  --radius:8px;
-  --radius-lg:14px;
-  --radius-sm:4px;
-  --font-sans:'Space Grotesk',system-ui,sans-serif;
-  --font-mono:'Fira Code',monospace;
-  --shadow-lg:0 20px 60px rgba(0,0,0,.06);
-  --shadow-glow:0 0 40px rgba(99,102,241,.06);
-  --nav-bg:rgba(248,250,252,.92);
-  --nav-mobile-bg:rgba(248,250,252,.99);
-  --section-alt:rgba(241,245,249,.7);
-  --table-row-hover:rgba(99,102,241,.02);
-  --skill-phase-border:rgba(226,232,240,.9);
-  --btn-gradient:linear-gradient(135deg,#6366f1 0%,#4f46e5 50%,#6366f1 100%);
-  --btn-gradient-hover:linear-gradient(135deg,#818cf8 0%,#6366f1 50%,#818cf8 100%);
-  --hero-glow:rgba(99,102,241,.05);
-  --card-top:rgba(99,102,241,.5);
+  --bg-page:#1a2e20;
+  --bg-card:#223828;
+  --bg-card-hover:#2a4030;
+  --bg-code:#142018;
+  --bg-hero:linear-gradient(160deg,#0e1c12 0%,#14241a 25%,#1a2e20 48%,#1c3022 62%,#162818 80%,#101e14 100%);
+  --shadow-lg:0 20px 60px rgba(0,0,0,.5);
+  --nav-bg:rgba(26,46,32,.92);
+  --nav-mobile-bg:rgba(26,46,32,.99);
+  --section-alt:rgba(22,36,26,.7);
 }
 
-/* ───── DESIGN TOKENS — Design C: "Warm" (Amber/Teal editorial warmth) ───── */
+/* ───── Design C: "Dusk Light" — lightest, sage-dark ───── */
 [data-design="c"]{
-  --bg-page:#fafaf9;
-  --bg-card:#ffffff;
-  --bg-card-hover:#f5f4f0;
-  --bg-code:#f2f0eb;
-  --bg-hero:linear-gradient(160deg,#e8e4da 0%,#eeebe3 25%,#f6f4f0 48%,#f8f6f2 62%,#f0ede7 80%,#e8e5de 100%);
-  --chrome-gradient:linear-gradient(90deg,#1c1917 0%,#44403c 9%,#78716c 18%,#1c1917 27%,#57534e 36%,#78716c 43%,#44403c 51%,#1c1917 59%,#57534e 68%,#44403c 76%,#1c1917 86%,#44403c 100%);
-  --accent:#0f766e;
-  --accent-light:#0d6660;
-  --accent-glow:rgba(15,118,110,.12);
-  --accent2:#d97706;
-  --accent3:#7c3aed;
-  --green:#15803d;
-  --amber:#d97706;
-  --red:#b91c1c;
-  --cyan:#0e7490;
-  --text-primary:#1c1917;
-  --text-secondary:#57534e;
-  --text-dim:#a8a29e;
-  --border:#e7e5e4;
-  --border-hover:#a8a29e;
-  --radius:8px;
-  --radius-lg:14px;
-  --radius-sm:4px;
-  --font-sans:'Space Grotesk',system-ui,sans-serif;
-  --font-mono:'Fira Code',monospace;
-  --shadow-lg:0 20px 60px rgba(0,0,0,.07);
-  --shadow-glow:0 0 40px rgba(15,118,110,.06);
-  --nav-bg:rgba(250,250,249,.92);
-  --nav-mobile-bg:rgba(250,250,249,.99);
-  --section-alt:rgba(242,240,235,.7);
-  --table-row-hover:rgba(15,118,110,.02);
-  --skill-phase-border:rgba(231,229,228,.9);
-  --btn-gradient:linear-gradient(135deg,#0f766e 0%,#0d6660 50%,#0f766e 100%);
-  --btn-gradient-hover:linear-gradient(135deg,#14b8a6 0%,#0f766e 50%,#14b8a6 100%);
-  --hero-glow:rgba(15,118,110,.05);
-  --card-top:rgba(15,118,110,.5);
+  --bg-page:#243c2a;
+  --bg-card:#2e4a34;
+  --bg-card-hover:#36543c;
+  --bg-code:#1c3020;
+  --bg-hero:linear-gradient(160deg,#182a1c 0%,#1e3224 25%,#243c2a 48%,#263e2c 62%,#203828 80%,#1a2e20 100%);
+  --shadow-lg:0 20px 60px rgba(0,0,0,.4);
+  --nav-bg:rgba(36,60,42,.92);
+  --nav-mobile-bg:rgba(36,60,42,.99);
+  --section-alt:rgba(30,48,34,.7);
 }
 
 /* ───── THEME TRANSITION ───── */
