@@ -1,28 +1,28 @@
 ---
 gsd_state_version: 1.0
-milestone: v0.9.0
-milestone_name: milestone
-current_plan: 1
-status: Phase 10 Verified
-stopped_at: Completed Phase 10 verification
-last_updated: "2026-04-08T11:36:32.812Z"
-last_activity: 2026-04-08
+milestone: v0.14.0
+milestone_name: AI-Driven Spec & Multi-Repo Orchestration
+current_plan: 0
+status: Defining requirements
+stopped_at: null
+last_updated: "2026-04-09T00:00:00.000Z"
+last_activity: 2026-04-09
 progress:
-  total_phases: 10
-  completed_phases: 8
-  total_plans: 24
-  completed_plans: 21
-  percent: 88
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
 
 **Project:** Silver Bullet
-**Current version:** v0.8.0
-**Active phase:** Phase 1 -- Workflow File Rewrites (executed, pending verify)
-**Current plan:** 1
+**Current version:** v0.13.2
+**Active phase:** Not started (defining requirements)
+**Current plan:** —
 
-Last activity: 2026-04-08
+Last activity: 2026-04-09
 
 ## Roadmap Evolution
 
@@ -31,6 +31,7 @@ Last activity: 2026-04-08
 - Phase 8 added: Comprehensive SB enforcement test harness using Claude Code CLI against test-app
 - Phase 9 added: Silver Bullet core improvements: init with GSD+Superpowers, GSD state delegation, guided UX, lettered option bullets
 - Phase 10 added: Create 7 named SB orchestration skill files (silver-feature/bugfix/ui/devops/research/release/fast)
+- Phase 11 added: Silver Bullet website content refresh — v0.13.0 site update
 
 ## Decisions
 
