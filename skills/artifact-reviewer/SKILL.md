@@ -38,9 +38,37 @@ If `--reviewer` is omitted, the reviewer is auto-detected from the artifact file
 1. Resolve artifact path to absolute path
 2. Load per-artifact review state (enables session resumption)
 3. Auto-detect or validate reviewer from mapping table
-4. Run the review loop (defined in rules/review-loop.md)
+4. Resolve review depth from `.planning/config.json` and run the review loop (defined in rules/review-loop.md) with the resolved depth
 5. Write REVIEW-ROUNDS.md audit trail after each round
-6. On 2 consecutive clean passes: clear state, report completion
+6. On required consecutive clean passes (depth-dependent): clear state, report completion
+
+## Review Depth Configuration
+
+Review depth is configured per artifact type in `.planning/config.json`:
+
+```json
+{
+  "review_depth": {
+    "review-spec": "deep",
+    "review-roadmap": "quick",
+    "gsd-plan-checker": "standard"
+  }
+}
+```
+
+### Depth Levels
+
+| Depth | QC Checks | Required Clean Passes | Use When |
+|-------|-----------|----------------------|----------|
+| deep | Full (all QC) | 2 consecutive | High-stakes artifacts (SPEC, REQUIREMENTS) |
+| standard | Full (all QC) | 1 | Default — good balance of rigor and speed |
+| quick | Structural only | 1 | Speed-critical reviews (CONTEXT, RESEARCH) |
+
+### Defaults
+
+- If `review_depth` is absent from config.json: all artifacts use `standard`
+- If `review_depth` exists but has no entry for a reviewer: that reviewer uses `standard`
+- An empty `review_depth: {}` is equivalent to "all standard"
 
 ## Loading Rules
 
