@@ -45,7 +45,11 @@ Decimal phases appear between their surrounding integers in numeric order.
   3. All 20 guided GSD commands appear at their appropriate workflow points with context; utility commands (/gsd:debug, /gsd:quick, /gsd:resume-work, etc.) appear with "when to use" guidance
   4. After completing a release step, the workflow detects infrastructure needs and offers to switch between dev and DevOps cycles while preserving all planning artifacts
   5. Non-GSD skills (design-system, ux-copy, accessibility-review, etc.) are triggered at specific workflow points with clear conditions
-**Plans**: TBD
+**Plans**: 2 plans
+
+Plans:
+- [ ] 20-01-PLAN.md — Cross-artifact reviewer skill (SPEC-to-REQ, REQ-to-ROADMAP, SPEC-to-DESIGN)
+- [ ] 20-02-PLAN.md — Wire cross-artifact review into milestone completion workflows
 
 Plans:
 - [x] 01-01: Rewrite full-dev-cycle.md as orchestration guide (commit 8a58d33)
