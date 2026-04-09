@@ -1,116 +1,169 @@
-# Requirements: Silver Bullet v0.9.0
+# Requirements: Silver Bullet v0.14.0
 
-**Defined:** 2026-04-05
-**Core Value:** Complete orchestration layer that owns the user experience, delegates execution to GSD, and guides users through 100% of the SDLC with zero prior tool knowledge.
+**Defined:** 2026-04-09
+**Core Value:** Single enforced workflow that eliminates the gap between "what AI should do" and "what AI actually does"
 
 ## v1 Requirements
 
-### Orchestration Guides (ORCH)
+Requirements for v0.14.0 milestone. Each maps to roadmap phases.
 
-- [ ] **ORCH-01**: Workflow file (full-dev-cycle.md) explains every GSD step with user-facing context — what it does, what to expect, what to do if it fails
-- [ ] **ORCH-02**: Workflow file (devops-cycle.md) provides the same comprehensive orchestration treatment for DevOps workflows
-- [ ] **ORCH-03**: Workflow files cover all 20 guided GSD commands at appropriate points (new-project, discuss, plan, execute, verify, ship, debug, quick, fast, resume-work, pause-work, progress, next, add-phase, insert-phase, review, autonomous, complete-milestone, audit-milestone, map-codebase)
-- [ ] **ORCH-04**: Each per-phase step (DISCUSS → QUALITY GATES → PLAN → EXECUTE → VERIFY → REVIEW) includes error recovery instructions (what to do when the step fails)
-- [ ] **ORCH-05**: Utility commands (/gsd:debug, /gsd:quick, /gsd:resume-work, etc.) are documented with "when to use" guidance in the workflow file
-- [ ] **ORCH-06**: Non-GSD skills are inserted at specific workflow points with clear trigger conditions (e.g., "if UI work → /design-system + /ux-copy + /accessibility-review")
+### Spec Foundation
 
-### Instruction Overhaul (INST)
+- [ ] **SPEC-01**: SB produces a canonical `.planning/SPEC.md` artifact with YAML frontmatter (spec-version, status, jira-id, figma-url, source-artifacts) and standardized sections (Overview, User Stories, UX Flows, Acceptance Criteria, Assumptions, Open Questions)
+- [ ] **SPEC-02**: SB produces a `.planning/DESIGN.md` artifact with structured screen/component/behavior/state definitions extracted from design inputs
+- [ ] **SPEC-03**: Spec templates exist in `templates/specs/` (SPEC.md.template, DESIGN.md.template, REQUIREMENTS.md.template) that new specs are generated from
+- [ ] **SPEC-04**: Every unresolvable ambiguity during spec creation produces an explicit `[ASSUMPTION: ...]` block in SPEC.md — assumption density is a quality signal, not optional decoration
+- [ ] **SPEC-05**: SPEC.md includes a `spec-version:` field in frontmatter that increments on each substantive change, enabling downstream version pinning
 
-- [x] **INST-01**: silver-bullet.md contains GSD process knowledge — Claude understands what each GSD step does without reading GSD's own docs
-- [x] **INST-02**: silver-bullet.md includes hand-holding instructions — what Claude should say/show the user at each workflow transition
-- [x] **INST-03**: silver-bullet.md includes utility command awareness — when to suggest /gsd:debug, /gsd:quick, etc. based on context
-- [x] **INST-04**: All existing enforcement rules (§0-§9) remain intact and functional in the restructured silver-bullet.md
+### AI-Driven Elicitation
 
-### Deduplication (DEDUP)
+- [ ] **ELIC-01**: `silver-spec` skill guides PM/BA through Socratic requirements elicitation — asking clarifying questions, surfacing gaps, and producing SPEC.md + REQUIREMENTS.md as output
+- [ ] **ELIC-02**: Elicitation covers: user stories, acceptance criteria, UX flow definition, edge cases, error states, and data model implications — through interactive dialogue, not template filling
+- [ ] **ELIC-03**: At any point during elicitation, user can provide a Google Doc, PPT, or Figma link as input — SB extracts content and incorporates it into the evolving spec
+- [ ] **ELIC-04**: Elicitation produces assumption blocks for every gap the PM/BA cannot resolve on the spot, with each assumption tagged for follow-up
+- [ ] **ELIC-05**: `silver-spec` can be invoked standalone (greenfield spec) or to augment an ingested draft (post-JIRA-ingestion refinement)
+- [ ] **ELIC-06**: Elicitation orchestrates existing plugin skills where applicable (product-management:write-spec, design:user-research, design:design-critique) rather than reimplementing their capabilities
 
-- [ ] **DEDUP-01**: SB forensics skill routes to /gsd:forensics for GSD-workflow-level issues (plan drift, execution anomalies, stuck loops)
-- [ ] **DEDUP-02**: SB forensics retains session-level investigation capabilities (timeout, stall, SB enforcement failures) that GSD forensics does not cover
-- [ ] **DEDUP-03**: No SB skill reimplements a GSD capability ��� zero redundant implementations
+### External Artifact Ingestion
 
-### Transition (TRANS)
+- [ ] **INGT-01**: `silver-ingest` skill pulls JIRA ticket content (summary, description, acceptance criteria, linked issues) via Atlassian MCP connector and produces a draft SPEC.md
+- [ ] **INGT-02**: `silver-ingest` resolves artifact links found in JIRA ticket (Google Drive URLs, Figma URLs, Confluence URLs) and ingests their content
+- [ ] **INGT-03**: Figma design context extracted via Figma MCP server — components, layout, tokens, flows — and written to DESIGN.md
+- [ ] **INGT-04**: Google Docs/Slides content extracted via Google Workspace CLI with vision support for embedded images — text + image understanding incorporated into spec context
+- [ ] **INGT-05**: Every ingestion produces an `INGESTION_MANIFEST.md` listing all artifacts attempted, succeeded, failed, and missing — no silent partial failures
+- [ ] **INGT-06**: Missing or failed artifact ingestion produces `[ARTIFACT MISSING: reason]` blocks in SPEC.md, not empty sections
+- [ ] **INGT-07**: Ingestion is resumable — if a connector fails mid-ingestion, re-running `silver-ingest` picks up from where it left off using the manifest
 
-- [ ] **TRANS-01**: After full-dev-cycle release step, SB detects when infrastructure work is needed and offers to switch to devops-cycle
-- [ ] **TRANS-02**: After devops-cycle completes, SB offers to switch back to full-dev-cycle for the next milestone
-- [ ] **TRANS-03**: Workflow transitions preserve all project context (planning artifacts, state, config)
+### Multi-Repo Spec Referencing
 
-### Template Parity (TMPL)
+- [ ] **REPO-01**: `silver-ingest --source-url <repo-url>` fetches main repo's SPEC.md and caches it as `.planning/SPEC.main.md` (read-only) in the mobile/satellite repo
+- [ ] **REPO-02**: Mobile repo's SB session validates its pinned spec-version against the main repo's current version at session start — blocks on mismatch with diff shown
+- [ ] **REPO-03**: Non-mobile-exclusive requirements are implementation-spec'd in the main repo first, then the main repo spec is referenced as input for mobile repo SB sessions
+- [ ] **REPO-04**: Mobile-exclusive requirements follow standard SB process entirely within the mobile repo — no main repo dependency
 
-- [ ] **TMPL-01**: docs/workflows/full-dev-cycle.md and templates/workflows/full-dev-cycle.md are byte-identical
-- [ ] **TMPL-02**: docs/workflows/devops-cycle.md and templates/workflows/devops-cycle.md are byte-identical
-- [ ] **TMPL-03**: silver-bullet.md structure matches templates/silver-bullet.md.base (with placeholder substitutions)
+### Pre-Build Validation
 
-### Documentation (DOC)
+- [ ] **VALD-01**: `silver-validate` skill performs gap analysis between SPEC.md and PLAN.md before implementation begins — surfaces missing coverage, conflicting requirements, unresolved assumptions
+- [ ] **VALD-02**: Validation output uses machine-readable finding objects with severity (BLOCK / WARN / INFO), not prose
+- [ ] **VALD-03**: BLOCK-severity findings prevent `gsd-plan-phase` from proceeding until resolved
+- [ ] **VALD-04**: WARN-severity findings are surfaced in PR description as deferred items
+- [ ] **VALD-05**: Pre-build validation re-surfaces all `[ASSUMPTION: ...]` blocks from SPEC.md at implementation start for developer awareness
 
-- [ ] **DOC-01**: README.md reflects the new orchestration approach — users understand SB guides them through GSD without needing GSD knowledge
-- [ ] **DOC-02**: Site pages (index.html, help pages, search.js) updated to reflect new workflow descriptions
-- [ ] **DOC-03**: Existing enforcement hooks continue to fire correctly with the restructured workflow files
+### Spec Floor Enforcement
+
+- [ ] **FLOR-01**: `spec-floor-check.sh` hook on `gsd-plan-phase` hard-blocks if `.planning/SPEC.md` is missing or lacks required sections (Overview, Acceptance Criteria, at minimum)
+- [ ] **FLOR-02**: `gsd-fast` and `gsd-quick` use a separate 3-field minimal spec format (what, why, acceptance-criteria) — checked as warning, not hard block
+- [ ] **FLOR-03**: Spec floor check completes in under 10 seconds to avoid blocking developer flow
+
+### PR Traceability
+
+- [ ] **TRAC-01**: Session record written at session start captures active spec-id, spec-version, and JIRA ticket reference
+- [ ] **TRAC-02**: `pr-traceability.sh` hook on `gsd-ship` auto-populates PR description with spec reference, requirement IDs covered, and link to SPEC.md
+- [ ] **TRAC-03**: PR traceability is machine-generated from session records — no developer annotation required
+- [ ] **TRAC-04**: SPEC.md Implementations section updated post-merge with PR URL and commit range
+
+### UAT Gate
+
+- [ ] **UATG-01**: `gsd-audit-uat` produces a UAT checklist derived from SPEC.md acceptance criteria — each criterion becomes a verifiable checklist item
+- [ ] **UATG-02**: UAT artifact (UAT.md) committed to `.planning/` with pass/fail per criterion and evidence notes
+- [ ] **UATG-03**: `uat-gate.sh` hook on `gsd-complete-milestone` blocks if UAT not run or any criterion marked FAIL
+- [ ] **UATG-04**: UAT validates against the pinned spec-version to prevent verification against a stale spec
 
 ## Validated (from previous milestones)
 
-- ✓ **SB-R1**: Separate silver-bullet.md from CLAUDE.md — v0.7.0
 - ✓ 7-layer enforcement architecture — v0.7.0
 - ✓ 8 quality dimension gates — v0.7.0
 - ✓ full-dev-cycle / devops-cycle workflows — v0.7.0
 - ✓ Pre-release quality gate §9 — v0.7.4
 - ✓ 4 gap-filling skills as enforced gates — v0.8.0
 - ✓ SENTINEL security hardening — v0.8.0
+- ✓ GSD-mainstay orchestration — v0.13.0
+- ✓ silver-bullet.md overhaul — v0.13.0
+- ✓ /silver smart router — v0.13.0
+- ✓ SB orchestration skills — v0.13.0
 
 ## v2 Requirements
 
-### Advanced Orchestration
+Deferred to future release. Tracked but not in current roadmap.
 
-- **ORCH-V2-01**: SB auto-detects project type (greenfield vs brownfield) and routes to appropriate GSD initialization
-- **ORCH-V2-02**: SB implements its own complete process steps replacing GSD/Superpowers (future vision per goal #7)
-- **ORCH-V2-03**: SB installs required dependencies (CLIs, MCPs, skills) automatically when needed
+### Advanced Ingestion
 
-### Operations
+- **INGT-08**: Bidirectional JIRA sync — spec changes push status updates back to JIRA ticket
+- **INGT-09**: Confluence page ingestion as spec source (alongside Google Docs)
+- **INGT-10**: PDF attachment ingestion from JIRA (pending MCP support)
 
-- **OPS-V2-01**: Post-deployment monitoring integration
-- **OPS-V2-02**: Incident → postmortem → learning → backlog feedback loop
-- **OPS-V2-03**: Cost tracking and budget enforcement
+### Advanced Validation
+
+- **VALD-06**: Cross-spec conflict detection across multiple SPEC.md files in same repo
+- **VALD-07**: Automated Requirements Traceability Matrix (RTM) generation
+- **VALD-08**: Regression UAT — re-run UAT for previously shipped specs affected by new changes
+
+### Advanced Multi-Repo
+
+- **REPO-05**: Automatic cross-repo sync notifications when main repo spec version changes
+- **REPO-06**: Shared design token synchronization between main and mobile repos
 
 ## Out of Scope
 
 | Feature | Reason |
 |---------|--------|
-| Replacing GSD execution engine | GSD owns execution (goal #7 is future vision, not v0.9.0) |
-| Guiding admin GSD commands (gsd-manager, gsd-settings, etc.) | Not part of SDLC workflow |
-| Modifying GSD/Superpowers/Engineering/Design plugin files | §8 boundary — never modify third-party plugins |
-| Automated dependency installation | v2 feature (ORCH-V2-03) |
-| Post-deployment monitoring | v2 feature (OPS-V2-01) |
+| Custom API integrations for JIRA/Figma/Google | MCP connectors handle all external access — no custom API code |
+| Modifying GSD plugin files | §8 plugin boundary — SB orchestrates, doesn't modify |
+| Automated Figma design creation | Figma MCP is read-only during beta; write capability deferred |
+| JIRA ticket creation from SB | One-way ingestion only for v0.14.0; bidirectional sync is v2 |
+| Nomadic Care-specific naming or file structures | SB provides generic patterns; teams customize via config |
+| Replacing GSD execution engine | GSD owns execution, SB orchestrates |
 
 ## Traceability
 
+Which phases cover which requirements. Updated during roadmap creation.
+
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ORCH-01 | Phase 1 | Pending |
-| ORCH-02 | Phase 1 | Pending |
-| ORCH-03 | Phase 1 | Pending |
-| ORCH-04 | Phase 1 | Pending |
-| ORCH-05 | Phase 1 | Pending |
-| ORCH-06 | Phase 1 | Pending |
-| INST-01 | Phase 2 | Complete |
-| INST-02 | Phase 2 | Complete |
-| INST-03 | Phase 2 | Complete |
-| INST-04 | Phase 2 | Complete |
-| DEDUP-01 | Phase 3 | Pending |
-| DEDUP-02 | Phase 3 | Pending |
-| DEDUP-03 | Phase 3 | Pending |
-| TRANS-01 | Phase 1 | Pending |
-| TRANS-02 | Phase 1 | Pending |
-| TRANS-03 | Phase 1 | Pending |
-| TMPL-01 | Phase 4 | Pending |
-| TMPL-02 | Phase 4 | Pending |
-| TMPL-03 | Phase 4 | Pending |
-| DOC-01 | Phase 5 | Pending |
-| DOC-02 | Phase 5 | Pending |
-| DOC-03 | Phase 4 | Pending |
+| SPEC-01 | — | Pending |
+| SPEC-02 | — | Pending |
+| SPEC-03 | — | Pending |
+| SPEC-04 | — | Pending |
+| SPEC-05 | — | Pending |
+| ELIC-01 | — | Pending |
+| ELIC-02 | — | Pending |
+| ELIC-03 | — | Pending |
+| ELIC-04 | — | Pending |
+| ELIC-05 | — | Pending |
+| ELIC-06 | — | Pending |
+| INGT-01 | — | Pending |
+| INGT-02 | — | Pending |
+| INGT-03 | — | Pending |
+| INGT-04 | — | Pending |
+| INGT-05 | — | Pending |
+| INGT-06 | — | Pending |
+| INGT-07 | — | Pending |
+| REPO-01 | — | Pending |
+| REPO-02 | — | Pending |
+| REPO-03 | — | Pending |
+| REPO-04 | — | Pending |
+| VALD-01 | — | Pending |
+| VALD-02 | — | Pending |
+| VALD-03 | — | Pending |
+| VALD-04 | — | Pending |
+| VALD-05 | — | Pending |
+| FLOR-01 | — | Pending |
+| FLOR-02 | — | Pending |
+| FLOR-03 | — | Pending |
+| TRAC-01 | — | Pending |
+| TRAC-02 | — | Pending |
+| TRAC-03 | — | Pending |
+| TRAC-04 | — | Pending |
+| UATG-01 | — | Pending |
+| UATG-02 | — | Pending |
+| UATG-03 | — | Pending |
+| UATG-04 | — | Pending |
 
 **Coverage:**
-- v1 requirements: 22 total
-- Mapped to phases: 22
-- Unmapped: 0 ✓
+- v1 requirements: 38 total
+- Mapped to phases: 0
+- Unmapped: 38 ⚠️
 
 ---
-*Requirements defined: 2026-04-05*
-*Last updated: 2026-04-05 after milestone v0.9.0 initialization*
+*Requirements defined: 2026-04-09*
+*Last updated: 2026-04-09 after initial definition*
