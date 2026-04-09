@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+## [0.15.1] — 2026-04-09
+
+### Fixed — Pre-Release QA Gate Findings
+- CR-01: Resolve gh CLI at runtime in pr-traceability.sh (cross-platform, was hardcoded /opt/homebrew/bin/gh)
+- CR-02: Remove --no-verify from auto-commit in pr-traceability.sh (was bypassing hook chain)
+- CR-03: Validate spec_version (dotted semver) and jira_id (uppercase project key) before shell use
+- WR-03: Add quote-stripping to uat-gate.sh spec-version comparison (prevents false mismatch on quoted YAML)
+- WR-06: Add 'Accepted' to valid assumption status in review-spec QC-5
+- WR-07: Align ingestion manifest status vocabulary (success/failed/skipped) across QC-1..5
+- Idempotent awk insert in pr-traceability.sh SPEC.md Implementations (prevents duplicate entries)
+- Diagnostic ERR traps in pr-traceability.sh and uat-gate.sh (was silent exit 0)
+- package.json version updated to match release (was stale at 0.13.0)
+
 ## [0.15.0] — 2026-04-09
 
 ### Added — Granular Artifact Review Rounds (v0.15.0)
