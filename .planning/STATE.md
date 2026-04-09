@@ -1,18 +1,18 @@
 ---
 gsd_state_version: 1.0
-milestone: v0.13.0
-milestone_name: site update
+milestone: v0.16.0
+milestone_name: Advanced Review Intelligence
 current_plan: 1
-status: Executing Phase 16
-stopped_at: Completed 17-03-PLAN.md — post-command review gates for WFIN-04/05/06/07 wired into silver-bullet.md.base
-last_updated: "2026-04-09T12:50:20.574Z"
-last_activity: 2026-04-09
+status: Defining requirements
+stopped_at: Milestone v0.16.0 started — defining requirements
+last_updated: "2026-04-10T00:00:00.000Z"
+last_activity: 2026-04-10
 progress:
-  total_phases: 17
-  completed_phases: 3
-  total_plans: 7
-  completed_plans: 7
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
