@@ -351,6 +351,8 @@ Silver Bullet anchors every implementation to a verified spec. The spec lifecycl
 
 **UAT Gate:** Before `gsd-complete-milestone`, UAT.md must exist with all criteria PASS. `uat-gate.sh` blocks if UAT is missing, any criterion is FAIL, or UAT was run against a stale spec version.
 
+**Cross-Artifact Gate:** Before `gsd-complete-milestone`, cross-artifact consistency is validated. `/artifact-reviewer --reviewer review-cross-artifact` checks SPEC↔REQUIREMENTS↔ROADMAP↔DESIGN alignment. Milestone completion is blocked if any ISSUE-level inconsistencies are found (unmapped ACs, orphaned requirements, missing design coverage).
+
 **MCP Prerequisites (for /silver:ingest):**
 - Atlassian MCP — JIRA ticket + Confluence page ingestion (use `/v1/mcp` streamable HTTP endpoint)
 - Figma MCP (beta) — design context and token extraction
@@ -422,6 +424,7 @@ This rule applies to ALL artifact-producing review steps. Any step that produces
 | Research | RESEARCH.md | /artifact-reviewer --reviewer review-research | YES | /gsd:plan-phase (researcher) |
 | Ingestion | INGESTION_MANIFEST.md | /artifact-reviewer --reviewer review-ingestion-manifest | YES | /silver:ingest Step 7 |
 | UAT generation | UAT.md | /artifact-reviewer --reviewer review-uat | YES | /silver:feature Step 17.0 |
+| Cross-artifact set | SPEC.md, REQUIREMENTS.md, ROADMAP.md, DESIGN.md | /artifact-reviewer --reviewer review-cross-artifact | YES | /silver:feature Step 17.0b, /silver:release Step 7.5 |
 
 If ANY of these steps produces findings on the first pass, you MUST fix the findings and re-run the review. The step is complete ONLY after two consecutive clean passes.
 
