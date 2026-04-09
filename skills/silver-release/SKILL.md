@@ -121,11 +121,7 @@ Invoke `gsd-ship` via the Skill tool. Purpose: deploy, ensure CI is green, push 
 
 **Only if `.planning/SPEC.md` and `.planning/REQUIREMENTS.md` exist:**
 
-Invoke `/artifact-reviewer --reviewer review-cross-artifact` with:
-- `.planning/SPEC.md`
-- `.planning/REQUIREMENTS.md`
-- `.planning/ROADMAP.md`
-- `.planning/DESIGN.md` (only if it exists)
+Invoke `/artifact-reviewer --reviewer review-cross-artifact --artifacts .planning/SPEC.md .planning/REQUIREMENTS.md .planning/ROADMAP.md` (add `.planning/DESIGN.md` if it exists).
 
 Do NOT proceed to Step 8 (gsd-complete-milestone) until cross-artifact review reports clean pass. If unresolvable after 5 rounds, STOP and present to the user.
 

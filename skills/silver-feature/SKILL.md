@@ -243,11 +243,7 @@ Do NOT proceed to gsd-audit-uat until /artifact-reviewer reports 2 consecutive c
 
 ### Step 17.0b: Cross-Artifact Consistency Review
 
-Invoke `/artifact-reviewer --reviewer review-cross-artifact` with artifacts:
-- `.planning/SPEC.md`
-- `.planning/REQUIREMENTS.md`
-- `.planning/ROADMAP.md`
-- `.planning/DESIGN.md` (only if it exists)
+Invoke `/artifact-reviewer --reviewer review-cross-artifact --artifacts .planning/SPEC.md .planning/REQUIREMENTS.md .planning/ROADMAP.md` (add `.planning/DESIGN.md` if it exists).
 
 Do NOT proceed to gsd-audit-uat until cross-artifact review reports clean pass. If ISSUES_FOUND, the orchestrator applies fixes and re-reviews per the review loop. If unresolvable after 5 rounds, STOP and present to the user.
 
