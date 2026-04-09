@@ -8,7 +8,7 @@ Brooks was right then. AI changes the equation now.
 
 Silver Bullet is a Claude Code plugin that orchestrates the best open-source agentic workflows into one enforced process. It combines [GSD](https://github.com/gsd-build/get-shit-done) (multi-agent execution), [Superpowers](https://github.com/obra/superpowers) (code review, branch management), [Engineering](https://github.com/anthropics/knowledge-work-plugins/tree/main/engineering) (testing, docs, deploy), and [Design](https://github.com/anthropics/knowledge-work-plugins/tree/main/design) (design system, UX copy, accessibility) into one guided workflow with 10 layers of compliance. **You don't need to know GSD** -- Silver Bullet guides you through every step, explains what's happening, and handles errors. Just describe what you want to build.
 
-**Current version: v0.15.3** — AI-driven spec creation (`silver:spec`), external artifact ingestion (`silver:ingest` — JIRA, Figma, Google Docs via MCP), pre-build validation (`silver:validate`), multi-repo spec coordination with version pinning, spec floor enforcement, PR-to-spec traceability, UAT pipeline gate, granular artifact review rounds (8 new reviewer skills with 2-consecutive-clean-pass enforcement for every artifact produced), SENTINEL security hardening (shell injection fixes, markdown injection prevention), and enforced subagent dispatch for large-context steps.
+**Current version: v0.16.0** — Configurable review depth (deep/standard/quick per artifact type), review analytics with JSON Lines metrics and summary reports, cross-artifact consistency validation (SPEC↔REQUIREMENTS↔ROADMAP↔DESIGN alignment), verification-before-completion enforcement in review loop, plus all v0.15.0 capabilities: AI-driven spec creation, external artifact ingestion (JIRA, Figma, Google Docs via MCP), pre-build validation, multi-repo spec coordination, spec floor enforcement, PR-to-spec traceability, UAT pipeline gate, granular artifact review rounds (8 reviewer skills with depth-configurable pass enforcement), SENTINEL security hardening, and enforced subagent dispatch for large-context steps.
 
 ## How It Works
 
@@ -50,7 +50,7 @@ Silver Bullet supports two workflow modes, selected during project initializatio
 
 | Workflow | For | Steps | Unique features |
 |----------|-----|-------|-----------------|
-| `full-dev-cycle` | Application development (web, API, CLI, library) | 20 | GSD wave execution, 8 quality dimensions, TDD, dev-to-DevOps transition, release notes |
+| `full-dev-cycle` | Application development (web, API, CLI, library) | 20 | GSD wave execution, 9 quality dimensions, TDD, dev-to-DevOps transition, release notes |
 | `devops-cycle` | Infrastructure / DevOps (Terraform, k8s, Helm, CI/CD) | 24 | Blast radius assessment, IaC-adapted quality gates, environment promotion, incident fast path, DevOps-to-dev transition, release notes |
 
 Both workflows use GSD as the primary execution engine. Silver Bullet guides you through every step with explanations of what each command does, what to expect, and what to do if something fails. Smooth transitions between the two workflows are built in -- after shipping an app, SB offers to set up infrastructure; after deploying infrastructure, SB offers to continue feature development.
@@ -198,7 +198,7 @@ Skills installed by this plugin that extend the workflow:
 | `/silver:research` | Orchestrated workflow for research and exploration |
 | `/silver:release` | Orchestrated workflow for release preparation |
 | `/silver:fast` | Orchestrated workflow for quick, low-overhead tasks |
-| `/quality-gates` | Before planning (dev) — checks all 8 quality dimensions in parallel |
+| `/quality-gates` | Before planning (dev) — checks all 9 quality dimensions in parallel |
 | `/blast-radius` | Before planning (DevOps) — maps change scope, dependencies, and rollback plan |
 | `/devops-quality-gates` | Before planning (DevOps) — 7 IaC-adapted quality dimensions (usability excluded) |
 | `/devops-skill-router` | During DevOps execution — routes to best available IaC toolchain plugin |
