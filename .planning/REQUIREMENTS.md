@@ -26,11 +26,11 @@ Requirements for v0.16.0 milestone. Each maps to roadmap phases.
 
 ### Cross-Artifact Consistency (from v0.15.0 ARVW-09)
 
-- [ ] **ARVW-09a**: Cross-artifact reviewer skill created — accepts list of artifacts, checks consistency across them
-- [ ] **ARVW-09b**: SPEC.md ↔ REQUIREMENTS.md alignment: every AC maps to a requirement, every requirement has a source AC
-- [ ] **ARVW-09c**: REQUIREMENTS.md ↔ ROADMAP.md alignment: every requirement maps to a phase, every phase requirement exists
-- [ ] **ARVW-09d**: SPEC.md ↔ DESIGN.md alignment: every user story has design coverage, no orphaned components
-- [ ] **ARVW-09e**: Cross-artifact review wired into milestone transition (gsd-complete-milestone) — blocks completion if inconsistencies found
+- [x] **ARVW-09a**: Cross-artifact reviewer skill created — accepts list of artifacts, checks consistency across them
+- [x] **ARVW-09b**: SPEC.md ↔ REQUIREMENTS.md alignment: every AC maps to a requirement, every requirement has a source AC
+- [x] **ARVW-09c**: REQUIREMENTS.md ↔ ROADMAP.md alignment: every requirement maps to a phase, every phase requirement exists
+- [x] **ARVW-09d**: SPEC.md ↔ DESIGN.md alignment: every user story has design coverage, no orphaned components
+- [x] **ARVW-09e**: Cross-artifact review wired into milestone transition (gsd-complete-milestone) — blocks completion if inconsistencies found
 
 ## Traceability
 
@@ -47,11 +47,11 @@ Requirements for v0.16.0 milestone. Each maps to roadmap phases.
 | ARVW-10c | Phase 19 | Complete |
 | ARVW-10d | Phase 19 | Complete |
 | ARVW-10e | Phase 19 | Complete |
-| ARVW-09a | Phase 20 | Pending |
-| ARVW-09b | Phase 20 | Pending |
-| ARVW-09c | Phase 20 | Pending |
-| ARVW-09d | Phase 20 | Pending |
-| ARVW-09e | Phase 20 | Pending |
+| ARVW-09a | Phase 20 | Complete |
+| ARVW-09b | Phase 20 | Complete |
+| ARVW-09c | Phase 20 | Complete |
+| ARVW-09d | Phase 20 | Complete |
+| ARVW-09e | Phase 20 | Complete |
 
 **Coverage:**
 - v1 requirements: 16 total

@@ -4,14 +4,14 @@ milestone: v0.13.0
 milestone_name: site update
 current_plan: 1
 status: Executing Phase 20
-stopped_at: Completed 20-01 cross-artifact reviewer skill
-last_updated: "2026-04-09T17:21:12.932Z"
+stopped_at: Completed 20-02 enforcement wiring
+last_updated: "2026-04-09T17:24:14.885Z"
 last_activity: 2026-04-09
 progress:
   total_phases: 20
-  completed_phases: 1
+  completed_phases: 2
   total_plans: 4
-  completed_plans: 5
+  completed_plans: 6
   percent: 100
 ---
 
@@ -86,6 +86,8 @@ Last activity: 2026-04-09
 - [Phase Phase 19-02]: Three report tables cover ARVW-10c requirements: pass rates, rounds to clean pass, finding categories by artifact type
 - [Phase 20-01]: artifact_path used as sentinel (SPEC.md path); source_inputs carries all artifact paths for cross-artifact reviewer
 - [Phase 20-01]: QC-3 (SPEC-to-DESIGN) is fully conditional: skipped with XART-I01 INFO when DESIGN.md absent
+- [Phase 20]: Step 17.0b inserted in silver-feature after Step 17.0a — cross-artifact alignment confirmed before milestone audit
+- [Phase 20]: Step 7.5 inserted in silver-release after gsd-ship and before gsd-complete-milestone
 
 ### Quick Tasks Completed
 
@@ -126,8 +128,9 @@ Last activity: 2026-04-09
 | Phase 19 P01 | 180 | 2 tasks | 2 files |
 | Phase 19 P02 | 90 | 1 tasks | 1 files |
 | Phase 20 P01 | 300 | 2 tasks | 2 files |
+| Phase 20 P02 | 180 | 2 tasks | 4 files |
 
 ## Session Continuity
 
-Last session: 2026-04-09T17:21:12.927Z
-Stopped at: Completed 20-01 cross-artifact reviewer skill
+Last session: 2026-04-09T17:24:14.880Z
+Stopped at: Completed 20-02 enforcement wiring

@@ -31,7 +31,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 17: Existing Reviewer Formalization & Workflow Wiring** - Formalize plan-checker, code-reviewer, verifier, and security-auditor into the 2-pass framework; wire all reviewers into their producing workflows (completed 2026-04-09)
 - [x] **Phase 18: Configurable Review Depth** - Review depth configurable per artifact type via .planning/config.json (deep/standard/quick) with standard as default (completed 2026-04-10)
 - [x] **Phase 19: Review Analytics** - Review rounds emit structured metrics to JSON Lines file; silver-review-stats skill produces summary reports (completed 2026-04-09)
-- [ ] **Phase 20: Cross-Artifact Consistency** - Cross-artifact reviewer validates SPEC↔REQUIREMENTS↔ROADMAP↔DESIGN alignment; wired into milestone completion
+- [x] **Phase 20: Cross-Artifact Consistency** - Cross-artifact reviewer validates SPEC↔REQUIREMENTS↔ROADMAP↔DESIGN alignment; wired into milestone completion (completed 2026-04-09)
 
 ## Phase Details
 
@@ -49,7 +49,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 Plans:
 - [x] 20-01-PLAN.md — Cross-artifact reviewer skill (SPEC-to-REQ, REQ-to-ROADMAP, SPEC-to-DESIGN)
-- [ ] 20-02-PLAN.md — Wire cross-artifact review into milestone completion workflows
+- [x] 20-02-PLAN.md — Wire cross-artifact review into milestone completion workflows
 
 Plans:
 - [x] 01-01: Rewrite full-dev-cycle.md as orchestration guide (commit 8a58d33)
