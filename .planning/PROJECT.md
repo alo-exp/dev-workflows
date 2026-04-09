@@ -35,15 +35,17 @@ Single enforced workflow that eliminates the gap between "what AI should do" and
 - ✓ UAT pipeline gate (uat-gate.sh hook) — v0.14.0
 - ✓ Multi-repo spec referencing with version pinning — v0.14.0
 - ✓ Step non-skip enforcement §3/§3a/§3d — v0.14.0
+- ✓ Granular artifact review rounds with 2-consecutive-clean-pass enforcement — v0.15.0
+- ✓ 8 new artifact reviewer skills (SPEC, DESIGN, REQUIREMENTS, ROADMAP, CONTEXT, RESEARCH, INGESTION_MANIFEST, UAT) — v0.15.0
+- ✓ Existing reviewers formalized into 2-pass framework (plan-checker, code-reviewer, verifier, security-auditor) — v0.15.0
+- ✓ Workflow integration: all producing steps wired to invoke reviewer before completing — v0.15.0
+- ✓ v0.14.0 critical bug fixes: shell injection, heredoc injection, Confluence failure path, version mismatch display — v0.15.0
 
 ### Active
 
-- [ ] Granular artifact review rounds: every artifact-producing step gets dedicated reviewer with 2-consecutive-clean-pass enforcement
-- [ ] New reviewer skills/agents for 8 artifact types (SPEC, DESIGN, REQUIREMENTS, ROADMAP, CONTEXT, RESEARCH, INGESTION_MANIFEST, UAT)
-- [ ] Existing reviewers formalized into same framework (plan-checker, code-reviewer, verifier, security-auditor)
-- [ ] Workflow integration: producing steps wired to invoke reviewer before completing
-- [ ] v0.14.0 critical bug fixes: shell injection in silver-ingest, heredoc injection in pr-traceability.sh
-- [ ] v0.14.0 verification gaps: Confluence [ARTIFACT MISSING], version mismatch diff
+- [ ] Cross-artifact consistency reviewer — validates SPEC.md ↔ DESIGN.md ↔ REQUIREMENTS.md are mutually consistent (ARVW-09)
+- [ ] Review round analytics — track review round counts, common finding patterns, time-to-clean-pass metrics (ARVW-10)
+- [ ] Configurable review depth (quick/standard/deep) per artifact type via .planning/config.json (ARVW-11)
 
 ### Out of Scope
 
@@ -53,15 +55,14 @@ Single enforced workflow that eliminates the gap between "what AI should do" and
 - Building custom integrations for external tools — use Claude Desktop MCP connectors / CLIs
 - Nomadic Care-specific naming conventions or file structures — SB provides generic patterns
 
-## Current Milestone: v0.15.0 Granular Artifact Review Rounds
+## Current Milestone: v0.16.0 Advanced Review Intelligence
 
-**Goal:** Every artifact produced by any SB/GSD workflow step gets iterative review rounds with a dedicated reviewer — 2 consecutive clean passes required before the step completes. No artifact ships without structured quality validation.
+**Goal:** Review depth is configurable per artifact type, review rounds emit structured analytics, and a cross-artifact consistency reviewer validates alignment across SPEC/REQUIREMENTS/ROADMAP/DESIGN — building on the v0.15.0 reviewer framework.
 
 **Target features:**
-- A: New artifact reviewers (~8 new skills/agents for SPEC, DESIGN, REQUIREMENTS, ROADMAP, CONTEXT, RESEARCH, INGESTION_MANIFEST, UAT)
-- B: Existing reviewer formalization (plan-checker, code-reviewer, verifier, security-auditor into same 2-pass framework)
-- C: Workflow integration (producing steps wired to invoke reviewer before completing)
-- D: v0.14.0 critical bug fixes (shell injection, heredoc injection, verification gaps)
+- A: Configurable review depth (deep/standard/quick) per artifact type via .planning/config.json (ARVW-11)
+- B: Review analytics — structured metrics per review round, JSON Lines storage, summary reporting skill (ARVW-10)
+- C: Cross-artifact consistency reviewer — validates alignment across SPEC.md ↔ REQUIREMENTS.md ↔ ROADMAP.md ↔ DESIGN.md, wired into milestone completion (ARVW-09)
 
 ## Context
 
@@ -70,7 +71,7 @@ Single enforced workflow that eliminates the gap between "what AI should do" and
 - GSD version: 1.32.0 (~60 commands, wave-based parallel execution)
 - Superpowers version: 5.0.5 (14 skills — code review, TDD, debugging, branch mgmt)
 - Engineering/Design: Anthropic knowledge-work-plugins (6+6 skills)
-- Current version: v0.13.2 (Hook hardening + init hook registration)
+- Current version: v0.15.3
 
 ## Constraints
 
@@ -108,4 +109,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-09 after milestone v0.15.0 start*
+*Last updated: 2026-04-10 after milestone v0.16.0 start*

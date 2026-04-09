@@ -1,28 +1,28 @@
 ---
 gsd_state_version: 1.0
-milestone: v0.13.0
-milestone_name: site update
+milestone: v0.16.0
+milestone_name: Advanced Review Intelligence
 current_plan: 1
-status: Executing Phase 16
-stopped_at: Completed 17-03-PLAN.md — post-command review gates for WFIN-04/05/06/07 wired into silver-bullet.md.base
-last_updated: "2026-04-09T12:50:20.574Z"
-last_activity: 2026-04-09
+status: Executing Phase 18
+stopped_at: Completed Phase 18 — configurable review depth
+last_updated: "2026-04-10T00:00:00.000Z"
+last_activity: 2026-04-10
 progress:
-  total_phases: 17
-  completed_phases: 3
-  total_plans: 7
-  completed_plans: 7
-  percent: 100
+  total_phases: 20
+  completed_phases: 1
+  total_plans: 2
+  completed_plans: 2
+  percent: 33
 ---
 
 # Project State
 
 **Project:** Silver Bullet
-**Current version:** v0.14.0
-**Active phase:** Phase 15 (not started — ready to plan)
+**Current version:** v0.15.3
+**Active phase:** Phase 19 (not started — ready to plan)
 **Current plan:** 1
 
-Last activity: 2026-04-09
+Last activity: 2026-04-10
 
 ## Roadmap Evolution
 
@@ -38,6 +38,9 @@ Last activity: 2026-04-09
 - Phase 15 added: Bug Fixes & Reviewer Framework — v0.14.0 critical fixes + artifact reviewer interface, 2-pass loop, state tracking, audit trail (v0.15.0)
 - Phase 16 added: New Artifact Reviewers — 8 new reviewer skills for SPEC, DESIGN, REQUIREMENTS, ROADMAP, CONTEXT, RESEARCH, INGESTION_MANIFEST, UAT (v0.15.0)
 - Phase 17 added: Existing Reviewer Formalization & Workflow Wiring — plan-checker/code-reviewer/verifier/security-auditor into 2-pass framework; all producing workflows wired (v0.15.0)
+- Phase 18 added: Configurable Review Depth — review depth configurable per artifact type via .planning/config.json (deep/standard/quick) with standard as default (v0.16.0)
+- Phase 19 added: Review Analytics — review rounds emit structured metrics to JSON Lines file; silver-review-stats skill produces summary reports (v0.16.0)
+- Phase 20 added: Cross-Artifact Consistency — cross-artifact reviewer validates SPEC↔REQUIREMENTS↔ROADMAP↔DESIGN alignment; wired into milestone completion (v0.16.0)
 
 ## Decisions
 
@@ -75,6 +78,10 @@ Last activity: 2026-04-09
 - [Phase 17]: Step 9a (DESIGN.md review) is conditional — only runs if Step 9 produced a DESIGN.md
 - [Phase 17]: silver-feature Step 17.0a inserted before gsd-audit-uat — review gates block before audit fills results
 - [Phase 17]: Post-command gates enforced via silver-bullet.md instruction (not GSD file modification) — §8 plugin boundary maintained
+- [v0.16.0]: ARVW-11 (configurable review depth) promoted from v2 to v1 as Phase 18 — enables project-specific review tuning
+- [v0.16.0]: ARVW-10 (review analytics) promoted from v2 to v1 as Phase 19 — provides data-driven review health visibility
+- [v0.16.0]: ARVW-09 (cross-artifact consistency) promoted from v2 to v1 as Phase 20 — prevents shipping misaligned artifacts
+- [Phase 18]: Review depth config uses per-artifact-type mapping in .planning/config.json — standard is default for backward compatibility
 
 ### Quick Tasks Completed
 
@@ -115,5 +122,5 @@ Last activity: 2026-04-09
 
 ## Session Continuity
 
-Last session: 2026-04-09T12:50:20.570Z
-Stopped at: Completed 17-03-PLAN.md — post-command review gates for WFIN-04/05/06/07 wired into silver-bullet.md.base
+Last session: 2026-04-10T00:00:00.000Z
+Stopped at: Completed Phase 18 — configurable review depth
