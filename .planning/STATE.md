@@ -4,15 +4,15 @@ milestone: v0.13.0
 milestone_name: site update
 current_plan: 1
 status: Executing Phase 16
-stopped_at: Completed 16-02-PLAN.md — 4 new artifact reviewer skills (CONTEXT, RESEARCH, INGESTION_MANIFEST, UAT)
-last_updated: "2026-04-09T12:22:50.945Z"
+stopped_at: Completed 17-02-PLAN.md — review rounds wired into silver-spec, silver-ingest, silver-feature
+last_updated: "2026-04-09T12:48:18.520Z"
 last_activity: 2026-04-09
 progress:
   total_phases: 17
   completed_phases: 2
-  total_plans: 4
-  completed_plans: 4
-  percent: 100
+  total_plans: 7
+  completed_plans: 6
+  percent: 86
 ---
 
 # Project State
@@ -72,6 +72,8 @@ Last activity: 2026-04-09
 - [Phase 16]: ROADMAP reviewer builds full dependency graph to detect circular and backward phase dependencies
 - [Phase 16]: CONTEXT.md reviewer: 6 QC checks enforcing decisions exist, gray areas resolved, decision specificity, no contradictions, deferred ideas separation, Claude's Discretion context
 - [Phase 16]: UAT.md reviewer: QC-1/QC-2 (AC coverage, orphan detection) conditional on spec-path; spec-version mismatch produces distinct findings (missing field vs version mismatch)
+- [Phase 17]: Step 9a (DESIGN.md review) is conditional — only runs if Step 9 produced a DESIGN.md
+- [Phase 17]: silver-feature Step 17.0a inserted before gsd-audit-uat — review gates block before audit fills results
 
 ### Quick Tasks Completed
 
@@ -105,8 +107,9 @@ Last activity: 2026-04-09
 | Phase 15 P02 | 300 | 2 tasks | 3 files |
 | Phase 16 P01 | 166 | 2 tasks | 5 files |
 | Phase 16 P02 | 186 | 2 tasks | 5 files |
+| Phase 17 P02 | 70 | 2 tasks | 3 files |
 
 ## Session Continuity
 
-Last session: 2026-04-09T12:22:50.940Z
-Stopped at: Completed 16-02-PLAN.md — 4 new artifact reviewer skills (CONTEXT, RESEARCH, INGESTION_MANIFEST, UAT)
+Last session: 2026-04-09T12:48:18.515Z
+Stopped at: Completed 17-02-PLAN.md — review rounds wired into silver-spec, silver-ingest, silver-feature

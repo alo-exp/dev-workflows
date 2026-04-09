@@ -27,10 +27,10 @@ Requirements for v0.15.0 milestone. Each maps to roadmap phases.
 - [x] **ARVW-02**: DESIGN.md reviewer — validates screen/component/behavior/state coverage, consistency with SPEC.md user stories, no orphaned components, interaction flows complete
 - [x] **ARVW-03**: REQUIREMENTS.md reviewer — validates REQ-ID format, uniqueness, testability, categorization, no duplicate requirements, traceability section populated
 - [x] **ARVW-04**: ROADMAP.md reviewer — validates 100% requirement coverage, phase dependency correctness, success criteria derivation from requirements, no orphaned requirements
-- [ ] **ARVW-05**: CONTEXT.md reviewer — validates all gray areas have decisions (locked or Claude's discretion), decisions are specific not vague, no contradictions between decisions
-- [ ] **ARVW-06**: RESEARCH.md reviewer — validates research addresses the phase's key questions, findings are evidence-based not speculative, confidence levels are justified, pitfalls are actionable
-- [ ] **ARVW-07**: INGESTION_MANIFEST.md reviewer — validates all source artifacts accounted for, statuses are accurate (not falsely reporting success), failed artifacts have corresponding [ARTIFACT MISSING] blocks in SPEC.md
-- [ ] **ARVW-08**: UAT.md reviewer — validates every acceptance criterion from SPEC.md has a UAT row, pass/fail evidence is substantive (not "looks good"), spec-version matches
+- [x] **ARVW-05**: CONTEXT.md reviewer — validates all gray areas have decisions (locked or Claude's discretion), decisions are specific not vague, no contradictions between decisions
+- [x] **ARVW-06**: RESEARCH.md reviewer — validates research addresses the phase's key questions, findings are evidence-based not speculative, confidence levels are justified, pitfalls are actionable
+- [x] **ARVW-07**: INGESTION_MANIFEST.md reviewer — validates all source artifacts accounted for, statuses are accurate (not falsely reporting success), failed artifacts have corresponding [ARTIFACT MISSING] blocks in SPEC.md
+- [x] **ARVW-08**: UAT.md reviewer — validates every acceptance criterion from SPEC.md has a UAT row, pass/fail evidence is substantive (not "looks good"), spec-version matches
 
 ### Existing Reviewer Formalization
 
@@ -41,15 +41,15 @@ Requirements for v0.15.0 milestone. Each maps to roadmap phases.
 
 ### Workflow Integration
 
-- [ ] **WFIN-01**: silver-spec workflow invokes SPEC.md reviewer after Step 7 (SPEC.md write) — step does not complete until 2 consecutive clean passes
-- [ ] **WFIN-02**: silver-spec workflow invokes DESIGN.md reviewer after Step 8 (DESIGN.md write) — step does not complete until 2 consecutive clean passes
-- [ ] **WFIN-03**: silver-spec workflow invokes REQUIREMENTS.md reviewer after Step 9 (REQUIREMENTS.md write) — step does not complete until 2 consecutive clean passes
+- [x] **WFIN-01**: silver-spec workflow invokes SPEC.md reviewer after Step 7 (SPEC.md write) — step does not complete until 2 consecutive clean passes
+- [x] **WFIN-02**: silver-spec workflow invokes DESIGN.md reviewer after Step 8 (DESIGN.md write) — step does not complete until 2 consecutive clean passes
+- [x] **WFIN-03**: silver-spec workflow invokes REQUIREMENTS.md reviewer after Step 9 (REQUIREMENTS.md write) — step does not complete until 2 consecutive clean passes
 - [ ] **WFIN-04**: new-milestone workflow invokes ROADMAP.md reviewer after roadmapper completes — roadmap not approved until 2 consecutive clean passes
 - [ ] **WFIN-05**: new-milestone workflow invokes REQUIREMENTS.md reviewer after requirements definition — requirements not committed until 2 consecutive clean passes
 - [ ] **WFIN-06**: discuss-phase workflow invokes CONTEXT.md reviewer after context capture — context not committed until 2 consecutive clean passes
 - [ ] **WFIN-07**: plan-phase workflow invokes RESEARCH.md reviewer after researcher completes — research not committed until 2 consecutive clean passes
-- [ ] **WFIN-08**: silver-ingest workflow invokes INGESTION_MANIFEST.md reviewer after Step 7 — manifest not committed until 2 consecutive clean passes
-- [ ] **WFIN-09**: silver-feature Step 17.0 invokes UAT.md reviewer after UAT generation — UAT not committed until 2 consecutive clean passes
+- [x] **WFIN-08**: silver-ingest workflow invokes INGESTION_MANIFEST.md reviewer after Step 7 — manifest not committed until 2 consecutive clean passes
+- [x] **WFIN-09**: silver-feature Step 17.0 invokes UAT.md reviewer after UAT generation — UAT not committed until 2 consecutive clean passes
 - [ ] **WFIN-10**: §3a updated with complete artifact-reviewer mapping table covering all 12+ artifact types
 
 ## Validated (from previous milestones)
@@ -98,23 +98,23 @@ Deferred to future release.
 | ARVW-02 | Phase 16 | Complete |
 | ARVW-03 | Phase 16 | Complete |
 | ARVW-04 | Phase 16 | Complete |
-| ARVW-05 | Phase 16 | Pending |
-| ARVW-06 | Phase 16 | Pending |
-| ARVW-07 | Phase 16 | Pending |
-| ARVW-08 | Phase 16 | Pending |
+| ARVW-05 | Phase 16 | Complete |
+| ARVW-06 | Phase 16 | Complete |
+| ARVW-07 | Phase 16 | Complete |
+| ARVW-08 | Phase 16 | Complete |
 | EXRV-01 | Phase 17 | Pending |
 | EXRV-02 | Phase 17 | Pending |
 | EXRV-03 | Phase 17 | Pending |
 | EXRV-04 | Phase 17 | Pending |
-| WFIN-01 | Phase 17 | Pending |
-| WFIN-02 | Phase 17 | Pending |
-| WFIN-03 | Phase 17 | Pending |
+| WFIN-01 | Phase 17 | Complete |
+| WFIN-02 | Phase 17 | Complete |
+| WFIN-03 | Phase 17 | Complete |
 | WFIN-04 | Phase 17 | Pending |
 | WFIN-05 | Phase 17 | Pending |
 | WFIN-06 | Phase 17 | Pending |
 | WFIN-07 | Phase 17 | Pending |
-| WFIN-08 | Phase 17 | Pending |
-| WFIN-09 | Phase 17 | Pending |
+| WFIN-08 | Phase 17 | Complete |
+| WFIN-09 | Phase 17 | Complete |
 | WFIN-10 | Phase 17 | Pending |
 
 **Coverage:**
