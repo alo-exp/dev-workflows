@@ -36,7 +36,7 @@ When the user requests skipping any step:
 2. Offer: A. Accept skip  B. Lightweight alternative  C. Show me what you have
 3. If user chooses A permanently: record in silver-bullet.md §10b and templates/silver-bullet.md.base §10b, then commit both files.
 
-**Non-skippable gates:** `Step 6: Assemble SPEC.md Draft`, `Step 7: Write INGESTION_MANIFEST.md`. Refuse skip requests for these regardless of §10.
+**Non-skippable gates:** `Step 6: Assemble SPEC.md Draft`, `Step 7: Write INGESTION_MANIFEST.md`, `Step 7a: Review INGESTION_MANIFEST.md`. Refuse skip requests for these regardless of §10.
 
 ## Step 0: Mode Detection + Prerequisite Check
 
@@ -384,6 +384,14 @@ Include ALL artifacts from this run, including:
 - Artifacts skipped from a prior run's manifest (`status: skipped`, Error: "resuming from prior run")
 
 On subsequent runs, silver-ingest reads this manifest in Step 0 and skips any `status: success` entries. `status: failed` entries are retried.
+
+### Step 7a: Review INGESTION_MANIFEST.md
+
+**NON-SKIPPABLE GATE.**
+
+Invoke `/artifact-reviewer .planning/INGESTION_MANIFEST.md --reviewer review-ingestion-manifest` via the Skill tool.
+
+Do NOT proceed to Step 8 until /artifact-reviewer reports 2 consecutive clean passes. If issues are found, /artifact-reviewer will apply fixes and re-review automatically. If /artifact-reviewer surfaces an unresolvable issue after 5 rounds, STOP and present it to the user.
 
 ## Step 8: Commit All Artifacts
 

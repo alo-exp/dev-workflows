@@ -233,7 +233,13 @@ UAT.md format:
 - Table: # | Criterion | Result | Evidence
 - Summary section: Total, PASS, FAIL, NOT-RUN counts
 
-Write `.planning/UAT.md` using the Write tool. Then proceed to invoke gsd-audit-uat which fills in results.
+Write `.planning/UAT.md` using the Write tool.
+
+### Step 17.0a: Review UAT.md
+
+Invoke `/artifact-reviewer .planning/UAT.md --reviewer review-uat` via the Skill tool.
+
+Do NOT proceed to gsd-audit-uat until /artifact-reviewer reports 2 consecutive clean passes. If issues are found, /artifact-reviewer will apply fixes and re-review automatically. If /artifact-reviewer surfaces an unresolvable issue after 5 rounds, STOP and present it to the user.
 
 1. Invoke `gsd-audit-uat` via the Skill tool
 2. Invoke `gsd-audit-milestone` via the Skill tool
