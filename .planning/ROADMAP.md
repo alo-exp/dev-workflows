@@ -119,7 +119,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 11. Website Content Refresh | 1/1 | ✓ Complete | 2026-04-09 |
 | 12. Spec Foundation | 0/3 | Planning complete | - |
 | 13. Ingestion & Multi-Repo | 0/? | Not started | - |
-| 14. Validation, Traceability & UAT Gate | 0/? | Not started | - |
+| 14. Validation, Traceability & UAT Gate | 0/3 | Planning complete | - |
 
 ### Phase 6: Implement Enforcement Techniques from AI-Native SDLC Playbook
 
@@ -233,4 +233,9 @@ Plans:
   3. After `gsd-ship`, the PR description contains auto-generated spec reference, requirement IDs covered, and a link to SPEC.md — with no developer annotation required
   4. SPEC.md's Implementations section is updated post-merge with the PR URL and commit range — the spec remains the living record of what was built against it
   5. Running `gsd-complete-milestone` when UAT has not been run, or when any UAT criterion is marked FAIL, results in a hard block — the UAT artifact (UAT.md) committed to `.planning/` with pass/fail per criterion is the only way to unblock
-**Plans**: TBD
+**Plans**: 3 plans
+
+Plans:
+- [ ] 14-01-PLAN.md -- silver-validate skill + silver-feature Step 2.7 wiring
+- [ ] 14-02-PLAN.md -- spec-session-record.sh + pr-traceability.sh hooks
+- [ ] 14-03-PLAN.md -- uat-gate.sh hook + spec lifecycle documentation
