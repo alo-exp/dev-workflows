@@ -4,15 +4,15 @@ milestone: v0.13.0
 milestone_name: site update
 current_plan: 1
 status: Executing Phase 16
-stopped_at: Completed 17-02-PLAN.md — review rounds wired into silver-spec, silver-ingest, silver-feature
-last_updated: "2026-04-09T12:48:18.520Z"
+stopped_at: Completed 17-03-PLAN.md — post-command review gates for WFIN-04/05/06/07 wired into silver-bullet.md.base
+last_updated: "2026-04-09T12:50:20.574Z"
 last_activity: 2026-04-09
 progress:
   total_phases: 17
-  completed_phases: 2
+  completed_phases: 3
   total_plans: 7
-  completed_plans: 6
-  percent: 86
+  completed_plans: 7
+  percent: 100
 ---
 
 # Project State
@@ -74,6 +74,7 @@ Last activity: 2026-04-09
 - [Phase 16]: UAT.md reviewer: QC-1/QC-2 (AC coverage, orphan detection) conditional on spec-path; spec-version mismatch produces distinct findings (missing field vs version mismatch)
 - [Phase 17]: Step 9a (DESIGN.md review) is conditional — only runs if Step 9 produced a DESIGN.md
 - [Phase 17]: silver-feature Step 17.0a inserted before gsd-audit-uat — review gates block before audit fills results
+- [Phase 17]: Post-command gates enforced via silver-bullet.md instruction (not GSD file modification) — §8 plugin boundary maintained
 
 ### Quick Tasks Completed
 
@@ -108,8 +109,9 @@ Last activity: 2026-04-09
 | Phase 16 P01 | 166 | 2 tasks | 5 files |
 | Phase 16 P02 | 186 | 2 tasks | 5 files |
 | Phase 17 P02 | 70 | 2 tasks | 3 files |
+| Phase 17 P03 | 300 | 2 tasks | 2 files |
 
 ## Session Continuity
 
-Last session: 2026-04-09T12:48:18.515Z
-Stopped at: Completed 17-02-PLAN.md — review rounds wired into silver-spec, silver-ingest, silver-feature
+Last session: 2026-04-09T12:50:20.570Z
+Stopped at: Completed 17-03-PLAN.md — post-command review gates for WFIN-04/05/06/07 wired into silver-bullet.md.base

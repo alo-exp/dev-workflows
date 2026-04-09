@@ -28,7 +28,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 14: Validation, Traceability & UAT Gate** - Pre-build validation gate, PR-to-spec traceability automation, and UAT as a formal pipeline gate (completed 2026-04-09)
 - [x] **Phase 15: Bug Fixes & Reviewer Framework** - Fix critical v0.14.0 bugs then establish the artifact reviewer framework (interface, loop, state tracking, audit trail) (completed 2026-04-09)
 - [x] **Phase 16: New Artifact Reviewers** - Create all 8 new artifact reviewer skills for SPEC, DESIGN, REQUIREMENTS, ROADMAP, CONTEXT, RESEARCH, INGESTION_MANIFEST, and UAT (completed 2026-04-09)
-- [ ] **Phase 17: Existing Reviewer Formalization & Workflow Wiring** - Formalize plan-checker, code-reviewer, verifier, and security-auditor into the 2-pass framework; wire all reviewers into their producing workflows
+- [x] **Phase 17: Existing Reviewer Formalization & Workflow Wiring** - Formalize plan-checker, code-reviewer, verifier, and security-auditor into the 2-pass framework; wire all reviewers into their producing workflows (completed 2026-04-09)
 
 ## Phase Details
 
@@ -125,7 +125,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5 -> 6 -> 7 -> 8
 | 14. Validation, Traceability & UAT Gate | 3/3 | Complete   | 2026-04-09 |
 | 15. Bug Fixes & Reviewer Framework | 2/2 | Complete   | 2026-04-09 |
 | 16. New Artifact Reviewers | 2/2 | Complete   | 2026-04-09 |
-| 17. Existing Reviewer Formalization & Workflow Wiring | 2/3 | In Progress|  |
+| 17. Existing Reviewer Formalization & Workflow Wiring | 3/3 | Complete   | 2026-04-09 |
 
 ### Phase 6: Implement Enforcement Techniques from AI-Native SDLC Playbook
 
@@ -297,4 +297,4 @@ Plans:
 Plans:
 - [x] 17-01-PLAN.md -- Formalize existing reviewers (EXRV-01..04) + complete section 3a mapping table (WFIN-10)
 - [x] 17-02-PLAN.md -- Wire review rounds into silver-spec, silver-ingest, silver-feature (WFIN-01/02/03/08/09)
-- [ ] 17-03-PLAN.md -- Wire review rounds into new-milestone, discuss-phase, plan-phase via silver-bullet.md.base (WFIN-04/05/06/07)
+- [x] 17-03-PLAN.md -- Wire review rounds into new-milestone, discuss-phase, plan-phase via silver-bullet.md.base (WFIN-04/05/06/07)

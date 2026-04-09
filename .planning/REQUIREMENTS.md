@@ -44,10 +44,10 @@ Requirements for v0.15.0 milestone. Each maps to roadmap phases.
 - [x] **WFIN-01**: silver-spec workflow invokes SPEC.md reviewer after Step 7 (SPEC.md write) — step does not complete until 2 consecutive clean passes
 - [x] **WFIN-02**: silver-spec workflow invokes DESIGN.md reviewer after Step 8 (DESIGN.md write) — step does not complete until 2 consecutive clean passes
 - [x] **WFIN-03**: silver-spec workflow invokes REQUIREMENTS.md reviewer after Step 9 (REQUIREMENTS.md write) — step does not complete until 2 consecutive clean passes
-- [ ] **WFIN-04**: new-milestone workflow invokes ROADMAP.md reviewer after roadmapper completes — roadmap not approved until 2 consecutive clean passes
-- [ ] **WFIN-05**: new-milestone workflow invokes REQUIREMENTS.md reviewer after requirements definition — requirements not committed until 2 consecutive clean passes
-- [ ] **WFIN-06**: discuss-phase workflow invokes CONTEXT.md reviewer after context capture — context not committed until 2 consecutive clean passes
-- [ ] **WFIN-07**: plan-phase workflow invokes RESEARCH.md reviewer after researcher completes — research not committed until 2 consecutive clean passes
+- [x] **WFIN-04**: new-milestone workflow invokes ROADMAP.md reviewer after roadmapper completes — roadmap not approved until 2 consecutive clean passes
+- [x] **WFIN-05**: new-milestone workflow invokes REQUIREMENTS.md reviewer after requirements definition — requirements not committed until 2 consecutive clean passes
+- [x] **WFIN-06**: discuss-phase workflow invokes CONTEXT.md reviewer after context capture — context not committed until 2 consecutive clean passes
+- [x] **WFIN-07**: plan-phase workflow invokes RESEARCH.md reviewer after researcher completes — research not committed until 2 consecutive clean passes
 - [x] **WFIN-08**: silver-ingest workflow invokes INGESTION_MANIFEST.md reviewer after Step 7 — manifest not committed until 2 consecutive clean passes
 - [x] **WFIN-09**: silver-feature Step 17.0 invokes UAT.md reviewer after UAT generation — UAT not committed until 2 consecutive clean passes
 - [ ] **WFIN-10**: §3a updated with complete artifact-reviewer mapping table covering all 12+ artifact types
@@ -109,10 +109,10 @@ Deferred to future release.
 | WFIN-01 | Phase 17 | Complete |
 | WFIN-02 | Phase 17 | Complete |
 | WFIN-03 | Phase 17 | Complete |
-| WFIN-04 | Phase 17 | Pending |
-| WFIN-05 | Phase 17 | Pending |
-| WFIN-06 | Phase 17 | Pending |
-| WFIN-07 | Phase 17 | Pending |
+| WFIN-04 | Phase 17 | Complete |
+| WFIN-05 | Phase 17 | Complete |
+| WFIN-06 | Phase 17 | Complete |
+| WFIN-07 | Phase 17 | Complete |
 | WFIN-08 | Phase 17 | Complete |
 | WFIN-09 | Phase 17 | Complete |
 | WFIN-10 | Phase 17 | Pending |
