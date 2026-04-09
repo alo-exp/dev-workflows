@@ -32,6 +32,7 @@ If `--reviewer` is omitted, the reviewer is auto-detected from the artifact file
 | RESEARCH.md | review-research | New SB reviewer |
 | INGESTION_MANIFEST.md | review-ingestion-manifest | New SB reviewer |
 | UAT.md | review-uat | New SB reviewer |
+| Cross-artifact set | review-cross-artifact | New SB reviewer -- multi-artifact |
 
 ## Orchestration Steps
 
