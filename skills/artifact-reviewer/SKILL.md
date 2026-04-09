@@ -24,10 +24,10 @@ If `--reviewer` is omitted, the reviewer is auto-detected from the artifact file
 | Code changes | gsd-code-reviewer | Existing GSD reviewer |
 | VERIFICATION.md | gsd-verifier | Existing GSD reviewer |
 | Security findings | silver:security | Existing SB reviewer |
-| SPEC.md | (Phase 16) | Not yet implemented |
-| DESIGN.md | (Phase 16) | Not yet implemented |
-| REQUIREMENTS.md | (Phase 16) | Not yet implemented |
-| ROADMAP.md | (Phase 16) | Not yet implemented |
+| SPEC.md | review-spec | New SB reviewer |
+| DESIGN.md | review-design | New SB reviewer |
+| REQUIREMENTS.md | review-requirements | New SB reviewer |
+| ROADMAP.md | review-roadmap | New SB reviewer |
 | CONTEXT.md | (Phase 16) | Not yet implemented |
 | RESEARCH.md | (Phase 16) | Not yet implemented |
 | INGESTION_MANIFEST.md | (Phase 16) | Not yet implemented |
