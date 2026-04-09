@@ -63,50 +63,13 @@ At the very start of any new session, perform these steps automatically:
    If A: invoke `/multai:update` via the Skill tool, then continue.
    If B or check fails (file missing/unknown): output "Skipping MultAI update." and continue.
 
-   **5.5 Multi-Repo Spec Validation**
-
-   If `.planning/SPEC.main.md` exists (indicating a satellite/mobile repo linked to a main repo spec):
-
-   1. Read `spec-version:` from `.planning/SPEC.main.md` frontmatter
-   2. Read the `<!-- READ-ONLY: fetched from {source-url} -->` header to get the source repo URL
-   3. Fetch the current main repo SPEC.md version:
-      ```bash
-      /opt/homebrew/bin/gh api repos/{owner}/{repo}/contents/.planning/SPEC.md --jq '.content' | base64 -d | grep -m1 '^spec-version:' | awk '{print $2}'
-      ```
-      If the gh CLI call fails (no network, auth expired): display "Could not verify spec version -- proceed with caution." and continue. The check is best-effort.
-   4. Compare versions:
-      - **Match:** Display "Spec version v{N} -- in sync with main repo." and continue.
-      - **Mismatch:** BLOCK the session. Fetch the full remote SPEC.md content and produce a side-by-side summary:
-        ```bash
-        # Fetch remote SPEC.md for diff
-        /opt/homebrew/bin/gh api repos/{owner}/{repo}/contents/.planning/SPEC.md --jq '.content' | base64 -d > /tmp/spec-remote-diff.md
-        diff --unified=3 .planning/SPEC.main.md /tmp/spec-remote-diff.md || true
-        rm -f /tmp/spec-remote-diff.md
-        ```
-        Display:
-        ```
-        SPEC VERSION MISMATCH
-        Local (SPEC.main.md):  v{local}
-        Remote ({repo}):       v{remote}
-
-        Content changes:
-        {unified diff output from above — show added/removed/changed lines}
-
-        Run /silver:ingest --source-url {repo-url} to refresh before proceeding.
-        ```
-        Do NOT proceed with any implementation work until the user refreshes.
-
-   If `.planning/SPEC.main.md` does not exist, skip this check silently.
-
-> **compactPrompt**: Your `.silver-bullet.json` includes a `compactPrompt` key that instructs the compaction LLM to preserve these rules verbatim. If you customized it or removed it, re-add: `"compactPrompt": "When compacting, preserve all rules and workflow steps from silver-bullet.md verbatim. Do not summarize skill names, ordering constraints, anti-skip rules, or enforcement layer descriptions."`
-
 > **Anti-Skip:** you are violating this rule if you begin work without reading docs/ or skip /compact. Evidence: no Read tool calls for docs/ files in session start.
 
 ---
 
 ## 1. Automated Enforcement
 
-Six technical layers plus one documentation layer enforce compliance:
+Ten enforcement layers enforce compliance:
 
 1. **Skill tracker** (PostToolUse/Skill) — Records every Silver Bullet skill invocation to the state file
 2. **Stage enforcer** (Pre+PostToolUse/Edit|Write|Bash) — HARD STOP if planning skills incomplete before source edits
@@ -114,8 +77,11 @@ Six technical layers plus one documentation layer enforce compliance:
 4. **Completion audit** (Pre+PostToolUse/Bash) — Blocks intermediate commits until planning is done; blocks PR/deploy/release until full workflow is done
 5. **CI status check** (Pre+PostToolUse/Bash) — Blocks further commits and actions when CI is failing
 6. **Session management** (PostToolUse/Bash) — Session logging, autonomous mode timeout detection, branch-scoped state reset
-7. **Redundant instructions + anti-rationalization** — Workflow file + CLAUDE.md both enforce;
-   explicit rules against skipping, combining, or implicitly covering steps
+7. **Stop hook** (Stop/SubagentStop) — Blocks task-complete declaration if required_deploy skills are missing
+8. **UserPromptSubmit reminder** (UserPromptSubmit) — Re-injects missing skills list before every user message
+9. **Forbidden skill gate** (PreToolUse/Skill) — Blocks deprecated/forbidden skill invocations before they execute
+10. **Redundant instructions + anti-rationalization** — Workflow file + CLAUDE.md both enforce;
+    explicit rules against skipping, combining, or implicitly covering steps
 
 **Enforcement model**: Hooks are **invocation-based**, not outcome-based.
 `record-skill.sh` records that a skill was *called*; it cannot verify
@@ -228,6 +194,75 @@ Suggest these commands based on context -- do not wait for the user to ask.
 | User asks "where are we?" or "what's left?" | `/gsd:progress` | Rich progress report with next actions |
 | User seems unsure what step is next | `/gsd:next` | Auto-advances to the next logical step |
 
+### 2d. Position Awareness (GSD State Delegation)
+
+**Rule:** SB does NOT maintain its own phase-progress tracking. At every workflow
+transition and step boundary, derive the user's current position from GSD's authoritative
+state — never from the SB state file.
+
+**At each step boundary, read:**
+1. `.planning/STATE.md` — parse YAML front matter for `current_plan`, `status`, `stopped_at`, `progress.total_phases`, `progress.completed_phases`, `progress.total_plans`, `progress.completed_plans`, `progress.percent`
+2. `.planning/ROADMAP.md` — identify current phase name, its goal, and how many plans it contains
+
+**SB state file (`~/.claude/.silver-bullet/state`) is ONLY for:**
+- Quality gate stage markers (`quality-gate-stage-1` through `quality-gate-stage-4`)
+- Skill invocation markers (recorded by `record-skill.sh`)
+- Session mode (`~/.claude/.silver-bullet/mode`)
+- Session init sentinel (`~/.claude/.silver-bullet/session-init`)
+
+These are SB-specific with no GSD equivalent. Never use the SB state file to determine
+which phase or plan the user is on — that information lives in GSD's STATE.md.
+
+### 2e. Progress Banner (Interactive Mode)
+
+At every workflow transition (the transitions listed in the Hand-Holding table above),
+display a progress banner BEFORE the transition narration:
+
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ PROGRESS: Phase {N} of {total} — {phase_name}
+ Plan {M} of {plans_in_phase} | Overall: {percent}% complete
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+Values come from STATE.md (`progress.*`) and ROADMAP.md (phase name, plan count).
+
+**Within-phase narration:** When inside a phase (between PLAN and VERIFY transitions),
+narrate at each plan boundary:
+
+> Now executing Plan {M} of {N}: {plan_objective_from_PLAN.md}
+> This plan produces: {files_modified summary}
+> After this: {what comes next — next plan, or VERIFY if last plan}
+
+### 2f. Autonomous Commentary
+
+In autonomous mode (when `~/.claude/.silver-bullet/mode` contains `autonomous`),
+do NOT ask questions or pause, but DO output structured commentary at each major step:
+
+**Before each GSD command invocation:**
+```
+— [{timestamp}] Running: {command} | Phase {N}, Plan {M} of {total} —
+```
+
+**After each GSD command completes:**
+```
+— [{timestamp}] Done: {command} | Result: {one-line summary} —
+```
+
+**At phase completion:**
+```
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ PHASE {N} COMPLETE — {phase_name}
+ {completed_phases}/{total_phases} phases done | {percent}%
+ Next: {next_phase_name or "FINALIZE + SHIP"}
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+```
+
+This commentary replaces the silence of autonomous mode with structured narration
+so the user can follow along without being asked to act.
+
+---
+
 ### 2g. Bare Instruction Interception
 
 When the user sends a **bare instruction** — a message that is not a slash command and is
@@ -292,50 +327,6 @@ When the user requests skipping a workflow step, SB:
 3. Records the decision in §10 if user chooses A permanently — **before committing, display the exact text being written to §10 and require explicit user confirmation** (showing what will change in both silver-bullet.md and templates/silver-bullet.md.base)
 
 Non-skippable gates: `silver:security`, `silver:quality-gates` pre-ship, `gsd-verify-work`.
-
----
-
-### 2i. Spec Lifecycle
-
-**When to invoke:** Before any feature development begins. `silver:spec` is the entry point for creating or refining a spec.
-
-**Artifacts produced:**
-- `.planning/SPEC.md` — Canonical spec with YAML frontmatter (spec-version, status, jira-id, figma-url, source-artifacts) and sections (Overview, User Stories, UX Flows, Acceptance Criteria, Assumptions, Open Questions, Out of Scope, Implementations)
-- `.planning/REQUIREMENTS.md` — Derived requirements with REQ-XX and NFR-XX IDs
-- `.planning/DESIGN.md` — Design artifact (when Figma or design context provided)
-
-**Spec floor enforcement:**
-- `gsd-plan-phase` is hard-blocked by `spec-floor-check.sh` if `.planning/SPEC.md` is missing or lacks `## Overview` and `## Acceptance Criteria` sections
-- `gsd-fast` and `gsd-quick` emit a warning but are not blocked — fast path preserves bypass intent
-- Run `/silver:spec` to create or update the spec before planning
-
-**Modes:**
-- Greenfield: no existing SPEC.md — full Socratic elicitation from scratch
-- Augment: existing SPEC.md — refine, extend, increment spec-version
-
-**Assumption tracking:** Every unresolvable ambiguity produces an `[ASSUMPTION: ...]` block in SPEC.md. Assumption density is a quality signal — zero assumptions on a non-trivial feature is suspicious.
-
----
-
-### 2j. MCP Connector Prerequisites (for silver-ingest)
-
-silver-ingest delegates all external data access to MCP connectors. Configure these in your Claude environment before using ingestion features:
-
-| Connector | Required For | Configuration |
-|-----------|-------------|---------------|
-| Atlassian MCP | JIRA ticket + Confluence ingestion | API token auth via `/v1/mcp` streamable HTTP endpoint. SSE transport deprecated after 2026-06-30. |
-| Figma MCP (official remote) | Design context extraction | Connect via Figma account. Free during beta. |
-| Google Drive MCP | Google Docs/Slides extraction | Community MCP or Google Workspace CLI with OAuth. |
-
-If a connector is not configured, silver-ingest continues with `[ARTIFACT MISSING]` blocks -- it never hard-blocks on a missing connector.
-
----
-
-### 2k. Cross-Repo Spec Workflow
-
-- **Main repo specs first (REPO-03):** Non-mobile-exclusive requirements are implementation-spec'd in the main repo first. The main repo spec is then fetched as input for satellite repo sessions via `silver-ingest --source-url`.
-- **Mobile-exclusive (REPO-04):** Requirements unique to the mobile/satellite repo follow the standard SB process entirely within the satellite repo -- no main repo dependency.
-- **Do not edit SPEC.main.md directly.** It is a read-only cache of the main repo spec. To update, re-run `/silver:ingest --source-url {repo-url}`.
 
 ---
 
@@ -598,11 +589,11 @@ Or for safer auto-approval (recommended for non-isolated environments):
 ```
 This is a Claude Code platform setting, not a Silver Bullet setting.
 
-At the start of every session, before any work begins, ask:
-
-> Run this session **interactively** or **autonomously**?
-> - **Interactive** (default) — I pause at decision points and phase gates
-> - **Autonomous** — I drive start to finish and surface blockers at the end
+At the start of every session, before any work begins, use AskUserQuestion:
+- Question: "Run this session interactively or autonomously?"
+- Options:
+  - "A. Interactive (default) — pause at decision points and phase gates"
+  - "B. Autonomous — drive start to finish, surface blockers at the end"
 
 Write the choice:
 ```bash
@@ -642,13 +633,11 @@ Sub-agents are pre-assigned via `model:` YAML frontmatter in each agent file:
 - **Opus** (2 agents): `gsd-planner` (architectural reasoning, MECE decomposition) and `gsd-security-auditor` (adversarial threat modeling). These are the only agents where reasoning depth measurably changes outcome quality.
 - **Sonnet** (22 agents): all other GSD agents — executors, researchers, verifiers, reviewers, documentation, testing, codebase mapping, etc.
 
-No model routing questions are asked during the session. Agents auto-select the correct model via frontmatter. The orchestrator (main session) always runs on Sonnet.
+No model routing questions are asked during the session. Opus agents auto-select their model via frontmatter. The main session (orchestrator + skills) runs on Sonnet throughout.
 
 **Autonomous mode**: stays Sonnet. Escalate silently to Opus only if a planning step produces measurably incomplete output: fewer than 5 lines, contains `TBD`/`[TODO]`/`...` placeholders, or a step expected to produce a file produces none. Log escalation as an autonomous decision.
 
 **Override**: User may specify `model: opus` for any session explicitly. Sub-agent frontmatter overrides are always respected.
-
-> **Anti-Skip:** You are violating this rule if you enter Planning or Design phases without offering the Opus upgrade. Evidence: no model switch prompt in conversation before /gsd:discuss-phase or design skill invocation.
 
 ---
 
@@ -739,11 +728,7 @@ Run all three review skills in sequence, then fix all issues. Repeat until clean
    You need BOTH: (a) run the actual verification commands, AND (b) invoke the skill so
    `record-skill.sh` tracks it. If you ran tests/CI/checks but did not invoke the skill,
    you have NOT completed this step. Do NOT record the stage marker until BOTH are done.
-7. Record stage completion (two writes required — ordering is verified by hooks):
-   ```bash
-   echo "verification-before-completion-stage-1" >> ~/.claude/.silver-bullet/state
-   echo "quality-gate-stage-1" >> ~/.claude/.silver-bullet/state
-   ```
+7. Record stage completion: `echo "quality-gate-stage-1" >> ~/.claude/.silver-bullet/state`
 
 ### Stage 2 — Big-Picture Consistency Audit
 
@@ -753,38 +738,41 @@ Review the entire plugin for cross-file inconsistencies, redundancies, and contr
    - Workflows (full-dev-cycle.md vs devops-cycle.md vs CLAUDE.md vs silver-bullet.md)
    - Skills (all SKILL.md files — obsolete references, redundant work, contradictions)
    - Hooks + config (.sh files, hooks.json, .silver-bullet.json, templates)
-   - Help site + README (HTML pages, search.js, README.md — step counts, paths, versions)
+   - Help site + README (HTML pages, search.js, README.md — step counts, paths, versions) **+ New-Feature Documentation Inventory:** for each workflow, skill, enforcement layer, or major feature added in this release, verify: (a) a dedicated help page exists under `site/help/`, (b) the page is linked from `site/help/index.html` or the appropriate section hub, (c) the page appears in `site/help/reference/index.html` or the relevant concept page. Missing pages = this dimension fails and Stage 2 loops.
    - Cross-plugin consistency (read 100% of skill content from all 4 dependency plugins — GSD: ~/.claude/get-shit-done/ workflows/references/templates; Superpowers: ~/.claude/plugins/cache/*/superpowers/*/skills/*/SKILL.md; Engineering: ~/.claude/plugins/cache/*/knowledge-work-plugins/*/engineering/skills/*/SKILL.md; Design: ~/.claude/plugins/cache/*/knowledge-work-plugins/*/design/skills/*/SKILL.md — check for contradictions, conflicts, inconsistencies, or redundancies between Silver Bullet instructions and upstream plugin skills)
 2. Fix all genuine issues found
 3. **Loop**: repeat until two consecutive audit passes find zero issues
 4. **MANDATORY — invoke `/superpowers:verification-before-completion`** via the Skill tool.
    Do NOT record the stage marker without invoking this skill first.
-5. Record stage completion (two writes required — ordering is verified by hooks):
-   ```bash
-   echo "verification-before-completion-stage-2" >> ~/.claude/.silver-bullet/state
-   echo "quality-gate-stage-2" >> ~/.claude/.silver-bullet/state
-   ```
+5. Record stage completion: `echo "quality-gate-stage-2" >> ~/.claude/.silver-bullet/state`
 
 ### Stage 3 — Public-Facing Content Refresh
 
 Verify and update all user-visible surfaces to reflect the current state.
 
-1. Audit for factual accuracy:
+1. Build a **Feature-to-Documentation Coverage Matrix** before touching any files:
+
+   | Feature | Type | Added in v{N} | Help page exists | Linked from nav | Linked from reference | Status |
+   |---------|------|---------------|------------------|-----------------|-----------------------|--------|
+   | [feature] | Workflow/Skill/Enforcement | ✓ | ✓ | ✓ | ✓ | PASS |
+
+   Every feature added in this release needs a row. Any blank cell or FAIL = Stage 3 is not complete until fixed.
+
+2. Audit for factual accuracy:
    - GitHub repo description and topics (`gh repo edit`)
    - README.md (version, step counts, enforcement layers, state paths, architecture)
-   - Landing page (`site/index.html`)
+   - Landing page (`site/index.html`) — **both visible content AND `<head>` metadata:**
+     - Visible: hero section, workflow section, pills, feature cards all reflect current product state
+     - Meta tags: `grep 'og:description\|twitter:description\|meta.*description' site/index.html` — verify no stale references (e.g. old workflow counts, old version numbers)
+     - Consistency: if visible content says "7 workflows", meta tags must too — contradictions between `<head>` and `<body>` are a failure
    - All help pages (`site/help/*/index.html`)
    - Search index (`site/help/search.js`)
    - Compare page (`site/compare/index.html`) if it exists
-2. Fix all discrepancies
-3. **MANDATORY — invoke `/superpowers:verification-before-completion`** via the Skill tool.
+4. Fix all discrepancies
+5. **MANDATORY — invoke `/superpowers:verification-before-completion`** via the Skill tool.
    Do NOT record the stage marker without invoking this skill first.
-4. Push and confirm CI green
-5. Record stage completion (two writes required — ordering is verified by hooks):
-   ```bash
-   echo "verification-before-completion-stage-3" >> ~/.claude/.silver-bullet/state
-   echo "quality-gate-stage-3" >> ~/.claude/.silver-bullet/state
-   ```
+6. Push and confirm CI green
+7. Record stage completion: `echo "quality-gate-stage-3" >> ~/.claude/.silver-bullet/state`
 
 ### Stage 4 — Security Audit (SENTINEL)
 
@@ -796,11 +784,7 @@ Run the SENTINEL v2.3 adversarial security audit against the full plugin.
 4. **Loop**: repeat until two consecutive audit passes find zero issues
 5. **MANDATORY — invoke `/superpowers:verification-before-completion`** via the Skill tool.
    Do NOT record the stage marker without invoking this skill first.
-6. Record stage completion (two writes required — ordering is verified by hooks):
-   ```bash
-   echo "verification-before-completion-stage-4" >> ~/.claude/.silver-bullet/state
-   echo "quality-gate-stage-4" >> ~/.claude/.silver-bullet/state
-   ```
+6. Record stage completion: `echo "quality-gate-stage-4" >> ~/.claude/.silver-bullet/state`
 
 ### Pre-Release Gate Enforcement
 
