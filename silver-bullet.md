@@ -405,14 +405,22 @@ GSD steps MUST be invoked as slash commands in the correct phase order.
 
 Every review loop **MUST iterate until the reviewer returns Approved TWICE IN A ROW**. A single clean pass is not sufficient — the reviewer must find no issues on two consecutive passes. There are NO exceptions.
 
-This rule applies to ALL artifact-producing review steps, specifically:
+This rule applies to ALL artifact-producing review steps. Any step that produces an artifact listed below MUST invoke the mapped reviewer and achieve 2 consecutive clean passes before the artifact is committed.
 
-| Step | Artifact | Review Tool | Two-Pass Required |
-|------|----------|-------------|-------------------|
-| Plan creation | {phase}-NN-PLAN.md | /gsd:plan-checker | YES |
-| Execution | Code changes + SUMMARY.md | /code-review | YES |
-| Verification | VERIFICATION.md | /gsd:verify-work | YES (verify + re-verify) |
-| Security check | Security findings | /silver:security | YES |
+| Step | Artifact | Reviewer | Two-Pass Required | Producing Workflow |
+|------|----------|----------|-------------------|--------------------|
+| Plan creation | {phase}-NN-PLAN.md | /gsd:plan-checker | YES | /gsd:plan-phase |
+| Execution | Code changes + SUMMARY.md | /gsd:code-reviewer | YES | /gsd:execute-phase |
+| Verification | VERIFICATION.md | /gsd:verify-work | YES | /gsd:verify-work |
+| Security check | Security findings | /silver:security | YES | /silver:security |
+| Spec elicitation | SPEC.md | /artifact-reviewer --reviewer review-spec | YES | /silver:spec Step 7 |
+| Design capture | DESIGN.md | /artifact-reviewer --reviewer review-design | YES | /silver:spec Step 9 |
+| Requirements derivation | REQUIREMENTS.md | /artifact-reviewer --reviewer review-requirements | YES | /silver:spec Step 8, /gsd:new-milestone |
+| Roadmap creation | ROADMAP.md | /artifact-reviewer --reviewer review-roadmap | YES | /gsd:new-milestone |
+| Context capture | CONTEXT.md | /artifact-reviewer --reviewer review-context | YES | /gsd:discuss-phase |
+| Research | RESEARCH.md | /artifact-reviewer --reviewer review-research | YES | /gsd:plan-phase (researcher) |
+| Ingestion | INGESTION_MANIFEST.md | /artifact-reviewer --reviewer review-ingestion-manifest | YES | /silver:ingest Step 7 |
+| UAT generation | UAT.md | /artifact-reviewer --reviewer review-uat | YES | /silver:feature Step 17.0 |
 
 If ANY of these steps produces findings on the first pass, you MUST fix the findings and re-run the review. The step is complete ONLY after two consecutive clean passes.
 
@@ -442,6 +450,16 @@ echo "review-loop-pass-2" >> ~/.claude/.silver-bullet/state
 The completion audit hook requires `review-loop-pass-2` in the state file before allowing PR creation, deploy, or release. This converts the two-consecutive-approvals rule from a documentation-only requirement to a partially mechanical gate.
 
 > **Note:** This is an imperfect proxy — the markers are written by Claude and not independently verified. However, they add friction: Claude must explicitly claim two clean passes occurred, creating an auditable trail.
+
+### Per-Reviewer 2-Pass Requirements
+
+**EXRV-01 (plan-checker):** After /gsd:plan-phase creates a PLAN.md, invoke /gsd:plan-checker iteratively. If issues are found, fix and re-run. The plan is NOT approved until 2 consecutive clean passes. Do not commit the plan until the second consecutive clean pass completes.
+
+**EXRV-02 (code-reviewer):** After /gsd:execute-phase completes code changes, invoke /gsd:code-reviewer iteratively. If ISSUE findings are returned, apply fixes via /gsd:code-review-fix and re-run the review. Code is NOT considered reviewed until 2 consecutive clean passes. Do not proceed to verification until the second consecutive clean pass completes.
+
+**EXRV-03 (verifier):** After /gsd:verify-work produces VERIFICATION.md, run verification a second consecutive time to confirm results. If the second pass surfaces new issues (e.g., flaky tests that passed first time), fix and restart the 2-pass count. Verification is NOT complete until 2 consecutive clean passes.
+
+**EXRV-04 (security-auditor):** After /silver:security produces security findings, run the audit a second consecutive time to validate mitigations applied during the first pass. If the second pass finds new or unresolved issues, fix and restart. Security review is NOT complete until 2 consecutive clean passes.
 
 ## 3b. GSD Command Tracking
 
