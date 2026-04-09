@@ -1,177 +1,127 @@
-# Requirements: Silver Bullet v0.14.0
+# Requirements: Silver Bullet v0.15.0
 
 **Defined:** 2026-04-09
-**Core Value:** Single enforced workflow that eliminates the gap between "what AI should do" and "what AI actually does"
+**Core Value:** Single enforced workflow — no artifact ships without structured quality validation
 
 ## v1 Requirements
 
-Requirements for v0.14.0 milestone. Each maps to roadmap phases.
+Requirements for v0.15.0 milestone. Each maps to roadmap phases.
 
-### Spec Foundation
+### Bug Fixes (carried from v0.14.0)
 
-- [ ] **SPEC-01**: SB produces a canonical `.planning/SPEC.md` artifact with YAML frontmatter (spec-version, status, jira-id, figma-url, source-artifacts) and standardized sections (Overview, User Stories, UX Flows, Acceptance Criteria, Assumptions, Open Questions)
-- [ ] **SPEC-02**: SB produces a `.planning/DESIGN.md` artifact with structured screen/component/behavior/state definitions extracted from design inputs
-- [ ] **SPEC-03**: Spec templates exist in `templates/specs/` (SPEC.md.template, DESIGN.md.template, REQUIREMENTS.md.template) that new specs are generated from
-- [ ] **SPEC-04**: Every unresolvable ambiguity during spec creation produces an explicit `[ASSUMPTION: ...]` block in SPEC.md — assumption density is a quality signal, not optional decoration
-- [ ] **SPEC-05**: SPEC.md includes a `spec-version:` field in frontmatter that increments on each substantive change, enabling downstream version pinning
+- [ ] **BFIX-01**: Fix shell injection via unvalidated owner/repo in silver-ingest --source-url — validate against `^[a-zA-Z0-9._-]+/[a-zA-Z0-9._-]+$` before shell substitution
+- [ ] **BFIX-02**: Fix command injection via unescaped WARN findings in pr-traceability.sh heredoc — use `printf '%s'` instead of heredoc expansion for warn_items
+- [ ] **BFIX-03**: Fix Confluence failure path in silver-ingest to produce `[ARTIFACT MISSING: reason]` block instead of "note in Assumptions"
+- [ ] **BFIX-04**: Fix version mismatch block in silver-bullet.md.base §0/5.5 to show content diff (not just version numbers) when SPEC.main.md is stale
 
-### AI-Driven Elicitation
+### Artifact Reviewer Framework
 
-- [ ] **ELIC-01**: `silver-spec` skill guides PM/BA through Socratic requirements elicitation — asking clarifying questions, surfacing gaps, and producing SPEC.md + REQUIREMENTS.md as output
-- [ ] **ELIC-02**: Elicitation covers: user stories, acceptance criteria, UX flow definition, edge cases, error states, and data model implications — through interactive dialogue, not template filling
-- [ ] **ELIC-03**: At any point during elicitation, user can provide a Google Doc, PPT, or Figma link as input — SB extracts content and incorporates it into the evolving spec
-- [ ] **ELIC-04**: Elicitation produces assumption blocks for every gap the PM/BA cannot resolve on the spot, with each assumption tagged for follow-up
-- [ ] **ELIC-05**: `silver-spec` can be invoked standalone (greenfield spec) or to augment an ingested draft (post-JIRA-ingestion refinement)
-- [ ] **ELIC-06**: Elicitation orchestrates existing plugin skills where applicable (product-management:write-spec, design:user-research, design:design-critique) rather than reimplementing their capabilities
+- [ ] **ARFR-01**: A standard artifact reviewer interface is defined — each reviewer accepts an artifact path, validates against source inputs, and returns structured findings with severity (PASS / ISSUE) and finding descriptions
+- [ ] **ARFR-02**: The review round loop is implemented as a reusable mechanism — invoke reviewer, collect findings, if issues found → fix and re-review, continue until 2 consecutive clean passes
+- [ ] **ARFR-03**: Review round state is tracked per-artifact so partially completed rounds can be resumed across sessions
+- [ ] **ARFR-04**: Review round results are recorded in a `REVIEW-ROUNDS.md` artifact alongside the reviewed file for audit trail
 
-### External Artifact Ingestion
+### New Artifact Reviewers
 
-- [ ] **INGT-01**: `silver-ingest` skill pulls JIRA ticket content (summary, description, acceptance criteria, linked issues) via Atlassian MCP connector and produces a draft SPEC.md
-- [ ] **INGT-02**: `silver-ingest` resolves artifact links found in JIRA ticket (Google Drive URLs, Figma URLs, Confluence URLs) and ingests their content
-- [ ] **INGT-03**: Figma design context extracted via Figma MCP server — components, layout, tokens, flows — and written to DESIGN.md
-- [ ] **INGT-04**: Google Docs/Slides content extracted via Google Workspace CLI with vision support for embedded images — text + image understanding incorporated into spec context
-- [ ] **INGT-05**: Every ingestion produces an `INGESTION_MANIFEST.md` listing all artifacts attempted, succeeded, failed, and missing — no silent partial failures
-- [ ] **INGT-06**: Missing or failed artifact ingestion produces `[ARTIFACT MISSING: reason]` blocks in SPEC.md, not empty sections
-- [ ] **INGT-07**: Ingestion is resumable — if a connector fails mid-ingestion, re-running `silver-ingest` picks up from where it left off using the manifest
+- [ ] **ARVW-01**: SPEC.md reviewer — validates completeness (all required sections present), assumption density (minimum threshold), acceptance criteria testability, user story format, and consistency with source inputs (JIRA ticket, Figma, Google Docs)
+- [ ] **ARVW-02**: DESIGN.md reviewer — validates screen/component/behavior/state coverage, consistency with SPEC.md user stories, no orphaned components, interaction flows complete
+- [ ] **ARVW-03**: REQUIREMENTS.md reviewer — validates REQ-ID format, uniqueness, testability, categorization, no duplicate requirements, traceability section populated
+- [ ] **ARVW-04**: ROADMAP.md reviewer — validates 100% requirement coverage, phase dependency correctness, success criteria derivation from requirements, no orphaned requirements
+- [ ] **ARVW-05**: CONTEXT.md reviewer — validates all gray areas have decisions (locked or Claude's discretion), decisions are specific not vague, no contradictions between decisions
+- [ ] **ARVW-06**: RESEARCH.md reviewer — validates research addresses the phase's key questions, findings are evidence-based not speculative, confidence levels are justified, pitfalls are actionable
+- [ ] **ARVW-07**: INGESTION_MANIFEST.md reviewer — validates all source artifacts accounted for, statuses are accurate (not falsely reporting success), failed artifacts have corresponding [ARTIFACT MISSING] blocks in SPEC.md
+- [ ] **ARVW-08**: UAT.md reviewer — validates every acceptance criterion from SPEC.md has a UAT row, pass/fail evidence is substantive (not "looks good"), spec-version matches
 
-### Multi-Repo Spec Referencing
+### Existing Reviewer Formalization
 
-- [ ] **REPO-01**: `silver-ingest --source-url <repo-url>` fetches main repo's SPEC.md and caches it as `.planning/SPEC.main.md` (read-only) in the mobile/satellite repo
-- [ ] **REPO-02**: Mobile repo's SB session validates its pinned spec-version against the main repo's current version at session start — blocks on mismatch with diff shown
-- [ ] **REPO-03**: Non-mobile-exclusive requirements are implementation-spec'd in the main repo first, then the main repo spec is referenced as input for mobile repo SB sessions
-- [ ] **REPO-04**: Mobile-exclusive requirements follow standard SB process entirely within the mobile repo — no main repo dependency
+- [ ] **EXRV-01**: plan-checker (gsd-plan-checker) is wired into the 2-consecutive-pass framework — plan-phase workflow invokes it iteratively until 2 clean passes, not just once
+- [ ] **EXRV-02**: code-reviewer (gsd-code-reviewer) is wired into the 2-consecutive-pass framework — execute-phase workflow invokes it iteratively with fix rounds between passes
+- [ ] **EXRV-03**: verifier (gsd-verifier) is wired into the 2-consecutive-pass framework — verification runs twice consecutively, second pass confirms first pass's results
+- [ ] **EXRV-04**: security-auditor (gsd-security-auditor) is wired into the 2-consecutive-pass framework — security audit runs twice, second pass validates mitigations from first
 
-### Pre-Build Validation
+### Workflow Integration
 
-- [ ] **VALD-01**: `silver-validate` skill performs gap analysis between SPEC.md and PLAN.md before implementation begins — surfaces missing coverage, conflicting requirements, unresolved assumptions
-- [ ] **VALD-02**: Validation output uses machine-readable finding objects with severity (BLOCK / WARN / INFO), not prose
-- [ ] **VALD-03**: BLOCK-severity findings prevent `gsd-plan-phase` from proceeding until resolved
-- [ ] **VALD-04**: WARN-severity findings are surfaced in PR description as deferred items
-- [ ] **VALD-05**: Pre-build validation re-surfaces all `[ASSUMPTION: ...]` blocks from SPEC.md at implementation start for developer awareness
-
-### Spec Floor Enforcement
-
-- [ ] **FLOR-01**: `spec-floor-check.sh` hook on `gsd-plan-phase` hard-blocks if `.planning/SPEC.md` is missing or lacks required sections (Overview, Acceptance Criteria, at minimum)
-- [ ] **FLOR-02**: `gsd-fast` and `gsd-quick` use a separate 3-field minimal spec format (what, why, acceptance-criteria) — checked as warning, not hard block
-- [ ] **FLOR-03**: Spec floor check completes in under 10 seconds to avoid blocking developer flow
-
-### PR Traceability
-
-- [ ] **TRAC-01**: Session record written at session start captures active spec-id, spec-version, and JIRA ticket reference
-- [ ] **TRAC-02**: `pr-traceability.sh` hook on `gsd-ship` auto-populates PR description with spec reference, requirement IDs covered, and link to SPEC.md
-- [ ] **TRAC-03**: PR traceability is machine-generated from session records — no developer annotation required
-- [ ] **TRAC-04**: SPEC.md Implementations section updated post-merge with PR URL and commit range
-
-### UAT Gate
-
-- [ ] **UATG-01**: `gsd-audit-uat` produces a UAT checklist derived from SPEC.md acceptance criteria — each criterion becomes a verifiable checklist item
-- [ ] **UATG-02**: UAT artifact (UAT.md) committed to `.planning/` with pass/fail per criterion and evidence notes
-- [ ] **UATG-03**: `uat-gate.sh` hook on `gsd-complete-milestone` blocks if UAT not run or any criterion marked FAIL
-- [ ] **UATG-04**: UAT validates against the pinned spec-version to prevent verification against a stale spec
+- [ ] **WFIN-01**: silver-spec workflow invokes SPEC.md reviewer after Step 7 (SPEC.md write) — step does not complete until 2 consecutive clean passes
+- [ ] **WFIN-02**: silver-spec workflow invokes DESIGN.md reviewer after Step 8 (DESIGN.md write) — step does not complete until 2 consecutive clean passes
+- [ ] **WFIN-03**: silver-spec workflow invokes REQUIREMENTS.md reviewer after Step 9 (REQUIREMENTS.md write) — step does not complete until 2 consecutive clean passes
+- [ ] **WFIN-04**: new-milestone workflow invokes ROADMAP.md reviewer after roadmapper completes — roadmap not approved until 2 consecutive clean passes
+- [ ] **WFIN-05**: new-milestone workflow invokes REQUIREMENTS.md reviewer after requirements definition — requirements not committed until 2 consecutive clean passes
+- [ ] **WFIN-06**: discuss-phase workflow invokes CONTEXT.md reviewer after context capture — context not committed until 2 consecutive clean passes
+- [ ] **WFIN-07**: plan-phase workflow invokes RESEARCH.md reviewer after researcher completes — research not committed until 2 consecutive clean passes
+- [ ] **WFIN-08**: silver-ingest workflow invokes INGESTION_MANIFEST.md reviewer after Step 7 — manifest not committed until 2 consecutive clean passes
+- [ ] **WFIN-09**: silver-feature Step 17.0 invokes UAT.md reviewer after UAT generation — UAT not committed until 2 consecutive clean passes
+- [ ] **WFIN-10**: §3a updated with complete artifact-reviewer mapping table covering all 12+ artifact types
 
 ## Validated (from previous milestones)
 
 - ✓ 7-layer enforcement architecture — v0.7.0
 - ✓ 8 quality dimension gates — v0.7.0
 - ✓ full-dev-cycle / devops-cycle workflows — v0.7.0
-- ✓ Pre-release quality gate §9 — v0.7.4
-- ✓ 4 gap-filling skills as enforced gates — v0.8.0
 - ✓ SENTINEL security hardening — v0.8.0
 - ✓ GSD-mainstay orchestration — v0.13.0
-- ✓ silver-bullet.md overhaul — v0.13.0
-- ✓ /silver smart router — v0.13.0
-- ✓ SB orchestration skills — v0.13.0
+- ✓ AI-driven spec creation, ingestion, validation — v0.14.0
+- ✓ Spec floor, PR traceability, UAT gate — v0.14.0
+- ✓ Step non-skip enforcement §3/§3a/§3d — v0.14.0
 
 ## v2 Requirements
 
-Deferred to future release. Tracked but not in current roadmap.
+Deferred to future release.
 
-### Advanced Ingestion
+### Advanced Review
 
-- **INGT-08**: Bidirectional JIRA sync — spec changes push status updates back to JIRA ticket
-- **INGT-09**: Confluence page ingestion as spec source (alongside Google Docs)
-- **INGT-10**: PDF attachment ingestion from JIRA (pending MCP support)
-
-### Advanced Validation
-
-- **VALD-06**: Cross-spec conflict detection across multiple SPEC.md files in same repo
-- **VALD-07**: Automated Requirements Traceability Matrix (RTM) generation
-- **VALD-08**: Regression UAT — re-run UAT for previously shipped specs affected by new changes
-
-### Advanced Multi-Repo
-
-- **REPO-05**: Automatic cross-repo sync notifications when main repo spec version changes
-- **REPO-06**: Shared design token synchronization between main and mobile repos
-
-### Granular Artifact Review Rounds (v0.15.0)
-
-- **ARVW-01**: Every artifact-producing step has a dedicated reviewer counterpart that runs iterative review rounds (2 consecutive clean passes required)
-- **ARVW-02**: New reviewer skills/agents created for: SPEC.md, DESIGN.md, REQUIREMENTS.md, ROADMAP.md, CONTEXT.md, RESEARCH.md, INGESTION_MANIFEST.md, UAT.md
-- **ARVW-03**: Each reviewer validates the artifact against its source inputs (requirements, user decisions, research) and produces structured findings
-- **ARVW-04**: Review rounds are wired into the producing workflow step — the step does not complete until the artifact passes 2 consecutive clean reviews
-- **ARVW-05**: Existing reviewers (plan-checker, code-reviewer, verifier, security-auditor) are formalized into the same iterative framework
+- **ARVW-09**: Cross-artifact consistency reviewer — validates SPEC.md ↔ DESIGN.md ↔ REQUIREMENTS.md are mutually consistent
+- **ARVW-10**: Review round analytics — track review round counts, common finding patterns, time-to-clean-pass metrics
+- **ARVW-11**: Configurable review depth (quick/standard/deep) per artifact type via .planning/config.json
 
 ## Out of Scope
 
 | Feature | Reason |
 |---------|--------|
-| Custom API integrations for JIRA/Figma/Google | MCP connectors handle all external access — no custom API code |
-| Modifying GSD plugin files | §8 plugin boundary — SB orchestrates, doesn't modify |
-| Automated Figma design creation | Figma MCP is read-only during beta; write capability deferred |
-| JIRA ticket creation from SB | One-way ingestion only for v0.14.0; bidirectional sync is v2 |
-| Nomadic Care-specific naming or file structures | SB provides generic patterns; teams customize via config |
-| Replacing GSD execution engine | GSD owns execution, SB orchestrates |
+| Modifying GSD plugin files | §8 plugin boundary — reviewers are SB skills, not GSD modifications |
+| Replacing existing GSD plan-checker/code-reviewer | Formalize into framework, don't replace |
+| Review rounds for non-artifact outputs (console output, git commits) | Artifacts only — measurable, file-based |
+| Blocking on INFO-level findings | Only ISSUE-level blocks; INFO is advisory |
 
 ## Traceability
 
-Which phases cover which requirements. Updated during roadmap creation.
-
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| SPEC-01 | Phase 12 | Pending |
-| SPEC-02 | Phase 12 | Pending |
-| SPEC-03 | Phase 12 | Pending |
-| SPEC-04 | Phase 12 | Pending |
-| SPEC-05 | Phase 12 | Pending |
-| ELIC-01 | Phase 12 | Pending |
-| ELIC-02 | Phase 12 | Pending |
-| ELIC-03 | Phase 12 | Pending |
-| ELIC-04 | Phase 12 | Pending |
-| ELIC-05 | Phase 12 | Pending |
-| ELIC-06 | Phase 12 | Pending |
-| FLOR-01 | Phase 12 | Pending |
-| FLOR-02 | Phase 12 | Pending |
-| FLOR-03 | Phase 12 | Pending |
-| INGT-01 | Phase 13 | Pending |
-| INGT-02 | Phase 13 | Pending |
-| INGT-03 | Phase 13 | Pending |
-| INGT-04 | Phase 13 | Pending |
-| INGT-05 | Phase 13 | Pending |
-| INGT-06 | Phase 13 | Pending |
-| INGT-07 | Phase 13 | Pending |
-| REPO-01 | Phase 13 | Pending |
-| REPO-02 | Phase 13 | Pending |
-| REPO-03 | Phase 13 | Pending |
-| REPO-04 | Phase 13 | Pending |
-| VALD-01 | Phase 14 | Pending |
-| VALD-02 | Phase 14 | Pending |
-| VALD-03 | Phase 14 | Pending |
-| VALD-04 | Phase 14 | Pending |
-| VALD-05 | Phase 14 | Pending |
-| TRAC-01 | Phase 14 | Pending |
-| TRAC-02 | Phase 14 | Pending |
-| TRAC-03 | Phase 14 | Pending |
-| TRAC-04 | Phase 14 | Pending |
-| UATG-01 | Phase 14 | Pending |
-| UATG-02 | Phase 14 | Pending |
-| UATG-03 | Phase 14 | Pending |
-| UATG-04 | Phase 14 | Pending |
+| BFIX-01 | — | Pending |
+| BFIX-02 | — | Pending |
+| BFIX-03 | — | Pending |
+| BFIX-04 | — | Pending |
+| ARFR-01 | — | Pending |
+| ARFR-02 | — | Pending |
+| ARFR-03 | — | Pending |
+| ARFR-04 | — | Pending |
+| ARVW-01 | — | Pending |
+| ARVW-02 | — | Pending |
+| ARVW-03 | — | Pending |
+| ARVW-04 | — | Pending |
+| ARVW-05 | — | Pending |
+| ARVW-06 | — | Pending |
+| ARVW-07 | — | Pending |
+| ARVW-08 | — | Pending |
+| EXRV-01 | — | Pending |
+| EXRV-02 | — | Pending |
+| EXRV-03 | — | Pending |
+| EXRV-04 | — | Pending |
+| WFIN-01 | — | Pending |
+| WFIN-02 | — | Pending |
+| WFIN-03 | — | Pending |
+| WFIN-04 | — | Pending |
+| WFIN-05 | — | Pending |
+| WFIN-06 | — | Pending |
+| WFIN-07 | — | Pending |
+| WFIN-08 | — | Pending |
+| WFIN-09 | — | Pending |
+| WFIN-10 | — | Pending |
 
 **Coverage:**
-- v1 requirements: 38 total
-- Mapped to phases: 38
-- Unmapped: 0 ✓
+- v1 requirements: 30 total
+- Mapped to phases: 0
+- Unmapped: 30 ⚠️
 
 ---
 *Requirements defined: 2026-04-09*
-*Last updated: 2026-04-09 after roadmap creation*
+*Last updated: 2026-04-09 after initial definition*
