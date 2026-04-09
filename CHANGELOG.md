@@ -2,7 +2,7 @@
 
 ## [Unreleased]
 
-## [0.15.2] — 2026-04-10
+## [0.15.3] — 2026-04-10
 
 ### Fixed — SENTINEL v2.3 Security Audit Findings
 - SENTINEL-9.1: Sanitize VALIDATION.md warn_items in pr-traceability.sh — strip markdown link syntax and wrap in code fence to prevent injection into PR descriptions
