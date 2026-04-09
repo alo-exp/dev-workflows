@@ -376,7 +376,7 @@ You MUST NOT:
 - Write runtime preference updates to §10 without updating both silver-bullet.md AND templates/silver-bullet.md.base atomically
 - Execute a GSD phase (plan, execute, verify) without producing the phase's required artifacts — manually driving execution that bypasses skill-based workflows is a §3 violation
 - Advance to the next GSD phase if the current phase is missing its required output artifacts (see §3d Post-Execution Artifact Requirements)
-- Minimize, abbreviate, or reduce the thoroughness of ANY step due to context window usage concerns — if context is running low, invoke `/compact` to free context, then continue the step at full thoroughness. A step executed at reduced quality is worse than a step executed after compaction.
+- Minimize, abbreviate, or reduce the thoroughness of ANY step due to context window usage concerns. When a step is expected to consume large context (e.g., SENTINEL security audits, full quality-gate sweeps, comprehensive code reviews), you MUST dispatch it as a subagent via the Agent tool so it runs in a fresh, independent context window. If subagent dispatch is not possible, ask the user to run `/compact` before proceeding, then continue the step at full thoroughness. A step executed at reduced quality is NEVER acceptable — dispatch to a subagent or compact first.
 
 If you believe a step is genuinely not applicable, you MUST:
 1. State which step you want to skip
