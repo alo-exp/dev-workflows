@@ -376,6 +376,7 @@ You MUST NOT:
 - Write runtime preference updates to §10 without updating both silver-bullet.md AND templates/silver-bullet.md.base atomically
 - Execute a GSD phase (plan, execute, verify) without producing the phase's required artifacts — manually driving execution that bypasses skill-based workflows is a §3 violation
 - Advance to the next GSD phase if the current phase is missing its required output artifacts (see §3d Post-Execution Artifact Requirements)
+- Minimize, abbreviate, or reduce the thoroughness of ANY step due to context window usage concerns — if context is running low, invoke `/compact` to free context, then continue the step at full thoroughness. A step executed at reduced quality is worse than a step executed after compaction.
 
 If you believe a step is genuinely not applicable, you MUST:
 1. State which step you want to skip
