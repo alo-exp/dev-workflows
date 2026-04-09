@@ -103,6 +103,14 @@ Deferred to future release. Tracked but not in current roadmap.
 - **REPO-05**: Automatic cross-repo sync notifications when main repo spec version changes
 - **REPO-06**: Shared design token synchronization between main and mobile repos
 
+### Granular Artifact Review Rounds (v0.15.0)
+
+- **ARVW-01**: Every artifact-producing step has a dedicated reviewer counterpart that runs iterative review rounds (2 consecutive clean passes required)
+- **ARVW-02**: New reviewer skills/agents created for: SPEC.md, DESIGN.md, REQUIREMENTS.md, ROADMAP.md, CONTEXT.md, RESEARCH.md, INGESTION_MANIFEST.md, UAT.md
+- **ARVW-03**: Each reviewer validates the artifact against its source inputs (requirements, user decisions, research) and produces structured findings
+- **ARVW-04**: Review rounds are wired into the producing workflow step — the step does not complete until the artifact passes 2 consecutive clean reviews
+- **ARVW-05**: Existing reviewers (plan-checker, code-reviewer, verifier, security-auditor) are formalized into the same iterative framework
+
 ## Out of Scope
 
 | Feature | Reason |
