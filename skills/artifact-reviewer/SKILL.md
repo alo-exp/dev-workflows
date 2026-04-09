@@ -28,10 +28,10 @@ If `--reviewer` is omitted, the reviewer is auto-detected from the artifact file
 | DESIGN.md | review-design | New SB reviewer |
 | REQUIREMENTS.md | review-requirements | New SB reviewer |
 | ROADMAP.md | review-roadmap | New SB reviewer |
-| CONTEXT.md | (Phase 16) | Not yet implemented |
-| RESEARCH.md | (Phase 16) | Not yet implemented |
-| INGESTION_MANIFEST.md | (Phase 16) | Not yet implemented |
-| UAT.md | (Phase 16) | Not yet implemented |
+| CONTEXT.md | review-context | New SB reviewer |
+| RESEARCH.md | review-research | New SB reviewer |
+| INGESTION_MANIFEST.md | review-ingestion-manifest | New SB reviewer |
+| UAT.md | review-uat | New SB reviewer |
 
 ## Orchestration Steps
 
