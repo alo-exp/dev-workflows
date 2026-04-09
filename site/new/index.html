@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <script>
   document.documentElement.setAttribute('data-design', localStorage.getItem('sb-design') || 'a');
-  document.documentElement.setAttribute('data-gradient', localStorage.getItem('sb-gradient') || '1');
 </script>
 <link rel="icon" type="image/png" href="../favicon.png">
 <title>Silver Bullet — Design Candidates</title>
@@ -26,7 +25,7 @@ html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
   --bg-card-hover:#162030;
   --bg-code:#060a0e;
   --bg-hero:linear-gradient(160deg,#040608 0%,#060c14 25%,#08101e 48%,#0a1226 62%,#070d1a 80%,#03050a 100%);
-  --chrome-gradient:linear-gradient(135deg,#00ff41 0%,#00ccff 50%,#a855f7 100%);
+  --chrome-gradient:linear-gradient(90deg,#1e1e1e 0%,#6a6a6a 14%,#c8c8c8 28%,#f5f5f5 40%,#ffffff 50%,#f0f0f0 60%,#b8b8b8 74%,#606060 88%,#1a1a1a 100%);
   --accent:#00ff41;
   --accent-light:#39ff66;
   --accent-glow:rgba(0,255,65,0.18);
@@ -68,7 +67,7 @@ html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
   --bg-card-hover:#162030;
   --bg-code:#060a0e;
   --bg-hero:linear-gradient(160deg,#040608 0%,#060c14 25%,#08101e 48%,#0a1226 62%,#070d1a 80%,#03050a 100%);
-  --chrome-gradient:linear-gradient(135deg,#00ff41 0%,#00ccff 50%,#a855f7 100%);
+  --chrome-gradient:linear-gradient(90deg,#1e1e1e 0%,#6a6a6a 14%,#c8c8c8 28%,#f5f5f5 40%,#ffffff 50%,#f0f0f0 60%,#b8b8b8 74%,#606060 88%,#1a1a1a 100%);
   --accent:#00ff41;
   --accent-light:#39ff66;
   --accent-glow:rgba(0,255,65,0.18);
@@ -110,7 +109,7 @@ html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
   --bg-card-hover:#162030;
   --bg-code:#060a0e;
   --bg-hero:linear-gradient(160deg,#040608 0%,#060c14 25%,#08101e 48%,#0a1226 62%,#070d1a 80%,#03050a 100%);
-  --chrome-gradient:linear-gradient(135deg,#00ff41 0%,#00ccff 50%,#a855f7 100%);
+  --chrome-gradient:linear-gradient(90deg,#1e1e1e 0%,#6a6a6a 14%,#c8c8c8 28%,#f5f5f5 40%,#ffffff 50%,#f0f0f0 60%,#b8b8b8 74%,#606060 88%,#1a1a1a 100%);
   --accent:#00ff41;
   --accent-light:#39ff66;
   --accent-glow:rgba(0,255,65,0.18);
@@ -152,7 +151,7 @@ html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
   --bg-card-hover:#162030;
   --bg-code:#060a0e;
   --bg-hero:linear-gradient(160deg,#040608 0%,#060c14 25%,#08101e 48%,#0a1226 62%,#070d1a 80%,#03050a 100%);
-  --chrome-gradient:linear-gradient(135deg,#00ff41 0%,#00ccff 50%,#a855f7 100%);
+  --chrome-gradient:linear-gradient(90deg,#1e1e1e 0%,#6a6a6a 14%,#c8c8c8 28%,#f5f5f5 40%,#ffffff 50%,#f0f0f0 60%,#b8b8b8 74%,#606060 88%,#1a1a1a 100%);
   --accent:#00ff41;
   --accent-light:#39ff66;
   --accent-glow:rgba(0,255,65,0.18);
@@ -194,7 +193,7 @@ html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
   --bg-card-hover:#162030;
   --bg-code:#060a0e;
   --bg-hero:linear-gradient(160deg,#040608 0%,#060c14 25%,#08101e 48%,#0a1226 62%,#070d1a 80%,#03050a 100%);
-  --chrome-gradient:linear-gradient(135deg,#00ff41 0%,#00ccff 50%,#a855f7 100%);
+  --chrome-gradient:linear-gradient(90deg,#1e1e1e 0%,#6a6a6a 14%,#c8c8c8 28%,#f5f5f5 40%,#ffffff 50%,#f0f0f0 60%,#b8b8b8 74%,#606060 88%,#1a1a1a 100%);
   --accent:#00ff41;
   --accent-light:#39ff66;
   --accent-glow:rgba(0,255,65,0.18);
@@ -228,57 +227,6 @@ html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
 }
 
 
-/* ───── GRADIENT OVERRIDES — Mirror Chrome L→R variants ───── */
-/* G1 — Classic: single bright centred hotspot */
-[data-gradient="1"]{
-  --chrome-gradient:linear-gradient(90deg,
-    #1e1e1e 0%,#6a6a6a 14%,#c8c8c8 28%,#f5f5f5 40%,#ffffff 50%,
-    #f0f0f0 60%,#b8b8b8 74%,#606060 88%,#1a1a1a 100%);
-}
-/* G2 — Double-glint: two shimmer peaks like bevelled metal */
-[data-gradient="2"]{
-  --chrome-gradient:linear-gradient(90deg,
-    #2a2a2a 0%,#909090 10%,#ffffff 20%,#c0c0c0 30%,
-    #707070 42%,#b0b0b0 54%,#ffffff 66%,
-    #d0d0d0 78%,#808080 90%,#222222 100%);
-}
-/* G3 — Wide spread: slower fade, longer bright zone */
-[data-gradient="3"]{
-  --chrome-gradient:linear-gradient(90deg,
-    #111111 0%,#505050 12%,#a8a8a8 24%,#e8e8e8 36%,#ffffff 44%,
-    #ffffff 56%,#e0e0e0 66%,#a0a0a0 78%,#484848 90%,#0e0e0e 100%);
-}
-
-/* ───── GRADIENT SWITCHER BAR ───── */
-.gradient-switcher{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  height:36px;
-  display:flex;align-items:center;justify-content:center;gap:8px;
-  background:rgba(4,4,8,.88);
-  border-bottom:1px solid rgba(255,255,255,.05);
-  backdrop-filter:blur(12px);
-  padding:0 16px;
-  font-family:'Inter',system-ui,sans-serif;
-}
-.gs-label{
-  font-size:.65rem;font-weight:600;letter-spacing:.1em;
-  text-transform:uppercase;color:rgba(255,255,255,.25);
-  margin-right:4px;
-}
-.gs-btn{
-  padding:4px 14px;border-radius:999px;font-size:.7rem;font-weight:600;
-  border:1px solid rgba(255,255,255,.1);background:transparent;
-  color:rgba(255,255,255,.4);cursor:pointer;transition:all .2s;
-  letter-spacing:.02em;
-}
-.gs-btn:hover{border-color:rgba(255,255,255,.28);color:rgba(255,255,255,.7)}
-[data-gradient="1"] .gs-btn[data-g="1"],
-[data-gradient="2"] .gs-btn[data-g="2"],
-[data-gradient="3"] .gs-btn[data-g="3"]{
-  background:rgba(255,255,255,.1);
-  border-color:rgba(220,220,220,.5);
-  color:#e8e8e8;
-}
 
 /* ───── THEME TRANSITION ───── */
 body,nav,section,.feature-card,.skill-card,.platform-pill,.install-block,.code-block,.arch-diagram,.callout,.comparison-table td,.comparison-table th,.enforcement-block{
@@ -291,7 +239,7 @@ body{
   color:var(--text-primary);
   line-height:1.7;
   overflow-x:hidden;
-  padding-top:36px;
+  padding-top:0;
 }
 
 /* ───── UTILITIES ───── */
@@ -316,7 +264,7 @@ body{
 
 /* ───── NAV ───── */
 nav{
-  position:fixed;top:36px;left:0;right:0;z-index:100;
+  position:fixed;top:0;left:0;right:0;z-index:100;
   background:var(--nav-bg);
   backdrop-filter:blur(20px);
   border-bottom:1px solid var(--border);
@@ -727,16 +675,6 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
 </style>
 </head>
 <body>
-
-<!-- ────── GRADIENT SWITCHER ────── -->
-<div class="gradient-switcher">
-  <span class="gs-label">Logo gradient:</span>
-  <button class="gs-btn" data-g="1" onclick="setGradient('1')">1 — Mirror Chrome</button>
-  <div class="ds-divider"></div>
-  <button class="gs-btn" data-g="2" onclick="setGradient('2')">2 — Brushed Steel</button>
-  <div class="ds-divider"></div>
-  <button class="gs-btn" data-g="3" onclick="setGradient('3')">3 — Liquid Mercury</button>
-</div>
 
 
 <!-- ────── NAV ────── -->
@@ -1360,14 +1298,6 @@ function setDesign(d) {
   document.documentElement.setAttribute('data-design', d);
   localStorage.setItem('sb-design', d);
 }
-function setGradient(g) {
-  document.documentElement.setAttribute('data-gradient', g);
-  localStorage.setItem('sb-gradient', g);
-}
-(function(){
-  var g = localStorage.getItem('sb-gradient') || '1';
-  document.documentElement.setAttribute('data-gradient', g);
-})();
 
 // ── Scroll-triggered fade-in ──
 const observer = new IntersectionObserver((entries) => {
