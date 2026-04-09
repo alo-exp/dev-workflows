@@ -266,8 +266,15 @@ Do NOT pass `{owner}` or `{repo}` to any shell command (`gh api`, `curl`) until 
 
 **Fallback — GitHub raw URL (if gh CLI auth fails):**
 
+Detect the default branch first, then fetch:
+
 ```bash
-curl -sL "https://raw.githubusercontent.com/{owner}/{repo}/main/.planning/SPEC.md" > .planning/SPEC.main.md
+DEFAULT_BRANCH=$(/opt/homebrew/bin/gh api "repos/{owner}/{repo}" --jq '.default_branch' 2>/dev/null || echo "main")
+curl -sfL "https://raw.githubusercontent.com/{owner}/{repo}/${DEFAULT_BRANCH}/.planning/SPEC.md" > .planning/SPEC.main.md
+if [[ ! -s .planning/SPEC.main.md ]]; then
+  # Try master as last resort
+  curl -sfL "https://raw.githubusercontent.com/{owner}/{repo}/master/.planning/SPEC.md" > .planning/SPEC.main.md
+fi
 ```
 
 **Annotate as read-only:**
@@ -287,6 +294,28 @@ grep -m1 '^spec-version:' .planning/SPEC.main.md | awk '{print $2}'
 ```
 
 Display: "Fetched SPEC.md (v{version}) from {owner}/{repo}."
+
+**Version mismatch diff:**
+
+When the fetched spec version differs from the local `.planning/SPEC.md` version, show a
+content diff summary so the user can assess what changed — not just version numbers:
+
+```bash
+LOCAL_VER=$(grep -m1 '^spec-version:' .planning/SPEC.md 2>/dev/null | awk '{print $2}')
+REMOTE_VER=$(grep -m1 '^spec-version:' .planning/SPEC.main.md | awk '{print $2}')
+if [[ "$LOCAL_VER" != "$REMOTE_VER" ]]; then
+  echo ""
+  echo "--- SPEC VERSION MISMATCH ---"
+  echo "Local:  v${LOCAL_VER:-unknown}"
+  echo "Remote: v${REMOTE_VER:-unknown}"
+  echo ""
+  echo "Changes in remote spec:"
+  diff --unified=1 .planning/SPEC.md .planning/SPEC.main.md | head -60 || true
+  echo "--- END DIFF ---"
+  echo ""
+  echo "Review the diff above. To accept remote changes, copy SPEC.main.md over SPEC.md."
+fi
+```
 
 **Important constraint:** Do NOT modify `.planning/SPEC.main.md` after the initial fetch except on explicit re-run with `--source-url`. It is a read-only cache of the remote spec.
 

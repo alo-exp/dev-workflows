@@ -112,6 +112,17 @@ Collect all answers and assumption blocks for Steps 5-8.
 - Turn 7: "I'm assuming error messages follow [language/tone]"
 - Turn 8: "I'm assuming [data entity] already exists in the system"
 
+**Minimum turn enforcement:**
+
+Maintain an internal turn counter starting at 0. Increment after each completed turn.
+You MUST NOT proceed to Step 7 (Write SPEC.md) until the turn counter reaches at least 4.
+If the user requests to skip remaining turns before turn 4, respond:
+
+> "Spec elicitation requires a minimum of 4 turns to ensure adequate coverage. We've completed {N} so far. Let's continue with Turn {N+1}."
+
+After turn 4, remaining turns may be condensed if the user explicitly requests it and all
+critical domains (Turns 1-4: problem, scope, user stories, acceptance criteria) are covered.
+
 **Warning signs:** A completed elicitation with zero `[ASSUMPTION]` blocks is suspicious for any non-trivial feature. Surface at least one assumption check per domain.
 
 ## Step 4: Artifact Injection (conditional -- only if URL provided in Step 1)
@@ -227,7 +238,8 @@ Do NOT proceed to Step 10 until /artifact-reviewer reports 2 consecutive clean p
 Stage and commit all spec artifacts:
 
 ```bash
-git add .planning/SPEC.md .planning/REQUIREMENTS.md
+git add .planning/SPEC.md
+git diff --quiet .planning/REQUIREMENTS.md 2>/dev/null || git add .planning/REQUIREMENTS.md
 git add .planning/DESIGN.md 2>/dev/null || true
 git commit -m "spec: [feature-slug] v{spec-version} draft"
 ```

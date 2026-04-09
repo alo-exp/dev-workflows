@@ -41,9 +41,9 @@ cmd=$(printf '%s' "$input" | jq -r '.tool_input.command // ""')
 is_plan_phase=false
 is_fast=false
 
-if printf '%s' "$cmd" | grep -qE '\bgsd-plan-phase\b|\bgsd[- ]plan[- ]phase\b'; then
+if printf '%s' "$cmd" | grep -qwE 'gsd-plan-phase|gsd[- ]plan[- ]phase'; then
   is_plan_phase=true
-elif printf '%s' "$cmd" | grep -qE '\bgsd-fast\b|\bgsd[- ]fast\b|\bgsd[- ]quick\b'; then
+elif printf '%s' "$cmd" | grep -qwE 'gsd-fast|gsd[- ]fast|gsd[- ]quick'; then
   is_fast=true
 fi
 
@@ -60,7 +60,7 @@ if [[ "$is_plan_phase" == true ]]; then
     exit 0
   fi
   for section in "## Overview" "## Acceptance Criteria"; do
-    if ! grep -q "^${section}" "$SPEC"; then
+    if ! grep -q "^${section}$" "$SPEC"; then
       emit_block "SPEC FLOOR VIOLATION: .planning/SPEC.md is missing required section: ${section}. Run /silver:spec to complete the spec before planning."
       exit 0
     fi
