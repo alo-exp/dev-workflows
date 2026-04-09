@@ -591,7 +591,7 @@ function applyTheme(dark){
   localStorage.setItem('silver-bullet-theme',dark?'dark':'light');
 }
 function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-theme')!=='dark')}
-(function(){const s=localStorage.getItem('silver-bullet-theme');applyTheme(s?s==='dark':true)})();
+(function(){const s=localStorage.getItem('silver-bullet-theme');applyTheme(s==='light'?false:true)})();
 const headings=document.querySelectorAll('.doc-content h2[id], .doc-content .step-card .step-title[id]');
 const links=document.querySelectorAll('.sidebar-nav a');
 window.addEventListener('scroll',()=>{let curr='';document.querySelectorAll('[id]').forEach(h=>{if(window.scrollY>=h.offsetTop-120)curr=h.id});links.forEach(l=>{const href=l.getAttribute('href');l.classList.toggle('active',href==='#'+curr)})},{passive:true});

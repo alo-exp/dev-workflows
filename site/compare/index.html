@@ -771,7 +771,7 @@ function applyTheme(dark){
   localStorage.setItem('silver-bullet-theme',dark?'dark':'light');
 }
 function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-theme')!=='dark')}
-(function(){const s=localStorage.getItem('silver-bullet-theme');applyTheme(s?s==='dark':true)})();
+(function(){const s=localStorage.getItem('silver-bullet-theme');applyTheme(s==='light'?false:true)})();
 </script>
 </body>
 </html>

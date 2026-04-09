@@ -304,7 +304,7 @@ function applyTheme(dark){
   localStorage.setItem('silver-bullet-theme',dark?'dark':'light');
 }
 function toggleTheme(){applyTheme(document.documentElement.getAttribute('data-theme')!=='dark')}
-(function(){const s=localStorage.getItem('silver-bullet-theme');applyTheme(s?s==='dark':true)})();
+(function(){const s=localStorage.getItem('silver-bullet-theme');applyTheme(s==='light'?false:true)})();
 lucide.createIcons();
 const links=document.querySelectorAll('.sidebar-nav a');
 window.addEventListener('scroll',()=>{let curr='';document.querySelectorAll('[id]').forEach(h=>{if(window.scrollY>=h.offsetTop-120)curr=h.id});links.forEach(l=>{l.classList.toggle('active',l.getAttribute('href')==='#'+curr)})},{passive:true});
