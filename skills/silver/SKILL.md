@@ -54,6 +54,7 @@ Wait for response, then proceed.
 | "root cause", "session failed", "what broke", "reconstruct" | `silver:forensics` | Post-mortem investigation |
 | "release notes", "github release", "cut release", "tag release" | `silver:create-release` | Release artifact creation |
 | "which IaC tool", "terraform vs pulumi", "which cloud skill" | `silver:devops-skill-router` | IaC tool routing |
+| "ingest", "import", "jira", "figma", "pull ticket", "cross-repo", "fetch spec from" | `silver:ingest` | Ingest external artifacts (JIRA, Figma, Google Docs) into SPEC.md + DESIGN.md, or fetch cross-repo spec |
 
 **"Ship" disambiguation:**
 
@@ -95,7 +96,8 @@ If input matches two or more destinations with similar confidence, use AskUserQu
 > E. `silver:research` — technology decision or spike
 > F. `silver:release` — publish a milestone release
 > G. `silver:fast` — trivial one-liner or config change
-> H. Something else — describe it
+> H. `silver:ingest` — ingest JIRA, Figma, Google Docs, or fetch cross-repo spec
+> I. Something else — describe it
 >
 > (Enter the letter)
 
