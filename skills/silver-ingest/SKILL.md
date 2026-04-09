@@ -242,6 +242,18 @@ Record the Google Doc entry in the in-memory artifact list.
 
 Extract `{owner}` and `{repo}` from the URL.
 
+**Input validation (BFIX-01 — shell injection prevention):**
+
+After extracting `{owner}/{repo}` from the URL, validate the combined string against:
+```bash
+if ! printf '%s' "{owner}/{repo}" | grep -qE '^[a-zA-Z0-9._-]+/[a-zA-Z0-9._-]+$'; then
+  echo "ERROR: Invalid repository identifier. Must match owner/repo with alphanumeric characters, dots, hyphens, underscores only."
+  # Record failed status and skip to Step 7
+fi
+```
+
+Do NOT pass `{owner}` or `{repo}` to any shell command (`gh api`, `curl`) until this validation passes. If validation fails, record `status: failed` with error "Invalid repository identifier" in the in-memory artifact list and skip to Step 7 (manifest write).
+
 **Fetch SPEC.md via gh CLI (primary path):**
 
 ```bash
