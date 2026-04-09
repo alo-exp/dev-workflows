@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-trap 'printf "{\"hookSpecificOutput\":{\"message\":\"⚠️ phase-archive: hook error — check jq/input format\"}}" ; exit 0' ERR
+trap 'printf "{\"hookSpecificOutput\":{\"message\":\"⚠️ phase-archive: archive failed — blocking clear to prevent data loss\"},\"decision\":\"block\"}" ; exit 0' ERR
 
 # PreToolUse hook (matcher: Bash)
 # Intercepts gsd-tools.cjs phases clear before it runs.
@@ -23,8 +23,8 @@ input=$(cat)
 cmd=$(printf '%s' "$input" | jq -r '.tool_input.command // ""')
 [[ -z "$cmd" ]] && exit 0
 
-# Only trigger on commands that contain "phases clear"
-if ! printf '%s' "$cmd" | grep -q "phases clear"; then
+# Only trigger on gsd-tools phases clear commands
+if ! printf '%s' "$cmd" | grep -qE 'gsd-tools[^"]*phases\s+clear'; then
   exit 0
 fi
 
@@ -61,6 +61,12 @@ fi
 mkdir -p "$ARCHIVE_DIR"
 
 # Copy all phase directories (cp -r preserves structure; clear runs after we exit 0)
+# Skip if archive already exists (avoid overwriting prior archive on repeated runs)
+if [[ -n "$(ls -A "$ARCHIVE_DIR" 2>/dev/null)" ]]; then
+  printf '{"hookSpecificOutput":{"message":"Phase archive: .planning/archive/%s/ already exists — skipping to avoid overwrite."}}' "$milestone_slug"
+  exit 0
+fi
+
 for phase_dir in "$PHASES_DIR"/*/; do
   [[ -d "$phase_dir" ]] || continue
   phase_name=$(basename "$phase_dir")
