@@ -200,13 +200,13 @@ Use the Glob tool to search for:
 `~/.claude/plugins/cache/multai/skills/orchestrator/SKILL.md`
 
 If no file found, use AskUserQuestion:
-- Question: "❌ **MultAI plugin is not installed.** MultAI is required for `silver:research` and multi-AI perspectives — these workflows will not function without it.\n\nPlease install the MultAI plugin from the Claude Code plugin marketplace (`/plugin install`), then come back.\n\nReady to continue?"
+- Question: "⚠️ **MultAI plugin is not installed.** MultAI is optional but recommended — it enables `silver:research` and multi-AI perspectives.\n\nInstall command (inside Claude Code):\n```\n/plugin install\n```\n(search for MultAI in the marketplace)\n\nWould you like to install it now, or continue without it?"
 - Options:
-  - "A. Yes, I've installed MultAI — continue"
-  - "B. Stop for now"
+  - "A. I'll install it now — pause and wait"
+  - "B. Skip it and continue without"
 
-If A: re-run the Glob check. If still not found, STOP with: `❌ MultAI plugin still not found. Please install it and re-run /silver:init.`
-If B: STOP.
+If A: wait, then re-run the Glob check and confirm. Continue regardless of result.
+If B: continue without stopping.
 
 ### 1.7 Anthropic Engineering plugin
 
