@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="../../favicon.png">
+<link rel="shortcut icon" href="../../favicon.ico">
+<title>Automatic Cost Optimization — Silver Bullet Help</title>
+<meta name="description" content="How Silver Bullet automatically routes each GSD subagent to the right model tier — Opus for design and review, Sonnet for execution and research, Haiku for structured output — without any manual switching.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
+:root{
+  --bg-page:#f6f4f0;
+  --bg-card:#ffffff;
+  --bg-card-hover:#f0ece6;
+  --bg-code:#ece8e0;
+  --bg-hero:linear-gradient(160deg,#eae4da 0%,#eee8de 25%,#f4f0e8 48%,#f6f2ea 62%,#f0ece4 80%,#eae6dc 100%);
+  --chrome-gradient:linear-gradient(90deg,#2a2a2a 0%,#585858 9%,#383838 18%,#282828 27%,#505050 36%,#444444 43%,#303030 51%,#484848 59%,#343434 68%,#242424 76%,#404040 86%,#1e1e1e 100%);
+  --accent:#007a20;--accent-light:#005c18;--accent-glow:rgba(0,122,32,.18);
+  --accent2:#006fa8;--accent3:#6b21d4;
+  --green:#007a20;--amber:#a86000;--red:#aa1830;--cyan:#006fa8;
+  --text-primary:#050f08;--text-secondary:#0d3a1a;--text-dim:#285c38;
+  --border:#8cc4a4;--border-hover:#4a9464;
+  --radius:12px;--radius-lg:20px;--radius-sm:8px;
+  --font-sans:'Space Grotesk',system-ui,sans-serif;
+  --font-mono:'Fira Code',monospace;
+  --shadow-glow:0 0 40px rgba(0,170,46,.08);
+  --nav-bg:rgba(246,244,240,.92);
+  --section-alt:rgba(236,230,220,.55);
+  --table-row-hover:rgba(0,170,46,.03);
+  --skill-phase-border:rgba(184,221,200,.9);
+}
+[data-theme="dark"]{
+  --bg-page:#080c10;
+  --bg-card:#0f1520;
+  --bg-card-hover:#162030;
+  --bg-code:#060a0e;
+  --bg-hero:linear-gradient(160deg,#040608 0%,#060c14 25%,#08101e 48%,#0a1226 62%,#070d1a 80%,#03050a 100%);
+  --chrome-gradient:linear-gradient(90deg,#a8a8a8 0%,#ffffff 9%,#c0c0c0 18%,#909090 27%,#efefef 36%,#ffffff 43%,#cccccc 51%,#909090 59%,#e8e8e8 68%,#b8b8b8 76%,#888888 86%,#a0a0a0 100%);
+  --accent:#00ff41;
+  --accent-light:#39ff66;
+  --accent-glow:rgba(0,255,65,0.18);
+  --accent2:#00ccff;
+  --accent3:#a855f7;
+  --green:#00ff41;
+  --amber:#ffaa00;
+  --red:#ff4466;
+  --cyan:#00ccff;
+  --text-primary:#c8f0d8;
+  --text-secondary:#7abf90;
+  --text-dim:#4a7a5c;
+  --border:#112218;
+  --border-hover:#1a3824;
+  --shadow-lg:0 20px 60px rgba(0,0,0,.7);
+  --shadow-glow:0 0 40px rgba(0,255,65,.06);
+  --nav-bg:rgba(8,12,16,.92);
+  --nav-mobile-bg:rgba(8,12,16,.99);
+  --section-alt:rgba(12,20,16,.7);
+  --table-row-hover:rgba(0,255,65,.02);
+  --skill-phase-border:rgba(17,34,24,.9);
+  --btn-gradient:linear-gradient(135deg,#00cc33 0%,#009922 50%,#00cc33 100%);
+  --btn-gradient-hover:linear-gradient(135deg,#00ff41 0%,#00cc33 50%,#00ff41 100%);
+  --hero-glow:rgba(0,255,65,0.06);
+  --card-top:rgba(0,255,65,0.6);
+}
+body,nav{transition:background .25s,background-color .25s,border-color .25s,color .25s}
+body{font-family:var(--font-sans);background:var(--bg-page);color:var(--text-primary);line-height:1.7;overflow-x:hidden}
+.container{max-width:860px;margin:0 auto;padding:0 24px}
+.container-wide{max-width:1100px;margin:0 auto;padding:0 24px}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:var(--nav-bg);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);padding:0 24px}
+nav .nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{font-weight:800;font-size:1rem;color:var(--text-primary);text-decoration:none;letter-spacing:-.02em}
+.nav-breadcrumb{font-size:.85rem;color:var(--text-secondary);display:flex;align-items:center;gap:8px}
+.nav-breadcrumb a{color:var(--text-secondary);text-decoration:none}
+.nav-breadcrumb a:hover{color:var(--accent-light)}
+.nav-breadcrumb .sep{color:var(--text-dim)}
+.theme-btn{background:none;border:1px solid var(--border);border-radius:8px;padding:6px 10px;cursor:pointer;color:var(--text-secondary);font-size:.9rem;transition:all .2s}
+.theme-btn:hover{border-color:var(--accent);color:var(--accent-light)}
+.page-hero{background:var(--bg-hero);padding:120px 24px 64px;position:relative;overflow:hidden}
+.page-hero::before{content:'';position:absolute;top:-200px;right:-200px;width:500px;height:500px;border-radius:50%;background:radial-gradient(circle,rgba(107,114,128,.08) 0%,transparent 70%)}
+.page-hero .container{position:relative;z-index:1}
+.breadcrumb-nav{font-size:.82rem;color:var(--text-dim);margin-bottom:24px;display:flex;align-items:center;gap:8px}
+.breadcrumb-nav a{color:var(--text-dim);text-decoration:none}
+.breadcrumb-nav a:hover{color:var(--accent-light)}
+.page-hero h1{font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:900;letter-spacing:-.04em;margin-bottom:16px;line-height:1.1}
+.page-hero p{font-size:1rem;color:var(--text-secondary);max-width:560px;line-height:1.7}
+.doc-layout{display:grid;grid-template-columns:220px 1fr;gap:48px;padding:64px 0}
+@media(max-width:768px){.doc-layout{grid-template-columns:1fr}}
+.doc-sidebar{position:sticky;top:88px;height:fit-content}
+.sidebar-nav{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:2px}
+.sidebar-nav li a{display:block;padding:7px 12px;border-radius:var(--radius-sm);font-size:.85rem;color:var(--text-secondary);text-decoration:none;transition:all .15s}
+.sidebar-nav li a:hover{background:var(--bg-code);color:var(--text-primary)}
+.sidebar-nav li a.active{background:rgba(107,114,128,.1);color:var(--accent-light);font-weight:600}
+.sidebar-nav .sidebar-section{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--text-dim);padding:16px 12px 4px;margin-top:8px}
+@media(max-width:768px){.doc-sidebar{display:none}}
+.doc-content h2{font-size:1.5rem;font-weight:800;letter-spacing:-.03em;margin-bottom:16px;margin-top:48px;padding-top:16px}
+.doc-content h2:first-child{margin-top:0}
+.doc-content h3{font-size:1.05rem;font-weight:700;margin-bottom:10px;margin-top:28px;color:var(--text-primary)}
+.doc-content p{margin-bottom:16px;color:var(--text-secondary);line-height:1.8}
+.doc-content ul,.doc-content ol{margin-bottom:16px;padding-left:20px;color:var(--text-secondary)}
+.doc-content li{margin-bottom:6px;line-height:1.7}
+.doc-content strong{color:var(--text-primary)}
+.doc-content code{font-family:var(--font-mono);font-size:.82em;background:var(--bg-code);padding:2px 6px;border-radius:4px;color:var(--accent-light)}
+.callout{border-radius:var(--radius);padding:20px 24px;margin-bottom:24px;display:flex;gap:14px;align-items:flex-start}
+.callout-info{background:rgba(107,114,128,.08);border:1px solid rgba(107,114,128,.2)}
+.callout-tip{background:rgba(5,150,105,.06);border:1px solid rgba(5,150,105,.2)}
+.callout-warn{background:rgba(217,119,6,.06);border:1px solid rgba(217,119,6,.2)}
+.callout-icon{font-size:1.1rem;flex-shrink:0;margin-top:1px}
+.callout-body{font-size:.875rem;color:var(--text-secondary);line-height:1.7}
+.callout-body strong{color:var(--text-primary)}
+.divider{height:1px;background:var(--border);margin:40px 0}
+.ref-table{width:100%;border-collapse:collapse;margin-bottom:24px;font-size:.875rem}
+.ref-table th{text-align:left;padding:10px 14px;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);border-bottom:2px solid var(--border);white-space:nowrap}
+.ref-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text-secondary);line-height:1.5;vertical-align:top}
+.ref-table td:first-child{font-family:var(--font-mono);font-size:.82rem;color:var(--accent-light);white-space:nowrap;font-weight:600}
+.ref-table tr:last-child td{border-bottom:none}
+.ref-table tr:hover td{background:var(--table-row-hover)}
+.ref-table .cat-row td{font-family:var(--font-sans);font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);background:var(--section-alt);padding:6px 14px}
+.tier-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:.72rem;font-weight:700;letter-spacing:.04em}
+.tier-opus{background:rgba(107,33,168,.1);color:#7c3aed;border:1px solid rgba(107,33,168,.2)}
+.tier-sonnet{background:rgba(6,182,212,.1);color:#0891b2;border:1px solid rgba(6,182,212,.2)}
+.tier-haiku{background:rgba(5,150,105,.1);color:#059669;border:1px solid rgba(5,150,105,.2)}
+.tier-session{background:rgba(107,114,128,.1);color:#6b7280;border:1px solid rgba(107,114,128,.2)}
+[data-theme="dark"] .tier-opus{color:#c084fc;border-color:rgba(192,132,252,.25);background:rgba(192,132,252,.1)}
+[data-theme="dark"] .tier-sonnet{color:#22d3ee;border-color:rgba(34,211,238,.25);background:rgba(34,211,238,.1)}
+[data-theme="dark"] .tier-haiku{color:#34d399;border-color:rgba(52,211,153,.25);background:rgba(52,211,153,.1)}
+[data-theme="dark"] .tier-session{color:#9ca3af;border-color:rgba(156,163,175,.2);background:rgba(156,163,175,.08)}
+.flow-diagram{background:var(--bg-code);border:1px solid var(--border);border-radius:var(--radius);padding:28px 32px;margin-bottom:24px;font-family:var(--font-mono);font-size:.82rem;line-height:2;color:var(--text-secondary)}
+.flow-diagram .flow-label{color:var(--text-dim);font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;margin-bottom:4px;font-family:var(--font-sans)}
+.flow-diagram .flow-tier{color:var(--accent-light);font-weight:600}
+.flow-diagram .flow-arrow{color:var(--text-dim)}
+.code-block{background:var(--bg-code);border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px 24px;font-family:var(--font-mono);font-size:.82rem;line-height:1.9;color:var(--text-secondary);overflow-x:auto;white-space:pre-wrap;margin-bottom:20px}
+.code-block .comment{color:var(--text-dim)}
+.code-block .key{color:var(--accent-light)}
+.code-block .val{color:var(--amber)}
+.page-nav-bottom{display:flex;justify-content:space-between;margin-top:56px;padding-top:32px;border-top:1px solid var(--border)}
+.page-nav-bottom a{display:flex;flex-direction:column;gap:4px;text-decoration:none;max-width:220px}
+.pnb-label{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;font-weight:600;color:var(--text-dim)}
+.pnb-title{font-size:.95rem;font-weight:700;color:var(--accent-light)}
+footer{border-top:1px solid var(--border);padding:40px 0;color:var(--text-dim);font-size:.85rem}
+.footer-inner{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+footer a{color:var(--text-secondary);text-decoration:none}
+footer a:hover{color:var(--accent-light)}
+.footer-links{display:flex;gap:24px}
+@media(max-width:600px){.footer-inner{flex-direction:column;align-items:flex-start;gap:12px}.footer-links{flex-wrap:wrap;gap:16px}}
+.nav-search-wrap{position:relative}
+.nav-search-input{width:180px;padding:7px 14px;border-radius:999px;border:1px solid var(--border);background:var(--bg-code);color:var(--text-primary);font-size:.82rem;font-family:var(--font-sans);outline:none;transition:border-color .2s,width .2s}
+.nav-search-input:focus{border-color:var(--accent);width:240px}
+.nav-search-input::placeholder{color:var(--text-dim)}
+.nav-search-results{position:absolute;top:calc(100% + 8px);right:0;width:340px;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 20px 60px rgba(0,0,0,.12);z-index:200;max-height:420px;overflow-y:auto;display:none}
+.nav-search-results.open{display:block}
+.nsr-item{display:flex;flex-direction:column;gap:3px;padding:12px 16px;text-decoration:none;border-bottom:1px solid var(--border);transition:background .15s;color:inherit}
+.nsr-item:last-child{border-bottom:none}
+.nsr-item:hover,.nsr-item.nsr-active{background:var(--bg-code)}
+.nsr-page{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.07em;color:var(--accent-light)}
+.nsr-title{font-size:.88rem;font-weight:600;color:var(--text-primary)}
+.nsr-excerpt{font-size:.78rem;color:var(--text-dim);line-height:1.4}
+@media(max-width:768px){.nav-search-wrap{display:none}}
+svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;stroke-width:1.5;stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div style="display:flex;align-items:center;gap:16px">
+      <a href="../../" class="nav-logo">Silver Bullet</a>
+      <span class="nav-breadcrumb"><span class="sep">/</span><a href="../">Help</a><span class="sep">/</span><a href="./">Concepts</a><span class="sep">/</span> Cost Optimization</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px">
+      <div class="nav-search-wrap">
+        <input type="text" class="nav-search-input" id="nav-search-input" placeholder="Search docs…" autocomplete="off">
+        <div class="nav-search-results" id="nav-search-results"></div>
+      </div>
+      <button class="theme-btn" onclick="toggleTheme()" id="theme-btn" aria-label="Toggle theme" style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;padding:0">
+        <span id="icon-sun" style="display:none"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>
+        <span id="icon-moon"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<div class="page-hero">
+  <div class="container">
+    <div class="breadcrumb-nav">
+      <a href="../">Help Center</a>
+      <span>/</span>
+      <a href="./">Concepts</a>
+      <span>/</span>
+      <span>Automatic Cost Optimization</span>
+    </div>
+    <h1>Automatic Cost Optimization</h1>
+    <p>Silver Bullet automatically routes each AI agent to the right model tier — Opus for judgment-heavy work, Sonnet for execution, Haiku for structured output — with zero manual switching.</p>
+  </div>
+</div>
+
+<div class="container-wide">
+  <div class="doc-layout">
+
+    <aside class="doc-sidebar">
+      <ul class="sidebar-nav">
+        <li class="sidebar-section">Overview</li>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#tier-rationale">Tier Rationale</a></li>
+        <li class="sidebar-section">Agent Mapping</li>
+        <li><a href="#full-table">Full Agent Table</a></li>
+        <li><a href="#inline-skills">Inline Skills</a></li>
+        <li class="sidebar-section">Configuration</li>
+        <li><a href="#profiles">Model Profiles</a></li>
+        <li><a href="#setup">Project Setup</a></li>
+        <li><a href="#overrides">Per-Agent Overrides</a></li>
+      </ul>
+    </aside>
+
+    <article class="doc-content">
+
+      <h2 id="how-it-works">How It Works</h2>
+      <p>Every GSD workflow spawns multiple specialized subagents to complete a phase — a planner, one or more executors, a verifier, sometimes a researcher and a code reviewer. Without cost optimization, every agent would use the same model, paying Opus prices for tasks that need nothing more than Haiku.</p>
+      <p>Silver Bullet solves this automatically. When a workflow spawns a subagent, the model routing system looks up that agent type in a profile table and selects the appropriate model tier — before the agent even starts. No prompting, no switching, no configuration required at runtime.</p>
+
+      <div class="flow-diagram">
+        <div class="flow-label">Request flow</div>
+        /silver → /gsd:plan-phase <span class="flow-arrow">→</span> spawns gsd-planner <span class="flow-arrow">→</span> <span class="flow-tier">resolve-model</span> <span class="flow-arrow">→</span> Opus
+                                  <span class="flow-arrow">→</span> spawns gsd-executor <span class="flow-arrow">→</span> <span class="flow-tier">resolve-model</span> <span class="flow-arrow">→</span> Sonnet
+                                  <span class="flow-arrow">→</span> spawns gsd-verifier <span class="flow-arrow">→</span> <span class="flow-tier">resolve-model</span> <span class="flow-arrow">→</span> Opus
+                                  <span class="flow-arrow">→</span> spawns gsd-codebase-mapper <span class="flow-arrow">→</span> <span class="flow-tier">resolve-model</span> <span class="flow-arrow">→</span> Haiku
+      </div>
+
+      <p>The routing system reads <code>.planning/config.json</code> for the active <code>model_profile</code>, looks up the agent in the profile table, and passes the resolved model to the <code>Task()</code> call. All 24 GSD agent types are covered.</p>
+
+      <div class="callout callout-tip">
+        <span class="callout-icon"><i data-lucide="zap"></i></span>
+        <div class="callout-body"><strong>Zero friction.</strong> You never choose a model mid-session for GSD work. The routing table encodes the right decision for every agent type. Just run your workflows normally.</div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2 id="tier-rationale">Tier Rationale</h2>
+      <p>The three tiers reflect a single principle: <strong>spend on reasoning where reasoning changes the outcome</strong>.</p>
+
+      <h3>Opus — Design, Review &amp; Verification</h3>
+      <p>Used where judgment quality directly impacts the result. A weak plan wastes an entire execution phase. A missed security issue ships to production. A false-positive verification passes broken code. These are the moments where Opus earns its cost.</p>
+      <ul>
+        <li><strong>Design agents</strong> make architecture decisions and produce plans that executors follow verbatim. Bad decomposition here cascades into every downstream task.</li>
+        <li><strong>Review agents</strong> catch bugs, security issues, and plan quality problems. Sonnet can follow patterns; catching subtle security flaws requires genuine reasoning.</li>
+        <li><strong>Verification agents</strong> check whether the code actually delivers what the phase promised — goal-backward reasoning, not pattern matching.</li>
+      </ul>
+
+      <h3>Sonnet — Execution &amp; Research</h3>
+      <p>Used for agents that follow explicit instructions. Executors implement a PLAN.md — the reasoning was already done by the planner. Researchers fetch and summarize information. Doc writers fill structured templates. These tasks need competence, not depth.</p>
+
+      <h3>Haiku — Structured Output</h3>
+      <p>Used for agents that extract and format, not reason. Codebase mapping reads files and produces structured summaries. Intel updating writes formatted analysis files. User profiling scores behavioral dimensions from session data. The output format is well-defined; the task is extraction.</p>
+
+      <div class="divider"></div>
+
+      <h2 id="full-table">Full Agent Table</h2>
+      <p>The balanced profile (default) model assignment for all 24 GSD agents:</p>
+
+      <table class="ref-table">
+        <thead>
+          <tr>
+            <th>Agent</th>
+            <th>Model</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="cat-row"><td colspan="3">Design</td></tr>
+          <tr>
+            <td>gsd-planner</td>
+            <td><span class="tier-badge tier-opus">Opus</span></td>
+            <td>Architecture decisions, task decomposition, MECE planning</td>
+          </tr>
+          <tr>
+            <td>gsd-roadmapper</td>
+            <td><span class="tier-badge tier-opus">Opus</span></td>
+            <td>Milestone and phase roadmap design</td>
+          </tr>
+          <tr>
+            <td>gsd-ui-researcher</td>
+            <td><span class="tier-badge tier-opus">Opus</span></td>
+            <td>UI design contracts and component specifications</td>
+          </tr>
+          <tr class="cat-row"><td colspan="3">Review — Judgment-Heavy</td></tr>
+          <tr>
+            <td>gsd-plan-checker</td>
+            <td><span class="tier-badge tier-opus">Opus</span></td>
+            <td>Plan quality review before execution</td>
+          </tr>
+          <tr>
+            <td>gsd-code-reviewer</td>
+            <td><span class="tier-badge tier-opus">Opus</span></td>
+            <td>Code bugs, security issues, and quality review</td>
+          </tr>
+          <tr>
+            <td>gsd-security-auditor</td>
+            <td><span class="tier-badge tier-opus">Opus</span></td>
+            <td>Adversarial threat modeling and security audit</td>
+          </tr>
+          <tr class="cat-row"><td colspan="3">Review — Mechanical</td></tr>
+          <tr>
+            <td>gsd-integration-checker</td>
+            <td><span class="tier-badge tier-sonnet">Sonnet</span></td>
+            <td>Cross-phase dependency and link validation</td>
+          </tr>
+          <tr>
+            <td>gsd-ui-checker</td>
+            <td><span class="tier-badge tier-sonnet">Sonnet</span></td>
+            <td>UI spec compliance check</td>
+          </tr>
+          <tr>
+            <td>gsd-ui-auditor</td>
+            <td><span class="tier-badge tier-sonnet">Sonnet</span></td>
+            <td>Retroactive UI visual audit</td>
+          </tr>
+          <tr class="cat-row"><td colspan="3">Verification</td></tr>
+          <tr>
+            <td>gsd-verifier</td>
+            <td><span class="tier-badge tier-opus">Opus</span></td>
+            <td>Goal-backward phase completion verification</td>
+          </tr>
+          <tr>
+            <td>gsd-doc-verifier</td>
+            <td><span class="tier-badge tier-sonnet">Sonnet</span></td>
+            <td>Documentation factual accuracy check</td>
+          </tr>
+          <tr>
+            <td>gsd-nyquist-auditor</td>
+            <td><span class="tier-badge tier-sonnet">Sonnet</span></td>
+            <td>UAT coverage gap validation</td>
+          </tr>
+          <tr class="cat-row"><td colspan="3">Deep Reasoning</td></tr>
+          <tr>
+            <td>gsd-debugger</td>
+            <td><span class="tier-badge tier-opus">Opus</span></td>
+            <td>Systematic bug investigation and root cause analysis</td>
+          </tr>
+          <tr class="cat-row"><td colspan="3">Execution</td></tr>
+          <tr>
+            <td>gsd-executor</td>
+            <td><span class="tier-badge tier-sonnet">Sonnet</span></td>
+            <td>Plan implementation and atomic commits</td>
+          </tr>
+          <tr>
+            <td>gsd-code-fixer</td>
+            <td><span class="tier-badge tier-sonnet">Sonnet</span></td>
+            <td>Applies findings from code review</td>
+          </tr>
+          <tr>
+            <td>gsd-doc-writer</td>
+            <td><span class="tier-badge tier-sonnet">Sonnet</span></td>
+            <td>Documentation writing and updates</td>
+          </tr>
+          <tr class="cat-row"><td colspan="3">Research</td></tr>
+          <tr>
+            <td>gsd-phase-researcher</td>
+            <td><span class="tier-badge tier-sonnet">Sonnet</span></td>
+            <td>Phase implementation research and approach analysis</td>
+          </tr>
+          <tr>
+            <td>gsd-project-researcher</td>
+            <td><span class="tier-badge tier-sonnet">Sonnet</span></td>
+            <td>Domain research for new projects and milestones</td>
+          </tr>
+          <tr>
+            <td>gsd-advisor-researcher</td>
+            <td><span class="tier-badge tier-sonnet">Sonnet</span></td>
+            <td>Gray area decision research during discuss phase</td>
+          </tr>
+          <tr>
+            <td>gsd-research-synthesizer</td>
+            <td><span class="tier-badge tier-sonnet">Sonnet</span></td>
+            <td>Multi-stream research synthesis into SUMMARY.md</td>
+          </tr>
+          <tr class="cat-row"><td colspan="3">Structured Output</td></tr>
+          <tr>
+            <td>gsd-codebase-mapper</td>
+            <td><span class="tier-badge tier-haiku">Haiku</span></td>
+            <td>Read-only codebase exploration and pattern extraction</td>
+          </tr>
+          <tr>
+            <td>gsd-assumptions-analyzer</td>
+            <td><span class="tier-badge tier-haiku">Haiku</span></td>
+            <td>Structured assumption listing for phase planning</td>
+          </tr>
+          <tr>
+            <td>gsd-intel-updater</td>
+            <td><span class="tier-badge tier-haiku">Haiku</span></td>
+            <td>Codebase intelligence file generation</td>
+          </tr>
+          <tr>
+            <td>gsd-user-profiler</td>
+            <td><span class="tier-badge tier-haiku">Haiku</span></td>
+            <td>Behavioral dimension scoring from session data</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="divider"></div>
+
+      <h2 id="inline-skills">Inline Skills</h2>
+      <p>Not all Silver Bullet capabilities run as GSD subagents. Skills from Anthropic's plugin suite (design, engineering, product-management, marketing), MultAI, Context7, and Superpowers run <em>inline</em> — they execute in the current session context rather than as spawned agents.</p>
+      <p>Inline skills use the <strong>session model</strong> — whatever model your Claude Code session is currently set to. The GSD model routing table does not apply to them.</p>
+
+      <div class="callout callout-info">
+        <span class="callout-icon"><i data-lucide="info"></i></span>
+        <div class="callout-body"><strong>Default session model is Sonnet.</strong> Silver Bullet sets <code>claude-sonnet-4-6</code> as the session default. Inline skills run on Sonnet automatically. If you need deeper reasoning for a specific design or architecture skill, switch to Opus with <code>/model claude-opus-4-6</code> before invoking it, then switch back.</div>
+      </div>
+
+      <h3>Why inline skills aren't routed automatically</h3>
+      <p>Inline skills are conversational — they ask clarifying questions, present options, and iterate with you mid-execution. Subagents are fire-and-forget. Converting interactive skills to subagents would break the back-and-forth that makes them useful, and require serializing the full conversation context into every spawn. The trade-off isn't worth it.</p>
+
+      <div class="divider"></div>
+
+      <h2 id="profiles">Model Profiles</h2>
+      <p>The routing table has four built-in profiles. Switch between them with <code>/gsd-set-profile &lt;name&gt;</code>.</p>
+
+      <table class="ref-table">
+        <thead>
+          <tr><th>Profile</th><th>Philosophy</th><th>Best for</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>balanced</td>
+            <td>Opus for design/review/verification; Sonnet for execution/research; Haiku for structured output</td>
+            <td>Default — normal development work</td>
+          </tr>
+          <tr>
+            <td>quality</td>
+            <td>Opus for all agents that make decisions; Sonnet for structured-output agents</td>
+            <td>Critical architecture, high-stakes releases</td>
+          </tr>
+          <tr>
+            <td>budget</td>
+            <td>Sonnet for anything that writes code; Haiku for research and verification</td>
+            <td>High-volume work, conserving quota</td>
+          </tr>
+          <tr>
+            <td>adaptive</td>
+            <td>Opus for planning and debugging; Haiku for checkers and auditors</td>
+            <td>Optimizing cost without sacrificing plan quality</td>
+          </tr>
+          <tr>
+            <td>inherit</td>
+            <td>All agents use the session model</td>
+            <td>Non-Anthropic providers, OpenRouter, local models</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="divider"></div>
+
+      <h2 id="setup">Project Setup</h2>
+      <p>Model routing is activated automatically when you initialize a project with <code>/silver-init</code>. The init skill runs <code>/gsd-new-project</code> (if not already done) and verifies that <code>model_profile: "balanced"</code> is set in <code>.planning/config.json</code>.</p>
+      <p>To verify your project is correctly configured:</p>
+
+      <div class="code-block"><span class="comment"># Check active profile</span>
+node "$HOME/.claude/get-shit-done/bin/gsd-tools.cjs" config-get model_profile
+
+<span class="comment"># Should output: balanced</span></div>
+
+      <p>If you see legacy keys (<code>planner_model</code>, <code>researcher_model</code>, <code>checker_model</code>) in your config instead of <code>model_profile</code>, your project was initialized before this feature was introduced. Migrate with:</p>
+
+      <div class="code-block"><span class="comment"># Apply the balanced profile (removes legacy keys automatically)</span>
+/gsd-set-profile balanced</div>
+
+      <div class="divider"></div>
+
+      <h2 id="overrides">Per-Agent Overrides</h2>
+      <p>You can override any individual agent without changing the overall profile. Add <code>model_overrides</code> to <code>.planning/config.json</code>:</p>
+
+      <div class="code-block">{
+  <span class="key">"model_profile"</span>: <span class="val">"balanced"</span>,
+  <span class="key">"model_overrides"</span>: {
+    <span class="key">"gsd-executor"</span>: <span class="val">"opus"</span>,
+    <span class="key">"gsd-codebase-mapper"</span>: <span class="val">"sonnet"</span>
+  }
+}</div>
+
+      <p>Overrides take precedence over the profile for that specific agent. Valid values: <code>opus</code>, <code>sonnet</code>, <code>haiku</code>, <code>inherit</code>, or any fully-qualified model ID (e.g. <code>"claude-opus-4-6[1m]"</code> for the 1M context variant).</p>
+
+      <div class="callout callout-warn">
+        <span class="callout-icon"><i data-lucide="triangle-alert"></i></span>
+        <div class="callout-body"><strong>Override sparingly.</strong> The balanced profile was designed to minimize cost without compromising outcome quality. Upgrading low-tier agents to Opus usually adds cost without measurable benefit. The most common legitimate override is bumping <code>gsd-debugger</code> to <code>claude-opus-4-6[1m]</code> for sessions involving very large codebases.</div>
+      </div>
+
+      <div class="page-nav-bottom">
+        <a href="routing-logic.html">
+          <span class="pnb-label">← Previous</span>
+          <span class="pnb-title">Routing Logic</span>
+        </a>
+        <a href="session-startup.html" style="text-align:right">
+          <span class="pnb-label">Next →</span>
+          <span class="pnb-title">Session Startup</span>
+        </a>
+      </div>
+
+    </article>
+  </div>
+</div>
+
+<footer>
+  <div class="container-wide footer-inner">
+    <span>© 2025 Ālo Labs · Silver Bullet</span>
+    <div class="footer-links">
+      <a href="../../">Home</a>
+      <a href="../">Help Center</a>
+      <a href="https://github.com/alo-exp/silver-bullet" target="_blank" rel="noopener">GitHub</a>
+    </div>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/lucide@0.469.0/dist/umd/lucide.min.js"></script>
+<script src="../search.js"></script>
+<script>
+(function(){
+  var t = localStorage.getItem('sb-theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', t);
+  function applyIcons(theme) {
+    var sun = document.getElementById('icon-sun');
+    var moon = document.getElementById('icon-moon');
+    if (!sun || !moon) return;
+    if (theme === 'dark') { sun.style.display = ''; moon.style.display = 'none'; }
+    else { sun.style.display = 'none'; moon.style.display = ''; }
+  }
+  applyIcons(t);
+  window.toggleTheme = function() {
+    var cur = document.documentElement.getAttribute('data-theme') || 'dark';
+    var next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('sb-theme', next);
+    applyIcons(next);
+  };
+})();
+lucide.createIcons();
+
+// Sidebar active highlight on scroll
+(function(){
+  var links = document.querySelectorAll('.sidebar-nav a[href^="#"]');
+  var sections = Array.from(links).map(function(l){ return document.querySelector(l.getAttribute('href')); }).filter(Boolean);
+  var obs = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){
+        links.forEach(function(l){ l.classList.remove('active'); });
+        var active = document.querySelector('.sidebar-nav a[href="#'+e.target.id+'"]');
+        if(active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(function(s){ obs.observe(s); });
+})();
+
+// Nav search
+(function(){
+  var inp = document.getElementById('nav-search-input');
+  var res = document.getElementById('nav-search-results');
+  if(!inp || !res || typeof SEARCH_INDEX === 'undefined') return;
+  var active = -1;
+  inp.addEventListener('input', function(){
+    var q = inp.value.trim().toLowerCase();
+    res.innerHTML = ''; active = -1;
+    if(q.length < 2){ res.classList.remove('open'); return; }
+    var hits = SEARCH_INDEX.filter(function(p){ return (p.title+' '+p.excerpt+' '+(p.keywords||'')).toLowerCase().indexOf(q) !== -1; }).slice(0,6);
+    if(!hits.length){ res.classList.remove('open'); return; }
+    hits.forEach(function(h){
+      var a = document.createElement('a'); a.className = 'nsr-item'; a.href = '../../help/'+h.url;
+      a.innerHTML = '<span class="nsr-page">'+h.section+'</span><span class="nsr-title">'+h.title+'</span><span class="nsr-excerpt">'+h.excerpt+'</span>';
+      res.appendChild(a);
+    });
+    res.classList.add('open');
+  });
+  document.addEventListener('click', function(e){ if(!inp.contains(e.target)&&!res.contains(e.target)) res.classList.remove('open'); });
+  inp.addEventListener('keydown', function(e){
+    var items = res.querySelectorAll('.nsr-item');
+    if(e.key==='ArrowDown'){ e.preventDefault(); active=Math.min(active+1,items.length-1); items.forEach(function(i,n){ i.classList.toggle('nsr-active',n===active); }); }
+    else if(e.key==='ArrowUp'){ e.preventDefault(); active=Math.max(active-1,0); items.forEach(function(i,n){ i.classList.toggle('nsr-active',n===active); }); }
+    else if(e.key==='Enter'&&active>=0){ items[active].click(); }
+    else if(e.key==='Escape'){ res.classList.remove('open'); inp.blur(); }
+  });
+})();
+</script>
+</body>
+</html>

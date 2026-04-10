@@ -56,6 +56,18 @@ var IDX = [
     text:'Fast path for trivial low-risk changes. Complexity triage confirms 3 or fewer files affected. Skips heavy planning and brainstorming phases. Runs gsd-fast for direct execution. Use for typos config values one-liners copy fixes. Not for features or architectural changes.' },
 
   // ── CONCEPTS ──────────────────────────────────────────────────
+  { page:'Concepts', url:'/help/concepts/cost-optimization.html', anchor:'how-it-works',
+    title:'Automatic Cost Optimization — model routing for GSD agents',
+    text:'Silver Bullet automatically routes each GSD subagent to the right model tier. Opus for design review and verification agents where reasoning quality changes the outcome. Sonnet for execution and research agents that follow explicit instructions. Haiku for structured output agents like codebase-mapper intel-updater and user-profiler. Configured via model_profile balanced in .planning/config.json.' },
+  { page:'Concepts', url:'/help/concepts/cost-optimization.html', anchor:'full-table',
+    title:'Agent model table — all 24 GSD agents and their model tier',
+    text:'Full table of all 24 GSD agents with balanced profile assignments. Design: gsd-planner gsd-roadmapper gsd-ui-researcher use Opus. Review judgment-heavy: gsd-plan-checker gsd-code-reviewer gsd-security-auditor use Opus. Review mechanical: gsd-integration-checker gsd-ui-checker gsd-ui-auditor use Sonnet. Verification: gsd-verifier uses Opus doc-verifier nyquist-auditor use Sonnet. Debugger uses Opus. Execution: executor code-fixer doc-writer use Sonnet. Research: phase-researcher project-researcher advisor-researcher research-synthesizer use Sonnet. Structured output: codebase-mapper assumptions-analyzer intel-updater user-profiler use Haiku.' },
+  { page:'Concepts', url:'/help/concepts/cost-optimization.html', anchor:'profiles',
+    title:'Model profiles — balanced quality budget adaptive inherit',
+    text:'Five model profiles: balanced is default Opus for design review verification Sonnet for execution Haiku for structured output. quality uses Opus for all decision agents. budget uses Sonnet for code writing Haiku for research. adaptive Opus for planning and debugging Haiku for checkers. inherit all agents follow session model for non-Anthropic providers. Switch with /gsd-set-profile.' },
+  { page:'Concepts', url:'/help/concepts/cost-optimization.html', anchor:'overrides',
+    title:'Per-agent model overrides — model_overrides in config.json',
+    text:'Override individual agents without changing the profile. Add model_overrides to .planning/config.json. Valid values opus sonnet haiku inherit or fully-qualified model ID like claude-opus-4-6[1m]. Overrides take precedence over profile. Use sparingly — most common override is gsd-debugger to 1M context for very large codebases.' },
   { page:'Concepts', url:'/help/concepts/routing-logic.html', anchor:'overview',
     title:'Routing logic — how /silver selects a workflow',
     text:'How Silver Bullet routes requests to the correct workflow. /silver analyzes your description and maps it to one of seven workflows using a keyword and intent table. Routing can be overridden by §10a routing preferences. Ambiguous requests trigger a disambiguation prompt before routing.' },

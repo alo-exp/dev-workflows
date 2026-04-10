@@ -225,6 +225,7 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
         <li><a href="#cross-artifact">Cross-Artifact Consistency</a></li>
         <li class="sidebar-section">Routing &amp; Behavior</li>
         <li><a href="#routing-logic">Routing Logic</a></li>
+        <li><a href="#cost-optimization">Automatic Cost Optimization</a></li>
         <li><a href="#verification">Verification Before Completion</a></li>
         <li><a href="#preferences">User Workflow Preferences</a></li>
         <li><a href="#session-startup">Session Startup</a></li>
@@ -672,6 +673,23 @@ docs/
           <div class="cc-icon"><i data-lucide="filter"></i></div>
           <h4>Complexity Triage</h4>
           <p>Trivial → silver:fast. Fuzzy → silver:explore first. Simple → direct workflow. Complex → explore + brainstorm. Prevents over-engineering trivial changes.</p>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <h2 id="cost-optimization">Automatic Cost Optimization</h2>
+      <p>Silver Bullet automatically routes each GSD subagent to the right model tier based on what that agent does — Opus for design and review, Sonnet for execution and research, Haiku for structured output. No manual model switching required. The active profile is set in <code>.planning/config.json</code> and applied to all 24 agent types at spawn time.</p>
+      <div class="concept-grid">
+        <div class="concept-card">
+          <div class="cc-icon"><i data-lucide="cpu"></i></div>
+          <h4><a href="cost-optimization.html" style="color:var(--accent-light);text-decoration:none">Automatic Cost Optimization →</a></h4>
+          <p>How model routing works, the full 24-agent tier table, model profiles, per-agent overrides, and project setup.</p>
+        </div>
+        <div class="concept-card">
+          <div class="cc-icon"><i data-lucide="layers"></i></div>
+          <h4>Three Tiers</h4>
+          <p>Opus where judgment changes the outcome (planning, review, verification). Sonnet for execution and research. Haiku for structured extraction — codebase mapping, profiling, intel files.</p>
         </div>
       </div>
 
