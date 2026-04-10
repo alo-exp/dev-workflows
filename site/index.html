@@ -728,6 +728,38 @@ footer .footer-links{display:flex;gap:24px}
 svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;stroke-width:1.5;stroke:currentColor;fill:none;stroke-linecap:round;stroke-linejoin:round}
 .nav-toggle svg.lucide{width:1.4rem;height:1.4rem}
 #theme-toggle svg.lucide{width:1.1rem;height:1.1rem}
+
+/* ───── MOBILE SAFETY ───── */
+img{max-width:100%;height:auto}
+/* Workflow tables need explicit min-width so overflow-x:auto actually scrolls */
+.workflow-table{min-width:520px}
+/* Touch targets */
+.btn{min-height:44px}
+.hero-pill{min-height:40px}
+/* Mobile-only nav items (GitHub CTA inside hamburger menu) */
+.mobile-only{display:none}
+
+/* ≤ 480px — compact phones: hide nav CTA from header, show in dropdown */
+@media(max-width:480px){
+  nav .nav-cta{display:none}
+  .mobile-only{display:block}
+  nav .nav-links.active .mobile-only a{
+    display:inline-block;margin-top:4px;
+    padding:10px 24px;border-radius:999px;
+    background:linear-gradient(135deg,#1a4a2a,#3a7a50);
+    color:#fff;font-size:.82rem;font-weight:600;text-decoration:none;
+  }
+}
+
+/* ≤ 375px — very small phones */
+@media(max-width:375px){
+  nav{padding:0 12px}
+  .container{padding:0 12px}
+  .hero{padding:88px 12px 56px}
+  .hero-pill{font-size:.72rem;padding:6px 14px}
+  .install-code{font-size:.68rem}
+  .workflow-table td,.workflow-table th{font-size:.7rem;padding:6px 7px}
+}
 </style>
 </head>
 <body>
@@ -747,6 +779,7 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
       <li><a href="#workflow">Workflow</a></li>
       <li><a href="#install">Install</a></li>
       <li><a href="compare/">Compare</a></li>
+      <li class="mobile-only"><a href="https://github.com/alo-exp/silver-bullet" target="_blank">GitHub</a></li>
     </ul>
     <div style="display:flex;align-items:center;gap:10px">
       <button id="theme-toggle" aria-label="Toggle light/dark mode" onclick="toggleTheme()" style="
@@ -1768,6 +1801,11 @@ document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
 // ── Lucide icons ──
 lucide.createIcons();
+
+// ── Close mobile nav on link click ──
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => document.querySelector('.nav-links').classList.remove('active'));
+});
 
 // ── Workflow tab switcher ──
 function switchWorkflow(mode) {
