@@ -630,17 +630,27 @@ and log "Mode fallback: defaulted to interactive" in the session log.
 
 ## 5. Model Routing
 
-Default model: **claude-sonnet-4-6** (latest Sonnet), **LOW thinking effort**. No user friction for standard work.
+**Session model:** `claude-sonnet-4-6` (latest Sonnet) — default for all inline work, interactive skills, and user-facing conversation.
 
-Sub-agents are pre-assigned via `model:` YAML frontmatter in each agent file:
-- **Opus** (2 agents): `gsd-planner` (architectural reasoning, MECE decomposition) and `gsd-security-auditor` (adversarial threat modeling). These are the only agents where reasoning depth measurably changes outcome quality.
-- **Sonnet** (22 agents): all other GSD agents — executors, researchers, verifiers, reviewers, documentation, testing, codebase mapping, etc.
+**GSD subagent routing:** Handled automatically via `model_profile: "balanced"` in `.planning/config.json`. No manual switching required for GSD-orchestrated steps.
 
-No model routing questions are asked during the session. Opus agents auto-select their model via frontmatter. The main session (orchestrator + skills) runs on Sonnet throughout.
+| Category | Model | Examples |
+|----------|-------|---------|
+| Design, Review, Verification | Opus | planner, roadmapper, plan-checker, code-reviewer, security-auditor, verifier |
+| Execution, Research | Sonnet | executor, phase-researcher, doc-writer, code-fixer |
+| Structured output | Haiku | codebase-mapper, intel-updater, user-profiler, assumptions-analyzer |
 
-**Autonomous mode**: stays Sonnet. Escalate silently to Opus only if a planning step produces measurably incomplete output: fewer than 5 lines, contains `TBD`/`[TODO]`/`...` placeholders, or a step expected to produce a file produces none. Log escalation as an autonomous decision.
+**For inline skills** (design, product-management, engineering, MultAI, etc.) that run in the current session: the session model applies. Switch to Opus before invoking high-stakes design or review skills when deeper reasoning is needed:
 
-**Override**: User may specify `model: opus` for any session explicitly. Sub-agent frontmatter overrides are always respected.
+> Before `/design:*`, `/engineering:architecture`, `/engineering:system-design`, or `/product-management:write-spec` on complex work — consider switching session model to Opus.
+
+**Setup requirement:** Every new project must have `.planning/config.json` containing `"model_profile": "balanced"`. Run after `/gsd-new-project`:
+```bash
+node "$HOME/.claude/get-shit-done/bin/gsd-tools.cjs" config-get model_profile
+```
+If not `balanced`, run `/gsd-set-profile balanced`.
+
+> **Anti-Skip:** GSD subagent model routing is automatic once `model_profile` is set. You are violating this rule if `.planning/config.json` is missing `model_profile` or uses legacy `planner_model`/`researcher_model`/`checker_model` fields.
 
 ---
 
