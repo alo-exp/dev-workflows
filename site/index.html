@@ -667,6 +667,8 @@ footer .footer-links{display:flex;gap:24px}
 /* 900px — grid collapsing (feature-grid missing breakpoint) */
 @media(max-width:900px){
   .feature-grid{grid-template-columns:repeat(2,1fr)}
+  /* Override the 3-col review-analytics rule so it collapses too */
+  #review-analytics .feature-grid{grid-template-columns:repeat(2,1fr)}
 }
 
 /* 768px — tablet / large phone */
@@ -705,6 +707,7 @@ footer .footer-links{display:flex;gap:24px}
   .hero .cta-group{flex-direction:column;align-items:center;gap:20px}
   .btn{width:100%;max-width:300px;justify-content:center}
   .feature-grid{grid-template-columns:1fr}
+  #review-analytics .feature-grid{grid-template-columns:1fr}
   .install-block{max-width:100%}
   .install-code{padding:16px;font-size:.73rem}
   .install-code div{word-break:break-all;white-space:normal}
@@ -732,7 +735,7 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
 /* ───── MOBILE SAFETY ───── */
 img{max-width:100%;height:auto}
 /* Workflow tables need explicit min-width so overflow-x:auto actually scrolls */
-.workflow-table{min-width:520px}
+.workflow-table{min-width:640px}
 /* Touch targets */
 .btn{min-height:44px}
 .hero-pill{min-height:40px}
