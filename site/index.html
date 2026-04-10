@@ -79,7 +79,7 @@ html{scroll-behavior:smooth;-webkit-font-smoothing:antialiased}
   --accent3:#a855f7;
   --green:#00ff41;
   --amber:#ffaa00;
-  --red:#ff4466;
+  --red:#c44060;
   --cyan:#00ccff;
   --text-primary:#c8f0d8;
   --text-secondary:#7abf90;
@@ -129,7 +129,7 @@ body{
 .tag-amber{background:rgba(251,191,36,.12);color:var(--amber)}
 .tag-pink{background:rgba(244,114,182,.12);color:var(--accent3)}
 .tag-cyan{background:rgba(34,211,238,.12);color:var(--cyan)}
-.tag-red{background:rgba(248,113,113,.12);color:var(--red)}
+.tag-red{background:rgba(180,70,90,.12);color:var(--red)}
 .tag-indigo{background:rgba(0,136,42,.15);color:var(--accent-light)}
 
 /* ───── NAV ───── */
@@ -261,6 +261,8 @@ nav .nav-cta:hover{
   font-size:.8rem;font-weight:700;color:var(--accent-light);
   letter-spacing:.02em;font-family:var(--font-mono);
 }
+a.hero-pill{text-decoration:none;transition:background .2s,border-color .2s,color .2s;}
+a.hero-pill:hover{background:linear-gradient(135deg,rgba(160,210,180,.26),rgba(0,136,42,.18),rgba(140,196,166,.20));border-color:rgba(160,210,180,.55);color:#fff;}
 .btn{
   display:inline-flex;align-items:center;gap:8px;
   padding:14px 28px;border-radius:999px;font-size:.9rem;
@@ -438,7 +440,7 @@ section:nth-child(even){background:var(--section-alt)}
 .workflow-panel.active{display:block}
 
 /* ───── DEVOPS PHASE BADGES ───── */
-.phase-incident{background:rgba(248,113,113,.15);color:var(--red)}
+.phase-incident{background:rgba(180,70,90,.15);color:var(--red)}
 .phase-blast{background:rgba(251,191,36,.15);color:var(--amber)}
 .phase-promotion{background:rgba(34,211,238,.12);color:var(--cyan)}
 
@@ -554,7 +556,7 @@ section:nth-child(even){background:var(--section-alt)}
 .step-required{
   display:inline-block;padding:2px 8px;border-radius:4px;
   font-size:.65rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
-  background:rgba(239,68,68,.12);color:var(--red);
+  background:rgba(180,60,80,.12);color:var(--red);
   font-family:var(--font-sans);margin-left:8px;
 }
 .step-gsd{
@@ -790,10 +792,10 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
     </div>
 
     <div class="hero-pills">
-      <span class="hero-pill">39 Skills</span>
-      <span class="hero-pill">7 Orchestration Workflows</span>
-      <span class="hero-pill">20 + 24 Steps</span>
-      <span class="hero-pill">10 Enforcement Layers</span>
+      <a href="#ecosystem" class="hero-pill">39 Skills</a>
+      <a href="#workflow-orch" class="hero-pill">7 Orchestration Workflows</a>
+      <a href="#workflow" class="hero-pill">20 + 24 Steps</a>
+      <a href="#enforcement" class="hero-pill">10 Enforcement Layers</a>
     </div>
   </div>
 </section>
@@ -846,10 +848,10 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
     <p class="section-desc centered">Silver Bullet is an agentic process orchestrator for AI-native software engineering and DevOps. It curates nine best-in-class plugins and wraps them in a ten-layer technical enforcement engine &mdash; with seven pre-designed orchestration workflows and two underlying enforcement cycles.</p>
 
     <div class="hero-pills mb-4 fade-in">
-      <span class="hero-pill">39 Skills</span>
-      <span class="hero-pill">7 Orchestration Workflows</span>
-      <span class="hero-pill">20 + 24 Steps</span>
-      <span class="hero-pill">10 Enforcement Layers</span>
+      <a href="#ecosystem" class="hero-pill">39 Skills</a>
+      <a href="#workflow-orch" class="hero-pill">7 Orchestration Workflows</a>
+      <a href="#workflow" class="hero-pill">20 + 24 Steps</a>
+      <a href="#enforcement" class="hero-pill">10 Enforcement Layers</a>
     </div>
     <div class="feature-grid mt-4 fade-in">
       <div class="feature-card">
@@ -1513,7 +1515,7 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
   <div class="container">
     <div class="text-center">
       <div class="section-label">The Workflows</div>
-      <h2 class="section-title">9 Workflows. Every Step Enforced.</h2>
+      <h2 class="section-title">7 Workflows. Every Step Enforced.</h2>
       <p class="section-desc centered">Seven orchestration workflows invoked via <code>/silver</code> — each one chains GSD, Superpowers, MultAI, and SB quality gates for its task type. Two underlying enforcement cycles drive execution. All steps enforced.</p>
     </div>
 
