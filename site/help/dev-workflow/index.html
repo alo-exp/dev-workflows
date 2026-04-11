@@ -76,7 +76,7 @@ nav .nav-inner{max-width:1100px;margin:0 auto;display:flex;align-items:center;ju
 .badge-eng{background:rgba(251,191,36,.12);color:var(--amber)}
 .badge-cond{background:rgba(251,191,36,.1);color:var(--amber)}
 /* PHASE HEADER */
-.phase-header{padding:12px 20px;border-radius:var(--radius-sm);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:16px;margin-top:32px}
+.phase-header{padding:12px 20px;border-radius:var(--radius-sm);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:24px;margin-top:52px}
 .phase-init{background:rgba(100,116,139,.1);color:#64748b}
 .phase-discuss{background:rgba(8,145,178,.1);color:var(--cyan)}
 .phase-gates{background:rgba(239,68,68,.08);color:var(--red)}
@@ -162,7 +162,7 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
         <li><a href="#post-review">Steps 11–12: Post-review</a></li>
         <li><a href="#finalization">Steps 13–16: Finalization</a></li>
         <li><a href="#artifact-review-gate">Steps 17a–17b: Review Gates</a></li>
-        <li><a href="#deployment">Step 17: CI/CD</a></li>
+        <li><a href="#deployment">Step 17c: CI/CD</a></li>
         <li><a href="#deploy-check">Step 18: Deploy Checklist</a></li>
         <li><a href="#ship">Step 19: Ship</a></li>
         <li><a href="#release">Step 20: Release</a></li>
@@ -432,7 +432,7 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
       </div>
 
       <div class="step-card required">
-        <div class="step-num" style="background:linear-gradient(135deg,var(--cyan),#0e7490)">17</div>
+        <div class="step-num" style="background:linear-gradient(135deg,var(--cyan),#0e7490)">17c</div>
         <div>
           <div class="step-meta"><span class="step-title">CI/CD pipeline</span><span class="badge badge-required">Required</span></div>
           <p class="step-desc">CI must be green before any deployment step. Run local verify commands first, then check CI status with <code>gh run list --limit 1 --json status,conclusion</code>. In Interactive mode, Claude shows status and waits for confirmation. In Autonomous mode, Claude polls every 30 seconds up to 10 minutes. If CI is red: fix, re-push, re-check. Do not proceed to Step 18 while CI is failing.</p>
@@ -517,7 +517,7 @@ svg.lucide{display:inline-block;vertical-align:middle;width:1em;height:1em;strok
   <div class="container-wide">
     <div class="footer-inner">
       <div><span style="font-weight:700;color:var(--text-secondary)">Silver Bullet</span> Help Center</div>
-      <div style="font-size:.9rem;color:var(--text-secondary)">Innovated at <a href="https://alolabs.dev" target="_blank" style="font-weight:700;background:var(--chrome-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-decoration:none">&#256;lo Labs</a></div>
+      <div style="font-size:.9rem;color:var(--text-secondary)">Innovated at <a href="https://alolabs.dev" target="_blank" style="font-weight:700;text-decoration:none">&#256;lo Labs</a></div>
       <div class="footer-links">
         <a href="../">Help Home</a>
         <a href="../../">Home</a>
