@@ -1,0 +1,155 @@
+/* Silver Bullet — Shared Design Tokens
+   Single source of truth for all CSS custom properties.
+   Linked by all site pages to prevent token drift. */
+
+/* ───── DESIGN TOKENS — LIGHT (default) ───── */
+:root{
+  --bg-page:#f6f4f0;
+  --bg-card:#ffffff;
+  --bg-card-hover:#f0ece6;
+  --bg-code:#ece8e0;
+  --bg-hero:linear-gradient(160deg,#eae4da 0%,#eee8de 25%,#f4f0e8 48%,#f6f2ea 62%,#f0ece4 80%,#eae6dc 100%);
+  --chrome-gradient:linear-gradient(90deg,#2a2a2a 0%,#585858 9%,#383838 18%,#282828 27%,#505050 36%,#444444 43%,#303030 51%,#484848 59%,#343434 68%,#242424 76%,#404040 86%,#1e1e1e 100%);
+  --accent:#00c834;
+  --accent-light:#009a28;
+  --accent-glow:rgba(0,200,52,.18);
+  --accent2:#006fa8;
+  --accent3:#6b21d4;
+  --green:#00c834;
+  --amber:#a86000;
+  --red:#aa1830;
+  --cyan:#006fa8;
+  --text-primary:#050f08;
+  --text-secondary:#0d3a1a;
+  --text-dim:#285c38;
+  --border:#8cc4a4;
+  --border-hover:#4a9464;
+  --radius:12px;
+  --radius-lg:20px;
+  --radius-sm:8px;
+  --font-sans:'Space Grotesk',system-ui,sans-serif;
+  --font-mono:'Fira Code',monospace;
+  --shadow-lg:0 20px 60px rgba(0,0,0,.10);
+  --shadow-glow:0 0 40px rgba(0,170,46,.08);
+  --nav-bg:rgba(246,244,240,.92);
+  --nav-mobile-bg:rgba(246,244,240,.99);
+  --section-alt:rgba(236,230,220,.55);
+  --table-row-hover:rgba(0,170,46,.03);
+  --skill-phase-border:rgba(184,221,200,.9);
+  --btn-gradient:linear-gradient(135deg,var(--grad-1) 0%,var(--grad-2) 50%,var(--grad-1) 100%);
+  --btn-gradient-hover:linear-gradient(135deg,var(--grad-2) 0%,var(--grad-4) 50%,var(--grad-2) 100%);
+  --accent-a04:color-mix(in srgb,var(--accent) 4%,transparent);
+  --accent-a07:color-mix(in srgb,var(--accent) 7%,transparent);
+  --accent-a08:color-mix(in srgb,var(--accent) 8%,transparent);
+  --accent-a10:color-mix(in srgb,var(--accent) 10%,transparent);
+  --accent-a12:color-mix(in srgb,var(--accent) 12%,transparent);
+  --accent-a14:color-mix(in srgb,var(--accent) 14%,transparent);
+  --accent-a15:color-mix(in srgb,var(--accent) 15%,transparent);
+  --accent-a18:color-mix(in srgb,var(--accent) 18%,transparent);
+  --accent-a25:color-mix(in srgb,var(--accent) 25%,transparent);
+  --accent-a28:color-mix(in srgb,var(--accent) 28%,transparent);
+  --accent-a30:color-mix(in srgb,var(--accent) 30%,transparent);
+  --accent-a35:color-mix(in srgb,var(--accent) 35%,transparent);
+  --accent-a40:color-mix(in srgb,var(--accent) 40%,transparent);
+  --mint-a07:rgba(160,210,180,.07);
+  --mint-a08:rgba(160,210,180,.08);
+  --mint-a10:rgba(160,210,180,.10);
+  --mint-a12:rgba(160,210,180,.12);
+  --mint-a13:rgba(160,210,180,.13);
+  --mint-a14:rgba(160,210,180,.14);
+  --mint-a18:rgba(140,196,166,.18);
+  --mint-a20:rgba(160,210,180,.20);
+  --mint-a22:rgba(160,210,180,.22);
+  --mint-a26:rgba(160,210,180,.26);
+  --mint-a28:rgba(160,210,180,.28);
+  --mint-a32:rgba(160,210,180,.32);
+  --mint-a35:rgba(160,210,180,.35);
+  --mint-a38:rgba(160,210,180,.38);
+  --mint-a45:rgba(160,210,180,.45);
+  --mint-a55:rgba(160,210,180,.55);
+  --mint-a90:rgba(160,210,180,.90);
+  --grad-1:#005818;
+  --grad-2:#008a24;
+  --grad-3:#6aaa80;
+  --grad-4:#00c034;
+  /* Semantic tint helpers */
+  --cyan-a06:rgba(0,204,255,.06);
+  --cyan-a10:rgba(0,204,255,.10);
+  --cyan-a12:rgba(0,204,255,.12);
+  --cyan-a25:rgba(0,204,255,.25);
+  --cyan-a30:rgba(0,204,255,.30);
+  --amber-a12:rgba(251,191,36,.12);
+  --amber-a15:rgba(251,191,36,.15);
+  --red-a12:rgba(180,60,80,.12);
+  --red-a15:rgba(180,70,90,.15);
+  --green-a12:rgba(52,211,153,.12);
+  --green-a15:rgba(5,150,105,.12);
+  --accent3-a12:rgba(244,114,182,.12);
+  --slate-a10:rgba(100,116,139,.10);
+  --slate-a12:rgba(100,116,139,.12);
+  --slate-text:#64748b;
+  --cyan-discuss-a12:rgba(8,145,178,.12);
+  --neutral-a12:rgba(180,194,210,.12);
+  --neutral-a10:rgba(75,85,99,.10);
+  --heading-muted:var(--text-primary);
+}
+
+/* ───── DARK THEME ───── */
+[data-theme="dark"]{
+  --bg-page:#080c10;
+  --bg-card:#0f1520;
+  --bg-card-hover:#162030;
+  --bg-code:#060a0e;
+  --bg-hero:linear-gradient(160deg,#040608 0%,#060c14 25%,#08101e 48%,#0a1226 62%,#070d1a 80%,#03050a 100%);
+  --chrome-gradient:linear-gradient(90deg,#a8a8a8 0%,#ffffff 9%,#c0c0c0 18%,#909090 27%,#efefef 36%,#ffffff 43%,#cccccc 51%,#909090 59%,#e8e8e8 68%,#b8b8b8 76%,#888888 86%,#a0a0a0 100%);
+  --accent:#00a82e;
+  --accent-light:#00a82e;
+  --accent-glow:rgba(0,168,46,0.13);
+  --accent2:#00ccff;
+  --accent3:#a855f7;
+  --green:#00a82e;
+  --amber:#ffaa00;
+  --red:#c44060;
+  --cyan:#00ccff;
+  --text-primary:#e2e8f0;
+  --text-secondary:#94a3b8;
+  --text-dim:#64748b;
+  --border:#112218;
+  --border-hover:#1a3824;
+  --shadow-lg:0 20px 60px rgba(0,0,0,.7);
+  --shadow-glow:0 0 40px rgba(0,255,65,.06);
+  --nav-bg:rgba(8,12,16,.92);
+  --nav-mobile-bg:rgba(8,12,16,.99);
+  --section-alt:rgba(12,20,16,.7);
+  --table-row-hover:rgba(0,255,65,.02);
+  --skill-phase-border:rgba(17,34,24,.9);
+  --btn-gradient:linear-gradient(135deg,#007a20 0%,#00a82e 50%,#007a20 100%);
+  --btn-gradient-hover:linear-gradient(135deg,#009428 0%,#00c034 50%,#009428 100%);
+  --hero-glow:rgba(0,176,42,0.04);
+  --card-top:rgba(0,176,42,0.45);
+  /* Semantic tint helpers — dark overrides */
+  --cyan-a06:rgba(0,204,255,.06);
+  --cyan-a10:rgba(0,204,255,.10);
+  --cyan-a12:rgba(0,204,255,.12);
+  --cyan-a25:rgba(0,204,255,.25);
+  --cyan-a30:rgba(0,204,255,.30);
+  --amber-a12:rgba(251,191,36,.12);
+  --amber-a15:rgba(251,191,36,.15);
+  --red-a12:rgba(180,60,80,.12);
+  --red-a15:rgba(180,70,90,.15);
+  --green-a12:rgba(52,211,153,.12);
+  --green-a15:rgba(5,150,105,.12);
+  --accent3-a12:rgba(244,114,182,.12);
+  --slate-a10:rgba(100,116,139,.10);
+  --slate-a12:rgba(100,116,139,.12);
+  --slate-text:#64748b;
+  --cyan-discuss-a12:rgba(8,145,178,.12);
+  --neutral-a12:rgba(180,194,210,.12);
+  --neutral-a10:rgba(75,85,99,.10);
+  --heading-muted:#b8c4cc;
+}
+
+/* ───── THEME TRANSITION ───── */
+body,nav,section,.feature-card,.skill-card,.platform-pill,.install-block,.code-block,.arch-diagram,.callout,.comparison-table td,.comparison-table th,.enforcement-block{
+  transition:background .25s,background-color .25s,border-color .25s,color .25s,box-shadow .25s;
+}
