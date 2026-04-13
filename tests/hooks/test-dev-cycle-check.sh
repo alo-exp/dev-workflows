@@ -352,7 +352,13 @@ out=$(run_hook_bash "PreToolUse" "python3 /home/user/silver-bullet/hooks/util.py
 assert_passes "hooks-protect: python3 execution in hooks dir is allowed" "$out"
 teardown
 
-# Test 26: cp into hooks dir should still be BLOCKED
+# Test 26: ruby execution in hooks dir should be ALLOWED
+setup
+out=$(run_hook_bash "PreToolUse" "ruby /home/user/silver-bullet/hooks/util.rb --check")
+assert_passes "hooks-protect: ruby execution in hooks dir is allowed" "$out"
+teardown
+
+# Test 27: cp into hooks dir should still be BLOCKED
 setup
 out=$(run_hook_bash "PreToolUse" "cp /tmp/evil.sh /home/user/silver-bullet/hooks/dev-cycle-check.sh")
 assert_blocks "hooks-protect: cp into hooks dir is still blocked" "$out"

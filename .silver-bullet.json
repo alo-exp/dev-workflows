@@ -1,5 +1,5 @@
 {
-  "version": "0.18.1",
+  "version": "0.18.3",
   "project": {
     "name": "silver-bullet",
     "src_pattern": "/hooks/|/skills/|/templates/",
