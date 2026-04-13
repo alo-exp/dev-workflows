@@ -83,11 +83,20 @@ if ! command -v jq >/dev/null 2>&1; then
 fi
 
 # Locate the Superpowers using-superpowers SKILL.md (glob, not find — faster and more restrictive)
+# Security: validate resolved path stays within ~/.claude/plugins/cache/ before reading
 sp_file=$(ls ~/.claude/plugins/cache/*/superpowers/*/skills/using-superpowers/SKILL.md 2>/dev/null | head -1 || true)
+if [[ -n "${sp_file:-}" ]]; then
+  _sp_resolved="$(cd "$(dirname "$sp_file")" 2>/dev/null && pwd)/$(basename "$sp_file")" || sp_file=""
+  [[ "${_sp_resolved:-}" == "${HOME}/.claude/plugins/cache/"* ]] || sp_file=""
+fi
 
 # Locate Design plugin design-system SKILL.md
 design_file=$(ls ~/.claude/plugins/cache/*/design/*/skills/design-system/SKILL.md 2>/dev/null | head -1 || true)
 [[ -z "${design_file:-}" ]] && design_file=$(ls ~/.claude/plugins/cache/*/knowledge-work-plugins/*/design/skills/design-system/SKILL.md 2>/dev/null | head -1 || true)
+if [[ -n "${design_file:-}" ]]; then
+  _design_resolved="$(cd "$(dirname "$design_file")" 2>/dev/null && pwd)/$(basename "$design_file")" || design_file=""
+  [[ "${_design_resolved:-}" == "${HOME}/.claude/plugins/cache/"* ]] || design_file=""
+fi
 
 # Locate SB core-rules.md (rules file installed alongside this hook)
 # This is the SB equivalent of ~/.claude/core-values.yml — re-injected every session

@@ -106,8 +106,7 @@ if [[ -n "$existing" ]]; then
   fi
 
   printf '%s' "$existing" > "$SB_DIR"/session-log-path
-  printf '{"hookSpecificOutput":{"message":"ℹ️ Session log already exists: %s"}}' \
-    "$(basename "$existing")"
+  basename "$existing" | jq -Rs '{"hookSpecificOutput":{"message":("ℹ️ Session log already exists: " + .)}}' | tr -d '\n'
   exit 0
 fi
 
@@ -199,5 +198,4 @@ if [[ "$mode" == "autonomous" ]]; then
 fi
 
 printf '%s' "$log_file" > "$SB_DIR"/session-log-path
-printf '{"hookSpecificOutput":{"message":"📋 Session log created: docs/sessions/%s"}}' \
-  "$(basename "$log_file")"
+basename "$log_file" | jq -Rs '{"hookSpecificOutput":{"message":("📋 Session log created: docs/sessions/" + .)}}'
