@@ -6,7 +6,7 @@
 set -euo pipefail
 
 SB_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-CLAUDE_BIN="/Users/shafqat/.local/bin/claude"
+CLAUDE_BIN="${CLAUDE_BIN:-$(command -v claude 2>/dev/null || echo "/Users/shafqat/.local/bin/claude")}"
 MAX_BUDGET="1.00"
 PASS=0
 FAIL=0

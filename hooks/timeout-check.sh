@@ -21,7 +21,11 @@ cat > /dev/null
 SB_DIR="${HOME}/.claude/.silver-bullet"
 
 # Mode gate: only act in autonomous mode
-mode_file_content=$(cat "$SB_DIR/mode" 2>/dev/null || echo "interactive")
+mode_file="$SB_DIR/mode"
+if [[ ! -f "$mode_file" || -L "$mode_file" ]]; then
+  exit 0
+fi
+mode_file_content=$(cat "$mode_file" 2>/dev/null || echo "interactive")
 [[ "$mode_file_content" != "autonomous" ]] && exit 0
 
 # Platform-aware stat helper: returns file mtime as epoch seconds

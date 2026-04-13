@@ -89,7 +89,7 @@ if [[ -f "$SPEC" ]]; then
     ENTRY="$entry" awk 'BEGIN{e=ENVIRON["ENTRY"]} /<!-- Populated automatically/ { print; print e; next } { print }' "$SPEC" > "${SPEC}.tmp" && mv "${SPEC}.tmp" "$SPEC"
 
     git add "$SPEC" 2>/dev/null || true
-    git commit -m "trace: link PR to SPEC.md v${spec_version}" 2>/dev/null || true
+    # SPEC.md staged for commit — auto-commit removed (HI-03: hooks should not commit)
   fi
 fi
 

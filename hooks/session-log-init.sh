@@ -50,7 +50,9 @@ mkdir -p "$sessions_dir"
 # --- Step 4: Sentinel cleanup (unconditional, before dedup guard) ---
 if [[ -f "$SB_DIR"/sentinel-pid ]]; then
   old_pid=$(cat "$SB_DIR"/sentinel-pid)
-  kill "$old_pid" 2>/dev/null || true
+  if kill -0 "$old_pid" 2>/dev/null && ps -p "$old_pid" -o user= 2>/dev/null | grep -q "^$(whoami)$"; then
+    kill "$old_pid" 2>/dev/null || true
+  fi
   rm -f "$SB_DIR"/sentinel-pid "$SB_DIR"/timeout \
         "$SB_DIR"/session-start-time "$SB_DIR"/timeout-warn-count
 fi

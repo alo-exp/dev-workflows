@@ -87,7 +87,7 @@ for t in $tracked_list; do
 done
 
 if [[ "$is_tracked" == false ]]; then
-  printf '{"hookSpecificOutput":{"message":"ℹ️ Skill not tracked by Silver Bullet: %s"}}' "$skill"
+  printf '{"hookSpecificOutput":{"message":%s}}' "$(printf 'ℹ️ Skill not tracked by Silver Bullet: %s' "$skill" | jq -Rs '.')"
   exit 0
 fi
 

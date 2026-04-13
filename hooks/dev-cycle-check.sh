@@ -105,6 +105,9 @@ See CLAUDE.md §8 for details."
   # --- State file tamper prevention (SB-008) ──────────────────────────────────
   # Block direct Edit/Write to Silver Bullet state files and Bash write patterns.
   # This prevents bypassing enforcement by manipulating the state file directly.
+  # Security note: if state/config files are unreadable, we emit a WARNING (not a
+  # block) — blocking on unreadable state would lock users out. The outer
+  # trap 'exit 0' ERR provides graceful degradation for all unexpected failures.
   SB_STATE_DIR_EARLY="${HOME}/.claude/.silver-bullet"
 
   if [[ -n "$file_path" ]]; then
@@ -127,6 +130,10 @@ To reset the workflow state, remove the file from your terminal (not from Claude
     is_whitelisted_append=false
     if printf '%s' "$command_str" | grep -qE "^echo ['\"]?(quality-gate-stage-[1-4]|verification-before-completion-stage-[1-4]|review-loop-pass-[12])['\"]? >> ~/\.claude/[^/]+/state$"; then
       is_whitelisted_append=true
+      # Reject if command contains chaining operators (bypass via semicolons, pipes, etc.)
+      if printf '%s' "$command_str" | grep -qE '[;|]|&&|\|\|'; then
+        is_whitelisted_append=false
+      fi
     fi
     if [[ "$is_whitelisted_append" == false ]] && \
        printf '%s' "$command_str" | grep -qE '\.claude/[^/]+/(state|branch|trivial|mode)' && \
@@ -181,6 +188,10 @@ To reset workflow state intentionally, run in your terminal:
     src_exclude_pattern=$(jq -r '.project.src_exclude_pattern // "__tests__|\\.test\\."' "$config_file")
     # Validate exclude pattern: reject patterns > 200 chars (ReDoS mitigation)
     if [[ ${#src_exclude_pattern} -gt 200 ]]; then
+      src_exclude_pattern='__tests__|\.test\.'
+    fi
+    # Validate exclude pattern: only allow safe characters (prevents regex injection)
+    if ! printf '%s' "$src_exclude_pattern" | grep -qE '^[a-zA-Z0-9/_.\-|()\^$+?*]+$'; then
       src_exclude_pattern='__tests__|\.test\.'
     fi
     active_workflow=$(jq -r '.project.active_workflow // "full-dev-cycle"' "$config_file")

@@ -38,6 +38,11 @@ cmd=$(printf '%s' "$input" | jq -r '.tool_input.command // ""')
 [[ -z "$cmd" ]] && exit 0
 
 # Detect command type — is this gsd-plan-phase or gsd-fast/gsd-quick?
+# Note (ME-03): This hook is registered as a Bash matcher only (see hooks/hooks.json).
+# GSD commands invoked via the Skill tool will NOT trigger this hook — only direct
+# Bash invocations of gsd-plan-phase match here. This is intentional: the spec floor
+# check fires when the user runs gsd-plan-phase as a shell command. Skill-tool
+# invocations are handled separately by the workflow gate in dev-cycle-check.sh.
 is_plan_phase=false
 is_fast=false
 

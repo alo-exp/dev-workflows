@@ -213,4 +213,4 @@ if [[ -n "$next_skill" ]]; then
   msg="${msg} | Next: /${next_skill}"
 fi
 
-printf '{"hookSpecificOutput":{"message":"%s"}}' "$msg"
+printf '{"hookSpecificOutput":{"message":%s}}' "$(printf '%s' "$msg" | jq -Rs '.')"
