@@ -568,16 +568,21 @@ effort, and phase introduced. Format: `| Item | Severity | Effort | Phase introd
 
 Minimum required files:
 - `README.md` -- MUST reflect current version, features, and changes before release
-- `docs/Master-PRD.md` (or `docs/Infra-PRD.md` for pure infra projects)
-- `docs/Architecture-and-Design.md`
-- `docs/Testing-Strategy-and-Plan.md`
+- `docs/ARCHITECTURE.md` -- high-level architecture and principles only
+- `docs/TESTING.md` -- test pyramid, coverage goals
 - `docs/Runbooks.md` (DevOps-specific: one section per phase/component)
-- `docs/CICD.md`
+- `docs/CICD.md` -- pipeline stages
 
 **Additional required at this step:**
-- Update `docs/KNOWLEDGE.md` Part 2: append dated entries to Architecture patterns,
-  Known gotchas, Key decisions, Recurring patterns, Open questions as applicable.
+- Update `docs/knowledge/YYYY-MM.md` (current month's file): append dated entries to
+  Architecture Patterns, Known Gotchas, Key Decisions, Recurring Patterns, Open Questions
+  as applicable. Create from `templates/knowledge/YYYY-MM.md.base` if it doesn't exist.
   Resolved questions: append `[RESOLVED YYYY-MM-DD]: <resolution>` below original.
+- Update `docs/lessons/YYYY-MM.md` (current month's file): append any portable lessons
+  learned — tech stack, engineering practices, DevOps, domain knowledge. Write as if
+  explaining to someone who has never seen this project. Create from
+  `templates/lessons/YYYY-MM.md.base` if it doesn't exist.
+- Update `docs/knowledge/INDEX.md` if any new docs were created or removed.
 - Update `docs/CHANGELOG.md`: prepend a new entry (newest first):
   ```
   ## YYYY-MM-DD -- <task-slug>
@@ -585,14 +590,15 @@ Minimum required files:
   **Commits**: <hashes>
   **Skills run**: <list>
   **Virtual cost**: ~$X.XX (Model, complexity)
-  **KNOWLEDGE.md**: updated (<sections>) | no changes
+  **Knowledge**: updated knowledge/YYYY-MM.md (<sections>) | no changes
+  **Lessons**: updated lessons/YYYY-MM.md (<categories>) | no changes
   ```
   Virtual cost complexity tiers: simple < 5 files / < 300 lines changed;
   medium 5-15 files or 300-1000 lines; complex > 15 files or architectural.
   Sonnet base rate; Opus ~ 3x multiplier.
 - Complete the session log: read path from `~/.claude/.silver-bullet/session-log-path`,
   edit that file to fill in Task, Approach, Files changed, Skills invoked,
-  Agent Teams dispatched, Autonomous decisions, Outcome, KNOWLEDGE.md additions,
+  Agent Teams dispatched, Autonomous decisions, Outcome, knowledge/lessons additions,
   Model, Virtual cost. If `~/.claude/.silver-bullet/session-log-path` is missing,
   create `docs/sessions/<today>-manual.md` from the session log template.
 - Documentation agents writing to `docs/` run in the **main worktree only**

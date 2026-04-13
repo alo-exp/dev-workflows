@@ -919,9 +919,17 @@ TODO — Define testing strategy, coverage goals, and test plan here.
 TODO — Document CI/CD pipeline configuration and deployment process here.
 ```
 
-**`docs/KNOWLEDGE.md`** (only if it does not already exist):
+**`docs/knowledge/INDEX.md`** (only if it does not already exist):
 
-Read `${PLUGIN_ROOT}/templates/KNOWLEDGE.md.base` using the Read tool. Replace `{{PROJECT_NAME}}` with the confirmed project name and `{{GIT_REPO}}` with the confirmed repo URL. Write to `docs/KNOWLEDGE.md`.
+Read `${PLUGIN_ROOT}/templates/knowledge/INDEX.md.base` using the Read tool. Replace `{{GIT_REPO}}` with the confirmed repo URL. Write to `docs/knowledge/INDEX.md`.
+
+**`docs/knowledge/YYYY-MM.md`** (only if current month's file does not already exist):
+
+Read `${PLUGIN_ROOT}/templates/knowledge/YYYY-MM.md.base` using the Read tool. Replace `{{PROJECT_NAME}}` with the confirmed project name and `{{YYYY-MM}}` with the current year-month (e.g., `2026-04`). Write to `docs/knowledge/YYYY-MM.md` (using actual current year-month).
+
+**`docs/lessons/YYYY-MM.md`** (only if current month's file does not already exist):
+
+Read `${PLUGIN_ROOT}/templates/lessons/YYYY-MM.md.base` using the Read tool. Replace `{{YYYY-MM}}` with the current year-month. Write to `docs/lessons/YYYY-MM.md` (using actual current year-month).
 
 **`docs/CHANGELOG.md`** (only if it does not already exist — task log, distinct from root-level CHANGELOG.md if present):
 

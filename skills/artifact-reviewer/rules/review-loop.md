@@ -172,6 +172,27 @@ After each round completes, append to `REVIEW-ROUNDS.md` in the same directory a
 - If REVIEW-ROUNDS.md already contains rounds for this artifact from a prior session, append new rounds after the last existing one
 - Commit REVIEW-ROUNDS.md alongside the artifact after the review loop completes (2 clean passes achieved)
 
+### Scalability: Rotation at Milestone Completion
+
+REVIEW-ROUNDS.md grows unboundedly across a milestone. To prevent it from exceeding LLM context limits:
+
+- **On milestone completion** (`gsd-complete-milestone`): archive the current REVIEW-ROUNDS.md to `.planning/archive/{milestone-slug}/REVIEW-ROUNDS.md` and start a fresh empty file
+- **Cap**: if REVIEW-ROUNDS.md exceeds 200 lines mid-milestone, archive to `.planning/archive/review-rounds-{YYYY-MM-DD}.md` and start fresh
+- The `record_round()` function checks line count before appending:
+
+```
+record_round(artifact_path, round, findings):
+  review_rounds_file = dirname(artifact_path) + "/REVIEW-ROUNDS.md"
+
+  # Rotation check (scalability enforcement)
+  if file_exists(review_rounds_file) and count_lines(review_rounds_file) > 200:
+    archive_dir = ".planning/archive"
+    mkdir_p(archive_dir)
+    move(review_rounds_file, archive_dir + "/review-rounds-{YYYY-MM-DD}.md")
+
+  append_round_entry(review_rounds_file, artifact_path, round, findings)
+```
+
 ---
 
 ## Section 4: Review Analytics (ARVW-10)

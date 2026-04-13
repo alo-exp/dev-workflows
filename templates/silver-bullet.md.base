@@ -353,6 +353,13 @@ Silver Bullet anchors every implementation to a verified spec. The spec lifecycl
 
 **Cross-Artifact Gate:** Before `gsd-complete-milestone`, cross-artifact consistency is validated. `/artifact-reviewer --reviewer review-cross-artifact` checks SPEC↔REQUIREMENTS↔ROADMAP↔DESIGN alignment. Milestone completion is blocked if any ISSUE-level inconsistencies are found (unmapped ACs, orphaned requirements, missing design coverage).
 
+**Scalability Enforcement:** On `gsd-complete-milestone`, the following cleanup runs to prevent unbounded artifact growth:
+1. **STATE.md** — Quick Tasks table capped at 20 rows. Excess rows archived to `milestones/v{N}-STATE.md` before reset. Decisions section trimmed to current milestone only.
+2. **ROADMAP.md** — Completed milestone phases collapsed to one-line summaries: `- [x] v{N} — {title} (see milestones/v{N}-ROADMAP.md)`. Only current milestone phases shown in detail.
+3. **PROJECT.md** — Validated requirements older than 2 milestones collapsed to count: `- v{N}: {count} requirements validated (see milestones/)`. Only current + previous milestone inline.
+4. **REVIEW-ROUNDS.md** — Archived to `.planning/archive/{milestone-slug}/REVIEW-ROUNDS.md` and reset to empty.
+5. **quick/ directories** — Directories from prior milestones deleted (summaries preserved in archived STATE.md).
+
 **MCP Prerequisites (for /silver:ingest):**
 - Atlassian MCP — JIRA ticket + Confluence page ingestion (use `/v1/mcp` streamable HTTP endpoint)
 - Figma MCP (beta) — design context and token extraction

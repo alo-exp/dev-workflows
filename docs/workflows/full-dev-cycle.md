@@ -438,16 +438,22 @@ of the project after this milestone's work.
 
 **What to expect:** The following files are updated or created:
 - `README.md` -- MUST reflect current version, features, and changes before release
-- `docs/PRD-Overview.md` -- sync high-level areas from `.planning/REQUIREMENTS.md`
-- `docs/Architecture-and-Design.md` -- high-level architecture and principles only;
+- `docs/ARCHITECTURE.md` -- high-level architecture and principles only;
   detailed phase designs live in `docs/specs/`
-- `docs/Testing-Strategy-and-Plan.md`
-- `docs/CICD.md`
+- `docs/TESTING.md` -- test pyramid, coverage goals, skip policy
+- `docs/CICD.md` -- pipeline stages (if CI exists)
 
 **Additional required updates at this step:**
-- Update `docs/KNOWLEDGE.md` Part 2: append dated entries to Architecture patterns,
-  Known gotchas, Key decisions, Recurring patterns, Open questions as applicable.
-  Resolved questions: append `[RESOLVED YYYY-MM-DD]: <resolution>` below original.
+- Update `docs/knowledge/YYYY-MM.md` (current month's file): append dated entries to
+  Architecture Patterns, Known Gotchas, Key Decisions, Recurring Patterns, Open Questions
+  as applicable. If the file doesn't exist yet, create it from
+  `templates/knowledge/YYYY-MM.md.base`. Resolved questions: append
+  `[RESOLVED YYYY-MM-DD]: <resolution>` below original.
+- Update `docs/lessons/YYYY-MM.md` (current month's file): append any portable lessons
+  learned — tech stack, engineering practices, DevOps, domain knowledge, or design patterns.
+  Write as if explaining to someone who has never seen this project. If the file doesn't
+  exist yet, create it from `templates/lessons/YYYY-MM.md.base`.
+- Update `docs/knowledge/INDEX.md` if any new docs were created or removed.
 - Update `docs/CHANGELOG.md`: prepend a new entry (newest first):
   ```
   ## YYYY-MM-DD -- <task-slug>
@@ -455,14 +461,15 @@ of the project after this milestone's work.
   **Commits**: <hashes>
   **Skills run**: <list>
   **Virtual cost**: ~$X.XX (Model, complexity)
-  **KNOWLEDGE.md**: updated (<sections>) | no changes
+  **Knowledge**: updated knowledge/YYYY-MM.md (<sections>) | no changes
+  **Lessons**: updated lessons/YYYY-MM.md (<categories>) | no changes
   ```
   Virtual cost complexity tiers: simple < 5 files / < 300 lines changed;
   medium 5-15 files or 300-1000 lines; complex > 15 files or architectural.
   Sonnet base rate; Opus is approximately 3x multiplier.
 - Complete the session log: read path from `~/.claude/.silver-bullet/session-log-path`,
   edit that file to fill in Task, Approach, Files changed, Skills invoked,
-  Agent Teams dispatched, Autonomous decisions, Outcome, KNOWLEDGE.md additions,
+  Agent Teams dispatched, Autonomous decisions, Outcome, knowledge/lessons additions,
   Model, Virtual cost. If `~/.claude/.silver-bullet/session-log-path` is missing,
   create `docs/sessions/<today>-manual.md` from the session log template.
 - Documentation agents writing to `docs/` run in the **main worktree only**
