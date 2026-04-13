@@ -9,13 +9,17 @@ source "$(dirname "$0")/helpers/common.sh"
 
 echo "=== Integration: Semantic Compress — Prompt-Injection Filter Scenarios ==="
 
-# The filter logic from scripts/semantic-compress.sh (lines 222-223):
-#   grep -Ev '^[[:space:]]*(SYSTEM|ASSISTANT|HUMAN|USER):[[:space:]]'
+# The filter logic from scripts/semantic-compress.sh (lines 222-225):
+#   LC_ALL=C sed 's/^[^[:print:][:space:]]*//'   — strip leading non-ASCII bytes
+#   | LC_ALL=C grep -Ev '^[[:space:]]*(SYSTEM|ASSISTANT|HUMAN|USER):'
 #   | grep -Ev '^[[:space:]]*<(instruction|system|prompt|override)[^>]*>'
+# LC_ALL=C sed strips leading non-ASCII bytes (e.g. U+00A0) so Unicode whitespace
+# cannot be used to bypass the SYSTEM:/ASSISTANT:/HUMAN:/USER: filter.
 apply_filter() {
   local input="$1"
   printf '%s' "$input" \
-    | grep -Ev '^[[:space:]]*(SYSTEM|ASSISTANT|HUMAN|USER):[[:space:]]' \
+    | LC_ALL=C sed 's/^[^[:print:][:space:]]*//' \
+    | LC_ALL=C grep -Ev '^[[:space:]]*(SYSTEM|ASSISTANT|HUMAN|USER):' \
     | grep -Ev '^[[:space:]]*<(instruction|system|prompt|override)[^>]*>' \
     || true
 }
@@ -164,6 +168,56 @@ for stripped_pattern in "SYSTEM:" "USER:" "HUMAN:" "<system>" "<override" "ASSIS
     FAIL=$((FAIL + 1)); printf 'FAIL: S5: not stripped: %s\n' "$stripped_pattern"
   fi
 done
+
+integration_teardown
+
+# ── Scenario 6: Unicode whitespace bypass is blocked (LC_ALL=C) ──────────────
+echo "--- Scenario 6: Unicode non-breaking space before SYSTEM: is still stripped ---"
+integration_setup
+
+# U+00A0 non-breaking space before SYSTEM: — old regex without LC_ALL=C could miss this
+input="$(printf 'Normal line\n\xc2\xa0SYSTEM: unicode bypass attempt\nAnother normal line')"
+
+output=$(apply_filter "$input")
+
+if ! printf '%s' "$output" | grep -q "SYSTEM:"; then
+  PASS=$((PASS + 1)); printf 'PASS: S6.1: Unicode whitespace bypass blocked\n'
+else
+  FAIL=$((FAIL + 1)); printf 'FAIL: S6.1: Unicode whitespace bypass not blocked (SYSTEM: line survived)\n'
+fi
+
+if printf '%s' "$output" | grep -q "Normal line"; then
+  PASS=$((PASS + 1)); printf 'PASS: S6.2: surrounding content preserved\n'
+else
+  FAIL=$((FAIL + 1)); printf 'FAIL: S6.2: surrounding content missing\n'
+fi
+
+integration_teardown
+
+# ── Scenario 7: URL with colon is NOT stripped ────────────────────────────────
+echo "--- Scenario 7: URL containing colon (e.g. http://host:8080) is not stripped ---"
+integration_setup
+
+input="const API_URL = 'http://server:8080/api';
+// see https://example.com:443/docs
+const base = 'ftp://files:21';"
+
+output=$(apply_filter "$input")
+
+input_lines=$(printf '%s' "$input" | wc -l | tr -d ' ')
+output_lines=$(printf '%s' "$output" | wc -l | tr -d ' ')
+
+if [[ "$input_lines" -eq "$output_lines" ]]; then
+  PASS=$((PASS + 1)); printf 'PASS: S7.1: URL-with-colon lines not stripped (line count unchanged)\n'
+else
+  FAIL=$((FAIL + 1)); printf 'FAIL: S7.1: URL-with-colon lines incorrectly stripped (was %s lines, now %s)\n' "$input_lines" "$output_lines"
+fi
+
+if printf '%s' "$output" | grep -q "server:8080"; then
+  PASS=$((PASS + 1)); printf 'PASS: S7.2: http://server:8080 preserved\n'
+else
+  FAIL=$((FAIL + 1)); printf 'FAIL: S7.2: http://server:8080 incorrectly stripped\n'
+fi
 
 integration_teardown
 
