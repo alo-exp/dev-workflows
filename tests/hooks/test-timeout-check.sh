@@ -115,5 +115,88 @@ else
   printf 'SKIP: stale warn-count test is macOS-only\n'
 fi
 
+# ── Tier 2: Call-count based anti-stall tests ────────────────────────────────
+SB_DIR="${HOME}/.claude/.silver-bullet"
+
+cleanup_tier2() {
+  rm -f "${SB_DIR}/call-count" "${SB_DIR}/last-progress-call" \
+        "${SB_DIR}/last-state-mtime" "${SB_DIR}/mode" \
+        "${SB_DIR}/session-start-time"
+}
+
+run_hook_tier2() {
+  printf '{"tool_name":"Bash","tool_input":{"command":"git status"}}' \
+    | bash "$HOOK"
+}
+
+# Test T2-1: 30-call warning fires ("Check-in" message)
+cleanup_tmp; cleanup_tier2
+mkdir -p "$SB_DIR"
+echo "autonomous"  > "${SB_DIR}/mode"
+date +%s           > "${SB_DIR}/session-start-time"
+# call_count = 29 stored; hook increments to 30; last_progress_count=0; calls_since_progress=30
+echo "29" > "${SB_DIR}/call-count"
+echo "0"  > "${SB_DIR}/last-progress-call"
+echo "0"  > "${SB_DIR}/last-state-mtime"
+# Don't create a state file — current_state_mtime will be 0 = last_state_mtime, no reset
+out=$(run_hook_tier2)
+if printf '%s' "$out" | grep -q "Check-in"; then
+  printf 'PASS: T2-1: 30 calls since progress → Check-in warning fires\n'
+else
+  printf 'FAIL: T2-1: expected "Check-in", got: %s\n' "$out"
+  cleanup_tier2; exit 1
+fi
+
+# Test T2-2: 60-call warning fires ("STALL WARNING" message)
+cleanup_tier2
+mkdir -p "$SB_DIR"
+echo "autonomous"  > "${SB_DIR}/mode"
+date +%s           > "${SB_DIR}/session-start-time"
+echo "59" > "${SB_DIR}/call-count"
+echo "0"  > "${SB_DIR}/last-progress-call"
+echo "0"  > "${SB_DIR}/last-state-mtime"
+out=$(run_hook_tier2)
+if printf '%s' "$out" | grep -q "STALL WARNING"; then
+  printf 'PASS: T2-2: 60 calls since progress → STALL WARNING fires\n'
+else
+  printf 'FAIL: T2-2: expected "STALL WARNING", got: %s\n' "$out"
+  cleanup_tier2; exit 1
+fi
+
+# Test T2-3: 100-call warning fires ("STALL DETECTED" message)
+cleanup_tier2
+mkdir -p "$SB_DIR"
+echo "autonomous"  > "${SB_DIR}/mode"
+date +%s           > "${SB_DIR}/session-start-time"
+echo "99" > "${SB_DIR}/call-count"
+echo "0"  > "${SB_DIR}/last-progress-call"
+echo "0"  > "${SB_DIR}/last-state-mtime"
+out=$(run_hook_tier2)
+if printf '%s' "$out" | grep -q "STALL DETECTED"; then
+  printf 'PASS: T2-3: 100 calls since progress → STALL DETECTED fires\n'
+else
+  printf 'FAIL: T2-3: expected "STALL DETECTED", got: %s\n' "$out"
+  cleanup_tier2; exit 1
+fi
+
+# Test T2-4: 31 calls → silent (not on a threshold boundary)
+cleanup_tier2
+mkdir -p "$SB_DIR"
+echo "autonomous"  > "${SB_DIR}/mode"
+date +%s           > "${SB_DIR}/session-start-time"
+# call_count stored=30; hook increments to 31; last_progress=0; calls_since_progress=31
+# 31 >= 30 but 31 mod 10 = 1 ≠ 0 → no message
+echo "30" > "${SB_DIR}/call-count"
+echo "0"  > "${SB_DIR}/last-progress-call"
+echo "0"  > "${SB_DIR}/last-state-mtime"
+out=$(run_hook_tier2)
+if [[ -z "$out" ]]; then
+  printf 'PASS: T2-4: 31 calls (non-threshold) → silent\n'
+else
+  printf 'FAIL: T2-4: expected silence at 31 calls, got: %s\n' "$out"
+  cleanup_tier2; exit 1
+fi
+
+cleanup_tier2
 cleanup_tmp
 printf 'All tests passed.\n'
