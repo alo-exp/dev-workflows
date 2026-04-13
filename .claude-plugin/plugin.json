@@ -7,10 +7,7 @@
     "email": "info@alolabs.dev"
   },
   "homepage": "https://github.com/alo-exp/silver-bullet",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/alo-exp/silver-bullet.git"
-  },
+  "repository": "https://github.com/alo-exp/silver-bullet.git",
   "license": "MIT",
   "keywords": [
     "silver-bullet",
