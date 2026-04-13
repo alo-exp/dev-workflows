@@ -187,3 +187,68 @@ print_results() {
   printf '\nResults: %d passed, %d failed\n' "$PASS" "$FAIL"
   [[ $FAIL -eq 0 ]] && exit 0 || exit 1
 }
+
+# --- Additional hook runners ---
+
+run_uat_gate() {
+  local skill="$1"
+  local input
+  input=$(jq -n --arg s "$skill" '{hook_event_name: "PreToolUse", tool_name: "Skill", tool_input: {skill: $s}}')
+  ( cd "$TMPDIR_TEST" && printf '%s' "$input" | bash "${HOOKS_DIR}/uat-gate.sh" 2>/dev/null )
+}
+
+run_spec_floor_check() {
+  local cmd="$1"
+  local input
+  input=$(jq -n --arg c "$cmd" '{hook_event_name: "PreToolUse", tool_name: "Bash", tool_input: {command: $c}}')
+  ( cd "$TMPDIR_TEST" && printf '%s' "$input" | bash "${HOOKS_DIR}/spec-floor-check.sh" 2>/dev/null )
+}
+
+run_phase_archive() {
+  local cmd="$1"
+  local input
+  input=$(jq -n --arg c "$cmd" '{hook_event_name: "PreToolUse", tool_name: "Bash", tool_input: {command: $c}}')
+  ( cd "$TMPDIR_TEST" && printf '%s' "$input" | bash "${HOOKS_DIR}/phase-archive.sh" 2>/dev/null )
+}
+
+run_timeout_check() {
+  local input='{"hook_event_name":"PostToolUse","tool_name":"Edit"}'
+  ( cd "$TMPDIR_TEST" && printf '%s' "$input" | bash "${HOOKS_DIR}/timeout-check.sh" 2>/dev/null )
+}
+
+run_pr_traceability() {
+  local cmd="$1"
+  local input
+  input=$(jq -n --arg c "$cmd" '{hook_event_name: "PostToolUse", tool_name: "Bash", tool_input: {command: $c}}')
+  ( cd "$TMPDIR_TEST" && printf '%s' "$input" | bash "${HOOKS_DIR}/pr-traceability.sh" 2>/dev/null )
+}
+
+run_semantic_compress() {
+  local skill="$1"
+  local input
+  input=$(jq -n --arg s "$skill" '{hook_event_name: "PostToolUse", tool_name: "Skill", tool_input: {skill: $s}}')
+  ( cd "$TMPDIR_TEST" && printf '%s' "$input" | bash "${HOOKS_DIR}/semantic-compress.sh" 2>/dev/null )
+}
+
+run_dev_cycle_bash() {
+  local event="$1" cmd="$2"
+  local input
+  input=$(jq -n --arg e "$event" --arg c "$cmd" \
+    '{hook_event_name: $e, tool_name: "Bash", tool_input: {command: $c}}')
+  ( cd "$TMPDIR_TEST" && printf '%s' "$input" | bash "${HOOKS_DIR}/dev-cycle-check.sh" 2>/dev/null )
+}
+
+write_full_config() {
+  local workflow="${1:-full-dev-cycle}"
+  cat > "$TMPCFG" << EOCFG
+{
+  "project": { "src_pattern": "/src/", "src_exclude_pattern": "__tests__|\\\\.test\\\\.", "active_workflow": "${workflow}" },
+  "skills": {
+    "required_planning": ["quality-gates"],
+    "required_deploy": ["quality-gates","code-review","requesting-code-review","receiving-code-review","testing-strategy","documentation","finishing-a-development-branch","deploy-checklist","create-release","verification-before-completion","test-driven-development","tech-debt"],
+    "all_tracked": ["quality-gates","blast-radius","devops-quality-gates","devops-skill-router","design-system","ux-copy","architecture","system-design","code-review","requesting-code-review","receiving-code-review","testing-strategy","documentation","finishing-a-development-branch","deploy-checklist","create-release","modularity","reusability","scalability","security","reliability","usability","testability","extensibility","forensics","silver-init","verification-before-completion","test-driven-development","tech-debt","accessibility-review","incident-response","gsd-new-project","gsd-new-milestone","gsd-discuss-phase","gsd-plan-phase","gsd-execute-phase","gsd-verify-work","gsd-ship","gsd-debug","gsd-ui-phase","gsd-ui-review","gsd-secure-phase"]
+  },
+  "state": { "state_file": "${TMPSTATE}", "trivial_file": "${SB_TEST_DIR}/trivial-test-${TEST_RUN_ID}" }
+}
+EOCFG
+}
