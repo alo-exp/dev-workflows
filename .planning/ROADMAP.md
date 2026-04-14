@@ -163,8 +163,8 @@ Plans:
   4. full-dev-cycle.md is demoted to example composition, not primary reference
 **Plans**: 2 plans
 Plans:
-- [ ] 28-01-PLAN.md — TBD
-- [ ] 28-02-PLAN.md — TBD
+- [ ] 28-01-PLAN.md — silver-bullet.md §2h rewrite with composable paths architecture
+- [ ] 28-02-PLAN.md — doc-scheme, ENFORCEMENT.md, full-dev-cycle.md updates
 
 ### Phase 29: Help Center + Homepage
 **Goal**: Website and help center fully reflect composable paths architecture for new and existing users
