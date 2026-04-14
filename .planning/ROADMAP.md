@@ -39,7 +39,7 @@
 
 ### v0.20.0 Composable Paths Architecture
 
-- [ ] **Phase 21: Foundation** - Path contracts, WORKFLOW.md spec, artifact-review-assessor, doc-scheme update
+- [x] **Phase 21: Foundation** - Path contracts, WORKFLOW.md spec, artifact-review-assessor, doc-scheme update (completed 2026-04-14)
 - [ ] **Phase 22: Core Paths** - 6 essential paths every composition uses (BOOTSTRAP, ORIENT, PLAN, EXECUTE, VERIFY, SHIP)
 - [ ] **Phase 23: Specialized Paths** - 6 context-triggered paths (EXPLORE, IDEATE, SPECIFY, DESIGN CONTRACT, UI QUALITY, DESIGN HANDOFF)
 - [ ] **Phase 24: Cross-Cutting Paths + Quality Gate Dual-Mode** - 7 cross-cutting paths plus dual-mode quality gates
@@ -63,7 +63,7 @@
 **Plans**: 2 plans
 Plans:
 - [x] 21-01-PLAN.md — Path contracts summary + WORKFLOW.md template
-- [ ] 21-02-PLAN.md — artifact-review-assessor skill + doc-scheme update
+- [x] 21-02-PLAN.md — artifact-review-assessor skill + doc-scheme update
 
 ### Phase 22: Core Paths
 **Goal**: The 6 paths that form the backbone of every composition are implemented and can execute end-to-end
@@ -77,7 +77,7 @@ Plans:
   5. PATH 11 (VERIFY) and PATH 13 (SHIP) produce their expected artifacts and enforce non-skippable verification before shipping
 **Plans**: 2 plans
 Plans:
-- [ ] 21-01-PLAN.md — Path contracts summary + WORKFLOW.md template
+- [x] 21-01-PLAN.md — Path contracts summary + WORKFLOW.md template
 - [ ] 21-02-PLAN.md — artifact-review-assessor skill + doc-scheme update
 
 ### Phase 23: Specialized Paths
@@ -190,7 +190,7 @@ Phases 21 -> 22 -> 23 -> 24 -> 25 -> 26 -> 27 + 28 (parallel possible) -> 29
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 1-20 | v0.9.0-v0.16.0 | 46/46 | Complete | 2026-04-10 |
-| 21. Foundation | v0.20.0 | 1/2 | In Progress|  |
+| 21. Foundation | v0.20.0 | 2/2 | Complete   | 2026-04-14 |
 | 22. Core Paths | v0.20.0 | 0/? | Not started | - |
 | 23. Specialized Paths | v0.20.0 | 0/? | Not started | - |
 | 24. Cross-Cutting + Quality Gates | v0.20.0 | 0/? | Not started | - |
