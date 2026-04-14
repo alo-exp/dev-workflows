@@ -137,8 +137,8 @@ Plans:
   4. silver:migrate scans STATE.md + artifacts, infers path completion, generates WORKFLOW.md, and user confirms before applying
 **Plans**: 2 plans
 Plans:
-- [ ] 26-01-PLAN.md — TBD
-- [ ] 26-02-PLAN.md — TBD
+- [ ] 26-01-PLAN.md — WORKFLOW.md awareness in 5 hook scripts with legacy fallback
+- [ ] 26-02-PLAN.md — silver:migrate skill with artifact-to-path inference
 
 ### Phase 27: silver-fast Redesign
 **Goal**: silver-fast triages work into 3 complexity tiers with appropriate routing and autonomous escalation
