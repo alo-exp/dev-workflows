@@ -78,7 +78,7 @@ Plans:
 **Plans**: 2 plans
 Plans:
 - [x] 21-01-PLAN.md — Path contracts summary + WORKFLOW.md template
-- [ ] 21-02-PLAN.md — artifact-review-assessor skill + doc-scheme update
+- [x] 21-02-PLAN.md — artifact-review-assessor skill + doc-scheme update
 
 ### Phase 23: Specialized Paths
 **Goal**: All 6 context-triggered paths are implemented -- each activates only when its trigger condition is met
@@ -92,7 +92,7 @@ Plans:
   5. PATH 15 (DESIGN HANDOFF) runs inside PATH 17 only, not in the per-phase sequence
 **Plans**: 2 plans
 Plans:
-- [ ] 21-01-PLAN.md — Path contracts summary + WORKFLOW.md template
+- [x] 21-01-PLAN.md — Path contracts summary + WORKFLOW.md template
 - [ ] 21-02-PLAN.md — artifact-review-assessor skill + doc-scheme update
 **UI hint**: yes
 
@@ -190,7 +190,7 @@ Phases 21 -> 22 -> 23 -> 24 -> 25 -> 26 -> 27 + 28 (parallel possible) -> 29
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 1-20 | v0.9.0-v0.16.0 | 46/46 | Complete | 2026-04-10 |
-| 21. Foundation | v0.20.0 | 2/2 | Complete   | 2026-04-14 |
+| 21. Foundation | v0.20.0 | 2/2 | Complete    | 2026-04-14 |
 | 22. Core Paths | v0.20.0 | 0/? | Not started | - |
 | 23. Specialized Paths | v0.20.0 | 0/? | Not started | - |
 | 24. Cross-Cutting + Quality Gates | v0.20.0 | 0/? | Not started | - |
