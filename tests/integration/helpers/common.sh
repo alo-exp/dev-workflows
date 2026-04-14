@@ -66,6 +66,96 @@ tech-debt
 EOSKILLS
 }
 
+# Write a WORKFLOW.md with all paths marked complete
+write_workflow_md_complete() {
+  local planning_dir="${TMPDIR_TEST}/.planning"
+  mkdir -p "$planning_dir"
+  cat > "$planning_dir/WORKFLOW.md" << 'WFEOF'
+# Composition
+
+**Workflow:** silver:feature
+**Mode:** autonomous
+
+## Path Log
+
+| # | Path | Status |
+|---|------|--------|
+| 0 | BOOTSTRAP | complete |
+| 1 | ORIENT | complete |
+| 5 | PLAN | complete |
+| 7 | EXECUTE | complete |
+| 11 | VERIFY | complete |
+| 12 | QUALITY GATE | complete |
+| 13 | SHIP | complete |
+
+## Heartbeat
+
+Last-path: PATH 13 SHIP
+Last-beat: 2026-04-15T00:00:00Z
+
+## Next Path
+
+(none — composition complete)
+WFEOF
+}
+
+# Write a WORKFLOW.md with partial completion
+write_workflow_md_partial() {
+  local planning_dir="${TMPDIR_TEST}/.planning"
+  mkdir -p "$planning_dir"
+  cat > "$planning_dir/WORKFLOW.md" << 'WFEOF'
+# Composition
+
+**Workflow:** silver:feature
+**Mode:** interactive
+
+## Path Log
+
+| # | Path | Status |
+|---|------|--------|
+| 0 | BOOTSTRAP | complete |
+| 1 | ORIENT | complete |
+| 5 | PLAN | complete |
+| 7 | EXECUTE | pending |
+| 11 | VERIFY | pending |
+| 13 | SHIP | pending |
+
+## Heartbeat
+
+Last-path: PATH 5 PLAN
+Last-beat: 2026-04-15T00:00:00Z
+
+## Next Path
+
+PATH 7 EXECUTE
+WFEOF
+}
+
+# Write a WORKFLOW.md with PATH 4 excluded (for spec-floor advisory tests)
+write_workflow_md_no_path4() {
+  local planning_dir="${TMPDIR_TEST}/.planning"
+  mkdir -p "$planning_dir"
+  cat > "$planning_dir/WORKFLOW.md" << 'WFEOF'
+# Composition
+
+**Workflow:** silver:feature
+**Mode:** interactive
+
+## Path Log
+
+| # | Path | Status |
+|---|------|--------|
+| 0 | BOOTSTRAP | complete |
+| 1 | ORIENT | complete |
+| 5 | PLAN | pending |
+| 7 | EXECUTE | pending |
+
+## Next Path
+
+PATH 5 PLAN
+WFEOF
+}
+
 # --- Hook runners ---
 run_dev_cycle_edit() {
   local event="$1" filepath="$2"

@@ -174,6 +174,34 @@ git clean -fd        # Remove untracked files
 
 ---
 
+## Composable Paths Verification (v0.20.0+)
+
+After completing the standard smoke test above, verify composable paths features:
+
+### WORKFLOW.md State Tracking
+1. Run `/silver:feature "add a health check endpoint"` on the test app
+2. Verify `.planning/WORKFLOW.md` is created during execution
+3. Check WORKFLOW.md contains: Composition section, Path Log table, Heartbeat section, Next Path
+4. Verify Path Log entries update as paths complete
+
+### Dual-Mode Hook Enforcement
+1. With WORKFLOW.md present, verify `dev-cycle-check.sh` shows PATH progress (not just skill count)
+2. With WORKFLOW.md present, verify `compliance-status.sh` shows PATH N/M format
+3. Delete WORKFLOW.md — verify hooks fall back to legacy skill-based enforcement
+
+### 3-Tier silver-fast Triage
+1. Run `/silver:fast "fix typo in README"` — should classify as Tier 1, route to gsd-fast
+2. Run `/silver:fast "refactor auth module across 5 files"` — should classify as Tier 2, route to gsd-quick
+3. Run `/silver:fast "implement new user dashboard"` — should classify as Tier 3, escalate to silver-feature
+
+### silver:migrate (Legacy Projects)
+1. On a project WITH .planning/ artifacts but WITHOUT WORKFLOW.md
+2. Run `/silver:migrate`
+3. Verify it scans artifacts, infers path completion, and proposes WORKFLOW.md
+4. Confirm generated WORKFLOW.md has correct path completion based on existing artifacts
+
+---
+
 ## Result
 
 | Outcome | Action |
