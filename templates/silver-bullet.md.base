@@ -292,9 +292,7 @@ skill, or SB skill.
 
 ### 2h. SB Orchestrated Workflows
 
-SB provides eight pre-designed orchestration workflows for all common development tasks.
-When a bare instruction is intercepted (§2g) or the user invokes `/silver`, the router
-classifies intent and dispatches to the appropriate workflow.
+Silver Bullet workflows are composed from a catalog of 18 reusable paths (PATH 0-17). Each path is a self-contained building block with defined prerequisites, trigger conditions, steps, and exit conditions. The `/silver` router classifies context and composes an ordered chain of paths tailored to the task. `WORKFLOW.md` tracks execution state — which paths have run, which are next, and any dynamic insertions (e.g., PATH 14 DEBUG on failure). See `docs/composable-paths-contracts.md` for full path contracts.
 
 **The eight workflows:**
 
@@ -307,11 +305,11 @@ classifies intent and dispatches to the appropriate workflow.
 | `silver:devops` | "infra", "CI/CD", "deploy", "pipeline", "terraform", "IaC", "cloud" | silver:intel → silver:blast-radius → silver:devops-skill-router |
 | `silver:research` | "how should we", "which technology", "compare X vs Y", "spike" | silver:explore → MultAI research → silver:brainstorm |
 | `silver:release` | "release", "publish", "version", "go live", "cut a release", "tag v" | silver:quality-gates → gsd-audit-uat → gsd-audit-milestone |
-| `silver:fast` | "trivial", "quick fix", "typo", "one-liner", "config value" | Complexity triage confirms ≤3 files → gsd-fast |
+| `silver:fast` | "trivial", "quick fix", "typo", "one-liner", "config value" | 3-tier complexity triage: Tier 1 (trivial) → gsd-fast, Tier 2 (medium) → gsd-quick with flags, Tier 3 (complex) → escalate to silver-feature |
 
 **Workflow enforcement rules:**
 - Quality gates run twice per workflow: pre-planning (full 9 dimensions) and pre-ship (full 9 dimensions)
-- `silver:security` is always mandatory — cannot be skipped via §9
+- `silver:security` is always mandatory — cannot be skipped via §10
 - `silver:devops` uses 7 IaC-adapted dimensions (silver:devops-quality-gates) instead of the standard 9
 - TDD enforcement (`silver:tdd`) applies to implementation plans only; config/infra/doc plans skip TDD
 - `/testing-strategy` runs after spec approval and before `silver:writing-plans` so test requirements are baked into the plan
@@ -324,9 +322,34 @@ classifies intent and dispatches to the appropriate workflow.
 When the user requests skipping a workflow step, SB:
 1. Explains why the step exists (one sentence)
 2. Offers lettered options: A. Accept skip  B. Lightweight alternative  C. Show me what you have
-3. Records the decision in §9 if user chooses A permanently — **before committing, display the exact text being written to §9 and require explicit user confirmation** (showing what will change in both silver-bullet.md and templates/silver-bullet.md.base)
+3. Records the decision in §10 if user chooses A permanently — **before committing, display the exact text being written to §10 and require explicit user confirmation** (showing what will change in both silver-bullet.md and templates/silver-bullet.md.base)
 
 Non-skippable gates: `silver:security`, `silver:quality-gates` pre-ship, `gsd-verify-work`.
+
+#### Composable Paths Catalog
+
+Each workflow composes from these 18 paths. See `docs/composable-paths-contracts.md` for full contracts.
+
+| Path | Name | Purpose |
+|------|------|---------|
+| PATH 0 | BOOTSTRAP | Project setup — PROJECT.md, ROADMAP.md, REQUIREMENTS.md, STATE.md |
+| PATH 1 | ORIENT | Codebase intelligence — gsd-intel, gsd-scan, gsd-map-codebase |
+| PATH 2 | EXPLORE | Research spike — silver:explore, MultAI research |
+| PATH 3 | IDEATE | Product brainstorming — silver:brainstorm, product-brainstorming |
+| PATH 4 | SPECIFY | Spec creation — silver-ingest, write-spec, silver-spec, silver-validate |
+| PATH 5 | PLAN | Phase planning — discuss-phase, writing-plans, gsd-plan-phase |
+| PATH 6 | DESIGN CONTRACT | UI/UX design — design-system, ux-copy, gsd-ui-phase |
+| PATH 7 | EXECUTE | Implementation — gsd-execute-phase with TDD as-needed |
+| PATH 8 | UI QUALITY | UI review — design-critique, gsd-ui-review, accessibility-review |
+| PATH 9 | REVIEW | Code review — 3 parallel layers with triage + fix |
+| PATH 10 | SECURE | Security audit — SENTINEL, gsd-secure-phase, gsd-validate-phase |
+| PATH 11 | VERIFY | Verification — gsd-verify-work, verification-before-completion |
+| PATH 12 | QUALITY GATE | Quality dimensions — 9-dimension check, dual-mode (design-time + adversarial) |
+| PATH 13 | SHIP | Phase shipping — gsd-ship, PR creation |
+| PATH 14 | DEBUG | Debugging — systematic-debugging, gsd-debug (dynamic insertion on failure) |
+| PATH 15 | DESIGN HANDOFF | Design-to-dev handoff — runs inside PATH 17 only |
+| PATH 16 | DOCUMENT | Documentation — gsd-docs-update, engineering:documentation, episodic memory |
+| PATH 17 | RELEASE | Milestone release — gsd-audit-uat, gsd-audit-milestone, create-release |
 
 ---
 
