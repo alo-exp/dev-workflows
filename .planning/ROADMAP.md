@@ -43,7 +43,7 @@
 - [x] **Phase 22: Core Paths** - 6 essential paths every composition uses (BOOTSTRAP, ORIENT, PLAN, EXECUTE, VERIFY, SHIP) (completed 2026-04-14)
 - [ ] **Phase 23: Specialized Paths** - 6 context-triggered paths (EXPLORE, IDEATE, SPECIFY, DESIGN CONTRACT, UI QUALITY, DESIGN HANDOFF)
 - [ ] **Phase 24: Cross-Cutting Paths + Quality Gate Dual-Mode** - 7 cross-cutting paths plus dual-mode quality gates
-- [ ] **Phase 25: Composer Redesign** - /silver as composer with supervision loop, dynamic insertion, anti-stall
+- [x] **Phase 25: Composer Redesign** - /silver as composer with supervision loop, dynamic insertion, anti-stall (completed 2026-04-14)
 - [ ] **Phase 26: Hook Alignment + silver:migrate** - 5 hooks modified for WORKFLOW.md awareness plus migration skill
 - [ ] **Phase 27: silver-fast Redesign** - 3-tier complexity triage with gsd-quick flags and autonomous escalation
 - [ ] **Phase 28: Documentation Update** - silver-bullet.md, doc-scheme, ENFORCEMENT.md, full-dev-cycle demotion
@@ -123,8 +123,8 @@ Plans:
   5. 4-tier anti-stall operates -- progress-based detection, permission-stall prevention, context exhaustion prevention, heartbeat sentinel
 **Plans**: 2 plans
 Plans:
-- [ ] 25-01-PLAN.md — Composition proposal + supervision loop + anti-stall in silver-feature + workflow.md.base heartbeat
-- [ ] 25-02-PLAN.md — Composition proposals in 5 remaining silver-* workflows + /silver router compatibility
+- [x] 25-01-PLAN.md — Composition proposal + supervision loop + anti-stall in silver-feature + workflow.md.base heartbeat
+- [x] 25-02-PLAN.md — Composition proposals in 5 remaining silver-* workflows + /silver router compatibility
 
 ### Phase 26: Hook Alignment + silver:migrate
 **Goal**: All hooks are WORKFLOW.md-aware with legacy fallback, and existing mid-milestone users can migrate to composable paths
@@ -194,7 +194,7 @@ Phases 21 -> 22 -> 23 -> 24 -> 25 -> 26 -> 27 + 28 (parallel possible) -> 29
 | 22. Core Paths | v0.20.0 | 2/2 | Complete    | 2026-04-14 |
 | 23. Specialized Paths | v0.20.0 | 0/2 | Not started | - |
 | 24. Cross-Cutting + Quality Gates | v0.20.0 | 0/2 | Not started | - |
-| 25. Composer Redesign | v0.20.0 | 0/2 | Not started | - |
+| 25. Composer Redesign | v0.20.0 | 2/2 | Complete   | 2026-04-14 |
 | 26. Hook Alignment + Migrate | v0.20.0 | 0/2 | Not started | - |
 | 27. silver-fast Redesign | v0.20.0 | 0/2 | Not started | - |
 | 28. Documentation Update | v0.20.0 | 0/2 | Not started | - |
