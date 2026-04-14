@@ -314,7 +314,7 @@ To reset workflow state intentionally, run in your terminal:
         exit 0
       elif [[ "$path_total_count" -gt 0 ]]; then
         # Partial progress — inform but fall through to legacy gate
-        printf '{"hookSpecificOutput":{"message":"ℹ️ PATH %s/%s — composable paths enforcement active. Legacy gate still applies." }}' \
+        printf '{"hookSpecificOutput":{"message":"ℹ️ FLOW %s/%s — composable flows enforcement active. Legacy gate still applies." }}' \
           "$path_complete_count" "$path_total_count"
       fi
     fi
