@@ -300,6 +300,28 @@ To reset workflow state intentionally, run in your terminal:
     fi
   fi
 
+  # --- WORKFLOW.md path completion check (primary gate with legacy fallback) ---
+  workflow_file="$PWD/.planning/WORKFLOW.md"
+  if [[ -f "$workflow_file" && ! -L "$workflow_file" ]]; then
+    # Parse Path Log table: count completed and total paths
+    path_complete_count=0
+    path_total_count=0
+    if path_complete_count=$(grep -cE '^\| [^|]+\| [^|]+\| complete' "$workflow_file" 2>/dev/null) && \
+       path_total_count=$(grep -cE '^\| [0-9]' "$workflow_file" 2>/dev/null); then
+      if [[ "$path_total_count" -gt 0 && "$path_complete_count" -eq "$path_total_count" ]]; then
+        # All workflow paths done — allow freely
+        printf '{"hookSpecificOutput":{"message":"✅ All workflow paths complete. Proceed freely."}}'
+        exit 0
+      elif [[ "$path_total_count" -gt 0 ]]; then
+        # Partial progress — inform but fall through to legacy gate
+        printf '{"hookSpecificOutput":{"message":"ℹ️ PATH %s/%s — composable paths enforcement active. Legacy gate still applies." }}' \
+          "$path_complete_count" "$path_total_count"
+      fi
+    fi
+    # If parsing failed (malformed file), fall through to legacy logic silently
+  fi
+  # If WORKFLOW.md absent: fall through to legacy logic unchanged (per D-03)
+
   # --- Read state file and determine stage ---
   completed_skills=""
   if [[ -f "$state_file" ]]; then

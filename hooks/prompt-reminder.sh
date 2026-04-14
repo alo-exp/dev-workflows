@@ -145,11 +145,35 @@ if [[ -n "$resolved_rules" && "$resolved_rules" != "${script_dir}/"* && "$resolv
   core_rules_file=""
 fi
 
+# ── WORKFLOW.md position injection ───────────────────────────────────────────
+workflow_file="$PWD/.planning/WORKFLOW.md"
+workflow_position=""
+if [[ -f "$workflow_file" && ! -L "$workflow_file" ]]; then
+  # Extract Last-path from Heartbeat section
+  last_path=""
+  last_path=$(grep -A1 '## Heartbeat' "$workflow_file" 2>/dev/null | grep 'Last-path:' | sed 's/Last-path:[[:space:]]*//' | tr -d '\r' || true)
+  # Extract next path from Next Path section
+  next_path=""
+  next_path=$(grep -A1 '## Next Path' "$workflow_file" 2>/dev/null | tail -1 | sed 's/^[[:space:]]*//' | tr -d '\r' || true)
+  # Extract mode from Composition section
+  comp_mode=""
+  comp_mode=$(grep '^Mode:' "$workflow_file" 2>/dev/null | head -1 | sed 's/Mode:[[:space:]]*//' | tr -d '\r' || true)
+  if [[ -n "$last_path" ]]; then
+    workflow_position="Composable path: currently at PATH ${last_path}, next: ${next_path} (${comp_mode} mode)"
+  fi
+fi
+
 # ── Emit additionalContext ────────────────────────────────────────────────────
 if [[ -z "$missing_list" ]]; then
   skill_status="Silver Bullet: all required skills complete."
 else
   skill_status="Silver Bullet -- Missing: ${missing_list} (${completed} of ${total} complete)"
+fi
+
+# Append WORKFLOW.md position if present
+if [[ -n "$workflow_position" ]]; then
+  skill_status="${skill_status}
+${workflow_position}"
 fi
 
 # Prepend core rules if available, then append skill status

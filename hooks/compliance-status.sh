@@ -120,6 +120,19 @@ if [[ ! -f "$state_file" ]]; then
   exit 0
 fi
 
+# --- WORKFLOW.md path progress ---
+workflow_file="$PWD/.planning/WORKFLOW.md"
+path_progress="PATH: N/A (legacy mode)"
+if [[ -f "$workflow_file" && ! -L "$workflow_file" ]]; then
+  wf_complete=0
+  wf_total=0
+  if wf_complete=$(grep -cE '^\| [^|]+\| [^|]+\| complete' "$workflow_file" 2>/dev/null) && \
+     wf_total=$(grep -cE '^\| [0-9]' "$workflow_file" 2>/dev/null) && \
+     [[ "$wf_total" -gt 0 ]]; then
+    path_progress="PATH ${wf_complete}/${wf_total}"
+  fi
+fi
+
 # Read state file once
 state_contents=$(cat "$state_file")
 total_steps=$(printf '%s\n' "$state_contents" | grep -c . || true)
@@ -208,7 +221,7 @@ elif [[ -n "$first_missing_release" ]]; then
 fi
 
 # --- Build output ---
-msg="Silver Bullet: ${total_steps} steps | Mode: ${mode} | GSD ${gsd_done}/${gsd_total} | PLANNING ${plan_done}/${plan_total} | REVIEW ${review_done}/${review_total} | FINALIZATION ${final_done}/${final_total} | RELEASE ${release_done}/${release_total}"
+msg="Silver Bullet: ${total_steps} steps | Mode: ${mode} | ${path_progress} | GSD ${gsd_done}/${gsd_total} | PLANNING ${plan_done}/${plan_total} | REVIEW ${review_done}/${review_total} | FINALIZATION ${final_done}/${final_total} | RELEASE ${release_done}/${release_total}"
 if [[ -n "$next_skill" ]]; then
   msg="${msg} | Next: /${next_skill}"
 fi

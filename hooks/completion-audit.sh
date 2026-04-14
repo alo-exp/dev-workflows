@@ -133,6 +133,43 @@ if [[ -f "$trivial_file" && ! -L "$trivial_file" ]]; then
   exit 0
 fi
 
+# ── WORKFLOW.md path completion check (primary gate with legacy fallback) ─────
+workflow_file="$PWD/.planning/WORKFLOW.md"
+if [[ -f "$workflow_file" && ! -L "$workflow_file" ]]; then
+  # Parse Path Log: count completed and total paths
+  wf_complete=0
+  wf_total=0
+  wf_parse_ok=false
+  if wf_complete=$(grep -cE '^\| [^|]+\| [^|]+\| complete' "$workflow_file" 2>/dev/null) && \
+     wf_total=$(grep -cE '^\| [0-9]' "$workflow_file" 2>/dev/null); then
+    wf_parse_ok=true
+  fi
+
+  if [[ "$wf_parse_ok" == true && "$wf_total" -gt 0 ]]; then
+    if [[ "$is_intermediate" == true ]]; then
+      # For intermediate commits: any path completed means planning is underway — allow
+      if [[ "$wf_complete" -gt 0 ]]; then
+        printf '{"hookSpecificOutput":{"message":"✅ WORKFLOW.md: %s/%s paths complete. Intermediate commit allowed."}}\n' \
+          "$wf_complete" "$wf_total"
+        exit 0
+      fi
+      # No paths complete yet — fall through to legacy check
+    elif [[ "$is_completion" == true ]]; then
+      if [[ "$wf_complete" -eq "$wf_total" ]]; then
+        # All paths complete — final delivery allowed
+        printf '{"hookSpecificOutput":{"message":"✅ WORKFLOW.md: all %s paths complete. Delivery allowed."}}\n' "$wf_total"
+        exit 0
+      else
+        # Not all paths done — block final delivery
+        emit_block "WORKFLOW INCOMPLETE — ${wf_complete}/${wf_total} paths done. Complete all paths before final delivery."
+        exit 0
+      fi
+    fi
+  fi
+  # If parsing failed (malformed WORKFLOW.md), fall through to legacy logic silently
+fi
+# If WORKFLOW.md absent: fall through to existing legacy logic unchanged
+
 # ── Detect current git branch ─────────────────────────────────────────────────
 current_branch=""
 current_branch=$(git -C "$PWD" rev-parse --abbrev-ref HEAD 2>/dev/null || true)
