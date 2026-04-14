@@ -270,65 +270,99 @@ All quality gate dimensions pass in adversarial audit mode.
 
 ---
 
-## Step 14: Finishing Branch
+## PATH 13: SHIP — Push branch and create PR
 
-Invoke `silver:finishing-branch` (superpowers:finishing-a-development-branch) via the Skill tool. Purpose: merge / PR / cleanup decision.
+### Prerequisite Check
 
-## Step 15a: PR Branch (ask user)
+PATH 12 pre-ship passed, PATH 11 completed (VERIFICATION.md with status: passed), clean git tree, on feature branch. If not, STOP and complete prerequisites first.
 
-Ask user:
+### Steps
 
-> Would you like a clean PR branch (strips .planning/ commits)?
->
-> A. Yes — run gsd-pr-branch  B. No — ship as-is  C. Save as permanent preference
+1. `superpowers:finishing-a-development-branch` (Always — merge / PR / cleanup decision)
+2. `gsd-pr-branch` (As-needed — user requests clean PR branch stripping .planning/ commits)
+3. `gsd-ship` (Always — push branch, create PR, prepare for merge; phase-level, not milestone-level)
 
-If A: invoke `gsd-pr-branch` via the Skill tool.
-If C: record preference in silver-bullet.md §10e and templates/silver-bullet.md.base §10e, commit both.
+### Exit Condition
 
-## Step 15b: Ship Phase
+PR created, CI green.
 
-Invoke `gsd-ship` via the Skill tool. Purpose: push branch, create PR, prepare for merge (phase-level). This is phase-level merge — not milestone-level publish (that is `silver:release`).
+---
 
-## Step 16: Episodic Memory
+## PATH 14: DEBUG — Dynamic insertion on failure
 
-Invoke `episodic-memory:remembering-conversations` via the Skill tool to record key decisions and lessons from this feature.
+> **DYNAMIC INSERTION PATH** — Not part of normal sequence. Inserted at any point when execution fails.
 
-## Step 17: Milestone Completion (last phase of milestone only)
+### Prerequisite Check
 
-Ask user:
+None — inserted on failure at any point in the workflow.
 
-> Is this the last phase of the current milestone?
->
-> A. Yes — run milestone completion lifecycle  B. No — done
+**Trigger:** execution failure, CI red, verification failure, unknown error.
 
-If A, run in sequence:
+### Steps
 
-### Step 17.0: Generate UAT.md from SPEC.md
+1. `superpowers:systematic-debugging` (Always — structured root cause analysis)
+2. `gsd-debug` (Always — GSD-assisted debugging)
+3. `engineering:debug` (As-needed — deeper engineering analysis)
+4. `forensics` (As-needed — unknown root cause)
+5. `gsd-forensics` (As-needed — failed GSD workflow)
+6. `engineering:incident-response` (As-needed — production incident)
 
-Read `.planning/SPEC.md` `## Acceptance Criteria` section. For each criterion, create a row in `.planning/UAT.md` with Result = NOT-RUN and Evidence = empty.
+### Resume Semantics
 
-UAT.md format:
-- Frontmatter: spec-version (from SPEC.md), uat-date (today), milestone (from STATE.md)
-- Table: # | Criterion | Result | Evidence
-- Summary section: Total, PASS, FAIL, NOT-RUN counts
+After PATH 14 completes, execution resumes from the interrupted path. Fix plan must be validated before re-entering the interrupted path. Fixes route through `gsd-execute-phase --gaps-only`.
 
-Write `.planning/UAT.md` using the Write tool.
+### Exit Condition
 
-### Step 17.0a: Review UAT.md
+Root cause identified, fix plan validated. Return to interrupted path.
 
-Invoke `/artifact-reviewer .planning/UAT.md --reviewer review-uat` via the Skill tool.
+---
 
-Do NOT proceed to gsd-audit-uat until /artifact-reviewer reports 2 consecutive clean passes. If issues are found, /artifact-reviewer will apply fixes and re-review automatically. If /artifact-reviewer surfaces an unresolvable issue after 5 rounds, STOP and present it to the user.
+## PATH 16: DOCUMENT — Post-ship documentation
 
-### Step 17.0b: Cross-Artifact Consistency Review
+### Prerequisite Check
 
-Invoke `/artifact-reviewer --reviewer review-cross-artifact --artifacts .planning/SPEC.md .planning/REQUIREMENTS.md .planning/ROADMAP.md` (add `.planning/DESIGN.md` if it exists).
+PATH 13 completed: PR created and CI green. If not, STOP and complete PATH 13 first.
 
-Do NOT proceed to gsd-audit-uat until cross-artifact review reports clean pass. If ISSUES_FOUND, the orchestrator applies fixes and re-reviews per the review loop. If unresolvable after 5 rounds, STOP and present to the user.
+### Steps
 
-**Why here:** Cross-artifact alignment must be confirmed before milestone audit begins — auditing against misaligned artifacts wastes effort.
+1. `gsd-docs-update` (Always — verify and update docs/)
+2. `engineering:documentation` (Always — documentation quality review)
+3. `engineering:tech-debt` (Always — record tech debt discovered during phase)
+4. `gsd-milestone-summary` (As-needed — milestone narrative when all phases shipped)
+5. `episodic-memory:remembering-conversations` (Always — record key decisions and lessons)
+6. `gsd-session-report` (As-needed — session report when relevant)
 
-1. Invoke `gsd-audit-uat` via the Skill tool
-2. Invoke `gsd-audit-milestone` via the Skill tool
-3. If gaps found (max 2 gap-closure iterations): invoke `gsd-plan-milestone-gaps` → invoke `silver:feature` for gap phases → return to Step 0 of the gap phases. After 2 iterations if gaps remain, surface to user with options.
-4. Invoke `gsd-complete-milestone` via the Skill tool
+### Exit Condition
+
+docs/ updated, session log completed.
+
+---
+
+## PATH 17: RELEASE — Milestone completion
+
+### Prerequisite Check
+
+All phases shipped (PATH 13 completed for every phase in milestone). Trigger: user signals milestone complete, or last phase shipped.
+
+```bash
+# Confirm all phases have PRs / are shipped before proceeding
+```
+
+### Steps
+
+1. `gsd-audit-uat` (Always — UAT audit across all phases)
+2. `gsd-audit-milestone` (Always — milestone completeness audit)
+3. `PATH 15 DESIGN HANDOFF` (As-needed — if milestone has UI phases, inserted here between steps 2 and 4)
+4. `gsd-plan-milestone-gaps` (As-needed — gaps found in audit; gap closure is Claude-suggested, user-decided depth)
+5. `create-release` (Always — create GitHub Release)
+6. `gsd-complete-milestone` (Always — archive .planning/, reset STATE.md)
+
+### Review Cycle
+
+Cross-artifact review → artifact-review-assessor → fix → pass (runs before create-release). Gap closure: Claude-suggested, user-decided depth.
+
+### Exit Condition
+
+GitHub Release created, milestone archived.
+
+> **Note:** PATH 17 also exists in silver-release/SKILL.md (primary location for standalone release flows). This silver-feature version handles milestone completion at the end of the feature workflow.
