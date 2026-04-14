@@ -48,10 +48,8 @@ cmd=$(printf '%s' "$input" | jq -r '.tool_input.command // ""')
 # ── Classify the command ──────────────────────────────────────────────────────
 # is_intermediate: git commit / git push (atomic commits during development)
 # is_completion:   gh pr create / deploy / gh release create (final delivery gates)
-# is_release:      gh release create (also requires §9 quality-gate stages)
 is_intermediate=false
 is_completion=false
-is_release=false
 
 if printf '%s' "$cmd" | grep -qE '\bgit commit\b'; then
   is_intermediate=true
@@ -65,7 +63,6 @@ elif printf '%s' "$cmd" | grep -iqE '\bdeploy\b'; then
   is_completion=true
 elif printf '%s' "$cmd" | grep -qE '\bgh release create\b'; then
   is_completion=true
-  is_release=true
 fi
 
 # Skip commands that don't match any gate
