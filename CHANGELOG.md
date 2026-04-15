@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 
+## [0.20.6] — 2026-04-16
+
+### Fixed
+- `hooks/roadmap-freshness.sh`: new PreToolUse/Bash hook that blocks `git commit` when a phase `*-SUMMARY.md` is staged but the corresponding ROADMAP.md checkbox is not ticked (`[ ]`). Prevents autonomous execution from silently skipping the ROADMAP bookkeeping step.
+- `skills/silver-feature/SKILL.md`: added explicit "TICK ROADMAP.md" step to the Per-Phase Loop so autonomous runs update the checkbox before the phase-completion commit.
+- `.planning/ROADMAP.md`: ticked checkboxes for phases 23, 24, 27, 28 which were completed in the prior milestone but not updated due to the missing enforcement.
+
+### Tests
+- Total: 972 tests, 3/3 suites green (8 new tests for roadmap-freshness hook)
+
 ## [0.20.5] — 2026-04-16
 
 ### Changed
