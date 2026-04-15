@@ -185,7 +185,8 @@ Invoke `silver:tdd` (superpowers:test-driven-development) via the Skill tool for
 
 Run review sequence in order:
 1. Invoke `silver:request-review` (superpowers:requesting-code-review) via the Skill tool.
-2. Invoke `gsd-code-review` via the Skill tool. If issues found: invoke `gsd-code-review-fix` via the Skill tool.
+2. Invoke `/code-review` via the Skill tool. Purpose: establish review criteria before spawning reviewer agents.
+3. Invoke `gsd-code-review` via the Skill tool. If issues found: invoke `gsd-code-review-fix` via the Skill tool.
 3. For architecturally significant UI systems: invoke `gsd-review --multi-ai` via the Skill tool (cross-AI adversarial review).
 4. Invoke `silver:receive-review` (superpowers:receiving-code-review) via the Skill tool.
 
@@ -219,6 +220,10 @@ If coverage gaps remain after verification: invoke `gsd-add-tests` via the Skill
 ## Step 12: Validate Phase
 
 Invoke `gsd-validate-phase` via the Skill tool. Purpose: Nyquist gap filling.
+
+## Step 12b: Tech Debt Review
+
+Invoke `/tech-debt` via the Skill tool. Purpose: identify and document any technical debt introduced during this phase. Items not addressed now MUST be captured via `gsd-add-backlog`.
 
 ## Step 13: Pre-Ship Quality Gates
 
