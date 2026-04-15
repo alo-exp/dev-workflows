@@ -1,38 +1,29 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<script>document.documentElement.setAttribute('data-theme',localStorage.getItem('silver-bullet-theme')==='light'?'light':'dark');</script>
 <meta name="description" content="How systemic inefficiency across every layer of modern software infrastructure undermines digital sustainability — 13-slide deck by Shafqat Ullah for GDC Sustainability Townhall, April 2026.">
 <title>The Brute-Force Stack — GDC Sustainability Townhall 2026</title>
 <link rel="icon" type="image/png" href="../favicon.png">
 <link rel="shortcut icon" href="../favicon.ico">
+<link rel="stylesheet" href="../tokens.css">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800&family=Roboto:ital,wght@0,300;0,400;0,700;1,400&family=Roboto+Mono:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap');
-
   :root {
-    --green: #1D9E75;
-    --green-light: #E1F5EE;
-    --green-dark: #0F6E56;
-    --amber: #BA7517;
-    --amber-light: #FAEEDA;
-    --red: #A32D2D;
-    --red-light: #FCEBEB;
-    --ink: #1a1a18;
-    --ink-mid: #3d3d38;
-    --ink-light: #787870;
-    --paper: #FAF9F6;
-    --paper-warm: #F2EFE6;
-    --rule: rgba(26,26,24,0.10);
     --slide-w: 1200px;
     --slide-h: 675px;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
 
+  html { -webkit-font-smoothing: antialiased; }
+
   body {
-    background: #1a1a18;
-    font-family: 'Syne', sans-serif;
+    background: var(--bg-page);
+    font-family: var(--font-body);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -49,26 +40,30 @@
     align-items: center;
     justify-content: space-between;
     padding: 10px 0 14px;
-    color: #888;
+    color: var(--text-dim);
     font-size: 13px;
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     letter-spacing: 0.04em;
   }
   .nav-btns { display: flex; gap: 10px; }
   .nav button {
-    background: rgba(255,255,255,0.08);
-    border: 1px solid rgba(255,255,255,0.15);
-    color: #ccc;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-secondary);
     padding: 6px 18px;
-    border-radius: 4px;
+    border-radius: var(--radius-sm);
     cursor: pointer;
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 12px;
     letter-spacing: 0.05em;
-    transition: background 0.15s;
+    transition: background .15s, border-color .15s, color .15s;
   }
-  .nav button:hover { background: rgba(255,255,255,0.15); }
-  .slide-counter { color: #666; }
+  .nav button:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--border-hover);
+    color: var(--text-primary);
+  }
+  .slide-counter { color: var(--text-dim); }
 
   /* SLIDE WRAPPER */
   .deck { width: var(--slide-w); max-width: 100%; position: relative; }
@@ -77,8 +72,9 @@
     width: var(--slide-w);
     max-width: 100%;
     min-height: var(--slide-h);
-    background: var(--paper);
-    border-radius: 4px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
     overflow: hidden;
     display: none;
     position: relative;
@@ -90,9 +86,9 @@
     position: absolute;
     top: 20px;
     right: 28px;
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
-    color: var(--ink-light);
+    color: var(--text-dim);
     letter-spacing: 0.08em;
   }
 
@@ -100,35 +96,39 @@
      SLIDE 1 — TITLE
   ═══════════════════════════════ */
   .s-title {
-    background: var(--ink);
-    color: var(--paper);
+    background: var(--bg-page);
+    color: var(--text-primary);
     flex-direction: column;
     justify-content: flex-end;
     padding: 0 80px 64px;
     min-height: var(--slide-h);
+    border: none;
   }
   .s-title .eyebrow {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     letter-spacing: 0.14em;
-    color: var(--green);
+    color: var(--accent);
     text-transform: uppercase;
     margin-bottom: 20px;
   }
   .s-title h1 {
-    font-family: 'DM Serif Display', serif;
+    font-family: var(--font-heading);
     font-size: 72px;
+    font-weight: 800;
     line-height: 1.05;
-    color: var(--paper);
+    letter-spacing: -0.04em;
+    color: var(--text-primary);
     max-width: 800px;
     margin-bottom: 28px;
   }
-  .s-title h1 em { color: #A8E6CE; font-style: normal; }
+  .s-title h1 em { color: var(--accent); font-style: normal; }
   .s-title .subtitle {
+    font-family: var(--font-body);
     font-size: 16px;
-    color: rgba(250,249,246,0.55);
+    color: var(--text-secondary);
     max-width: 560px;
-    line-height: 1.6;
+    line-height: 1.7;
   }
   .s-title .speaker-line {
     margin-top: 36px;
@@ -136,24 +136,26 @@
     align-items: center;
     gap: 20px;
     padding-top: 28px;
-    border-top: 1px solid rgba(255,255,255,0.12);
+    border-top: 1px solid var(--border);
   }
   .s-title .speaker-line .name {
+    font-family: var(--font-heading);
     font-size: 15px;
     font-weight: 600;
-    color: var(--paper);
+    color: var(--text-primary);
   }
   .s-title .speaker-line .role {
+    font-family: var(--font-body);
     font-size: 13px;
-    color: rgba(250,249,246,0.45);
+    color: var(--text-dim);
   }
-  .s-title .dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.25); }
+  .s-title .dot { width: 4px; height: 4px; border-radius: 50%; background: var(--border-hover); }
   .title-grid {
     position: absolute;
     inset: 0;
     background-image:
-      linear-gradient(rgba(29,158,117,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(29,158,117,0.04) 1px, transparent 1px);
+      linear-gradient(var(--accent-a04) 1px, transparent 1px),
+      linear-gradient(90deg, var(--accent-a04) 1px, transparent 1px);
     background-size: 60px 60px;
     pointer-events: none;
   }
@@ -162,42 +164,47 @@
      SECTION DIVIDER
   ═══════════════════════════════ */
   .s-divider {
-    background: var(--green-dark);
+    background: linear-gradient(135deg, #004010 0%, #006a1c 100%);
     color: white;
     justify-content: center;
     align-items: flex-start;
     padding: 0 80px;
     flex-direction: column;
     gap: 16px;
+    border: none;
   }
   .s-divider .section-num {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-heading);
     font-size: 120px;
-    font-weight: 500;
-    color: rgba(255,255,255,0.08);
+    font-weight: 800;
+    color: rgba(255,255,255,0.07);
     line-height: 1;
     position: absolute;
     right: 60px;
     bottom: 40px;
+    letter-spacing: -0.05em;
   }
   .s-divider .section-label {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     letter-spacing: 0.16em;
     color: rgba(255,255,255,0.5);
     text-transform: uppercase;
   }
   .s-divider h2 {
-    font-family: 'DM Serif Display', serif;
-    font-size: 52px;
+    font-family: var(--font-heading);
+    font-size: 50px;
+    font-weight: 800;
     line-height: 1.15;
     max-width: 640px;
+    letter-spacing: -0.03em;
   }
   .s-divider p {
+    font-family: var(--font-body);
     font-size: 15px;
     color: rgba(255,255,255,0.65);
     max-width: 520px;
-    line-height: 1.65;
+    line-height: 1.7;
   }
 
   /* ═══════════════════════════════
@@ -214,34 +221,34 @@
     gap: 14px;
     margin-bottom: 32px;
     padding-bottom: 16px;
-    border-bottom: 1px solid var(--rule);
+    border-bottom: 1px solid var(--border);
   }
   .slide-header .layer-badge {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     letter-spacing: 0.1em;
     text-transform: uppercase;
     color: white;
-    background: var(--ink-mid);
+    background: var(--text-dim);
     padding: 3px 9px;
-    border-radius: 3px;
+    border-radius: var(--radius-sm);
     flex-shrink: 0;
   }
   .slide-header h2 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 28px;
+    font-family: var(--font-heading);
+    font-size: 26px;
     font-weight: 700;
-    color: var(--ink);
-    line-height: 1.15;
-    letter-spacing: -0.01em;
+    color: var(--heading-muted);
+    line-height: 1.2;
+    letter-spacing: -0.02em;
   }
   .slide-header .sub {
     font-size: 13px;
-    color: var(--ink-light);
+    color: var(--text-dim);
     font-weight: 400;
     margin-left: auto;
     white-space: nowrap;
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
   }
 
   /* STAT GRID */
@@ -255,9 +262,9 @@
   .stat-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
 
   .stat-card {
-    background: white;
-    border: 0.5px solid var(--rule);
-    border-radius: 6px;
+    background: var(--bg-card-hover);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-sm);
     padding: 18px 20px 16px;
     display: flex;
     flex-direction: column;
@@ -266,50 +273,53 @@
   }
   .stat-card.accent-red { border-top: 3px solid var(--red); }
   .stat-card.accent-amber { border-top: 3px solid var(--amber); }
-  .stat-card.accent-green { border-top: 3px solid var(--green); }
-  .stat-card.accent-ink { border-top: 3px solid var(--ink); }
+  .stat-card.accent-green { border-top: 3px solid var(--accent); }
+  .stat-card.accent-ink { border-top: 3px solid var(--text-secondary); }
 
   .stat-num {
-    font-family: 'DM Serif Display', serif;
+    font-family: var(--font-heading);
     font-size: 44px;
+    font-weight: 800;
     line-height: 1;
-    color: var(--ink);
+    color: var(--text-primary);
+    letter-spacing: -0.03em;
   }
   .stat-num.sm { font-size: 32px; }
   .stat-num.lg { font-size: 56px; }
   .stat-num.red { color: var(--red); }
   .stat-num.amber { color: var(--amber); }
-  .stat-num.green { color: var(--green); }
+  .stat-num.green { color: var(--accent); }
 
   .stat-label {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 16px;
+    font-family: var(--font-heading);
+    font-size: 15px;
     font-weight: 700;
-    color: var(--ink);
-    line-height: 1.25;
-    letter-spacing: 0.01em;
+    color: var(--heading-muted);
+    line-height: 1.3;
+    letter-spacing: -0.01em;
   }
   .stat-desc {
-    font-size: 13.5px;
-    color: var(--ink-light);
-    line-height: 1.55;
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
     flex: 1;
   }
   .stat-source {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
-    color: rgba(120,120,112,0.7);
+    color: var(--text-dim);
     margin-top: 6px;
-    border-top: 0.5px solid var(--rule);
+    border-top: 0.5px solid var(--border);
     padding-top: 6px;
   }
 
   /* FULL-WIDTH STAT */
   .stat-wide {
-    background: white;
-    border: 0.5px solid var(--rule);
-    border-left: 4px solid var(--green);
-    border-radius: 0 6px 6px 0;
+    background: var(--bg-card-hover);
+    border: 0.5px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
     padding: 16px 22px;
     display: flex;
     align-items: center;
@@ -317,21 +327,35 @@
     margin-bottom: 12px;
   }
   .stat-wide .num {
-    font-family: 'DM Serif Display', serif;
+    font-family: var(--font-heading);
     font-size: 48px;
+    font-weight: 800;
     line-height: 1;
-    color: var(--ink);
+    color: var(--text-primary);
     white-space: nowrap;
     min-width: 120px;
+    letter-spacing: -0.03em;
   }
   .stat-wide .num.red { color: var(--red); }
   .stat-wide .text { flex: 1; }
-  .stat-wide .text .label { font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 3px; letter-spacing: 0.01em; }
-  .stat-wide .text .desc { font-size: 13.5px; color: var(--ink-light); line-height: 1.55; }
+  .stat-wide .text .label {
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--heading-muted);
+    margin-bottom: 3px;
+    letter-spacing: -0.01em;
+  }
+  .stat-wide .text .desc {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
   .stat-wide .src {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
-    color: rgba(120,120,112,0.7);
+    color: var(--text-dim);
     white-space: nowrap;
   }
 
@@ -339,35 +363,45 @@
   .stack-wrap { display: flex; gap: 20px; flex: 1; align-items: stretch; }
   .stack-col { flex: 1; display: flex; flex-direction: column; gap: 6px; }
   .stack-layer {
-    border-radius: 5px;
+    border-radius: var(--radius-sm);
     padding: 12px 16px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 10px;
   }
-  .stack-layer .lname { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; color: var(--ink); letter-spacing: 0.01em; }
-  .stack-layer .lsub { font-size: 12.5px; color: var(--ink-light); }
-  .stack-layer .lbadge {
-    font-family: 'DM Mono', monospace;
+  .stack-layer .lname {
+    font-family: var(--font-heading);
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--heading-muted);
+    letter-spacing: -0.01em;
+  }
+  .stack-layer .lsub {
+    font-family: var(--font-body);
     font-size: 12px;
+    color: var(--text-secondary);
+  }
+  .stack-layer .lbadge {
+    font-family: var(--font-mono);
+    font-size: 11px;
     font-weight: 500;
     white-space: nowrap;
     padding: 3px 8px;
-    border-radius: 3px;
+    border-radius: var(--radius-sm);
   }
-  .layer-1 { background: #FCEBEB; }
+  .layer-1 { background: var(--red-a12); }
   .layer-1 .lbadge { background: var(--red); color: white; }
-  .layer-2 { background: #FFF3E0; }
-  .layer-2 .lbadge { background: #E65100; color: white; }
-  .layer-3 { background: #FFF8E1; }
-  .layer-3 .lbadge { background: var(--amber); color: white; }
-  .layer-4 { background: #F3F8E8; }
-  .layer-4 .lbadge { background: #5B8A1A; color: white; }
-  .layer-5 { background: #E8F5E9; }
-  .layer-5 .lbadge { background: var(--green); color: white; }
-  .layer-6 { background: var(--green-light); }
-  .layer-6 .lbadge { background: var(--green-dark); color: white; }
+  .layer-2 { background: var(--amber-a12); }
+  .layer-2 .lbadge { background: var(--amber); color: var(--bg-page); }
+  .layer-3 { background: var(--amber-a12); }
+  .layer-3 .lbadge { background: var(--amber); color: var(--bg-page); }
+  .layer-4 { background: var(--green-a12); }
+  .layer-4 .lbadge { background: var(--accent-a25); color: var(--accent); border: 1px solid var(--accent-a40); }
+  .layer-5 { background: var(--green-a15); }
+  .layer-5 .lbadge { background: var(--accent); color: var(--bg-page); }
+  .layer-6 { background: var(--mint-a12); }
+  .layer-6 .lbadge { background: var(--grad-2); color: white; }
 
   .multiply-chain {
     display: flex;
@@ -375,21 +409,24 @@
     justify-content: center;
     gap: 6px;
     padding: 14px 20px;
-    background: var(--ink);
-    border-radius: 6px;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
     margin-top: 4px;
   }
   .multiply-chain .mitem {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 13px;
-    color: rgba(255,255,255,0.7);
+    color: var(--text-secondary);
   }
-  .multiply-chain .op { color: rgba(255,255,255,0.3); }
+  .multiply-chain .op { color: var(--text-dim); }
   .multiply-chain .result {
-    font-family: 'DM Serif Display', serif;
-    font-size: 22px;
-    color: #A8E6CE;
+    font-family: var(--font-heading);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--accent);
     margin-left: 6px;
+    letter-spacing: -0.02em;
   }
 
   /* THESIS SLIDE */
@@ -398,21 +435,23 @@
     justify-content: center;
     padding: 64px 80px;
     gap: 28px;
-    background: var(--paper-warm);
+    background: var(--bg-card-hover);
   }
   .s-thesis .q {
-    font-family: 'DM Serif Display', serif;
-    font-size: 42px;
-    line-height: 1.2;
-    color: var(--ink);
+    font-family: var(--font-heading);
+    font-size: 38px;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--text-primary);
     max-width: 840px;
+    letter-spacing: -0.03em;
   }
-  .s-thesis .q em { color: var(--green-dark); font-style: italic; }
+  .s-thesis .q em { color: var(--accent); font-style: italic; }
   .s-thesis .attrib {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     letter-spacing: 0.08em;
-    color: var(--ink-light);
+    color: var(--text-dim);
   }
 
   /* COMPARE SLIDE */
@@ -423,43 +462,58 @@
   }
   .compare-item {
     flex: 1;
-    background: white;
-    border: 0.5px solid var(--rule);
-    border-radius: 6px;
+    background: var(--bg-card-hover);
+    border: 0.5px solid var(--border);
+    border-radius: var(--radius-sm);
     padding: 16px 18px;
   }
   .compare-item .ci-label {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
     letter-spacing: 0.1em;
-    color: var(--ink-light);
+    color: var(--text-dim);
     text-transform: uppercase;
     margin-bottom: 8px;
   }
-  .compare-item .ci-name { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 700; color: var(--ink); margin-bottom: 4px; letter-spacing: 0.01em; }
+  .compare-item .ci-name {
+    font-family: var(--font-heading);
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--heading-muted);
+    margin-bottom: 4px;
+    letter-spacing: -0.01em;
+  }
   .compare-item .ci-val {
-    font-family: 'DM Serif Display', serif;
-    font-size: 38px;
+    font-family: var(--font-heading);
+    font-size: 36px;
+    font-weight: 800;
     line-height: 1;
     margin-bottom: 4px;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
   }
   .compare-item .ci-val.bad { color: var(--red); }
-  .compare-item .ci-val.good { color: var(--green); }
-  .compare-item .ci-sub { font-size: 13px; color: var(--ink-light); }
+  .compare-item .ci-val.good { color: var(--accent); }
+  .compare-item .ci-sub {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
   .vs-badge {
     display: flex;
     align-items: center;
     justify-content: center;
     width: 44px;
     flex-shrink: 0;
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 12px;
-    color: var(--ink-light);
+    color: var(--text-dim);
     font-weight: 500;
   }
   .gap-callout {
-    background: var(--ink);
-    border-radius: 6px;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
     padding: 14px 22px;
     display: flex;
     align-items: center;
@@ -467,17 +521,24 @@
     margin-top: 6px;
   }
   .gap-callout .gc-num {
-    font-family: 'DM Serif Display', serif;
+    font-family: var(--font-heading);
     font-size: 48px;
-    color: #A8E6CE;
+    font-weight: 800;
+    color: var(--accent);
     line-height: 1;
     white-space: nowrap;
+    letter-spacing: -0.03em;
   }
-  .gap-callout .gc-text { font-size: 15px; color: rgba(250,249,246,0.8); line-height: 1.55; }
+  .gap-callout .gc-text {
+    font-family: var(--font-body);
+    font-size: 14px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
   .gap-callout .gc-src {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
-    color: rgba(250,249,246,0.3);
+    color: var(--text-dim);
     margin-left: auto;
     white-space: nowrap;
   }
@@ -490,86 +551,104 @@
   }
   .big-card {
     flex: 1;
-    background: var(--ink);
-    color: white;
-    border-radius: 6px;
+    background: var(--bg-code);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
     padding: 24px 22px;
     display: flex;
     flex-direction: column;
     gap: 8px;
   }
-  .big-card.light { background: white; border: 0.5px solid var(--rule); color: var(--ink); }
+  .big-card.light { background: var(--bg-card-hover); }
   .big-card .bc-num {
-    font-family: 'DM Serif Display', serif;
-    font-size: 52px;
+    font-family: var(--font-heading);
+    font-size: 48px;
+    font-weight: 800;
     line-height: 1;
-    color: #A8E6CE;
+    color: var(--accent);
+    letter-spacing: -0.04em;
   }
   .big-card.light .bc-num { color: var(--red); }
-  .big-card .bc-label { font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; color: rgba(255,255,255,0.9); letter-spacing: 0.01em; }
-  .big-card.light .bc-label { color: var(--ink); }
-  .big-card .bc-desc { font-size: 13.5px; color: rgba(255,255,255,0.5); line-height: 1.55; }
-  .big-card.light .bc-desc { color: var(--ink-light); }
+  .big-card .bc-label {
+    font-family: var(--font-heading);
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--heading-muted);
+    letter-spacing: -0.01em;
+  }
+  .big-card .bc-desc {
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
   .big-card .bc-src {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
-    color: rgba(255,255,255,0.25);
+    color: var(--text-dim);
     margin-top: auto;
   }
-  .big-card.light .bc-src { color: rgba(120,120,112,0.5); }
 
   /* CALL TO ACTION SLIDE */
   .s-cta {
-    background: var(--green-dark);
+    background: linear-gradient(135deg, #004010 0%, #006a1c 100%);
     color: white;
     flex-direction: column;
     justify-content: center;
     padding: 64px 80px;
     gap: 24px;
+    border: none;
   }
   .s-cta .eyebrow {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
     letter-spacing: 0.14em;
     color: rgba(255,255,255,0.5);
     text-transform: uppercase;
   }
   .s-cta h2 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 48px;
+    font-family: var(--font-heading);
+    font-size: 44px;
     font-weight: 800;
     line-height: 1.1;
     max-width: 760px;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.03em;
   }
   .s-cta .asks { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
   .s-cta .ask-item {
     display: flex;
     align-items: flex-start;
     gap: 14px;
-    background: rgba(255,255,255,0.07);
-    border-radius: 6px;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: var(--radius-sm);
     padding: 14px 18px;
   }
   .s-cta .ask-num {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 12px;
-    color: #A8E6CE;
+    color: rgba(160,210,180,0.9);
     padding-top: 1px;
     flex-shrink: 0;
   }
-  .s-cta .ask-text { font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.85); }
+  .s-cta .ask-text {
+    font-family: var(--font-body);
+    font-size: 14px;
+    line-height: 1.65;
+    color: rgba(255,255,255,0.85);
+  }
 
   /* CAVEAT BOX */
   .caveat-box {
-    background: var(--amber-light);
-    border: 0.5px solid rgba(186,117,23,0.25);
+    background: var(--amber-a12);
+    border: 0.5px solid var(--amber-a15);
     border-left: 3px solid var(--amber);
-    border-radius: 0 5px 5px 0;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
     padding: 10px 16px;
+    font-family: var(--font-body);
     font-size: 13px;
-    color: #5a3d08;
-    line-height: 1.5;
+    color: var(--text-secondary);
+    line-height: 1.55;
     margin-top: 10px;
   }
 
@@ -584,41 +663,52 @@
     align-items: flex-start;
   }
   .source-item .s-num {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 11px;
-    color: var(--green);
+    color: var(--accent);
     padding-top: 2px;
     min-width: 22px;
     font-weight: 500;
   }
   .source-item .s-body { flex: 1; }
-  .source-item .s-title { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; color: var(--ink); line-height: 1.25; letter-spacing: 0.01em; }
-  .source-item .s-detail { font-size: 12px; color: var(--ink-light); font-family: 'DM Mono', monospace; margin-top: 2px; }
+  .source-item .s-title {
+    font-family: var(--font-heading);
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--heading-muted);
+    line-height: 1.3;
+  }
+  .source-item .s-detail {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-dim);
+    margin-top: 2px;
+  }
 
   /* PROGRESS BAR */
   .progress {
     width: var(--slide-w);
     max-width: 100%;
     height: 2px;
-    background: rgba(255,255,255,0.08);
+    background: var(--border);
     border-radius: 1px;
     margin-top: 10px;
   }
   .progress-fill {
     height: 2px;
-    background: var(--green);
+    background: var(--accent);
     border-radius: 1px;
     transition: width 0.3s ease;
   }
 
   /* FOOTNOTE */
   .footnote {
-    font-family: 'DM Mono', monospace;
+    font-family: var(--font-mono);
     font-size: 10px;
-    color: var(--ink-light);
+    color: var(--text-dim);
     margin-top: auto;
     padding-top: 10px;
-    border-top: 0.5px solid var(--rule);
+    border-top: 0.5px solid var(--border);
     letter-spacing: 0.04em;
   }
 </style>
@@ -657,8 +747,8 @@
   <p class="q">"The GDC made sustainability a principle.<br><em>Implementation makes it real.</em>"</p>
   <p class="attrib">— CODES Secretariat, Townhall Invitation, April 2026</p>
   <div style="margin-top:12px; max-width:780px;">
-    <p style="font-size:18px; color:var(--ink-mid); line-height:1.7;">But implementation happens at the infrastructure layer — inside Kubernetes clusters, CI/CD pipelines, and cloud dashboards. That layer has almost no connection to GDC sustainability commitments. The people who control it have no sustainability metric, no mandate, and no tooling to act on what the Compact requires.</p>
-    <p style="font-size:18px; color:var(--ink-mid); line-height:1.7; margin-top:14px;">This talk presents evidence for a hypothesis: the mainstream software stack is so fundamentally resource-inefficient at every layer that a typical workload consumes <strong>10–30× more energy</strong> than an optimised equivalent — and this compounds the digital sector's sustainability crisis at planetary scale.</p>
+    <p style="font-size:17px; color:var(--text-secondary); line-height:1.7; font-family:var(--font-body);">But implementation happens at the infrastructure layer — inside Kubernetes clusters, CI/CD pipelines, and cloud dashboards. That layer has almost no connection to GDC sustainability commitments. The people who control it have no sustainability metric, no mandate, and no tooling to act on what the Compact requires.</p>
+    <p style="font-size:17px; color:var(--text-secondary); line-height:1.7; margin-top:14px; font-family:var(--font-body);">This talk presents evidence for a hypothesis: the mainstream software stack is so fundamentally resource-inefficient at every layer that a typical workload consumes <strong style="color:var(--text-primary);">10–30× more energy</strong> than an optimised equivalent — and this compounds the digital sector's sustainability crisis at planetary scale.</p>
   </div>
 </div>
 
@@ -713,7 +803,7 @@
 <div class="slide s-content" id="slide-4">
   <span class="slide-tag">04</span>
   <div class="slide-header">
-    <span class="layer-badge" style="background:#A32D2D;">Layer 1</span>
+    <span class="layer-badge" style="background:var(--red);">Layer 1</span>
     <h2>Hardware utilisation — paying to keep servers idle</h2>
     <span class="sub">Data centers globally</span>
   </div>
@@ -749,7 +839,7 @@
 <div class="slide s-content" id="slide-5">
   <span class="slide-tag">05</span>
   <div class="slide-header">
-    <span class="layer-badge" style="background:#E65100;">Layer 2</span>
+    <span class="layer-badge" style="background:var(--amber);">Layer 2</span>
     <h2>Cloud provisioning — a third of spend delivers nothing</h2>
     <span class="sub">$675B annual cloud market</span>
   </div>
@@ -787,7 +877,7 @@
 <div class="slide s-content" id="slide-6">
   <span class="slide-tag">06</span>
   <div class="slide-header">
-    <span class="layer-badge" style="background:#8a6d00;">Layer 3</span>
+    <span class="layer-badge" style="background:var(--amber);">Layer 3</span>
     <h2>Virtualisation overhead — the abstraction tax</h2>
     <span class="sub">VMs vs. containers vs. native</span>
   </div>
@@ -815,7 +905,7 @@
   </div>
   <div class="gap-callout" style="margin-top:14px;">
     <div class="gc-num">10×</div>
-    <div class="gc-text">Container density advantage over VMs — enterprises running VM fleets where containers would suffice are paying 5–10× more hardware cost for equivalent workloads.<br><span style="color:rgba(255,255,255,0.5); font-size:11px;">Yet most enterprise fleets remain mixed VM/container with significant hypervisor tax still in place.</span></div>
+    <div class="gc-text">Container density advantage over VMs — enterprises running VM fleets where containers would suffice are paying 5–10× more hardware cost for equivalent workloads.<br><span style="color:var(--text-dim); font-size:11px; font-family:var(--font-mono);">Yet most enterprise fleets remain mixed VM/container with significant hypervisor tax still in place.</span></div>
     <div class="gc-src">OneUptime, 2026 · IEEE Felter et al.</div>
   </div>
   <div class="stat-grid cols-2" style="margin-top:12px;">
@@ -838,7 +928,7 @@
 <div class="slide s-content" id="slide-7">
   <span class="slide-tag">07</span>
   <div class="slide-header">
-    <span class="layer-badge" style="background:#3B6D11;">Layer 4</span>
+    <span class="layer-badge" style="background:var(--accent);">Layer 4</span>
     <h2>Language choice — orders of magnitude in energy cost</h2>
     <span class="sub">Pereira et al., ACM SIGPLAN 2017 · Revisited 2024</span>
   </div>
@@ -863,7 +953,7 @@
     </div>
   </div>
   <div class="stat-wide">
-    <div class="num" style="color:var(--green); min-width:100px; font-size:38px;">2.4–119×</div>
+    <div class="num green" style="font-size:38px; min-width:100px;">2.4–119×</div>
     <div class="text">
       <div class="label">Performance improvement compiling Python vs. standard CPython runtime</div>
       <div class="desc">Showing how much efficiency is left on the table by the default language runtime — yet standard deployments use CPython universally</div>
@@ -877,7 +967,7 @@
 <div class="slide s-content" id="slide-8">
   <span class="slide-tag">08</span>
   <div class="slide-header">
-    <span class="layer-badge" style="background:var(--green);">Layer 5</span>
+    <span class="layer-badge" style="background:var(--grad-2);">Layer 5</span>
     <h2>Framework overhead — the case of Laravel vs. the field</h2>
     <span class="sub">TechEmpower Framework Benchmarks — Fortunes test</span>
   </div>
@@ -905,7 +995,7 @@
   </div>
   <div class="gap-callout" style="margin-top:14px;">
     <div class="gc-num">64%</div>
-    <div class="gc-text">PHP market share held by Laravel (2025) — the most popular choice is not the most efficient. Mass adoption at this scale amplifies per-request inefficiency globally across every Laravel-powered application.<br><span style="color:rgba(255,255,255,0.5); font-size:11px;">Also: 268 method calls to convert a single date field in typical enterprise framework code — the hidden overhead of abstraction layers.</span></div>
+    <div class="gc-text">PHP market share held by Laravel (2025) — the most popular choice is not the most efficient. Mass adoption at this scale amplifies per-request inefficiency globally across every Laravel-powered application.<br><span style="color:var(--text-dim); font-size:11px; font-family:var(--font-mono);">Also: 268 method calls to convert a single date field in typical enterprise framework code — the hidden overhead of abstraction layers.</span></div>
     <div class="gc-src">JetBrains State of PHP 2025 · TechEmpower R22 · HN thread 2025</div>
   </div>
   <p class="footnote">Source: TechEmpower Framework Benchmarks Round 22/23 · JetBrains State of PHP 2025 · github.com/TechEmpower/FrameworkBenchmarks</p>
@@ -915,7 +1005,7 @@
 <div class="slide s-content" id="slide-9">
   <span class="slide-tag">09</span>
   <div class="slide-header">
-    <span class="layer-badge" style="background:var(--green-dark);">Layer 6</span>
+    <span class="layer-badge" style="background:var(--grad-1);">Layer 6</span>
     <h2>Software bloat & technical debt — invisible energy waste</h2>
     <span class="sub">Oxford Open Energy · Data Center Knowledge</span>
   </div>
@@ -933,7 +1023,7 @@
       <div class="stat-source">Software bloat research, Grokipedia 2026</div>
     </div>
   </div>
-  <div class="stat-wide" style="border-left-color:var(--green);">
+  <div class="stat-wide" style="border-left-color:var(--accent);">
     <div class="num green" style="font-size:36px; min-width:80px;">Stack-wide</div>
     <div class="text">
       <div class="label">Bloat is documented across the entire software stack</div>
@@ -955,7 +1045,7 @@
 <div class="slide s-content" id="slide-10">
   <span class="slide-tag">10</span>
   <div class="slide-header">
-    <span class="layer-badge" style="background:var(--ink);">Scale</span>
+    <span class="layer-badge">Scale</span>
     <h2>Why this matters — the planetary dimension</h2>
     <span class="sub">IEA Energy & AI Report, 2025</span>
   </div>
@@ -981,7 +1071,7 @@
       <div class="bc-src">Flexera 2025 / Spendark 2026</div>
     </div>
     <div class="big-card light">
-      <div class="bc-num" style="color:var(--green);">30%</div>
+      <div class="bc-num" style="color:var(--accent);">30%</div>
       <div class="bc-label">Potential savings from energy-proportional servers alone</div>
       <div class="bc-desc">Before any software efficiency gains are factored in — hardware optimisation alone delivers massive savings</div>
       <div class="bc-src">ResearchGate server energy proportionality study</div>
@@ -993,26 +1083,26 @@
 <div class="slide s-content" id="slide-11">
   <span class="slide-tag">11</span>
   <div class="slide-header">
-    <span class="layer-badge" style="background:#185FA5;">Global South</span>
+    <span class="layer-badge" style="background:var(--cyan);">Global South</span>
     <h2>A second dimension — locking in carbon for the next billion users</h2>
     <span class="sub">Bangladesh · EdTech · Digital infrastructure choices made now</span>
   </div>
   <div class="stat-grid cols-2" style="margin-bottom:16px;">
-    <div class="stat-card" style="border-top:3px solid #185FA5;">
-      <div class="stat-num sm" style="color:#185FA5;">15–20 yrs</div>
+    <div class="stat-card" style="border-top:3px solid var(--cyan);">
+      <div class="stat-num sm" style="color:var(--cyan);">15–20 yrs</div>
       <div class="stat-label">Productive life of digital infrastructure</div>
       <div class="stat-desc">Infrastructure choices made today for EdTech in Bangladesh, Southeast Asia, and Sub-Saharan Africa will be in production for 15–20 years — locking in efficiency or waste for decades</div>
       <div class="stat-source">Infrastructure lifecycle analysis</div>
     </div>
-    <div class="stat-card" style="border-top:3px solid #185FA5;">
-      <div class="stat-num sm" style="color:#185FA5;">Next 1B</div>
+    <div class="stat-card" style="border-top:3px solid var(--cyan);">
+      <div class="stat-num sm" style="color:var(--cyan);">Next 1B</div>
       <div class="stat-label">Digital learners coming online</div>
       <div class="stat-desc">CodersTrust Bangladesh and similar organisations are building digital education infrastructure now. Framework and language choices made at this foundation layer determine the carbon and resource cost for millions of users over the next two decades</div>
       <div class="stat-source">CodersTrust / SourceVO operational context</div>
     </div>
   </div>
-  <div class="stat-wide" style="border-left-color:#185FA5;">
-    <div class="num" style="color:#185FA5; font-size:34px; min-width:80px;">GDC Obj. 1(e)</div>
+  <div class="stat-wide" style="border-left-color:var(--cyan);">
+    <div class="num" style="color:var(--cyan); font-size:34px; min-width:80px;">GDC Obj. 1(e)</div>
     <div class="text">
       <div class="label">"Promote sustainability across the life cycle of digital technologies… context-specific measures to increase resource efficiency"</div>
       <div class="desc">This commitment explicitly targets developing-country contexts and lifecycle responsibility. It cannot be fulfilled if the infrastructure layer — where the actual choices are made — has no sustainability mandate, metric, or tooling.</div>
