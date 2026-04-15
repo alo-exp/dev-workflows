@@ -1,6 +1,7 @@
 ---
 name: usability
 description: Use when designing, planning, implementing, or reviewing any non-trivial change — enforces intuitive APIs, clear error messages, progressive disclosure, and developer/user experience so the system is a joy to use
+user-invocable: false
 ---
 
 # /usability — Usability-First Design Enforcement

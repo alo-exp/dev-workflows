@@ -1,6 +1,7 @@
 ---
 name: testability
 description: Use when designing, planning, implementing, or reviewing any non-trivial change — enforces dependency injection, pure functions, observable state, and seam-based design so every component can be tested in isolation
+user-invocable: false
 ---
 
 # /testability — Testable Design Enforcement

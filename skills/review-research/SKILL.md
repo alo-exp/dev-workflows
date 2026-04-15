@@ -2,6 +2,7 @@
 name: review-research
 description: "RESEARCH.md artifact reviewer — validates that all findings cite evidence, confidence levels are justified, pitfalls are actionable, and recommendations are concrete and implementable"
 argument-hint: "<research-path>"
+user-invocable: false
 ---
 
 # review-research

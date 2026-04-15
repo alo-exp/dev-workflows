@@ -1,6 +1,7 @@
 ---
 name: devops-skill-router
 description: Context-aware routing table that maps IaC toolchain, cloud provider, and DevOps context to the best available plugin skill. Used by the devops-cycle workflow at contextual trigger points. Not a workflow step — a lookup utility.
+user-invocable: false
 ---
 
 # /devops-skill-router — Context-Aware DevOps Skill Routing

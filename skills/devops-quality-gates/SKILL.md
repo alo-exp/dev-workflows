@@ -1,6 +1,7 @@
 ---
 name: devops-quality-gates
 description: Apply 7 IaC-adapted quality dimensions against infrastructure and DevOps changes. Use after /blast-radius and before /gsd:plan-phase in the devops-cycle workflow. Skips usability (no user-facing interface in IaC). All dimensions must pass — any ❌ is a hard stop.
+user-invocable: false
 ---
 
 # /devops-quality-gates — IaC Quality Review

@@ -1,6 +1,7 @@
 ---
 name: reusability
 description: Use when designing, planning, implementing, or reviewing any non-trivial change — enforces DRY, well-defined abstractions, and composable components so code is written once and used many times
+user-invocable: false
 ---
 
 # /reusability — Reusable Design Enforcement

@@ -1,6 +1,7 @@
 ---
 name: security
 description: Use when designing, planning, implementing, or reviewing any non-trivial change — enforces defense in depth, input validation, secure defaults, and OWASP best practices to prevent vulnerabilities before they ship
+user-invocable: false
 ---
 
 # /security — Security-First Design Enforcement

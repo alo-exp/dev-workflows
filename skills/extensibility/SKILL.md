@@ -1,6 +1,7 @@
 ---
 name: extensibility
 description: Use when designing, planning, implementing, or reviewing any non-trivial change — enforces open-closed design, plugin architectures, stable interfaces, and versioning so systems grow without breaking existing consumers
+user-invocable: false
 ---
 
 # /extensibility — Extensible Design Enforcement

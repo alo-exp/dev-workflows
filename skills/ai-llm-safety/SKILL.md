@@ -1,6 +1,7 @@
 ---
 name: ai-llm-safety
 description: Use when designing, planning, implementing, or reviewing any system that involves LLM agents, tool use, prompt construction, or agentic workflows — enforces prompt injection defense, tool safety, and context integrity
+user-invocable: false
 ---
 
 # /ai-llm-safety — AI/LLM Safety Design Enforcement

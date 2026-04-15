@@ -1,6 +1,7 @@
 ---
 name: scalability
 description: Use when designing, planning, implementing, or reviewing any non-trivial change — enforces stateless design, efficient resource usage, and architectural patterns that handle 10x-100x growth without redesign
+user-invocable: false
 ---
 
 # /scalability — Scalable Design Enforcement

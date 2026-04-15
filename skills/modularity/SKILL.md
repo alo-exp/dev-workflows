@@ -1,6 +1,7 @@
 ---
 name: modularity
 description: Use when designing, planning, implementing, or reviewing any non-trivial change — enforces small, focused modules so any change fits in context without compaction
+user-invocable: false
 ---
 
 # /modularity — Modular Design Enforcement

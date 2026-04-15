@@ -1,6 +1,7 @@
 ---
 name: reliability
 description: Use when designing, planning, implementing, or reviewing any non-trivial change — enforces graceful degradation, proper error handling, retry strategies, and fault-tolerant patterns so systems stay up when things go wrong
+user-invocable: false
 ---
 
 # /reliability — Reliable Design Enforcement
