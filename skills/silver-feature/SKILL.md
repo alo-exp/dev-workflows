@@ -333,6 +333,12 @@ Invoke `gsd-plan-phase` via the Skill tool. Purpose: PLAN.md with verification l
 
 **Error path:** If execution fails mid-wave, do NOT mark the phase complete. Route to `silver:bugfix` via the Skill tool for triage (Step 0 classification). Return here only after bugfix confirms the root cause is resolved.
 
+**During-execution deferred capture:** While executing, any item that is skipped, descoped, or explicitly deferred (e.g., "skipping X for now", "out of scope", "future optimization") MUST be added to the GSD backlog before moving to the next task — not at the end of the session. Do not accumulate deferred items silently.
+
+```
+Skill(skill="gsd-add-backlog", args="<description of deferred item>")
+```
+
 ## Step 7a: TDD Gate (implementation plans only)
 
 **Only for implementation plans — skip for config/infra/doc plans:**
@@ -459,3 +465,20 @@ Do NOT proceed to gsd-audit-uat until cross-artifact review reports clean pass. 
 2. Invoke `gsd-audit-milestone` via the Skill tool
 3. If gaps found (max 2 gap-closure iterations): invoke `gsd-plan-milestone-gaps` → invoke `silver:feature` for gap phases → return to Step 0 of the gap phases. After 2 iterations if gaps remain, surface to user with options.
 4. Invoke `gsd-complete-milestone` via the Skill tool
+
+## Step 18: Post-work backlog capture (mandatory)
+
+After all work for this feature/phase is complete, perform a final deferred-item sweep:
+
+1. Review all CONTEXT.md `<deferred>` sections from phases worked on in this session
+2. Review any items marked "future", "TODO", "later", or "out of scope" in SUMMARYs, PLANs, or discussion
+3. Review any items explicitly deferred during execution (e.g., "skipping X for now")
+
+**Every deferred item that has not yet been captured in the GSD backlog must be added now:**
+```
+Skill(skill="gsd-add-backlog", args="<deferred item description>")
+```
+
+If no items were deferred during this session, output: "Post-work sweep: no deferred items to capture."
+
+**This step is non-negotiable.** Items deferred during execution and not captured here are permanently lost.
