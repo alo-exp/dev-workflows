@@ -48,10 +48,10 @@ is_blocked() {
 assert_blocks() {
   local label="$1" output="$2"
   if is_blocked "$output"; then
-    echo "  ✅ $label"
+    echo "  PASS $label"
     PASS=$((PASS + 1))
   else
-    echo "  ❌ $label — expected block, got: $output"
+    echo "  FAIL $label — expected block, got: $output"
     FAIL=$((FAIL + 1))
   fi
 }
@@ -59,10 +59,10 @@ assert_blocks() {
 assert_passes() {
   local label="$1" output="$2"
   if ! is_blocked "$output"; then
-    echo "  ✅ $label"
+    echo "  PASS $label"
     PASS=$((PASS + 1))
   else
-    echo "  ❌ $label — expected pass, got: $output"
+    echo "  FAIL $label — expected pass, got: $output"
     FAIL=$((FAIL + 1))
   fi
 }
@@ -159,7 +159,9 @@ out=$(run_hook "PreToolUse" "git commit -m 'Phases 23+24 complete'")
 assert_blocks "one unticked among multiple stages: blocks" "$out"
 teardown
 
-# 8. PostToolUse event — same logic applies
+# 8. PostToolUse event — hook emits PreToolUse deny format unconditionally regardless of
+#    the event type in stdin. Hook is registered PreToolUse-only in hooks.json; this test
+#    verifies the hook's own output (deny) not a separate PostToolUse code path.
 echo "  group: PostToolUse event"
 setup
 write_roadmap "- [ ] **Phase 27: silver-fast Redesign** - desc

@@ -57,6 +57,8 @@ staged_files=$(git -C "$project_root" diff --cached --name-only 2>/dev/null || t
 [[ -z "$staged_files" ]] && exit 0
 
 # Filter for phase SUMMARY.md files: .planning/phases/N-*/N-*-SUMMARY.md
+# Convention: phase plan files are named {phase}-{step}-SUMMARY.md (e.g. 27-01-SUMMARY.md).
+# Files with more numeric segments (e.g. 27-01-02-SUMMARY.md) are silently skipped — by design.
 staged_summaries=$(printf '%s' "$staged_files" | grep -E '^\.planning/phases/[0-9]+-[^/]+/[0-9]+-[0-9]+-SUMMARY\.md$' || true)
 [[ -z "$staged_summaries" ]] && exit 0
 
