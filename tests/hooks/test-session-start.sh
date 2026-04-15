@@ -14,35 +14,30 @@ SB_TEST_DIR="${HOME}/.claude/.silver-bullet"
 mkdir -p "$SB_TEST_DIR"
 TEST_RUN_ID="$$"
 
-# Backup real branch/state files
-REAL_STATE="${SB_TEST_DIR}/state"
-REAL_BRANCH="${SB_TEST_DIR}/branch"
-REAL_TRIVIAL="${SB_TEST_DIR}/trivial"
-BACKUP_STATE="${SB_TEST_DIR}/state.bak.${TEST_RUN_ID}"
-BACKUP_BRANCH="${SB_TEST_DIR}/branch.bak.${TEST_RUN_ID}"
-
-backup_real_state() {
-  [[ -f "$REAL_STATE" ]] && cp "$REAL_STATE" "$BACKUP_STATE" || true
-  [[ -f "$REAL_BRANCH" ]] && cp "$REAL_BRANCH" "$BACKUP_BRANCH" || true
-}
-
-restore_real_state() {
-  [[ -f "$BACKUP_STATE" ]] && mv "$BACKUP_STATE" "$REAL_STATE" || rm -f "$REAL_STATE"
-  [[ -f "$BACKUP_BRANCH" ]] && mv "$BACKUP_BRANCH" "$REAL_BRANCH" || rm -f "$REAL_BRANCH"
-}
+# Use temp files for state/branch so tests never touch the live session state.
+# SILVER_BULLET_STATE_FILE is honoured by session-start (same env var pattern
+# as completion-audit.sh and stop-check.sh).
+TMPSTATE="${SB_TEST_DIR}/test-state-${TEST_RUN_ID}"
+TMPBRANCH="${SB_TEST_DIR}/test-branch-${TEST_RUN_ID}"
+TMPTRIVIAL="${SB_TEST_DIR}/trivial"   # trivial still uses default path (config-driven tests below)
+export SILVER_BULLET_STATE_FILE="$TMPSTATE"
 
 cleanup_all() {
-  restore_real_state
-  rm -f "${REAL_TRIVIAL}" 2>/dev/null || true
+  rm -f "$TMPSTATE" "$TMPBRANCH" 2>/dev/null || true
+  rm -f "${TMPTRIVIAL}" 2>/dev/null || true
 }
 trap cleanup_all EXIT
 
 run_hook() {
-  # session-start does NOT read stdin — run directly; override PWD via a temp git repo
+  # session-start does NOT read stdin — run directly; override PWD via a temp git repo.
+  # Pass TMPBRANCH as the branch file via env (branch file is not configurable, so we
+  # point SB_STATE_DIR at a temp dir for the duration of each test via env override).
   # Use || true: hook may exit non-zero when optional plugins (design) are absent,
   # but we test effects (state file mutations, output content) not the exit code.
   local workdir="${1:-$HOOK_WORKDIR}"
-  ( cd "$workdir" && bash "$HOOK" 2>/dev/null ) || true
+  ( cd "$workdir" && \
+    SILVER_BULLET_STATE_FILE="$TMPSTATE" \
+    bash "$HOOK" 2>/dev/null ) || true
 }
 
 # Create a minimal git repo directory with a commit so HEAD is valid
@@ -53,6 +48,16 @@ make_git_repo() {
   git -C "$dir" -c user.email="test@test.com" -c user.name="Test" commit -q --allow-empty -m "init" 2>/dev/null
   printf '%s' "$dir"
 }
+
+# Point the hook's branch file at our temp branch file for a test.
+# We do this by temporarily replacing the real branch file content and restoring it.
+# Branch file is not overrideable via env, so we use a scoped swap that only touches
+# the branch tracking file (not the state file — which is now safely isolated).
+REAL_BRANCH="${SB_TEST_DIR}/branch"
+BACKUP_BRANCH="${SB_TEST_DIR}/branch.bak.${TEST_RUN_ID}"
+
+save_branch()    { [[ -f "$REAL_BRANCH" ]] && cp "$REAL_BRANCH" "$BACKUP_BRANCH" || true; }
+restore_branch() { [[ -f "$BACKUP_BRANCH" ]] && mv "$BACKUP_BRANCH" "$REAL_BRANCH" || rm -f "$REAL_BRANCH"; }
 
 assert_contains() {
   local label="$1"
@@ -137,14 +142,14 @@ echo "=== session-start tests ==="
 
 # Test 1: Branch change -> state file deleted (full reset)
 echo "--- Test 1: Branch change -> state file deleted ---"
-backup_real_state
+save_branch
 HOOK_WORKDIR=$(make_git_repo)
 new_branch=$(git -C "$HOOK_WORKDIR" rev-parse --abbrev-ref HEAD 2>/dev/null)
 # Write a state file and point branch file at a different branch
-printf 'silver-quality-gates\ncode-review\n' > "$REAL_STATE"
+printf 'silver-quality-gates\ncode-review\n' > "$TMPSTATE"
 printf 'old-branch-xyz' > "$REAL_BRANCH"
 run_hook "$HOOK_WORKDIR" >/dev/null
-assert_file_missing "branch changed -> state file deleted" "$REAL_STATE"
+assert_file_missing "branch changed -> state file deleted" "$TMPSTATE"
 # branch file should now reflect current branch
 if [[ -f "$REAL_BRANCH" ]]; then
   stored=$(cat "$REAL_BRANCH")
@@ -160,68 +165,70 @@ else
   FAIL=$((FAIL + 1))
 fi
 rm -rf "$HOOK_WORKDIR"
-restore_real_state
+restore_branch
 
 # Test 2: Same branch -> state file preserved
 echo "--- Test 2: Same branch -> state file preserved ---"
-backup_real_state
+save_branch
 HOOK_WORKDIR=$(make_git_repo)
 new_branch=$(git -C "$HOOK_WORKDIR" rev-parse --abbrev-ref HEAD 2>/dev/null)
-# Pre-write skill lines (no quality-gate or gsd lines — should be preserved)
-printf 'silver-quality-gates\ncode-review\n' > "$REAL_STATE"
+printf 'silver-quality-gates\ncode-review\n' > "$TMPSTATE"
 printf '%s' "$new_branch" > "$REAL_BRANCH"
 run_hook "$HOOK_WORKDIR" >/dev/null
-assert_file_exists "same branch -> state file preserved" "$REAL_STATE"
-assert_file_contains "same branch -> skill line preserved" "$REAL_STATE" "silver-quality-gates"
+assert_file_exists "same branch -> state file preserved" "$TMPSTATE"
+assert_file_contains "same branch -> skill line preserved" "$TMPSTATE" "silver-quality-gates"
 rm -rf "$HOOK_WORKDIR"
-restore_real_state
+restore_branch
+rm -f "$TMPSTATE"
 
 # Test 3: Same branch -> regular skills survive session restart
 echo "--- Test 3: Same branch -> regular skills survive session restart ---"
-backup_real_state
+save_branch
 HOOK_WORKDIR=$(make_git_repo)
 new_branch=$(git -C "$HOOK_WORKDIR" rev-parse --abbrev-ref HEAD 2>/dev/null)
-printf 'silver-quality-gates\ncode-review\n' > "$REAL_STATE"
+printf 'silver-quality-gates\ncode-review\n' > "$TMPSTATE"
 printf '%s' "$new_branch" > "$REAL_BRANCH"
 run_hook "$HOOK_WORKDIR" >/dev/null
-assert_file_contains "same branch -> skills preserved" "$REAL_STATE" "silver-quality-gates"
-assert_file_contains "same branch -> code-review preserved" "$REAL_STATE" "code-review"
+assert_file_contains "same branch -> skills preserved" "$TMPSTATE" "silver-quality-gates"
+assert_file_contains "same branch -> code-review preserved" "$TMPSTATE" "code-review"
 rm -rf "$HOOK_WORKDIR"
-restore_real_state
+restore_branch
+rm -f "$TMPSTATE"
 
 # Test 4: Same branch -> gsd-* markers stripped
 echo "--- Test 4: Same branch -> gsd-* markers stripped ---"
-backup_real_state
+save_branch
 HOOK_WORKDIR=$(make_git_repo)
 new_branch=$(git -C "$HOOK_WORKDIR" rev-parse --abbrev-ref HEAD 2>/dev/null)
-printf 'silver-quality-gates\ngsd-discuss-phase\ngsd-plan-phase\n' > "$REAL_STATE"
+printf 'silver-quality-gates\ngsd-discuss-phase\ngsd-plan-phase\n' > "$TMPSTATE"
 printf '%s' "$new_branch" > "$REAL_BRANCH"
 run_hook "$HOOK_WORKDIR" >/dev/null
-assert_file_contains "same branch -> silver-quality-gates preserved" "$REAL_STATE" "silver-quality-gates"
-assert_file_not_contains "same branch -> gsd-discuss-phase stripped" "$REAL_STATE" "gsd-discuss-phase"
-assert_file_not_contains "same branch -> gsd-plan-phase stripped" "$REAL_STATE" "gsd-plan-phase"
+assert_file_contains "same branch -> silver-quality-gates preserved" "$TMPSTATE" "silver-quality-gates"
+assert_file_not_contains "same branch -> gsd-discuss-phase stripped" "$TMPSTATE" "gsd-discuss-phase"
+assert_file_not_contains "same branch -> gsd-plan-phase stripped" "$TMPSTATE" "gsd-plan-phase"
 rm -rf "$HOOK_WORKDIR"
-restore_real_state
+restore_branch
+rm -f "$TMPSTATE"
 
 # ── Trivial file cleanup tests ────────────────────────────────────────────────
 
 # Test 5: Trivial file deleted on session start
 echo "--- Test 5: Trivial file deleted on session start ---"
-backup_real_state
+save_branch
 HOOK_WORKDIR=$(make_git_repo)
 new_branch=$(git -C "$HOOK_WORKDIR" rev-parse --abbrev-ref HEAD 2>/dev/null)
 printf '%s' "$new_branch" > "$REAL_BRANCH"
-touch "$REAL_TRIVIAL"
+touch "$TMPTRIVIAL"
 run_hook "$HOOK_WORKDIR" >/dev/null
-assert_file_missing "trivial file deleted on session start" "$REAL_TRIVIAL"
+assert_file_missing "trivial file deleted on session start" "$TMPTRIVIAL"
 rm -rf "$HOOK_WORKDIR"
-restore_real_state
+restore_branch
 
 # ── Output / injection tests ──────────────────────────────────────────────────
 
 # Test 6: Output is valid JSON with hookSpecificOutput key
 echo "--- Test 6: Output is valid JSON with hookSpecificOutput ---"
-backup_real_state
+save_branch
 HOOK_WORKDIR=$(make_git_repo)
 new_branch=$(git -C "$HOOK_WORKDIR" rev-parse --abbrev-ref HEAD 2>/dev/null)
 printf '%s' "$new_branch" > "$REAL_BRANCH"
@@ -247,11 +254,11 @@ else
   fi
 fi
 rm -rf "$HOOK_WORKDIR"
-restore_real_state
+restore_branch
 
 # Test 7: core-rules.md content injected when file exists
 echo "--- Test 7: core-rules.md content injected ---"
-backup_real_state
+save_branch
 HOOK_WORKDIR=$(make_git_repo)
 new_branch=$(git -C "$HOOK_WORKDIR" rev-parse --abbrev-ref HEAD 2>/dev/null)
 printf '%s' "$new_branch" > "$REAL_BRANCH"
@@ -270,7 +277,7 @@ else
   PASS=$((PASS + 1))
 fi
 rm -rf "$HOOK_WORKDIR"
-restore_real_state
+restore_branch
 
 # ── Results ───────────────────────────────────────────────────────────────────
 echo ""

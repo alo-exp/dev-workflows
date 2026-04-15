@@ -24,6 +24,15 @@ mkdir -p "$SB_STATE_DIR" 2>/dev/null || true
 state_file="${SB_STATE_DIR}/state"
 branch_file="${SB_STATE_DIR}/branch"
 
+# Env var override — allows tests to redirect state writes to a temp file
+# without touching the live session state (same pattern as completion-audit.sh)
+state_file="${SILVER_BULLET_STATE_FILE:-$state_file}"
+# Security: validate path stays within ~/.claude/
+case "$state_file" in
+  "$HOME"/.claude/*) ;;
+  *) state_file="${SB_STATE_DIR}/state" ;;
+esac
+
 # Detect current git branch (safe: validates characters, falls back to empty)
 current_branch=""
 current_branch=$(git -C "$PWD" rev-parse --abbrev-ref HEAD 2>/dev/null || true)
