@@ -104,7 +104,7 @@ When the user requests skipping any step:
 2. Offer: A. Accept skip  B. Lightweight alternative  C. Show me what you have
 3. If user chooses A permanently: record in silver-bullet.md §10b and templates/silver-bullet.md.base §10b, commit both.
 
-**Non-skippable gates:** `silver:security` (Step 2a), `silver:silver-quality-gates` pre-release (Step 0), `gsd-verify-work` (embedded in milestone audit), `gsd-ship` (Step 7) must succeed before Step 8.
+**Non-skippable gates:** `silver:security` (Step 2a), `silver:silver-quality-gates` pre-release (Step 0), `gsd-verify-work` (embedded in milestone audit), cross-artifact review (Step 7) must pass before Step 8 (gsd-ship), `gsd-ship` (Step 8) must succeed before Step 9.
 
 ## Step 0: Pre-Release Quality Gates (9 dimensions)
 
@@ -194,22 +194,22 @@ Ask using AskUserQuestion:
 If A: invoke `gsd-pr-branch` via the Skill tool.
 If C: record in silver-bullet.md §10e and templates/silver-bullet.md.base §10e, commit both.
 
-## Step 7: Ship — Deploy, CI Green, Tag Push
-
-Invoke `gsd-ship` via the Skill tool. Purpose: deploy, ensure CI is green, push the version tag. This MUST succeed before milestone is archived.
-
-**Enforcement:** Do not proceed to Step 8 until gsd-ship confirms CI green and deploy succeeded.
-
-## Step 7.5: Cross-Artifact Consistency Review
+## Step 7: Cross-Artifact Consistency Review
 
 **Only if `.planning/SPEC.md` and `.planning/REQUIREMENTS.md` exist:**
 
 Invoke `/artifact-reviewer --reviewer review-cross-artifact --artifacts .planning/SPEC.md .planning/REQUIREMENTS.md .planning/ROADMAP.md` (add `.planning/DESIGN.md` if it exists).
 
-Do NOT proceed to Step 8 (gsd-complete-milestone) until cross-artifact review reports clean pass. If unresolvable after 5 rounds, STOP and present to the user.
+Do NOT proceed to Step 8 (Ship) until cross-artifact review reports clean pass. If unresolvable after 5 rounds, STOP and present to the user.
 
-## Step 8: Complete Milestone
+## Step 8: Ship — Deploy, CI Green, Tag Push
 
-**Only after Step 7 (gsd-ship) confirms success and Step 7.5 cross-artifact review passes:**
+Invoke `gsd-ship` via the Skill tool. Purpose: deploy, ensure CI is green, push the version tag. This MUST succeed before milestone is archived.
+
+**Enforcement:** Do not proceed to Step 9 until gsd-ship confirms CI green and deploy succeeded.
+
+## Step 9: Complete Milestone
+
+**Only after Step 8 (gsd-ship) confirms success:**
 
 Invoke `gsd-complete-milestone` via the Skill tool. Purpose: archive milestone, prepare for next version. This is the final step — milestone is officially closed after this.
