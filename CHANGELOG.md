@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 
+## [0.20.8] — 2026-04-16
+
+### Fixed
+- `skills/silver-forensics/SKILL.md`: replaced 4 occurrences of non-existent `/gsd:silver-forensics` routing with correct `/gsd-forensics`. The bug caused silent agent failure when Silver Bullet tried to delegate GSD workflow issues to a command that never existed.
+
+### Tests
+- `tests/integration/test-skill-integrity.sh`: added Check 8 — regression test asserting `silver-forensics/SKILL.md` does not reference `/gsd:silver-forensics`. RED-GREEN verified.
+- Total: 288 tests, 3/3 suites green.
+
+### Docs / Planning
+- Autonomous mode preference recorded in `silver-bullet.md §10e` and base template.
+- `ROADMAP.md ## Backlog`: 17 deferred items (999.1–999.17) captured from forensics sweep and added for future work.
+- `CHANGELOG.md`: corrected stale "972 tests" count in v0.20.6 entry to correct value (288).
+
 ## [0.20.7] — 2026-04-16
 
 ### Fixed
