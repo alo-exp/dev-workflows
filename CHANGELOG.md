@@ -9,7 +9,7 @@
 - `tests/hooks/test-session-start.sh`: replaced fragile backup/restore machinery with `TMPSTATE` isolation via `SILVER_BULLET_STATE_FILE`. Running the full test suite no longer wipes the live session state file, ending the skill re-recording loop that blocked session completion after every test run.
 
 ### Tests
-- Total: 972 tests, 3/3 suites green (no new tests — existing 12 session-start tests now run in full isolation)
+- Total: 288 tests, 3/3 suites green (no new tests — existing 12 session-start tests now run in full isolation)
 
 ## [0.20.6] — 2026-04-16
 

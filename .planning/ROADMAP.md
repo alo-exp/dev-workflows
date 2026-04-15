@@ -220,3 +220,5 @@ Items below are deferred, not yet scheduled to a milestone. Numbered 999.x.
 | 999.13 | During-work deferred-item capture: add instructions/mechanisms so that items deferred or ignored during execution are automatically added to GSD backlog | user request 2026-04-16 | High | Medium |
 | 999.14 | After-review backlog enforcement: after any review (code review, quality gates, security), low-priority/suggested items must be implemented immediately or added to backlog — not silently dropped | user request 2026-04-16 | High | Low |
 | 999.15 | Analyze composable flows for atomicity: split non-atomic flows, eliminate redundancy from arbitrary compositions, fix ordering issues that cause work at wrong step | user request 2026-04-16 | High | High |
+| 999.16 | Document `SILVER_BULLET_STATE_FILE` env var override in ENFORCEMENT.md or README — currently undocumented despite being used by hooks and tests | code review 2026-04-16 | Low | Low |
+| 999.17 | Add test for `hooks/session-start` security guard fallback path (invalid path outside `~/.claude/` falls back to default state file) | code review 2026-04-16 | Low | Low |
