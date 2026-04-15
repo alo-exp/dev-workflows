@@ -2,6 +2,19 @@
 
 ## [Unreleased]
 
+## [0.20.2] — 2026-04-15
+
+### Refactored
+- `hooks/lib/workflow-utils.sh` (new): shared utility library — single source of truth for Flow Log row-counting regex, extracted from three hooks (TD-1)
+- `completion-audit.sh`, `dev-cycle-check.sh`, `compliance-status.sh`: source shared lib with inline fallback definitions for resilience in test environments
+- Fixed stale "workflow paths" terminology in `completion-audit.sh` output messages → "flows" (TD-2)
+
+### Added
+- Comprehensive skill execution path test suite: 169 tests covering sub-skill reference integrity, non-skippable gate presence, step ordering constraints, quality-gates 9-dimension completeness, and skill name consistency across all 41 orchestration skills (TD-3)
+
+### Tests
+- Total: 962 tests, 3/3 suites green (up from 793 in v0.20.0)
+
 ## [0.20.1] — 2026-04-15
 
 ### Fixed
