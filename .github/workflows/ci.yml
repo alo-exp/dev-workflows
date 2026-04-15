@@ -71,6 +71,19 @@ jobs:
           all_count=$(jq '.skills.all_tracked | length' "$config")
           echo "required_deploy ($req_count) is a valid subset of all_tracked ($all_count)"
 
+      - name: Check docs/workflows/ parity with templates/workflows/
+        run: |
+          # docs/workflows/ is the live copy; templates/workflows/ ships to user projects.
+          # Drift has caused bugs where SB updated its own workflow but users got stale templates.
+          diff_out=$(diff -r --brief docs/workflows/ templates/workflows/ 2>&1 || true)
+          if [[ -n "$diff_out" ]]; then
+            echo "ERROR: docs/workflows/ and templates/workflows/ have diverged:"
+            echo "$diff_out"
+            diff -r docs/workflows/ templates/workflows/ || true
+            exit 1
+          fi
+          echo "docs/workflows/ and templates/workflows/ are in sync"
+
       - name: Lint site HTML (duplicate IDs, structure)
         run: |
           npx --yes html-validate@latest \
