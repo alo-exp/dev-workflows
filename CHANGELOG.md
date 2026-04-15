@@ -2,6 +2,18 @@
 
 ## [Unreleased]
 
+## [0.20.4] — 2026-04-16
+
+### Changed
+- All user-facing Silver Bullet skills now use the `/silver-*` naming convention: `blast-radius` → `silver-blast-radius`, `create-release` → `silver-create-release`, `forensics` → `silver-forensics`, `quality-gates` → `silver-quality-gates`. End users now see a clean `/silver-*` namespace in the Claude Code slash command menu.
+- `hooks/lib/required-skills.sh`, `hooks/record-skill.sh`, `hooks/completion-audit.sh`, `hooks/stop-check.sh`, `hooks/dev-cycle-check.sh`: updated all references to use new skill names
+- `.silver-bullet.json`, `templates/silver-bullet.config.json.default`: `required_planning`, `required_deploy`, and `all_tracked` arrays updated to new names
+- 22 internal skills (dimension checkers, artifact reviewers, internal routing skills) marked `user-invocable: false` in SKILL.md frontmatter — hidden from Claude Code slash command menu to reduce context token overhead for end users
+- README.md: all skill name references updated to new `silver-*` convention
+
+### Tests
+- Total: 962 tests, 3/3 suites green
+
 ## [0.20.3] — 2026-04-15
 
 ### Added

@@ -8,7 +8,7 @@ Brooks was right then. AI changes the equation now.
 
 Silver Bullet is a Claude Code plugin that orchestrates the best open-source agentic workflows into one enforced process. It combines [GSD](https://github.com/gsd-build/get-shit-done) (multi-agent execution), [Superpowers](https://github.com/obra/superpowers) (code review, branch management), [Engineering](https://github.com/anthropics/knowledge-work-plugins/tree/main/engineering) (testing, docs, deploy), and [Design](https://github.com/anthropics/knowledge-work-plugins/tree/main/design) (design system, UX copy, accessibility) into one guided workflow with 10 layers of compliance. **You don't need to know GSD** -- Silver Bullet guides you through every step, explains what's happening, and handles errors. Just describe what you want to build.
 
-**Current version: v0.20.3** — Google Chat release notifications via configurable webhook in `.silver-bullet.json`. Previous: v0.20.2 shared Flow Log regex lib + 169-test skill execution path suite; v0.20.1 Bug-2 regex fix.
+**Current version: v0.20.4** — All user-facing skills now use `/silver-*` naming convention; 22 internal skills hidden from slash command menu. Previous: v0.20.3 Google Chat release notifications; v0.20.2 shared Flow Log regex lib + 169-test suite.
 
 ## How It Works
 
@@ -16,7 +16,7 @@ When you edit source code without completing the planning phase, you see this:
 
 ```
 🚫 HARD STOP — Planning incomplete. Missing skills:
-❌ quality-gates
+❌ silver-quality-gates
 Run the missing planning skills before editing source code.
 ```
 
@@ -146,7 +146,7 @@ That's it. Enforcement is now active.
 | # | Step | Source | Required |
 |---|------|--------|----------|
 | 3 | `/gsd:discuss-phase` | GSD | **Yes** |
-| 4 | `/quality-gates` | Silver Bullet | **Yes** |
+| 4 | `/silver-quality-gates` | Silver Bullet | **Yes** |
 | 5 | `/gsd:plan-phase` | GSD | **Yes** |
 | 6 | `/gsd:execute-phase` | GSD | **Yes** |
 | 7 | `/gsd:verify-work` | GSD | **Yes** |
@@ -173,13 +173,13 @@ That's it. Enforcement is now active.
 ### RELEASE
 | # | Step | Source | Required |
 |---|------|--------|----------|
-| 20 | `/create-release` | Silver Bullet | **Yes** |
+| 20 | `/silver-create-release` | Silver Bullet | **Yes** |
 
 ## DevOps Cycle (24 Steps)
 
 Same structure as full-dev-cycle with these additions:
 - **Incident fast path** at the top for emergency production changes
-- **`/blast-radius`** assessment before quality gates (maps change scope, dependencies, failure scenarios, rollback plan)
+- **`/silver-blast-radius`** assessment before quality gates (maps change scope, dependencies, failure scenarios, rollback plan)
 - **`/devops-quality-gates`** — 7 IaC-adapted quality dimensions (usability excluded)
 - **Environment promotion** section (dev → staging → prod)
 - `.yml`/`.yaml` files are NOT exempt from enforcement (they are infrastructure code)
@@ -200,14 +200,14 @@ Skills installed by this plugin that extend the workflow:
 | `/silver:research` | Orchestrated workflow for research and exploration |
 | `/silver:release` | Orchestrated workflow for release preparation |
 | `/silver:fast` | Orchestrated workflow for quick, low-overhead tasks |
-| `/quality-gates` | Before planning (dev) — checks all 9 quality dimensions in parallel |
-| `/blast-radius` | Before planning (DevOps) — maps change scope, dependencies, and rollback plan |
+| `/silver-quality-gates` | Before planning (dev) — checks all 9 quality dimensions in parallel |
+| `/silver-blast-radius` | Before planning (DevOps) — maps change scope, dependencies, and rollback plan |
 | `/devops-quality-gates` | Before planning (DevOps) — 7 IaC-adapted quality dimensions (usability excluded) |
 | `/devops-skill-router` | During DevOps execution — routes to best available IaC toolchain plugin |
-| `/forensics` | After a completed, failed, or abandoned session — routes to GSD forensics for workflow issues, handles session-level issues directly |
-| `/create-release` | After `/gsd:ship` — generates release notes and creates GitHub Release |
+| `/silver-forensics` | After a completed, failed, or abandoned session — routes to GSD forensics for workflow issues, handles session-level issues directly |
+| `/silver-create-release` | After `/gsd:ship` — generates release notes and creates GitHub Release |
 
-### `/forensics`
+### `/silver-forensics`
 
 When a session produces wrong output, stalls, or is abandoned, `/forensics` guides Claude through structured root-cause investigation rather than blind retrying.
 
@@ -253,27 +253,27 @@ Edit `.silver-bullet.json` in your project root:
     "active_workflow": "full-dev-cycle"
   },
   "skills": {
-    "required_planning": ["quality-gates"],
+    "required_planning": ["silver-quality-gates"],
     "required_deploy": [
-      "quality-gates",
+      "silver-quality-gates",
       "code-review", "requesting-code-review", "receiving-code-review",
       "testing-strategy", "documentation",
       "finishing-a-development-branch", "deploy-checklist",
-      "create-release",
+      "silver-create-release",
       "verification-before-completion",
       "test-driven-development", "tech-debt"
     ],
     "all_tracked": [
-      "quality-gates", "blast-radius", "devops-quality-gates", "devops-skill-router",
+      "silver-quality-gates", "silver-blast-radius", "devops-quality-gates", "devops-skill-router",
       "design-system", "ux-copy",
       "architecture", "system-design",
       "code-review", "requesting-code-review", "receiving-code-review",
       "testing-strategy", "documentation",
       "finishing-a-development-branch", "deploy-checklist",
-      "create-release",
+      "silver-create-release",
       "modularity", "reusability", "scalability", "security",
       "reliability", "usability", "testability", "extensibility",
-      "forensics", "silver-init",
+      "silver-forensics", "silver-init",
       "verification-before-completion",
       "test-driven-development", "tech-debt", "accessibility-review", "incident-response",
       "gsd-new-project", "gsd-new-milestone", "gsd-discuss-phase", "gsd-plan-phase",
@@ -302,12 +302,12 @@ Edit `.silver-bullet.json` in your project root:
 | `src_pattern` | Which file paths trigger enforcement | `/src/` |
 | `src_exclude_pattern` | Which files are exempt (regex) | `__tests__\|\.test\.` |
 | `active_workflow` | Which workflow to enforce | `full-dev-cycle` |
-| `required_planning` | Skills that must run before code edits | `quality-gates` |
-| `required_deploy` | Skills required for final delivery (gh pr create, deploy, release) — see two-tier enforcement note below | quality-gates, code-review, requesting-code-review, receiving-code-review, testing-strategy, documentation, finishing-a-development-branch, deploy-checklist, create-release, verification-before-completion, test-driven-development, tech-debt |
+| `required_planning` | Skills that must run before code edits | `silver-quality-gates` |
+| `required_deploy` | Skills required for final delivery (gh pr create, deploy, release) — see two-tier enforcement note below | silver-quality-gates, code-review, requesting-code-review, receiving-code-review, testing-strategy, documentation, finishing-a-development-branch, deploy-checklist, silver-create-release, verification-before-completion, test-driven-development, tech-debt |
 | `all_tracked` | All skills that get recorded | 42 skills (see above) |
 | `devops_plugins` | Which optional DevOps plugins are installed (auto-detected) | all `false` |
 
-> **Two-tier enforcement**: `git commit` and `git push` only require `required_planning` skills (default: `quality-gates`). The full `required_deploy` list is only checked at final delivery time — `gh pr create`, deploy commands, and `gh release create`. This allows GSD's `/gsd:execute-phase` to make atomic commits during development without being blocked.
+> **Two-tier enforcement**: `git commit` and `git push` only require `required_planning` skills (default: `silver-quality-gates`). The full `required_deploy` list is only checked at final delivery time — `gh pr create`, deploy commands, and `gh release create`. This allows GSD's `/gsd:execute-phase` to make atomic commits during development without being blocked.
 
 ## Trivial Changes
 
