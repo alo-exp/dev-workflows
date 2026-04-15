@@ -50,7 +50,7 @@ use `$PWD` as the project root and note "Project root not confirmed" in Evidence
 ## Step 1b — GSD-Awareness Routing
 
 Before proceeding to SB's own triage, check whether the issue is better handled by
-GSD's built-in silver-forensics (`/gsd:silver-forensics`).
+GSD's built-in silver-forensics (`/gsd-forensics`).
 
 **Quick-check (run all three in parallel):**
 1. Does `.planning/` exist with phase directories?
@@ -62,16 +62,16 @@ GSD's built-in silver-forensics (`/gsd:silver-forensics`).
 
 | Evidence | Route to | Reason |
 |----------|----------|--------|
-| Issue mentions a specific GSD phase, plan, or execution anomaly (plan drift, stuck loop, scope drift, missing SUMMARY.md) | `/gsd:silver-forensics` | GSD silver-forensics specializes in workflow-level analysis of `.planning/` artifacts and execution patterns |
+| Issue mentions a specific GSD phase, plan, or execution anomaly (plan drift, stuck loop, scope drift, missing SUMMARY.md) | `/gsd-forensics` | GSD silver-forensics specializes in workflow-level analysis of `.planning/` artifacts and execution patterns |
 | Issue is about session timeout, stall, SB enforcement failure, or session-level problems | SB silver-forensics (continue to Step 2) | SB silver-forensics handles session-level issues that GSD doesn't track |
 | Issue is about test failures after recent commits, wrong output, or general investigation | SB silver-forensics (continue to Step 2) | General investigation path handles these |
 | Unclear — evidence could go either way | SB silver-forensics (continue to Step 2) | SB's General path (Path 3) can further delegate if GSD-specific patterns emerge |
 
-**If routing to `/gsd:silver-forensics`:**
+**If routing to `/gsd-forensics`:**
 > "This looks like a GSD workflow issue (plan drift / execution anomaly / missing artifacts).
-> GSD has specialized silver-forensics for this. Running `/gsd:silver-forensics` instead."
+> GSD has specialized silver-forensics for this. Running `/gsd-forensics` instead."
 
-Invoke `/gsd:silver-forensics` via the Skill tool and stop. Do not proceed to Step 2.
+Invoke `/gsd-forensics` via the Skill tool and stop. Do not proceed to Step 2.
 
 **If routing to SB silver-forensics:** Continue to Step 2.
 

@@ -763,6 +763,6 @@ Last updated: (not yet set)
 ### 10e. Mode Preferences
 | Setting | Value | Since |
 |---------|-------|-------|
-| Default session mode | interactive | (set at init) |
+| Default session mode | autonomous | 2026-04-16 |
 | PR branch | ask | (set at first use) |
 | TDD enforcement | per-plan-type | (default) |
