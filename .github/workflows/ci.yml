@@ -50,6 +50,27 @@ jobs:
           bash tests/hooks/test-completion-audit.sh
           bash tests/hooks/test-dev-cycle-check.sh
 
+      - name: Assert required_deploy is subset of all_tracked
+        run: |
+          # Every skill in required_deploy must also appear in all_tracked.
+          # Drift between the two arrays causes completion-audit.sh to gate on skills
+          # that are never observed, blocking all deploys silently.
+          config=".silver-bullet.json"
+          jq empty "$config" || { echo "Invalid JSON: $config"; exit 1; }
+          missing=$(jq -r '
+            (.skills.required_deploy // []) as $req |
+            (.skills.all_tracked // []) as $all |
+            $req[] | select(. as $s | $all | map(select(. == $s)) | length == 0)
+          ' "$config")
+          if [[ -n "$missing" ]]; then
+            echo "ERROR: required_deploy skills missing from all_tracked:"
+            echo "$missing"
+            exit 1
+          fi
+          req_count=$(jq '.skills.required_deploy | length' "$config")
+          all_count=$(jq '.skills.all_tracked | length' "$config")
+          echo "required_deploy ($req_count) is a valid subset of all_tracked ($all_count)"
+
       - name: Lint site HTML (duplicate IDs, structure)
         run: |
           npx --yes html-validate@latest \
