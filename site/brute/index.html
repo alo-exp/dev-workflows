@@ -1,0 +1,1182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Brute-Force Stack — GDC Sustainability Townhall 2026</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700&display=swap');
+
+  :root {
+    --green: #1D9E75;
+    --green-light: #E1F5EE;
+    --green-dark: #0F6E56;
+    --amber: #BA7517;
+    --amber-light: #FAEEDA;
+    --red: #A32D2D;
+    --red-light: #FCEBEB;
+    --ink: #1a1a18;
+    --ink-mid: #3d3d38;
+    --ink-light: #787870;
+    --paper: #FAF9F6;
+    --paper-warm: #F2EFE6;
+    --rule: rgba(26,26,24,0.10);
+    --slide-w: 1200px;
+    --slide-h: 675px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #1a1a18;
+    font-family: 'Syne', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 24px 16px 40px;
+    gap: 0;
+  }
+
+  /* NAV */
+  .nav {
+    width: var(--slide-w);
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 0 14px;
+    color: #888;
+    font-size: 13px;
+    font-family: 'DM Mono', monospace;
+    letter-spacing: 0.04em;
+  }
+  .nav-btns { display: flex; gap: 10px; }
+  .nav button {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: #ccc;
+    padding: 6px 18px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.05em;
+    transition: background 0.15s;
+  }
+  .nav button:hover { background: rgba(255,255,255,0.15); }
+  .slide-counter { color: #666; }
+
+  /* SLIDE WRAPPER */
+  .deck { width: var(--slide-w); max-width: 100%; position: relative; }
+
+  .slide {
+    width: var(--slide-w);
+    max-width: 100%;
+    min-height: var(--slide-h);
+    background: var(--paper);
+    border-radius: 4px;
+    overflow: hidden;
+    display: none;
+    position: relative;
+  }
+  .slide.active { display: flex; flex-direction: column; }
+
+  /* SLIDE NUMBER TAG */
+  .slide-tag {
+    position: absolute;
+    top: 20px;
+    right: 28px;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--ink-light);
+    letter-spacing: 0.08em;
+  }
+
+  /* ═══════════════════════════════
+     SLIDE 1 — TITLE
+  ═══════════════════════════════ */
+  .s-title {
+    background: var(--ink);
+    color: var(--paper);
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 80px 64px;
+    min-height: var(--slide-h);
+  }
+  .s-title .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: var(--green);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+  .s-title h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 72px;
+    line-height: 1.05;
+    color: var(--paper);
+    max-width: 800px;
+    margin-bottom: 28px;
+  }
+  .s-title h1 em { color: #A8E6CE; font-style: normal; }
+  .s-title .subtitle {
+    font-size: 16px;
+    color: rgba(250,249,246,0.55);
+    max-width: 560px;
+    line-height: 1.6;
+  }
+  .s-title .speaker-line {
+    margin-top: 36px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding-top: 28px;
+    border-top: 1px solid rgba(255,255,255,0.12);
+  }
+  .s-title .speaker-line .name {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--paper);
+  }
+  .s-title .speaker-line .role {
+    font-size: 13px;
+    color: rgba(250,249,246,0.45);
+  }
+  .s-title .dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.25); }
+  .title-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(29,158,117,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(29,158,117,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+    pointer-events: none;
+  }
+
+  /* ═══════════════════════════════
+     SECTION DIVIDER
+  ═══════════════════════════════ */
+  .s-divider {
+    background: var(--green-dark);
+    color: white;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 0 80px;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .s-divider .section-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 120px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.08);
+    line-height: 1;
+    position: absolute;
+    right: 60px;
+    bottom: 40px;
+  }
+  .s-divider .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+  }
+  .s-divider h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 52px;
+    line-height: 1.15;
+    max-width: 640px;
+  }
+  .s-divider p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.65);
+    max-width: 520px;
+    line-height: 1.65;
+  }
+
+  /* ═══════════════════════════════
+     STANDARD CONTENT SLIDE
+  ═══════════════════════════════ */
+  .s-content {
+    flex-direction: column;
+    padding: 48px 72px 44px;
+    gap: 0;
+  }
+  .slide-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 32px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--rule);
+  }
+  .slide-header .layer-badge {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: white;
+    background: var(--ink-mid);
+    padding: 3px 9px;
+    border-radius: 3px;
+    flex-shrink: 0;
+  }
+  .slide-header h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+  }
+  .slide-header .sub {
+    font-size: 13px;
+    color: var(--ink-light);
+    font-weight: 400;
+    margin-left: auto;
+    white-space: nowrap;
+    font-family: 'DM Mono', monospace;
+  }
+
+  /* STAT GRID */
+  .stat-grid {
+    display: grid;
+    gap: 14px;
+    flex: 1;
+  }
+  .stat-grid.cols-2 { grid-template-columns: 1fr 1fr; }
+  .stat-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+  .stat-grid.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+
+  .stat-card {
+    background: white;
+    border: 0.5px solid var(--rule);
+    border-radius: 6px;
+    padding: 18px 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    position: relative;
+  }
+  .stat-card.accent-red { border-top: 3px solid var(--red); }
+  .stat-card.accent-amber { border-top: 3px solid var(--amber); }
+  .stat-card.accent-green { border-top: 3px solid var(--green); }
+  .stat-card.accent-ink { border-top: 3px solid var(--ink); }
+
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 44px;
+    line-height: 1;
+    color: var(--ink);
+  }
+  .stat-num.sm { font-size: 32px; }
+  .stat-num.lg { font-size: 56px; }
+  .stat-num.red { color: var(--red); }
+  .stat-num.amber { color: var(--amber); }
+  .stat-num.green { color: var(--green); }
+
+  .stat-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--ink);
+    line-height: 1.25;
+    letter-spacing: 0.01em;
+  }
+  .stat-desc {
+    font-size: 13.5px;
+    color: var(--ink-light);
+    line-height: 1.55;
+    flex: 1;
+  }
+  .stat-source {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: rgba(120,120,112,0.7);
+    margin-top: 6px;
+    border-top: 0.5px solid var(--rule);
+    padding-top: 6px;
+  }
+
+  /* FULL-WIDTH STAT */
+  .stat-wide {
+    background: white;
+    border: 0.5px solid var(--rule);
+    border-left: 4px solid var(--green);
+    border-radius: 0 6px 6px 0;
+    padding: 16px 22px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 12px;
+  }
+  .stat-wide .num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 48px;
+    line-height: 1;
+    color: var(--ink);
+    white-space: nowrap;
+    min-width: 120px;
+  }
+  .stat-wide .num.red { color: var(--red); }
+  .stat-wide .text { flex: 1; }
+  .stat-wide .text .label { font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; color: var(--ink); margin-bottom: 3px; letter-spacing: 0.01em; }
+  .stat-wide .text .desc { font-size: 13.5px; color: var(--ink-light); line-height: 1.55; }
+  .stat-wide .src {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: rgba(120,120,112,0.7);
+    white-space: nowrap;
+  }
+
+  /* STACK DIAGRAM */
+  .stack-wrap { display: flex; gap: 20px; flex: 1; align-items: stretch; }
+  .stack-col { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+  .stack-layer {
+    border-radius: 5px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .stack-layer .lname { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; font-weight: 700; color: var(--ink); letter-spacing: 0.01em; }
+  .stack-layer .lsub { font-size: 12.5px; color: var(--ink-light); }
+  .stack-layer .lbadge {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+    padding: 3px 8px;
+    border-radius: 3px;
+  }
+  .layer-1 { background: #FCEBEB; }
+  .layer-1 .lbadge { background: var(--red); color: white; }
+  .layer-2 { background: #FFF3E0; }
+  .layer-2 .lbadge { background: #E65100; color: white; }
+  .layer-3 { background: #FFF8E1; }
+  .layer-3 .lbadge { background: var(--amber); color: white; }
+  .layer-4 { background: #F3F8E8; }
+  .layer-4 .lbadge { background: #5B8A1A; color: white; }
+  .layer-5 { background: #E8F5E9; }
+  .layer-5 .lbadge { background: var(--green); color: white; }
+  .layer-6 { background: var(--green-light); }
+  .layer-6 .lbadge { background: var(--green-dark); color: white; }
+
+  .multiply-chain {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 14px 20px;
+    background: var(--ink);
+    border-radius: 6px;
+    margin-top: 4px;
+  }
+  .multiply-chain .mitem {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+  }
+  .multiply-chain .op { color: rgba(255,255,255,0.3); }
+  .multiply-chain .result {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: #A8E6CE;
+    margin-left: 6px;
+  }
+
+  /* THESIS SLIDE */
+  .s-thesis {
+    flex-direction: column;
+    justify-content: center;
+    padding: 64px 80px;
+    gap: 28px;
+    background: var(--paper-warm);
+  }
+  .s-thesis .q {
+    font-family: 'DM Serif Display', serif;
+    font-size: 42px;
+    line-height: 1.2;
+    color: var(--ink);
+    max-width: 840px;
+  }
+  .s-thesis .q em { color: var(--green-dark); font-style: italic; }
+  .s-thesis .attrib {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--ink-light);
+  }
+
+  /* COMPARE SLIDE */
+  .compare-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+  .compare-item {
+    flex: 1;
+    background: white;
+    border: 0.5px solid var(--rule);
+    border-radius: 6px;
+    padding: 16px 18px;
+  }
+  .compare-item .ci-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    color: var(--ink-light);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .compare-item .ci-name { font-family: 'Barlow Condensed', sans-serif; font-size: 20px; font-weight: 700; color: var(--ink); margin-bottom: 4px; letter-spacing: 0.01em; }
+  .compare-item .ci-val {
+    font-family: 'DM Serif Display', serif;
+    font-size: 38px;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .compare-item .ci-val.bad { color: var(--red); }
+  .compare-item .ci-val.good { color: var(--green); }
+  .compare-item .ci-sub { font-size: 13px; color: var(--ink-light); }
+  .vs-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    flex-shrink: 0;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--ink-light);
+    font-weight: 500;
+  }
+  .gap-callout {
+    background: var(--ink);
+    border-radius: 6px;
+    padding: 14px 22px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 6px;
+  }
+  .gap-callout .gc-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 48px;
+    color: #A8E6CE;
+    line-height: 1;
+    white-space: nowrap;
+  }
+  .gap-callout .gc-text { font-size: 15px; color: rgba(250,249,246,0.8); line-height: 1.55; }
+  .gap-callout .gc-src {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: rgba(250,249,246,0.3);
+    margin-left: auto;
+    white-space: nowrap;
+  }
+
+  /* MACRO IMPACT */
+  .big-number-row {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .big-card {
+    flex: 1;
+    background: var(--ink);
+    color: white;
+    border-radius: 6px;
+    padding: 24px 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .big-card.light { background: white; border: 0.5px solid var(--rule); color: var(--ink); }
+  .big-card .bc-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 52px;
+    line-height: 1;
+    color: #A8E6CE;
+  }
+  .big-card.light .bc-num { color: var(--red); }
+  .big-card .bc-label { font-family: 'Barlow Condensed', sans-serif; font-size: 17px; font-weight: 700; color: rgba(255,255,255,0.9); letter-spacing: 0.01em; }
+  .big-card.light .bc-label { color: var(--ink); }
+  .big-card .bc-desc { font-size: 13.5px; color: rgba(255,255,255,0.5); line-height: 1.55; }
+  .big-card.light .bc-desc { color: var(--ink-light); }
+  .big-card .bc-src {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.25);
+    margin-top: auto;
+  }
+  .big-card.light .bc-src { color: rgba(120,120,112,0.5); }
+
+  /* CALL TO ACTION SLIDE */
+  .s-cta {
+    background: var(--green-dark);
+    color: white;
+    flex-direction: column;
+    justify-content: center;
+    padding: 64px 80px;
+    gap: 24px;
+  }
+  .s-cta .eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    color: rgba(255,255,255,0.5);
+    text-transform: uppercase;
+  }
+  .s-cta h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 48px;
+    font-weight: 800;
+    line-height: 1.1;
+    max-width: 760px;
+    letter-spacing: -0.01em;
+  }
+  .s-cta .asks { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
+  .s-cta .ask-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 6px;
+    padding: 14px 18px;
+  }
+  .s-cta .ask-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: #A8E6CE;
+    padding-top: 1px;
+    flex-shrink: 0;
+  }
+  .s-cta .ask-text { font-size: 15px; line-height: 1.6; color: rgba(255,255,255,0.85); }
+
+  /* CAVEAT BOX */
+  .caveat-box {
+    background: var(--amber-light);
+    border: 0.5px solid rgba(186,117,23,0.25);
+    border-left: 3px solid var(--amber);
+    border-radius: 0 5px 5px 0;
+    padding: 10px 16px;
+    font-size: 13px;
+    color: #5a3d08;
+    line-height: 1.5;
+    margin-top: 10px;
+  }
+
+  /* SOURCES SLIDE */
+  .s-sources { flex-direction: column; padding: 48px 72px; gap: 0; }
+  .source-list { columns: 2; column-gap: 32px; margin-top: 8px; }
+  .source-item {
+    break-inside: avoid;
+    margin-bottom: 14px;
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+  .source-item .s-num {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    color: var(--green);
+    padding-top: 2px;
+    min-width: 22px;
+    font-weight: 500;
+  }
+  .source-item .s-body { flex: 1; }
+  .source-item .s-title { font-family: 'Barlow Condensed', sans-serif; font-size: 15px; font-weight: 700; color: var(--ink); line-height: 1.25; letter-spacing: 0.01em; }
+  .source-item .s-detail { font-size: 12px; color: var(--ink-light); font-family: 'DM Mono', monospace; margin-top: 2px; }
+
+  /* PROGRESS BAR */
+  .progress {
+    width: var(--slide-w);
+    max-width: 100%;
+    height: 2px;
+    background: rgba(255,255,255,0.08);
+    border-radius: 1px;
+    margin-top: 10px;
+  }
+  .progress-fill {
+    height: 2px;
+    background: var(--green);
+    border-radius: 1px;
+    transition: width 0.3s ease;
+  }
+
+  /* FOOTNOTE */
+  .footnote {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    color: var(--ink-light);
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 0.5px solid var(--rule);
+    letter-spacing: 0.04em;
+  }
+</style>
+</head>
+<body>
+
+<div class="nav">
+  <span class="slide-counter" id="counter">Slide 1 / 13</span>
+  <div class="nav-btns">
+    <button onclick="prev()">← Prev</button>
+    <button onclick="next()">Next →</button>
+  </div>
+</div>
+
+<div class="deck">
+
+<!-- ═══ SLIDE 1: TITLE ═══ -->
+<div class="slide s-title active" id="slide-1">
+  <div class="title-grid"></div>
+  <span class="eyebrow">GDC Sustainability Townhall · April 15, 2026</span>
+  <h1>The <em>Brute-Force</em><br>Software Stack</h1>
+  <p class="subtitle">How systemic inefficiency across every layer of modern software infrastructure undermines digital sustainability — and what we need to do about it.</p>
+  <div class="speaker-line">
+    <div>
+      <div class="name">Shafqat Ullah</div>
+      <div class="role">SourceVO · Platform Engineering & AIOps</div>
+    </div>
+    <div class="dot"></div>
+    <div class="role">CODES / Global Digital Compact</div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 2: THESIS ═══ -->
+<div class="slide s-thesis" id="slide-2">
+  <span class="slide-tag">02</span>
+  <p class="q">"The GDC made sustainability a principle.<br><em>Implementation makes it real.</em>"</p>
+  <p class="attrib">— CODES Secretariat, Townhall Invitation, April 2026</p>
+  <div style="margin-top:12px; max-width:780px;">
+    <p style="font-size:18px; color:var(--ink-mid); line-height:1.7;">But implementation happens at the infrastructure layer — inside Kubernetes clusters, CI/CD pipelines, and cloud dashboards. That layer has almost no connection to GDC sustainability commitments. The people who control it have no sustainability metric, no mandate, and no tooling to act on what the Compact requires.</p>
+    <p style="font-size:18px; color:var(--ink-mid); line-height:1.7; margin-top:14px;">This talk presents evidence for a hypothesis: the mainstream software stack is so fundamentally resource-inefficient at every layer that a typical workload consumes <strong>10–30× more energy</strong> than an optimised equivalent — and this compounds the digital sector's sustainability crisis at planetary scale.</p>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 3: STACK OVERVIEW ═══ -->
+<div class="slide s-content" id="slide-3">
+  <span class="slide-tag">03</span>
+  <div class="slide-header">
+    <span class="layer-badge">Overview</span>
+    <h2>Six layers of compounding inefficiency</h2>
+  </div>
+  <div class="stack-wrap">
+    <div class="stack-col">
+      <div class="stack-layer layer-1">
+        <div><div class="lname">Layer 1 — Hardware utilisation</div><div class="lsub">Servers idle 82–88% of the time</div></div>
+        <span class="lbadge">~6× waste</span>
+      </div>
+      <div class="stack-layer layer-2">
+        <div><div class="lname">Layer 2 — Cloud provisioning</div><div class="lsub">27–32% of spend wasted annually</div></div>
+        <span class="lbadge">~3× waste</span>
+      </div>
+      <div class="stack-layer layer-3">
+        <div><div class="lname">Layer 3 — Virtualisation overhead</div><div class="lsub">VMs: up to 30% throughput loss vs. native</div></div>
+        <span class="lbadge">~1.3× waste</span>
+      </div>
+      <div class="stack-layer layer-4">
+        <div><div class="lname">Layer 4 — Programming language</div><div class="lsub">Interpreted langs: 4–75× vs. compiled C</div></div>
+        <span class="lbadge">4–10× waste</span>
+      </div>
+      <div class="stack-layer layer-5">
+        <div><div class="lname">Layer 5 — Application framework</div><div class="lsub">Popular frameworks: 2–10× vs. lean alternatives</div></div>
+        <span class="lbadge">2–10× waste</span>
+      </div>
+      <div class="stack-layer layer-6">
+        <div><div class="lname">Layer 6 — Software bloat & tech debt</div><div class="lsub">Unused features, abstraction overhead</div></div>
+        <span class="lbadge">20%+ CPU</span>
+      </div>
+    </div>
+  </div>
+  <div class="multiply-chain">
+    <span class="mitem">6× hardware</span><span class="op">×</span>
+    <span class="mitem">3× cloud</span><span class="op">×</span>
+    <span class="mitem">1.3× VM</span><span class="op">×</span>
+    <span class="mitem">4× language</span><span class="op">×</span>
+    <span class="mitem">3× framework</span>
+    <span class="op">=</span>
+    <span class="result">≈ 30× compound waste</span>
+  </div>
+  <p class="footnote">Inefficiencies are multiplicative, not additive. Conservative estimates across all layers. Sources detailed in subsequent slides.</p>
+</div>
+
+<!-- ═══ SLIDE 4: LAYER 1 — HARDWARE ═══ -->
+<div class="slide s-content" id="slide-4">
+  <span class="slide-tag">04</span>
+  <div class="slide-header">
+    <span class="layer-badge" style="background:#A32D2D;">Layer 1</span>
+    <h2>Hardware utilisation — paying to keep servers idle</h2>
+    <span class="sub">Data centers globally</span>
+  </div>
+  <div class="stat-grid cols-2">
+    <div class="stat-card accent-red">
+      <div class="stat-num red">12–18%</div>
+      <div class="stat-label">Average server utilisation rate</div>
+      <div class="stat-desc">Globally — meaning 82–88% of provisioned compute capacity sits idle or underused at any given moment</div>
+      <div class="stat-source">Fortune, 2025 · Security Boulevard, 2026</div>
+    </div>
+    <div class="stat-card accent-red">
+      <div class="stat-num red">~25%</div>
+      <div class="stat-label">Share that are "zombie servers"</div>
+      <div class="stat-desc">Drawing full power and cooling while performing zero useful computational work — estimated across global data centres</div>
+      <div class="stat-source">Security Boulevard / Hyperview, 2026</div>
+    </div>
+    <div class="stat-card accent-red">
+      <div class="stat-num red sm">10M</div>
+      <div class="stat-label">Servers completely idle worldwide</div>
+      <div class="stat-desc">Representing $30 billion in stranded capital — infrastructure paid for that delivers nothing</div>
+      <div class="stat-source">Fortune, Aug 2025</div>
+    </div>
+    <div class="stat-card accent-red">
+      <div class="stat-num red">50%+</div>
+      <div class="stat-label">Idle power draw vs. peak</div>
+      <div class="stat-desc">A server doing nothing still consumes over half its maximum power — due to hardware design that is not energy-proportional</div>
+      <div class="stat-source">Hyperview / Security Boulevard, 2026</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 5: LAYER 2 — CLOUD ═══ -->
+<div class="slide s-content" id="slide-5">
+  <span class="slide-tag">05</span>
+  <div class="slide-header">
+    <span class="layer-badge" style="background:#E65100;">Layer 2</span>
+    <h2>Cloud provisioning — a third of spend delivers nothing</h2>
+    <span class="sub">$675B annual cloud market</span>
+  </div>
+  <div class="stat-grid cols-3" style="margin-bottom:12px;">
+    <div class="stat-card accent-amber">
+      <div class="stat-num amber">27–32%</div>
+      <div class="stat-label">Cloud spend wasted annually</div>
+      <div class="stat-desc">~$182B/year at gross. Unchanged since 2019 despite years of FinOps investment</div>
+      <div class="stat-source">Flexera State of the Cloud 2025 · Spendark 2026</div>
+    </div>
+    <div class="stat-card accent-amber">
+      <div class="stat-num amber">7–12%</div>
+      <div class="stat-label">Median EC2 CPU utilisation</div>
+      <div class="stat-desc">The compute that cloud customers actually pay for — at single-digit utilisation</div>
+      <div class="stat-source">Harness Cloud Cost Management Report, 2025</div>
+    </div>
+    <div class="stat-card accent-amber">
+      <div class="stat-num amber">10% / 20%</div>
+      <div class="stat-label">Kubernetes CPU / memory avg.</div>
+      <div class="stat-desc">The dominant container orchestration platform, meant to improve efficiency, itself massively underutilised</div>
+      <div class="stat-source">CNCF FinOps Survey, 2024</div>
+    </div>
+  </div>
+  <div class="stat-wide" style="border-left-color:var(--amber);">
+    <div class="num red">35–45%</div>
+    <div class="text">
+      <div class="label">VMs and containers running above their required size</div>
+      <div class="desc">Overprovisioned by default — developers request more than needed as a safety margin, with no automatic right-sizing or sustainability incentive</div>
+    </div>
+    <div class="src">Datastackhub, 2025</div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 6: LAYER 3 — VIRTUALISATION ═══ -->
+<div class="slide s-content" id="slide-6">
+  <span class="slide-tag">06</span>
+  <div class="slide-header">
+    <span class="layer-badge" style="background:#8a6d00;">Layer 3</span>
+    <h2>Virtualisation overhead — the abstraction tax</h2>
+    <span class="sub">VMs vs. containers vs. native</span>
+  </div>
+  <div class="compare-row">
+    <div class="compare-item">
+      <div class="ci-label">Native execution</div>
+      <div class="ci-name">Bare metal</div>
+      <div class="ci-val good">35%</div>
+      <div class="ci-sub">CPU utilised at 40,000 TPS</div>
+    </div>
+    <div class="vs-badge">→</div>
+    <div class="compare-item">
+      <div class="ci-label">Container</div>
+      <div class="ci-name">Docker</div>
+      <div class="ci-val" style="color:var(--amber);">42%</div>
+      <div class="ci-sub">+20% overhead vs. native</div>
+    </div>
+    <div class="vs-badge">→</div>
+    <div class="compare-item">
+      <div class="ci-label">Virtual Machine</div>
+      <div class="ci-name">KVM/Hypervisor</div>
+      <div class="ci-val bad">60%</div>
+      <div class="ci-sub">+71% overhead vs. native</div>
+    </div>
+  </div>
+  <div class="gap-callout" style="margin-top:14px;">
+    <div class="gc-num">10×</div>
+    <div class="gc-text">Container density advantage over VMs — enterprises running VM fleets where containers would suffice are paying 5–10× more hardware cost for equivalent workloads.<br><span style="color:rgba(255,255,255,0.5); font-size:11px;">Yet most enterprise fleets remain mixed VM/container with significant hypervisor tax still in place.</span></div>
+    <div class="gc-src">OneUptime, 2026 · IEEE Felter et al.</div>
+  </div>
+  <div class="stat-grid cols-2" style="margin-top:12px;">
+    <div class="stat-card accent-ink">
+      <div class="stat-num sm">~30%</div>
+      <div class="stat-label">KVM throughput reduction vs. native</div>
+      <div class="stat-desc">On Redis workloads; nearly double the latency for MySQL database operations</div>
+      <div class="stat-source">IEEE benchmark, Felter et al.</div>
+    </div>
+    <div class="stat-card accent-ink">
+      <div class="stat-num sm">&lt;5%</div>
+      <div class="stat-label">Docker container CPU overhead</div>
+      <div class="stat-desc">Near-native performance when properly configured — the efficiency improvement over VMs exists, but adoption is incomplete</div>
+      <div class="stat-source">IEEE / WJAETS, 2025</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 7: LAYER 4 — LANGUAGE ═══ -->
+<div class="slide s-content" id="slide-7">
+  <span class="slide-tag">07</span>
+  <div class="slide-header">
+    <span class="layer-badge" style="background:#3B6D11;">Layer 4</span>
+    <h2>Language choice — orders of magnitude in energy cost</h2>
+    <span class="sub">Pereira et al., ACM SIGPLAN 2017 · Revisited 2024</span>
+  </div>
+  <div class="stat-grid cols-3" style="margin-bottom:12px;">
+    <div class="stat-card accent-red">
+      <div class="stat-num red">75×</div>
+      <div class="stat-label">Python vs. C — benchmark energy gap</div>
+      <div class="stat-desc">On compute-heavy algorithmic benchmarks (CLBG). Peer-reviewed: Pereira et al., ACM SLE 2017, DOI: 10.1145/3136014.3136031. Validated in 2021 followup.</div>
+      <div class="stat-source">Pereira et al., ACM SIGPLAN 2017 · Science of Computer Programming 2021</div>
+    </div>
+    <div class="stat-card accent-amber">
+      <div class="stat-num amber">~4×</div>
+      <div class="stat-label">Real-world Python vs. C gap</div>
+      <div class="stat-desc">In production code with I/O, syscalls, and library calls (not pure compute). Still significant at scale — green-coding.io empirical study, 2024</div>
+      <div class="stat-source">Green-Coding.io, 2024 (revisit of Pereira)</div>
+    </div>
+    <div class="stat-card accent-ink">
+      <div class="stat-num sm">76.6%</div>
+      <div class="stat-label">All websites running PHP</div>
+      <div class="stat-desc">An interpreted language with significant runtime overhead — powering the majority of the web's backend in 2025</div>
+      <div class="stat-source">JetBrains State of PHP, 2025</div>
+    </div>
+  </div>
+  <div class="stat-wide">
+    <div class="num" style="color:var(--green); min-width:100px; font-size:38px;">2.4–119×</div>
+    <div class="text">
+      <div class="label">Performance improvement compiling Python vs. standard CPython runtime</div>
+      <div class="desc">Showing how much efficiency is left on the table by the default language runtime — yet standard deployments use CPython universally</div>
+    </div>
+    <div class="src">arXiv:2505.02346, May 2025</div>
+  </div>
+  <div class="caveat-box">⚠ Caveat: the 75× figure is benchmark-specific (compute-intensive algorithms). Real-world applications with I/O-heavy workloads show a ~4× gap. Both figures come from the same peer-reviewed source; context matters when citing.</div>
+</div>
+
+<!-- ═══ SLIDE 8: LAYER 5 — FRAMEWORKS ═══ -->
+<div class="slide s-content" id="slide-8">
+  <span class="slide-tag">08</span>
+  <div class="slide-header">
+    <span class="layer-badge" style="background:var(--green);">Layer 5</span>
+    <h2>Framework overhead — the case of Laravel vs. the field</h2>
+    <span class="sub">TechEmpower Framework Benchmarks — Fortunes test</span>
+  </div>
+  <div class="compare-row">
+    <div class="compare-item">
+      <div class="ci-label">Most popular PHP framework</div>
+      <div class="ci-name">Laravel</div>
+      <div class="ci-val bad">~4,800</div>
+      <div class="ci-sub">req/sec (full TechEmpower board)</div>
+    </div>
+    <div class="vs-badge">vs.</div>
+    <div class="compare-item">
+      <div class="ci-label">Leaner PHP framework</div>
+      <div class="ci-name">Symfony</div>
+      <div class="ci-val" style="color:var(--amber);">~2×</div>
+      <div class="ci-sub">faster than Laravel in TechEmpower</div>
+    </div>
+    <div class="vs-badge">vs.</div>
+    <div class="compare-item">
+      <div class="ci-label">High-efficiency framework (Python)</div>
+      <div class="ci-name">FastAPI</div>
+      <div class="ci-val good">167,592</div>
+      <div class="ci-sub">req/sec (JSON serialisation test)</div>
+    </div>
+  </div>
+  <div class="gap-callout" style="margin-top:14px;">
+    <div class="gc-num">64%</div>
+    <div class="gc-text">PHP market share held by Laravel (2025) — the most popular choice is not the most efficient. Mass adoption at this scale amplifies per-request inefficiency globally across every Laravel-powered application.<br><span style="color:rgba(255,255,255,0.5); font-size:11px;">Also: 268 method calls to convert a single date field in typical enterprise framework code — the hidden overhead of abstraction layers.</span></div>
+    <div class="gc-src">JetBrains State of PHP 2025 · TechEmpower R22 · HN thread 2025</div>
+  </div>
+  <p class="footnote">Source: TechEmpower Framework Benchmarks Round 22/23 · JetBrains State of PHP 2025 · github.com/TechEmpower/FrameworkBenchmarks</p>
+</div>
+
+<!-- ═══ SLIDE 9: LAYER 6 — BLOAT ═══ -->
+<div class="slide s-content" id="slide-9">
+  <span class="slide-tag">09</span>
+  <div class="slide-header">
+    <span class="layer-badge" style="background:var(--green-dark);">Layer 6</span>
+    <h2>Software bloat & technical debt — invisible energy waste</h2>
+    <span class="sub">Oxford Open Energy · Data Center Knowledge</span>
+  </div>
+  <div class="stat-grid cols-2" style="margin-bottom:12px;">
+    <div class="stat-card accent-green">
+      <div class="stat-num sm green">20%+</div>
+      <div class="stat-label">CPU overhead from poorly coded application</div>
+      <div class="stat-desc">Direct energy equivalent — a 20% higher CPU usage means ~20% more energy consumed by that workload's entire infrastructure stack</div>
+      <div class="stat-source">Data Center Knowledge, 2024</div>
+    </div>
+    <div class="stat-card accent-green">
+      <div class="stat-num sm green">268</div>
+      <div class="stat-label">Method calls for one date field conversion</div>
+      <div class="stat-desc">Measured in real enterprise framework code — illustrating how abstraction layers generate enormous hidden computational overhead for trivial operations</div>
+      <div class="stat-source">Software bloat research, Grokipedia 2026</div>
+    </div>
+  </div>
+  <div class="stat-wide" style="border-left-color:var(--green);">
+    <div class="num green" style="font-size:36px; min-width:80px;">Stack-wide</div>
+    <div class="text">
+      <div class="label">Bloat is documented across the entire software stack</div>
+      <div class="desc">"Today's software is bloated across the entire stack — from operating systems and applications to containers. The primary concern in digital energy efficiency is not hardware evolution but in how software is written." — Oxford Open Energy, 2023</div>
+    </div>
+    <div class="src">Oxford Open Energy, 2023</div>
+  </div>
+  <div class="stat-wide" style="border-left-color:var(--red); margin-top:10px;">
+    <div class="num red" style="font-size:36px; min-width:80px;">41%</div>
+    <div class="text">
+      <div class="label">Environmental SDG indicators that can't be measured globally</div>
+      <div class="desc">Due to lack of interoperable data and standardised reporting — the sustainability measurement failure is itself a software architecture problem</div>
+    </div>
+    <div class="src">UN GDC / CODES policy brief</div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 10: MACRO SCALE ═══ -->
+<div class="slide s-content" id="slide-10">
+  <span class="slide-tag">10</span>
+  <div class="slide-header">
+    <span class="layer-badge" style="background:var(--ink);">Scale</span>
+    <h2>Why this matters — the planetary dimension</h2>
+    <span class="sub">IEA Energy & AI Report, 2025</span>
+  </div>
+  <div class="big-number-row">
+    <div class="big-card">
+      <div class="bc-num">415 TWh</div>
+      <div class="bc-label">Data centre electricity use in 2024</div>
+      <div class="bc-desc">~1.5% of global electricity. Producing ~182 million tonnes of CO₂. Growing at 12%/year since 2017</div>
+      <div class="bc-src">IEA Energy and AI Report, April 2025</div>
+    </div>
+    <div class="big-card">
+      <div class="bc-num">945 TWh</div>
+      <div class="bc-label">Projected consumption by 2030</div>
+      <div class="bc-desc">Equivalent to Japan's entire current annual electricity demand. Growing 15%/year — 4× faster than all other sectors combined</div>
+      <div class="bc-src">IEA Energy and AI Report, April 2025</div>
+    </div>
+  </div>
+  <div class="big-number-row">
+    <div class="big-card light">
+      <div class="bc-num">$182B</div>
+      <div class="bc-label">Annual wasted cloud spend (global)</div>
+      <div class="bc-desc">27% of total cloud spend — unchanged since 2019. Proportional energy waste is one of the largest addressable sustainability levers in the digital sector</div>
+      <div class="bc-src">Flexera 2025 / Spendark 2026</div>
+    </div>
+    <div class="big-card light">
+      <div class="bc-num" style="color:var(--green);">30%</div>
+      <div class="bc-label">Potential savings from energy-proportional servers alone</div>
+      <div class="bc-desc">Before any software efficiency gains are factored in — hardware optimisation alone delivers massive savings</div>
+      <div class="bc-src">ResearchGate server energy proportionality study</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 11: GLOBAL SOUTH ═══ -->
+<div class="slide s-content" id="slide-11">
+  <span class="slide-tag">11</span>
+  <div class="slide-header">
+    <span class="layer-badge" style="background:#185FA5;">Global South</span>
+    <h2>A second dimension — locking in carbon for the next billion users</h2>
+    <span class="sub">Bangladesh · EdTech · Digital infrastructure choices made now</span>
+  </div>
+  <div class="stat-grid cols-2" style="margin-bottom:16px;">
+    <div class="stat-card" style="border-top:3px solid #185FA5;">
+      <div class="stat-num sm" style="color:#185FA5;">15–20 yrs</div>
+      <div class="stat-label">Productive life of digital infrastructure</div>
+      <div class="stat-desc">Infrastructure choices made today for EdTech in Bangladesh, Southeast Asia, and Sub-Saharan Africa will be in production for 15–20 years — locking in efficiency or waste for decades</div>
+      <div class="stat-source">Infrastructure lifecycle analysis</div>
+    </div>
+    <div class="stat-card" style="border-top:3px solid #185FA5;">
+      <div class="stat-num sm" style="color:#185FA5;">Next 1B</div>
+      <div class="stat-label">Digital learners coming online</div>
+      <div class="stat-desc">CodersTrust Bangladesh and similar organisations are building digital education infrastructure now. Framework and language choices made at this foundation layer determine the carbon and resource cost for millions of users over the next two decades</div>
+      <div class="stat-source">CodersTrust / SourceVO operational context</div>
+    </div>
+  </div>
+  <div class="stat-wide" style="border-left-color:#185FA5;">
+    <div class="num" style="color:#185FA5; font-size:34px; min-width:80px;">GDC Obj. 1(e)</div>
+    <div class="text">
+      <div class="label">"Promote sustainability across the life cycle of digital technologies… context-specific measures to increase resource efficiency"</div>
+      <div class="desc">This commitment explicitly targets developing-country contexts and lifecycle responsibility. It cannot be fulfilled if the infrastructure layer — where the actual choices are made — has no sustainability mandate, metric, or tooling.</div>
+    </div>
+    <div class="src">Global Digital Compact text, Sept 2024</div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 12: CALL TO ACTION ═══ -->
+<div class="slide s-cta" id="slide-12">
+  <span class="slide-tag" style="color:rgba(255,255,255,0.3);">12</span>
+  <span class="eyebrow">Concrete asks for this townhall</span>
+  <h2>Making sustainability-by-default a runtime behaviour, not a design aspiration</h2>
+  <div class="asks">
+    <div class="ask-item">
+      <span class="ask-num">01</span>
+      <span class="ask-text"><strong>Include platform engineers in CODES working groups.</strong> DevOps and platform practitioners control the infrastructure layer where sustainability commitments live or die. They are currently absent from GDC implementation bodies.</span>
+    </div>
+    <div class="ask-item">
+      <span class="ask-num">02</span>
+      <span class="ask-text"><strong>Mandate sustainability metrics in CI/CD tooling.</strong> A "green build" status — surfacing carbon and energy impact at the point of infrastructure decisions — should be part of GDC implementation guidance, not an optional add-on.</span>
+    </div>
+    <div class="ask-item">
+      <span class="ask-num">03</span>
+      <span class="ask-text"><strong>Apply lifecycle sustainability to Global South infrastructure first.</strong> Digital infrastructure for developing countries must be built on efficient foundations from the start — not inherit the West's technical debt at scale.</span>
+    </div>
+    <div class="ask-item">
+      <span class="ask-num">04</span>
+      <span class="ask-text"><strong>Reference: Green Software Foundation's SCI metric, Carbon-Aware SDK, CODES digital sustainability frameworks</strong> — already-existing tools that operationalise the GDC's Objective 1(e) commitment at the platform layer.</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ SLIDE 13: SOURCES ═══ -->
+<div class="slide s-sources" id="slide-13">
+  <span class="slide-tag">13</span>
+  <div class="slide-header">
+    <span class="layer-badge">Sources</span>
+    <h2>References & data provenance</h2>
+    <span class="sub">All claims verified — caveats noted where benchmarks are contested</span>
+  </div>
+  <div class="source-list">
+    <div class="source-item">
+      <span class="s-num">S1</span>
+      <div class="s-body">
+        <div class="s-title">Fortune — Data centers underutilised</div>
+        <div class="s-detail">fortune.com · Aug 2025 · 12–18% utilisation, 10M idle servers, $30B wasted</div>
+      </div>
+    </div>
+    <div class="source-item">
+      <span class="s-num">S2</span>
+      <div class="s-body">
+        <div class="s-title">Flexera State of the Cloud Report 2025</div>
+        <div class="s-detail">27–32% cloud waste, unchanged 2019–2025. $182B at $675B market size.</div>
+      </div>
+    </div>
+    <div class="source-item">
+      <span class="s-num">S3</span>
+      <div class="s-body">
+        <div class="s-title">CNCF FinOps Survey 2024</div>
+        <div class="s-detail">Kubernetes clusters: avg 10% CPU, 20% memory utilisation</div>
+      </div>
+    </div>
+    <div class="source-item">
+      <span class="s-num">S4</span>
+      <div class="s-body">
+        <div class="s-title">Harness Cloud Cost Management Report 2025</div>
+        <div class="s-detail">Median EC2 instance: 7–12% CPU utilisation</div>
+      </div>
+    </div>
+    <div class="source-item">
+      <span class="s-num">S5</span>
+      <div class="s-body">
+        <div class="s-title">IEEE / Felter et al. — VM vs. Container benchmark</div>
+        <div class="s-detail">KVM: ~30% throughput loss vs. native on Redis. Docker: &lt;5% overhead.</div>
+      </div>
+    </div>
+    <div class="source-item">
+      <span class="s-num">S6</span>
+      <div class="s-body">
+        <div class="s-title">Pereira et al., ACM SLE 2017</div>
+        <div class="s-detail">DOI: 10.1145/3136014.3136031 · Python 75× vs. C on CLBG benchmarks. Validated in Science of Computer Programming, 2021.</div>
+      </div>
+    </div>
+    <div class="source-item">
+      <span class="s-num">S7</span>
+      <div class="s-body">
+        <div class="s-title">Green-Coding.io — Python energy efficiency revisit, 2024</div>
+        <div class="s-detail">Real-world Python/C gap: ~4× (vs. 75× in pure-compute benchmarks)</div>
+      </div>
+    </div>
+    <div class="source-item">
+      <span class="s-num">S8</span>
+      <div class="s-body">
+        <div class="s-title">TechEmpower Framework Benchmarks — Round 22 (2023) / Round 23 (2025)</div>
+        <div class="s-detail">Laravel ~4,800 req/s (full board); ~2× slower than Symfony (HN thread confirmation). FastAPI: 167,592 req/s JSON. github.com/TechEmpower/FrameworkBenchmarks</div>
+      </div>
+    </div>
+    <div class="source-item">
+      <span class="s-num">S9</span>
+      <div class="s-body">
+        <div class="s-title">JetBrains State of PHP 2025</div>
+        <div class="s-detail">Laravel: 64% PHP market share. PHP powers 76.6% of all websites.</div>
+      </div>
+    </div>
+    <div class="source-item">
+      <span class="s-num">S10</span>
+      <div class="s-body">
+        <div class="s-title">Oxford Open Energy — "Black software", 2023</div>
+        <div class="s-detail">doi.org/10.1093/ooenergy/oiac011 · Software bloat and higher-level languages compound energy inefficiency across the full stack</div>
+      </div>
+    </div>
+    <div class="source-item">
+      <span class="s-num">S11</span>
+      <div class="s-body">
+        <div class="s-title">IEA Energy and AI Report, April 2025</div>
+        <div class="s-detail">iea.org/reports/energy-and-ai · 415 TWh (2024) → 945 TWh (2030). 15%/yr growth, 4× other sectors.</div>
+      </div>
+    </div>
+    <div class="source-item">
+      <span class="s-num">S12</span>
+      <div class="s-body">
+        <div class="s-title">Global Digital Compact text — Objective 1(e)</div>
+        <div class="s-detail">un.org/pact-for-the-future/en/annex-i-global-digital-compact · Adopted Sept 2024, 193 Member States</div>
+      </div>
+    </div>
+    <div class="source-item">
+      <span class="s-num">S13</span>
+      <div class="s-body">
+        <div class="s-title">Data Center Knowledge — Technical debt & sustainability, 2024</div>
+        <div class="s-detail">20% CPU overhead from poorly optimised code = equivalent energy increase</div>
+      </div>
+    </div>
+    <div class="source-item">
+      <span class="s-num">S14</span>
+      <div class="s-body">
+        <div class="s-title">arXiv:2505.02346 — Compiled Python energy study, May 2025</div>
+        <div class="s-detail">2.4–119× improvement from compiled vs. standard CPython runtime</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<div class="progress"><div class="progress-fill" id="progress-fill" style="width:7.7%"></div></div>
+
+<script>
+  const slides = document.querySelectorAll('.slide');
+  const total = slides.length;
+  let current = 0;
+
+  function showSlide(n) {
+    slides[current].classList.remove('active');
+    current = (n + total) % total;
+    slides[current].classList.add('active');
+    document.getElementById('counter').textContent = `Slide ${current + 1} / ${total}`;
+    document.getElementById('progress-fill').style.width = `${((current + 1) / total) * 100}%`;
+  }
+
+  function next() { showSlide(current + 1); }
+  function prev() { showSlide(current - 1); }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') { e.preventDefault(); next(); }
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); prev(); }
+  });
+</script>
+</body>
+</html>
