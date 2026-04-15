@@ -16,6 +16,13 @@
 
 <!-- ENTRIES BELOW — newest first -->
 
+## 2026-04-16 — engineering-skills-restoration
+**What**: Restored Anthropic Engineering plugin skill invocations missing from composable flows; fixed stop-check and completion-audit hooks to treat required_deploy config as sole source of truth.
+**Commits**: 405f683, 4fcadce, 4eb2a11, 3717b93, 197015b
+**Skills run**: silver-quality-gates, requesting-code-review, receiving-code-review, security, test-driven-development, verification-before-completion, silver-create-release
+**Virtual cost**: ~$0.40 (Sonnet, low-medium complexity)
+**KNOWLEDGE.md**: no changes
+
 ## 2026-04-16 — backlog-maintenance-sweep
 **What**: Implemented 17 backlog items (999.1–999.18): CI assertions, hook fixes, test additions, skill ordering correction in silver-release, and deferred-item capture enforcement across composable flows.
 **Commits**: acd4bdc, 242caf5, e3c2f93, 7997079, 79614d4, 184e249, c2adf5a, cab7ca1, b368dac, 4319a30, 4d35e81, b47974d, 00c20c0, 2cbb599, 4800963, 31b23e9, ed37723
