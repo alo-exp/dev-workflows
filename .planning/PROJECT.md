@@ -55,14 +55,16 @@ Single enforced workflow that eliminates the gap between "what AI should do" and
 - Building custom integrations for external tools — use Claude Desktop MCP connectors / CLIs
 - Nomadic Care-specific naming conventions or file structures — SB provides generic patterns
 
-## Current Milestone: v0.16.0 Advanced Review Intelligence
+## Current Milestone: v0.21.0 Hook Quality & Docs
 
-**Goal:** Review depth is configurable per artifact type, review rounds emit structured analytics, and a cross-artifact consistency reviewer validates alignment across SPEC/REQUIREMENTS/ROADMAP/DESIGN — building on the v0.15.0 reviewer framework.
+**Goal:** Resolve all 9 pending GitHub issues — fix false-positive blocks and a deadlock in the hook layer, reduce advisory hook noise, extract duplicated logic, add CI quality checks, and document the trivial-session bypass mechanism for end users.
 
-**Target features:**
-- A: Configurable review depth (deep/standard/quick) per artifact type via .planning/config.json (ARVW-11)
-- B: Review analytics — structured metrics per review round, JSON Lines storage, summary reporting skill (ARVW-10)
-- C: Cross-artifact consistency reviewer — validates alignment across SPEC.md ↔ REQUIREMENTS.md ↔ ROADMAP.md ↔ DESIGN.md, wired into milestone completion (ARVW-09)
+**Target issues:**
+- Bugs: uat-gate false-positive on FAIL column header (#5), dev-cycle-check false-positive state-tamper via heredoc (#8), ci-status-check deadlock when CI fails (#9)
+- Enhancements: stop-check session intent awareness (#3), read-guard hook noise reduction (#10)
+- Refactor: extract duplicated trivial-bypass logic into shared helper (#6)
+- Chores: SessionStart umask consistency (#4), CI plugin.json version drift warning (#7)
+- Documentation: document trivial-session bypass mechanism in user-facing docs (#11)
 
 ## Context
 
@@ -109,4 +111,4 @@ This document evolves at phase transitions and milestone boundaries.
 4. Update Context with current state
 
 ---
-*Last updated: 2026-04-10 after milestone v0.16.0 start*
+*Last updated: 2026-04-16 after milestone v0.21.0 start*

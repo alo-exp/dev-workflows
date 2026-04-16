@@ -1,50 +1,48 @@
 ---
 gsd_state_version: 1.0
-milestone: v0.20.0
-milestone_name: Composable Paths Architecture
-current_plan: Complete
-status: complete
-stopped_at: Completed all phases 21-29
+milestone: v0.21.0
+milestone_name: Hook Quality & Docs
+current_plan: —
+status: defining requirements
+stopped_at: Milestone v0.21.0 started — defining requirements
 last_updated: "2026-04-16T00:00:00.000Z"
 last_activity: 2026-04-16
 progress:
-  total_phases: 9
-  completed_phases: 9
-  total_plans: 13
-  completed_plans: 13
-  percent: 100
+  total_phases: 0
+  completed_phases: 0
+  total_plans: 0
+  completed_plans: 0
+  percent: 0
 ---
 
 # Project State
 
 **Project:** Silver Bullet
-**Current version:** v0.20.8
-**Active phase:** None (all phases complete)
-**Current plan:** Complete
+**Current version:** v0.20.11
+**Active phase:** None (defining requirements)
+**Current plan:** —
 
 Last activity: 2026-04-16
 
 ## Project Reference
 
-See: .planning/PROJECT.md (updated 2026-04-14)
+See: .planning/PROJECT.md (updated 2026-04-16)
 
 **Core value:** Single enforced workflow -- no artifact ships without structured quality validation
-**Current focus:** Backlog items (999.x)
+**Current focus:** v0.21.0 — resolving all 9 pending GitHub issues
 
 ## Current Position
 
-Phase: All complete (21–29)
-Plan: 13 of 13
-Status: Milestone complete — all phases verified
-Last activity: 2026-04-16
-
-Progress: [██████████] 100%
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-04-16 — Milestone v0.21.0 started
 
 ## Performance Metrics
 
 **Velocity:**
 
-- Total plans completed: 4
+- Total plans completed: —
 - Average duration: --
 - Total execution time: 0 hours
 
@@ -65,9 +63,6 @@ Progress: [██████████] 100%
 - Quality gates are dual-mode: design-time checklist + adversarial audit
 - PATH 15 (DESIGN HANDOFF) runs inside PATH 17 (RELEASE), not in per-phase sequence
 - Design spec: docs/superpowers/specs/2026-04-14-composable-paths-design.md
-- [Phase 21-foundation]: PATH 0-17 = 18 paths; plan had off-by-one in acceptance criteria but design spec defines 18 — implemented 18 correctly
-- [Phase 21]: Assessor judges against artifact CONTRACT only -- no self-review loop -- cycle is Reviewer -> Assessor -> fix MUST-FIX -> Reviewer
-- [Phase 29]: Used 'rather than following a fixed pipeline' contrast phrasing in silver-feature — kept as acceptable explanatory language
 
 ### Pending Todos
 
@@ -84,5 +79,5 @@ Progress: [██████████] 100%
 
 ## Session Continuity
 
-Last session: 2026-04-14T16:03:35.723Z
-Stopped at: Completed 29-01-PLAN.md
+Last session: 2026-04-16
+Stopped at: Milestone v0.21.0 started — defining requirements
