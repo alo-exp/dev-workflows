@@ -73,9 +73,15 @@ case "$trivial_file" in
   *) trivial_file="${SB_STATE_DIR}/trivial" ;;
 esac
 
-# ── Trivial bypass (reject symlinks) ─────────────────────────────────────────
-if [[ -f "$trivial_file" && ! -L "$trivial_file" ]]; then
-  exit 0
+# ── Resolve lib dir (needed for trivial-bypass and required-skills helpers) ───
+_lib_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/lib" && pwd)"
+
+# ── Trivial bypass (sourced from shared helper — REF-01) ────────────────────
+# shellcheck source=lib/trivial-bypass.sh
+if [[ -f "$_lib_dir/trivial-bypass.sh" ]]; then
+  # shellcheck disable=SC1090
+  source "$_lib_dir/trivial-bypass.sh"
+  sb_trivial_bypass "$trivial_file"
 fi
 
 # ── Detect current git branch ─────────────────────────────────────────────────
@@ -97,7 +103,6 @@ state_contents=""
 # ── Build required skills list (Tier 2: full required_deploy list) ────────────
 # Source canonical required-skills list (single source of truth — TD-01 fix)
 # shellcheck source=lib/required-skills.sh
-_lib_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/lib" && pwd)"
 if [[ -f "$_lib_dir/required-skills.sh" ]]; then
   # shellcheck disable=SC1090
   source "$_lib_dir/required-skills.sh"

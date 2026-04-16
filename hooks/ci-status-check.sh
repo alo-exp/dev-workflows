@@ -52,11 +52,13 @@ while true; do
 done
 [[ -z "$config_file" ]] && exit 0
 
-# ── Trivial bypass (reject symlinks) ─────────────────────────────────────────
-SB_STATE_DIR="${HOME}/.claude/.silver-bullet"
-trivial_file="${SB_STATE_DIR}/trivial"
-if [[ -f "$trivial_file" && ! -L "$trivial_file" ]]; then
-  exit 0
+# ── Trivial bypass (sourced from shared helper — REF-01) ────────────────────
+# shellcheck source=lib/trivial-bypass.sh
+_lib_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/lib" && pwd)"
+if [[ -f "$_lib_dir/trivial-bypass.sh" ]]; then
+  # shellcheck disable=SC1090
+  source "$_lib_dir/trivial-bypass.sh"
+  sb_trivial_bypass
 fi
 
 # gh CLI required for real runs; test override bypasses it
