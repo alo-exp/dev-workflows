@@ -50,14 +50,14 @@
 
 ## Traceability
 
-| REQ-ID  | Phase | Status  |
-|---------|-------|---------|
-| HOOK-01 | —     | Pending |
-| HOOK-02 | —     | Pending |
-| HOOK-03 | —     | Pending |
-| HOOK-04 | —     | Pending |
-| HOOK-05 | —     | Pending |
-| REF-01  | —     | Pending |
-| CI-01   | —     | Pending |
-| CI-02   | —     | Pending |
-| DOC-01  | —     | Pending |
+| REQ-ID  | Phase    | Status  |
+|---------|----------|---------|
+| REF-01  | Phase 30 | Pending |
+| CI-01   | Phase 30 | Pending |
+| CI-02   | Phase 30 | Pending |
+| HOOK-01 | Phase 31 | Pending |
+| HOOK-02 | Phase 31 | Pending |
+| HOOK-03 | Phase 31 | Pending |
+| HOOK-04 | Phase 32 | Pending |
+| HOOK-05 | Phase 32 | Pending |
+| DOC-01  | Phase 33 | Pending |

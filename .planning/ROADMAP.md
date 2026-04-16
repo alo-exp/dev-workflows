@@ -7,12 +7,13 @@
 - :white_check_mark: **v0.13.0 Orchestration Skills** - Phases 9-11 (shipped)
 - :white_check_mark: **v0.14.0 Spec-Driven Development** - Phases 12-14 (shipped)
 - :white_check_mark: **v0.16.0 Artifact Review System** - Phases 15-20 (shipped)
-- :construction: **v0.20.0 Composable Paths Architecture** - Phases 21-29 (in progress)
+- :white_check_mark: **v0.20.0 Composable Paths Architecture** - Phases 21-29 (shipped)
+- :construction: **v0.21.0 Hook Quality & Docs** - Phases 30-33 (in progress)
 
 ## Phases
 
 <details>
-<summary>Completed milestones (Phases 1-20) -- shipped through v0.19.1</summary>
+<summary>Completed milestones (Phases 1-29) -- shipped through v0.20.11</summary>
 
 - [x] **Phase 1: Workflow File Rewrites** - Rewrite both workflow files as comprehensive orchestration guides
 - [x] **Phase 2: silver-bullet.md Overhaul** - Add GSD process knowledge and hand-holding instructions
@@ -34,170 +35,78 @@
 - [x] **Phase 18: Configurable Review Depth** - Per-artifact depth config (deep/standard/quick)
 - [x] **Phase 19: Review Analytics** - Structured metrics + silver-review-stats
 - [x] **Phase 20: Cross-Artifact Consistency** - Cross-artifact reviewer, milestone completion gate
+- [x] **Phase 21: Foundation** - Path contracts, WORKFLOW.md spec, artifact-review-assessor, doc-scheme update
+- [x] **Phase 22: Core Paths** - 6 essential paths every composition uses
+- [x] **Phase 23: Specialized Paths** - 6 context-triggered paths
+- [x] **Phase 24: Cross-Cutting Paths + Quality Gate Dual-Mode** - 7 cross-cutting paths plus dual-mode quality gates
+- [x] **Phase 25: Composer Redesign** - /silver as composer with supervision loop
+- [x] **Phase 26: Hook Alignment + silver:migrate** - 5 hooks modified for WORKFLOW.md awareness plus migration skill
+- [x] **Phase 27: silver-fast Redesign** - 3-tier complexity triage with gsd-quick flags
+- [x] **Phase 28: Documentation Update** - silver-bullet.md, doc-scheme, ENFORCEMENT.md updates
+- [x] **Phase 29: Help Center + Homepage** - Homepage refresh and help center rewrite
 
 </details>
 
-### v0.20.0 Composable Paths Architecture
+### v0.21.0 Hook Quality & Docs
 
-- [x] **Phase 21: Foundation** - Path contracts, WORKFLOW.md spec, artifact-review-assessor, doc-scheme update (completed 2026-04-14)
-- [x] **Phase 22: Core Paths** - 6 essential paths every composition uses (BOOTSTRAP, ORIENT, PLAN, EXECUTE, VERIFY, SHIP) (completed 2026-04-14)
-- [x] **Phase 23: Specialized Paths** - 6 context-triggered paths (EXPLORE, IDEATE, SPECIFY, DESIGN CONTRACT, UI QUALITY, DESIGN HANDOFF) (completed 2026-04-15)
-- [x] **Phase 24: Cross-Cutting Paths + Quality Gate Dual-Mode** - 7 cross-cutting paths plus dual-mode quality gates (completed 2026-04-15)
-- [x] **Phase 25: Composer Redesign** - /silver as composer with supervision loop, dynamic insertion, anti-stall (completed 2026-04-14)
-- [x] **Phase 26: Hook Alignment + silver:migrate** - 5 hooks modified for WORKFLOW.md awareness plus migration skill (completed 2026-04-14)
-- [x] **Phase 27: silver-fast Redesign** - 3-tier complexity triage with gsd-quick flags and autonomous escalation (completed 2026-04-15)
-- [x] **Phase 28: Documentation Update** - silver-bullet.md, doc-scheme, ENFORCEMENT.md, full-dev-cycle demotion (completed 2026-04-15)
-- [x] **Phase 29: Help Center + Homepage** - Homepage refresh and help center rewrite for composable architecture (completed 2026-04-14)
+- [ ] **Phase 30: Shared Helper & CI Chores** - Extract trivial-bypass helper, fix umask, add version-drift CI warning
+- [ ] **Phase 31: Hook Bug Fixes** - Fix false-positives in uat-gate and dev-cycle-check, fix ci-status-check deadlock
+- [ ] **Phase 32: Hook Behavior Enhancements** - Session-intent awareness for stop-check, noise reduction for read-guard
+- [ ] **Phase 33: Trivial-Session Bypass Documentation** - Document the bypass mechanism in user-facing docs
 
 ## Phase Details
 
-### Phase 21: Foundation
-**Goal**: All building blocks exist for composable paths -- contracts defined, state tracking specified, review assessment available, artifact documentation updated
-**Depends on**: Nothing (first phase of v0.20.0)
-**Requirements**: FOUND-01, FOUND-02, FOUND-03, FOUND-04
+### Phase 30: Shared Helper & CI Chores
+**Goal**: Duplicated trivial-bypass logic is consolidated into a single shared helper, and two CI/chore hygiene items are resolved
+**Depends on**: Nothing (first phase of v0.21.0)
+**Requirements**: REF-01, CI-01, CI-02
 **Success Criteria** (what must be TRUE):
-  1. Every composable path has a documented contract with prerequisites, trigger, steps, produces, review cycle, GSD impact, and exit condition
-  2. WORKFLOW.md can be created and tracks path log, phase iterations, dynamic insertions, autonomous decisions, deferred improvements, and next path -- stays under 100 lines
-  3. artifact-review-assessor skill triages reviewer findings into MUST-FIX / NICE-TO-HAVE / DISMISS based on artifact contract, with no review loop on itself
-  4. doc-scheme.md.base includes WORKFLOW.md, VALIDATION.md, UI-SPEC.md, UI-REVIEW.md, SECURITY.md in artifact tables and enforces non-redundancy rule 6
-**Plans**: 2 plans
-Plans:
-- [x] 21-01-PLAN.md — Path contracts summary + WORKFLOW.md template
-- [x] 21-02-PLAN.md — artifact-review-assessor skill + doc-scheme update
+  1. A single shared helper file (e.g. `hooks/lib/trivial-bypass.sh`) exists and both `stop-check.sh` and `ci-status-check.sh` source it instead of inlining the trivial-bypass guard logic
+  2. The `SessionStart` hook command that creates the trivial bypass file uses `umask 0077`, matching all other Silver Bullet hook scripts
+  3. CI emits a visible, non-blocking warning when `plugin.json` version does not match the latest git tag -- the build does not fail, but the mismatch is surfaced
+**Plans**: TBD
 
-### Phase 22: Core Paths
-**Goal**: The 6 paths that form the backbone of every composition are implemented and can execute end-to-end
-**Depends on**: Phase 21
-**Requirements**: CORE-01, CORE-02, CORE-03, CORE-04, CORE-05, CORE-06
+### Phase 31: Hook Bug Fixes
+**Goal**: Three hook correctness bugs are eliminated -- hooks no longer block users with false-positive errors or deadlock on CI failure
+**Depends on**: Phase 30 (shared helper must exist before modifying ci-status-check)
+**Requirements**: HOOK-01, HOOK-02, HOOK-03
 **Success Criteria** (what must be TRUE):
-  1. PATH 0 (BOOTSTRAP) produces PROJECT.md + ROADMAP.md + REQUIREMENTS.md + STATE.md and includes episodic memory, new-project, map-codebase, new-milestone, resume-work, progress
-  2. PATH 1 (ORIENT) runs gsd-intel, gsd-scan, gsd-map-codebase and requires PATH 0 completed
-  3. PATH 5 (PLAN) produces CONTEXT.md + RESEARCH.md + PLAN.md using discuss-phase, writing-plans, testing-strategy, list-phase-assumptions, analyze-dependencies, gsd-plan-phase
-  4. PATH 7 (EXECUTE) uses TDD as-needed and gsd-execute-phase/gsd-autonomous as sole execution engine with all 10 GSD assumptions preserved
-  5. PATH 11 (VERIFY) and PATH 13 (SHIP) produce their expected artifacts and enforce non-skippable verification before shipping
-**Plans**: 2 plans
-Plans:
-- [x] 22-01-PLAN.md — Restructure silver-feature with 6 core path sections
-- [x] 22-02-PLAN.md — Restructure silver-bugfix with core path sections
+  1. `uat-gate.sh` passes cleanly when a UAT.md summary table contains a FAIL column header in the header row -- only data rows with FAIL trigger the failure check
+  2. `dev-cycle-check.sh` state-tamper detection does not false-positive when a heredoc body happens to contain a Silver Bullet state path string -- only actual write-destination arguments are checked
+  3. After CI fails, the user can perform at least one `git commit` + `git push` cycle to fix the failing run without being deadlocked by `ci-status-check.sh` (via override flag, grace period, or explicit escape instruction)
+**Plans**: TBD
 
-### Phase 23: Specialized Paths
-**Goal**: All 6 context-triggered paths are implemented -- each activates only when its trigger condition is met
-**Depends on**: Phase 22
-**Requirements**: SPEC-01, SPEC-02, SPEC-03, SPEC-04, SPEC-05, SPEC-06
+### Phase 32: Hook Behavior Enhancements
+**Goal**: Advisory hooks stop firing in contexts where they add no value -- stop-check skips non-code sessions, read-guard suppresses redundant warnings
+**Depends on**: Phase 30 (shared helper used by stop-check)
+**Requirements**: HOOK-04, HOOK-05
 **Success Criteria** (what must be TRUE):
-  1. PATH 2 (EXPLORE) and PATH 3 (IDEATE) run their respective skill chains and produce research/design artifacts
-  2. PATH 4 (SPECIFY) enforces skip condition (REQUIREMENTS.md must exist) and runs silver-ingest, write-spec, silver-spec, silver-validate
-  3. PATH 6 (DESIGN CONTRACT) triggers on UI phase detection and runs design-system, ux-copy, gsd-ui-phase, accessibility-review iteratively
-  4. PATH 8 (UI QUALITY) triggers from PATH 6 or UI file types in SUMMARY.md and runs design-critique, gsd-ui-review (6-pillar), accessibility-review
-  5. PATH 15 (DESIGN HANDOFF) runs inside PATH 17 only, not in the per-phase sequence
-**Plans**: 2 plans
-Plans:
-- [ ] 23-01-PLAN.md — Add PATHs 2, 3, 4, 6, 8 to silver-feature
-- [ ] 23-02-PLAN.md — Add PATHs 6, 8 to silver-ui + PATH 15 to silver-release
-**UI hint**: yes
+  1. `stop-check.sh` dev-cycle skill checklist does not fire for sessions where no code-producing work occurred (e.g. backlog reviews, Q&A, documentation-only, housekeeping)
+  2. `gsd-read-guard.js` does not emit the "will reject" advisory message when the file being edited was already read earlier in the same session -- the message only appears when a file genuinely has not been read yet
+**Plans**: TBD
 
-### Phase 24: Cross-Cutting Paths + Quality Gate Dual-Mode
-**Goal**: All cross-cutting paths that can insert at any point in a composition are implemented, and quality gates operate in dual mode
-**Depends on**: Phase 23
-**Requirements**: CROSS-01, CROSS-02, CROSS-03, CROSS-04, CROSS-05, CROSS-06, CROSS-07
+### Phase 33: Trivial-Session Bypass Documentation
+**Goal**: Developers can find, understand, and manually invoke the trivial-session bypass mechanism from user-facing documentation
+**Depends on**: Phase 31, Phase 32 (document the mechanism after all hook fixes are landed)
+**Requirements**: DOC-01
 **Success Criteria** (what must be TRUE):
-  1. PATH 9 (REVIEW) runs three parallel review layers, each with triage + fix, iterating until 2 consecutive clean passes
-  2. PATH 10 (SECURE) and PATH 12 (QUALITY GATE) operate correctly -- quality gate uses 4-state disambiguation table and appears twice in compositions
-  3. PATH 14 (DEBUG) has resume semantics defined for all interrupted paths and chains debugging skills appropriately
-  4. PATH 16 (DOCUMENT) and PATH 17 (RELEASE) complete their skill chains, with PATH 17 including the PATH 15 insertion point for UI milestones
-  5. All 9 quality dimension skills operate in dual mode -- design-time checklist (pre-plan) and adversarial audit (pre-ship) with mode detected from artifact state
-**Plans**: 2 plans
-Plans:
-- [ ] 24-01-PLAN.md — Add PATHs 9, 10, 12, 14, 16, 17 to silver-feature
-- [ ] 24-02-PLAN.md — Quality gate dual-mode detection in quality-gates orchestrator
-
-### Phase 25: Composer Redesign
-**Goal**: /silver works as a composer -- classifying context, selecting and ordering paths, proposing compositions, supervising execution with anti-stall
-**Depends on**: Phase 24
-**Requirements**: COMP-01, COMP-02, COMP-03, COMP-04, COMP-05, COMP-06
-**Success Criteria** (what must be TRUE):
-  1. /silver classifies context, selects paths, orders chain, and proposes to user (or auto-confirms in autonomous mode)
-  2. Composition templates exist for silver-feature, silver-ui, silver-bugfix, silver-devops, silver-research, silver-release as shortcut compositions
-  3. End-to-end supervision loop works -- after each path: verify exit, evaluate composition changes, stall check, advance, report progress
-  4. Dynamic insertion works -- PATH 14 inserted on failure, new paths inserted on context discovery, all recorded in WORKFLOW.md
-  5. 4-tier anti-stall operates -- progress-based detection, permission-stall prevention, context exhaustion prevention, heartbeat sentinel
-**Plans**: 2 plans
-Plans:
-- [x] 25-01-PLAN.md — Composition proposal + supervision loop + anti-stall in silver-feature + workflow.md.base heartbeat
-- [x] 25-02-PLAN.md — Composition proposals in 5 remaining silver-* workflows + /silver router compatibility
-
-### Phase 26: Hook Alignment + silver:migrate
-**Goal**: All hooks are WORKFLOW.md-aware with legacy fallback, and existing mid-milestone users can migrate to composable paths
-**Depends on**: Phase 25
-**Requirements**: HOOK-01, HOOK-02, HOOK-03, HOOK-04, HOOK-05, HOOK-06
-**Success Criteria** (what must be TRUE):
-  1. dev-cycle-check.sh and completion-audit.sh use WORKFLOW.md path completion as primary gate, falling back to legacy markers when WORKFLOW.md absent
-  2. compliance-status.sh shows path progress (PATH 5/12) alongside skill count, and prompt-reminder.sh includes WORKFLOW.md position for post-compact recovery
-  3. spec-floor-check.sh downgrades to advisory when PATH 4 is intentionally excluded from composition
-  4. silver:migrate scans STATE.md + artifacts, infers path completion, generates WORKFLOW.md, and user confirms before applying
-**Plans**: 2 plans
-Plans:
-- [x] 26-01-PLAN.md — WORKFLOW.md awareness in 5 hook scripts with legacy fallback
-- [x] 26-02-PLAN.md — silver:migrate skill with artifact-to-path inference
-
-### Phase 27: silver-fast Redesign
-**Goal**: silver-fast triages work into 3 complexity tiers with appropriate routing and autonomous escalation
-**Depends on**: Phase 26
-**Requirements**: FAST-01, FAST-02, FAST-03
-**Success Criteria** (what must be TRUE):
-  1. Trivial changes route to gsd-fast, medium changes route to gsd-quick with appropriate flags, complex changes escalate to silver-feature
-  2. gsd-quick flag composition (--discuss, --research, --validate, --full) is selected based on detected need
-  3. Autonomous escalation re-runs /silver classification against expanded scope when complexity exceeds silver-fast tier
-**Plans**: 1 plan
-Plans:
-- [ ] 27-01-PLAN.md — Rewrite SKILL.md with 3-tier triage, gsd-quick flags, and autonomous escalation
-
-### Phase 28: Documentation Update
-**Goal**: All documentation reflects the composable paths architecture -- silver-bullet.md, doc-scheme, enforcement docs, and dev-cycle reference updated
-**Depends on**: Phase 26
-**Requirements**: DOCS-01, DOCS-02, DOCS-03, DOCS-04
-**Success Criteria** (what must be TRUE):
-  1. silver-bullet.md section 2h describes composable paths architecture instead of fixed pipeline
-  2. doc-scheme.md.base is finalized with all new artifacts documented
-  3. ENFORCEMENT.md reflects all hook modifications from Phase 26
-  4. full-dev-cycle.md is demoted to example composition, not primary reference
-**Plans**: 2 plans
-Plans:
-- [ ] 28-01-PLAN.md — silver-bullet.md §2h rewrite with composable paths architecture
-- [ ] 28-02-PLAN.md — doc-scheme, ENFORCEMENT.md, full-dev-cycle.md updates
-
-### Phase 29: Help Center + Homepage
-**Goal**: Website and help center fully reflect composable paths architecture for new and existing users
-**Depends on**: Phase 28
-**Requirements**: SITE-01, SITE-02, SITE-03, SITE-04, SITE-05
-**Success Criteria** (what must be TRUE):
-  1. Homepage meta tags, hero section, workflow section, and feature cards reflect composable architecture
-  2. Help center concept pages exist for composable-paths, artifact-review-assessor, routing-logic, verification, and documentation
-  3. Help center workflow pages describe silver-feature, silver-ui, silver-fast as composable and silver-bugfix, silver-devops, silver-release, silver-research are updated
-  4. Reference page documents assessor, WORKFLOW.md, path contracts, and search.js indexes all new pages
-**Plans**: 2 plans
-Plans:
-- [x] 29-01-PLAN.md — Homepage updates + help center concept pages (new and updated)
-- [x] 29-02-PLAN.md — Workflow pages + reference page + search index updates
-**UI hint**: yes
+  1. User-facing documentation (README.md or docs/ARCHITECTURE.md) explains what the trivial file is, how it is created automatically at session start, and how it is cleared when files are modified
+  2. The documentation includes instructions for manually recreating the trivial file as an escape hatch when a hook blocks unexpectedly
+**Plans**: TBD
 
 ## Progress
 
 **Execution Order:**
-Phases 21 -> 22 -> 23 -> 24 -> 25 -> 26 -> 27 + 28 (parallel possible) -> 29
+Phases 30 -> 31 -> 32 -> 33
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 1-20 | v0.9.0-v0.16.0 | 46/46 | Complete | 2026-04-10 |
-| 21. Foundation | v0.20.0 | 2/2 | Complete    | 2026-04-14 |
-| 22. Core Paths | v0.20.0 | 2/2 | Complete    | 2026-04-14 |
-| 23. Specialized Paths | v0.20.0 | 0/2 | Not started | - |
-| 24. Cross-Cutting + Quality Gates | v0.20.0 | 0/2 | Not started | - |
-| 25. Composer Redesign | v0.20.0 | 2/2 | Complete   | 2026-04-14 |
-| 26. Hook Alignment + Migrate | v0.20.0 | 2/2 | Complete   | 2026-04-14 |
-| 27. silver-fast Redesign | v0.20.0 | 0/1 | Not started | - |
-| 28. Documentation Update | v0.20.0 | 0/2 | Not started | - |
-| 29. Help Center + Homepage | v0.20.0 | 2/2 | Complete   | 2026-04-14 |
+| 21-29 | v0.20.0 | 12/12 | Complete | 2026-04-15 |
+| 30. Shared Helper & CI Chores | v0.21.0 | 0/0 | Not started | - |
+| 31. Hook Bug Fixes | v0.21.0 | 0/0 | Not started | - |
+| 32. Hook Behavior Enhancements | v0.21.0 | 0/0 | Not started | - |
+| 33. Trivial-Session Bypass Docs | v0.21.0 | 0/0 | Not started | - |
 
 ## Backlog
 
@@ -205,21 +114,21 @@ Items below are deferred, not yet scheduled to a milestone. Numbered 999.x.
 
 | # | Item | Source | Priority | Effort | Status |
 |---|------|--------|----------|--------|--------|
-| 999.1 | `jq` CI assertions for `required_deploy`/`all_tracked` correctness (silent drift risk if arrays diverge) | docs/tech-debt.md Phase 2 | High | Low | ✅ Done |
-| 999.2 | `diff` CI step for `docs/workflows/` vs `templates/workflows/` parity (template drift has caused bugs) | docs/tech-debt.md Phase 2 | High | Low | ✅ Done |
-| 999.3 | Derive `finalization_skills` from `.silver-bullet.json` at hook runtime instead of hardcoded string in `hooks/dev-cycle-check.sh` line 371 | docs/tech-debt.md Phase 2 | Medium | Medium | ✅ Done |
-| 999.4 | Investigate and fix T2-1 test failure in `tests/hooks/test-timeout-check.sh` ("expected 'Check-in', got: ") | forensics 2026-04-16 | Medium | Low | ✅ Done |
-| 999.5 | Create or verify `docs/KNOWLEDGE.md` and `docs/LESSONS.md` — referenced in session log but files are missing | forensics 2026-04-16 | Medium | Low | ✅ Done (exist as dirs) |
-| 999.6 | Add test for roadmap-freshness hook: missing ROADMAP.md path edge case (deferred from aeda816 code review) | code review aeda816 | Medium | Low | ✅ Done |
-| 999.7 | Fix regex convention drift in `hooks/roadmap-freshness.sh` that allows silent pass (deferred from aeda816 code review) | code review aeda816 | Medium | Low | ✅ Done |
-| 999.8 | Create missing VERIFICATION.md for phases 25, 26, 27, 28, 29 (skipped during autonomous v0.20.0 execution) | forensics gsd-2026-04-16 | Low | Medium | ✅ Done |
-| 999.9 | Reconcile STATE.md `completed_phases: 6` stale value + narrative section (shows Phase 21 active) | forensics gsd-2026-04-16 | Low | Low | ✅ Done |
-| 999.10 | Investigate Phase 23 missing PLAN.md/CONTEXT.md artifacts (work completed, but planning artifacts absent) | forensics gsd-2026-04-16 | Low | Low | ✅ Done |
+| 999.1 | `jq` CI assertions for `required_deploy`/`all_tracked` correctness (silent drift risk if arrays diverge) | docs/tech-debt.md Phase 2 | High | Low | Done |
+| 999.2 | `diff` CI step for `docs/workflows/` vs `templates/workflows/` parity (template drift has caused bugs) | docs/tech-debt.md Phase 2 | High | Low | Done |
+| 999.3 | Derive `finalization_skills` from `.silver-bullet.json` at hook runtime instead of hardcoded string in `hooks/dev-cycle-check.sh` line 371 | docs/tech-debt.md Phase 2 | Medium | Medium | Done |
+| 999.4 | Investigate and fix T2-1 test failure in `tests/hooks/test-timeout-check.sh` ("expected 'Check-in', got: ") | forensics 2026-04-16 | Medium | Low | Done |
+| 999.5 | Create or verify `docs/KNOWLEDGE.md` and `docs/LESSONS.md` -- referenced in session log but files are missing | forensics 2026-04-16 | Medium | Low | Done (exist as dirs) |
+| 999.6 | Add test for roadmap-freshness hook: missing ROADMAP.md path edge case (deferred from aeda816 code review) | code review aeda816 | Medium | Low | Done |
+| 999.7 | Fix regex convention drift in `hooks/roadmap-freshness.sh` that allows silent pass (deferred from aeda816 code review) | code review aeda816 | Medium | Low | Done |
+| 999.8 | Create missing VERIFICATION.md for phases 25, 26, 27, 28, 29 (skipped during autonomous v0.20.0 execution) | forensics gsd-2026-04-16 | Low | Medium | Done |
+| 999.9 | Reconcile STATE.md `completed_phases: 6` stale value + narrative section (shows Phase 21 active) | forensics gsd-2026-04-16 | Low | Low | Done |
+| 999.10 | Investigate Phase 23 missing PLAN.md/CONTEXT.md artifacts (work completed, but planning artifacts absent) | forensics gsd-2026-04-16 | Low | Low | Done |
 | 999.11 | PATH 9 layer parallelism: sequential invocation is current; true parallelism is a future optimization | Phase 24 CONTEXT.md | Low | High | Deferred |
-| 999.12 | Post-work deferred-item capture step: add mechanism in SB composable flows to add deferred items to backlog after each flow's core work completes | user request 2026-04-16 | High | Medium | ✅ Done |
-| 999.13 | During-work deferred-item capture: add instructions/mechanisms so that items deferred or ignored during execution are automatically added to GSD backlog | user request 2026-04-16 | High | Medium | ✅ Done |
-| 999.14 | After-review backlog enforcement: after any review (code review, quality gates, security), low-priority/suggested items must be implemented immediately or added to backlog — not silently dropped | user request 2026-04-16 | High | Low | ✅ Done |
-| 999.15 | Analyze composable flows for atomicity: split non-atomic flows, eliminate redundancy from arbitrary compositions, fix ordering issues that cause work at wrong step | user request 2026-04-16 | High | High | ✅ Done |
-| 999.16 | Document `SILVER_BULLET_STATE_FILE` env var override in ENFORCEMENT.md or README — currently undocumented despite being used by hooks and tests | code review 2026-04-16 | Low | Low | ✅ Done |
-| 999.17 | Add test for `hooks/session-start` security guard fallback path (invalid path outside `~/.claude/` falls back to default state file) | code review 2026-04-16 | Low | Low | ✅ Done |
-| 999.18 | Ensure full implementation of `doc-scheme.base.md` is restored — verify all sections from the base schema are present and correctly implemented in the live documentation scheme | user request 2026-04-16 | High | Medium | ✅ Done |
+| 999.12 | Post-work deferred-item capture step: add mechanism in SB composable flows to add deferred items to backlog after each flow's core work completes | user request 2026-04-16 | High | Medium | Done |
+| 999.13 | During-work deferred-item capture: add instructions/mechanisms so that items deferred or ignored during execution are automatically added to GSD backlog | user request 2026-04-16 | High | Medium | Done |
+| 999.14 | After-review backlog enforcement: after any review (code review, quality gates, security), low-priority/suggested items must be implemented immediately or added to backlog -- not silently dropped | user request 2026-04-16 | High | Low | Done |
+| 999.15 | Analyze composable flows for atomicity: split non-atomic flows, eliminate redundancy from arbitrary compositions, fix ordering issues that cause work at wrong step | user request 2026-04-16 | High | High | Done |
+| 999.16 | Document `SILVER_BULLET_STATE_FILE` env var override in ENFORCEMENT.md or README -- currently undocumented despite being used by hooks and tests | code review 2026-04-16 | Low | Low | Done |
+| 999.17 | Add test for `hooks/session-start` security guard fallback path (invalid path outside `~/.claude/` falls back to default state file) | code review 2026-04-16 | Low | Low | Done |
+| 999.18 | Ensure full implementation of `doc-scheme.base.md` is restored -- verify all sections from the base schema are present and correctly implemented in the live documentation scheme | user request 2026-04-16 | High | Medium | Done |
