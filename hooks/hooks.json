@@ -2,6 +2,15 @@
   "hooks": {
     "SessionStart": [
       {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "mkdir -p ~/.claude/.silver-bullet && touch ~/.claude/.silver-bullet/trivial",
+            "async": false
+          }
+        ]
+      },
+      {
         "matcher": "startup|clear|compact",
         "hooks": [
           {
@@ -105,6 +114,16 @@
       }
     ],
     "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "rm -f ~/.claude/.silver-bullet/trivial",
+            "async": false
+          }
+        ]
+      },
       {
         "matcher": "Skill",
         "hooks": [
