@@ -50,7 +50,7 @@
 ### v0.21.0 Hook Quality & Docs
 
 - [x] **Phase 30: Shared Helper & CI Chores** - Extract trivial-bypass helper, fix umask, add version-drift CI warning (completed 2026-04-16)
-- [ ] **Phase 31: Hook Bug Fixes** - Fix false-positives in uat-gate and dev-cycle-check, fix ci-status-check deadlock
+- [x] **Phase 31: Hook Bug Fixes** - Fix false-positives in uat-gate and dev-cycle-check, fix ci-status-check deadlock (completed 2026-04-16)
 - [ ] **Phase 32: Hook Behavior Enhancements** - Session-intent awareness for stop-check, noise reduction for read-guard
 - [ ] **Phase 33: Trivial-Session Bypass Documentation** - Document the bypass mechanism in user-facing docs
 
@@ -76,9 +76,9 @@ Plans:
   1. `uat-gate.sh` passes cleanly when a UAT.md summary table contains a FAIL column header in the header row -- only data rows with FAIL trigger the failure check
   2. `dev-cycle-check.sh` state-tamper detection does not false-positive when a heredoc body happens to contain a Silver Bullet state path string -- only actual write-destination arguments are checked
   3. After CI fails, the user can perform at least one `git commit` + `git push` cycle to fix the failing run without being deadlocked by `ci-status-check.sh` (via override flag, grace period, or explicit escape instruction)
-**Plans:** 1 plan
+**Plans:** 1/1 plans complete
 Plans:
-- [ ] 31-01-PLAN.md -- Fix uat-gate FAIL header false-positive, dev-cycle-check heredoc false-positive, ci-status-check CI deadlock escape instruction
+- [x] 31-01-PLAN.md -- Fix uat-gate FAIL header false-positive, dev-cycle-check heredoc false-positive, ci-status-check CI deadlock escape instruction
 
 ### Phase 32: Hook Behavior Enhancements
 **Goal**: Advisory hooks stop firing in contexts where they add no value -- stop-check skips non-code sessions, read-guard suppresses redundant warnings
@@ -108,7 +108,7 @@ Phases 30 -> 31 -> 32 -> 33
 | 1-20 | v0.9.0-v0.16.0 | 46/46 | Complete | 2026-04-10 |
 | 21-29 | v0.20.0 | 12/12 | Complete | 2026-04-15 |
 | 30. Shared Helper & CI Chores | v0.21.0 | 1/1 | Complete    | 2026-04-16 |
-| 31. Hook Bug Fixes | v0.21.0 | 0/1 | Not started | - |
+| 31. Hook Bug Fixes | v0.21.0 | 1/1 | Complete    | 2026-04-16 |
 | 32. Hook Behavior Enhancements | v0.21.0 | 0/0 | Not started | - |
 | 33. Trivial-Session Bypass Docs | v0.21.0 | 0/0 | Not started | - |
 
