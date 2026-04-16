@@ -36,6 +36,31 @@ under `~/.claude/.silver-bullet/`.
 | *(hooks.json entry)* | SessionStart | Creates `~/.claude/.silver-bullet/trivial` — marks every new session trivial by default |
 | *(hooks.json entry)* | PostToolUse (Write\|Edit\|MultiEdit) | Removes `~/.claude/.silver-bullet/trivial` — clears trivial flag when files are modified |
 
+### Trivial-Session Bypass
+
+The trivial bypass is a touch-file mechanism that allows enforcement hooks to stand down for
+non-code-producing sessions. The file lives at `~/.claude/.silver-bullet/trivial`.
+
+**Lifecycle:**
+1. **Session start** — `SessionStart` hook creates the file unconditionally. Every session begins as "trivial" (no dev work assumed).
+2. **First file edit** — `PostToolUse` on Write/Edit/MultiEdit removes the file. The session is now marked as a dev session; enforcement activates.
+3. **Session end** — `stop-check.sh` checks: if the file exists, skips the skill checklist (non-dev session). If absent, enforces required skills.
+
+**Which hooks check the trivial file:**
+- `stop-check.sh` — skips skill checklist
+- `ci-status-check.sh` — skips CI failure block
+- `completion-audit.sh` — skips planning completeness gate
+
+**Manual escape hatch:**
+If the bypass file was removed (because a file was edited) but you need to commit without full workflow compliance (e.g. committing a CI fix), recreate it in your terminal:
+```bash
+touch ~/.claude/.silver-bullet/trivial
+```
+The file will be cleared again on the next file edit, so the bypass is temporary.
+
+**Security:**
+The hooks validate that the trivial file is a regular file (`-f`) and not a symlink (`! -L`) before honoring it, preventing symlink-based bypass attacks.
+
 ## Design Principles
 
 1. **Never modify third-party plugins.** All enforcement is additive to the host project.
