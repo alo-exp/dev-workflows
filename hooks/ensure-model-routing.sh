@@ -14,6 +14,20 @@
 
 set -euo pipefail
 trap 'exit 0' ERR
+
+# ── DISABLED (2026-04-16) ─────────────────────────────────────────────────────
+# Model routing via frontmatter injection into GSD agent files is discontinued.
+# Reason: SB must not modify third-party plugin source files. Patching
+# ~/.claude/agents/gsd-*.md creates a tug-of-war with GSD's update system:
+# GSD wipes model: lines on upgrade, SB re-injects them each session.
+#
+# GSD-native replacement: use model_overrides in .planning/config.json or
+# .gsd/defaults.json. GSD v1.36.0 balanced profile already routes
+# gsd-planner → opus. For gsd-security-auditor, add model_overrides config.
+#
+# Code preserved below for reference only.
+exit 0
+
 umask 0077
 
 AGENTS_DIR="${HOME}/.claude/agents"
