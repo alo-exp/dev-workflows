@@ -46,6 +46,7 @@ Single enforced workflow that eliminates the gap between "what AI should do" and
 - [ ] Cross-artifact consistency reviewer — validates SPEC.md ↔ DESIGN.md ↔ REQUIREMENTS.md are mutually consistent (ARVW-09)
 - [ ] Review round analytics — track review round counts, common finding patterns, time-to-clean-pass metrics (ARVW-10)
 - [ ] Configurable review depth (quick/standard/deep) per artifact type via .planning/config.json (ARVW-11)
+- [ ] v0.21.0 remaining requirements (HOOK-01 through HOOK-05, DOC-01) — phases 31-33
 
 ### Out of Scope
 
