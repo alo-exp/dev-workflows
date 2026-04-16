@@ -13,6 +13,23 @@ jobs:
             echo "Valid: $f"
           done
 
+      - name: Check plugin.json version vs latest git tag
+        continue-on-error: true
+        run: |
+          plugin_version=$(jq -r '.version' .claude-plugin/plugin.json)
+          latest_tag=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+          if [[ -z "$latest_tag" ]]; then
+            echo "No git tags found — skipping version check"
+            exit 0
+          fi
+          # Strip leading 'v' from tag for comparison (tags are v0.20.11, plugin.json is 0.20.11)
+          tag_version="${latest_tag#v}"
+          if [[ "$plugin_version" != "$tag_version" ]]; then
+            echo "::warning::plugin.json version ($plugin_version) does not match latest git tag ($latest_tag)"
+          else
+            echo "plugin.json version ($plugin_version) matches latest tag ($latest_tag)"
+          fi
+
       - name: Check hook executability
         run: |
           for f in hooks/session-start hooks/*.sh scripts/*.sh; do
