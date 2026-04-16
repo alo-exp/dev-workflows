@@ -32,6 +32,9 @@ under `~/.claude/.silver-bullet/`.
 | `compliance-status.sh` | PostToolUse (all tools) | Emits live progress score per tool call |
 | `completion-audit.sh` | PostToolUse (Bash) | Blocks `git commit/push/deploy/gh release` if `required_deploy` skills are missing |
 | `ci-status-check.sh` | PostToolUse (Bash) | Warns on commit/push if CI is failing |
+| `stop-check.sh` | Stop / SubagentStop | Requires required_deploy skills before session ends; skipped when `trivial` file exists |
+| *(hooks.json entry)* | SessionStart | Creates `~/.claude/.silver-bullet/trivial` — marks every new session trivial by default |
+| *(hooks.json entry)* | PostToolUse (Write\|Edit\|MultiEdit) | Removes `~/.claude/.silver-bullet/trivial` — clears trivial flag when files are modified |
 
 ## Design Principles
 
