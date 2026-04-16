@@ -288,6 +288,26 @@ out=$(run_hook_bash "PreToolUse" "echo 'fake-skill' >> ~/.claude/.silver-bullet/
 assert_blocks "tamper: arbitrary state write is blocked" "$out"
 teardown
 
+# Test 17: Heredoc body containing state path should NOT be blocked (HOOK-02 regression)
+setup
+out=$(run_hook_bash "PreToolUse" "cat > /tmp/instructions.md << 'EOF'
+To reset state, remove ~/.claude/.silver-bullet/state
+EOF")
+assert_passes "tamper: heredoc body with state path is NOT blocked (HOOK-02)" "$out"
+teardown
+
+# Test 17b: Direct write to state path is STILL blocked after HOOK-02 fix
+setup
+out=$(run_hook_bash "PreToolUse" "printf 'fake' > ~/.claude/.silver-bullet/state")
+assert_blocks "tamper: direct write to state path is still blocked (HOOK-02)" "$out"
+teardown
+
+# Test 17c: tee to state path is STILL blocked after HOOK-02 fix
+setup
+out=$(run_hook_bash "PreToolUse" "echo 'x' | tee ~/.claude/.silver-bullet/trivial")
+assert_blocks "tamper: tee to state path is still blocked (HOOK-02)" "$out"
+teardown
+
 # Tests 18-22: F-07 plugin boundary — execution vs write distinction
 # Use expanded $HOME path so the plugin_cache grep actually fires in the hook
 PLUGIN_CACHE_PATH="${HOME}/.claude/plugins/cache"
