@@ -8,7 +8,7 @@ Brooks was right then. AI changes the equation now.
 
 Silver Bullet is a Claude Code plugin that orchestrates the best open-source agentic workflows into one enforced process. It combines [GSD](https://github.com/gsd-build/get-shit-done) (multi-agent execution), [Superpowers](https://github.com/obra/superpowers) (code review, branch management), [Engineering](https://github.com/anthropics/knowledge-work-plugins/tree/main/engineering) (testing, docs, deploy), and [Design](https://github.com/anthropics/knowledge-work-plugins/tree/main/design) (design system, UX copy, accessibility) into one guided workflow with 10 layers of compliance. **You don't need to know GSD** -- Silver Bullet guides you through every step, explains what's happening, and handles errors. Just describe what you want to build.
 
-**Current version: v0.20.11** — Trivial-session bypass for stop-check: `SessionStart` now marks every session as trivial; `PostToolUse` on Write/Edit/MultiEdit removes the marker. The skill gate only fires in sessions where files were actually modified — read-only tasks (version checks, queries, etc.) are no longer blocked. Previous: v0.20.10 engineering-skills restoration.
+**Current version: v0.21.0** — Hook quality & docs: fixed 6 hook false-positives and deadlocks (UAT-gate header row, dev-cycle-check heredoc, CI status deadlock), added session-intent awareness to stop-check and completion-audit (empty state = non-dev session = silent exit), extracted trivial-bypass shared helper, added CI version-drift warning, and documented the trivial-session bypass mechanism fully in README and ARCHITECTURE. Previous: v0.20.11 trivial-session bypass for stop-check.
 
 ## How It Works
 
@@ -310,15 +310,41 @@ Edit `.silver-bullet.json` in your project root:
 
 > **Two-tier enforcement**: `git commit` and `git push` only require `required_planning` skills (default: `silver-quality-gates`). The full `required_deploy` list is only checked at final delivery time — `gh pr create`, deploy commands, and `gh release create`. This allows GSD's `/gsd:execute-phase` to make atomic commits during development without being blocked.
 
-## Trivial Changes
+## Trivial-Session Bypass
 
-For typo fixes, copy edits, and config tweaks that don't need the full workflow, Claude will automatically detect the change is trivial and bypass enforcement by running:
+Silver Bullet tracks whether a session has done code-producing work via a touch-file: `~/.claude/.silver-bullet/trivial`. When the file exists, enforcement hooks (`stop-check`, `ci-status-check`, `completion-audit`) stand down. When it doesn't exist, they enforce.
+
+### Automatic lifecycle
+
+- **Session start** — the `SessionStart` hook creates `~/.claude/.silver-bullet/trivial` unconditionally. Every new session begins as "trivial" (no enforcement).
+- **First file edit** — the `PostToolUse` hook on Write/Edit/MultiEdit removes the file the moment any file is modified. The session is now marked as a dev session and enforcement activates for the rest of the session.
+
+### Which hooks check the trivial file
+
+| Hook | Effect when trivial file exists |
+|------|---------------------------------|
+| `stop-check.sh` | Skips the skill checklist at session end |
+| `ci-status-check.sh` | Skips the CI failure block on commit/push |
+| `completion-audit.sh` | Skips the planning completeness gate |
+
+### Manual escape hatch
+
+If a hook is blocking you and you need to proceed — for example, CI failed, you edited the fix, and now `ci-status-check` is blocking the commit needed to push that fix — recreate the file in your terminal:
 
 ```bash
 touch ~/.claude/.silver-bullet/trivial
 ```
 
-You can also run this manually if Claude doesn't detect a trivial change. The flag is automatically cleaned up on the next session start.
+This re-enables commits for the rest of the session. The file will be cleared again on the next file edit, so the bypass is temporary.
+
+Common scenarios where this helps:
+- **CI fix commit**: CI fails → you edit the fix (trivial file removed) → `ci-status-check` blocks the commit → run `touch` to unblock.
+- **Non-dev session end**: `stop-check` blocks at session end for a documentation-only or read-only session → run `touch` to unblock.
+- **Documentation-only commit**: `completion-audit` blocks a docs-only commit → run `touch` to unblock.
+
+### Trivial changes (copy edits and typo fixes)
+
+For typo fixes, copy edits, and config tweaks that don't warrant the full dev workflow, you can run the escape hatch command above before making your edit. The session will be re-marked as trivial immediately; as soon as you make a file edit, the flag clears and normal enforcement resumes.
 
 **Note**: In `devops-cycle` mode, `.yml`, `.yaml`, `.json`, and `.toml` files are infrastructure code and are NOT auto-exempted from enforcement.
 

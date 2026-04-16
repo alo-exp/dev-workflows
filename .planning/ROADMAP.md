@@ -51,8 +51,8 @@
 
 - [x] **Phase 30: Shared Helper & CI Chores** - Extract trivial-bypass helper, fix umask, add version-drift CI warning (completed 2026-04-16)
 - [x] **Phase 31: Hook Bug Fixes** - Fix false-positives in uat-gate and dev-cycle-check, fix ci-status-check deadlock (completed 2026-04-16)
-- [ ] **Phase 32: Hook Behavior Enhancements** - Session-intent awareness for stop-check, noise reduction for read-guard
-- [ ] **Phase 33: Trivial-Session Bypass Documentation** - Document the bypass mechanism in user-facing docs
+- [x] **Phase 32: Hook Behavior Enhancements** - Session-intent awareness for stop-check, noise reduction for read-guard (completed 2026-04-16)
+- [x] **Phase 33: Trivial-Session Bypass Documentation** - Document the bypass mechanism in user-facing docs (completed 2026-04-16)
 
 ## Phase Details
 
@@ -109,8 +109,8 @@ Phases 30 -> 31 -> 32 -> 33
 | 21-29 | v0.20.0 | 12/12 | Complete | 2026-04-15 |
 | 30. Shared Helper & CI Chores | v0.21.0 | 1/1 | Complete    | 2026-04-16 |
 | 31. Hook Bug Fixes | v0.21.0 | 1/1 | Complete    | 2026-04-16 |
-| 32. Hook Behavior Enhancements | v0.21.0 | 0/0 | Not started | - |
-| 33. Trivial-Session Bypass Docs | v0.21.0 | 0/0 | Not started | - |
+| 32. Hook Behavior Enhancements | v0.21.0 | 1/1 | Complete    | 2026-04-16 |
+| 33. Trivial-Session Bypass Docs | v0.21.0 | 1/1 | Complete    | 2026-04-16 |
 
 ## Backlog
 
@@ -136,4 +136,5 @@ Items below are deferred, not yet scheduled to a milestone. Numbered 999.x.
 | 999.16 | Document `SILVER_BULLET_STATE_FILE` env var override in ENFORCEMENT.md or README -- currently undocumented despite being used by hooks and tests | code review 2026-04-16 | Low | Low | Done |
 | 999.17 | Add test for `hooks/session-start` security guard fallback path (invalid path outside `~/.claude/` falls back to default state file) | code review 2026-04-16 | Low | Low | Done |
 | 999.18 | Ensure full implementation of `doc-scheme.base.md` is restored -- verify all sections from the base schema are present and correctly implemented in the live documentation scheme | user request 2026-04-16 | High | Medium | Done |
-| 999.19 | Disable `hooks/ensure-model-routing.sh` model injection into GSD agent files; replace with GSD-native `model_overrides` config (e.g. `gsd-security-auditor: opus` in `.gsd/defaults.json`). SB must never patch third-party plugin source files. | audit 2026-04-16 | High | Low | Pending |
+| 999.19 | If silver-bullet hooks become a public extension surface (third-party projects or CI pipelines), add formal API versioning to the hooks interface — currently internal-only so unversioned is acceptable, but extensibility skill flags it as a future risk | quality gates 2026-04-16 | Low | Medium | Deferred |
+| 999.20 | Disable `hooks/ensure-model-routing.sh` model injection into GSD agent files; replace with GSD-native `model_overrides` config (e.g. `gsd-security-auditor: opus` in `.gsd/defaults.json`). SB must never patch third-party plugin source files. | audit 2026-04-16 | High | Low | Done |
