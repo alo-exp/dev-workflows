@@ -8,7 +8,7 @@ Brooks was right then. AI changes the equation now.
 
 Silver Bullet is a Claude Code plugin that orchestrates the best open-source agentic workflows into one enforced process. It combines [GSD](https://github.com/gsd-build/get-shit-done) (multi-agent execution), [Superpowers](https://github.com/obra/superpowers) (code review, branch management), [Engineering](https://github.com/anthropics/knowledge-work-plugins/tree/main/engineering) (testing, docs, deploy), and [Design](https://github.com/anthropics/knowledge-work-plugins/tree/main/design) (design system, UX copy, accessibility) into one guided workflow with 10 layers of compliance. **You don't need to know GSD** -- Silver Bullet guides you through every step, explains what's happening, and handles errors. Just describe what you want to build.
 
-**Current version: v0.20.10** — Restore Anthropic Engineering plugin skill invocations: `/code-review` now runs before `gsd-code-review` in all feature/UI/bugfix flows, `/tech-debt` runs before quality gates, `/deploy-checklist` runs before gsd-ship in silver-release. Config enforcement hooks (`stop-check`, `completion-audit`) now treat `required_deploy` as sole source of truth. Previous: v0.20.9 backlog maintenance sweep.
+**Current version: v0.20.11** — Trivial-session bypass for stop-check: `SessionStart` now marks every session as trivial; `PostToolUse` on Write/Edit/MultiEdit removes the marker. The skill gate only fires in sessions where files were actually modified — read-only tasks (version checks, queries, etc.) are no longer blocked. Previous: v0.20.10 engineering-skills restoration.
 
 ## How It Works
 

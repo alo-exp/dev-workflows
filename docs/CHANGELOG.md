@@ -16,6 +16,13 @@
 
 <!-- ENTRIES BELOW — newest first -->
 
+## 2026-04-16 — trivial-session-bypass
+**What**: Added trivial-session bypass to stop-check — SessionStart creates ~/.claude/.silver-bullet/trivial, PostToolUse Write/Edit/MultiEdit removes it; skill gate only fires when files were actually modified.
+**Commits**: 7848b92
+**Skills run**: silver-quality-gates, security, gsd-docs-update, silver-release
+**Virtual cost**: ~$0.15 (Sonnet, low complexity)
+**KNOWLEDGE.md**: no changes
+
 ## 2026-04-16 — engineering-skills-restoration
 **What**: Restored Anthropic Engineering plugin skill invocations missing from composable flows; fixed stop-check and completion-audit hooks to treat required_deploy config as sole source of truth.
 **Commits**: 405f683, 4fcadce, 4eb2a11, 3717b93, 197015b
