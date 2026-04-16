@@ -23,6 +23,9 @@ jobs:
       - name: Verify hooks.json references exist
         run: |
           jq -r '.. | .command? // empty' hooks/hooks.json | while read -r cmd; do
+            # Only check commands that reference plugin scripts via ${CLAUDE_PLUGIN_ROOT}
+            # Inline shell commands (e.g. mkdir, rm -f, touch) are skipped
+            [[ "$cmd" == *'${CLAUDE_PLUGIN_ROOT}/'* ]] || continue
             # Extract script path relative to hooks/
             script=$(echo "$cmd" | sed 's|"${CLAUDE_PLUGIN_ROOT}/||;s|"||g')
             test -f "$script" || { echo "Missing: $script"; exit 1; }
