@@ -51,8 +51,8 @@
 
 - [x] **Phase 30: Shared Helper & CI Chores** - Extract trivial-bypass helper, fix umask, add version-drift CI warning (completed 2026-04-16)
 - [x] **Phase 31: Hook Bug Fixes** - Fix false-positives in uat-gate and dev-cycle-check, fix ci-status-check deadlock (completed 2026-04-16)
-- [ ] **Phase 32: Hook Behavior Enhancements** - Session-intent awareness for stop-check, noise reduction for read-guard
-- [ ] **Phase 33: Trivial-Session Bypass Documentation** - Document the bypass mechanism in user-facing docs
+- [x] **Phase 32: Hook Behavior Enhancements** - Session-intent awareness for stop-check, noise reduction for read-guard (completed 2026-04-16)
+- [x] **Phase 33: Trivial-Session Bypass Documentation** - Document the bypass mechanism in user-facing docs (completed 2026-04-16)
 
 ## Phase Details
 
@@ -109,8 +109,8 @@ Phases 30 -> 31 -> 32 -> 33
 | 21-29 | v0.20.0 | 12/12 | Complete | 2026-04-15 |
 | 30. Shared Helper & CI Chores | v0.21.0 | 1/1 | Complete    | 2026-04-16 |
 | 31. Hook Bug Fixes | v0.21.0 | 1/1 | Complete    | 2026-04-16 |
-| 32. Hook Behavior Enhancements | v0.21.0 | 0/0 | Not started | - |
-| 33. Trivial-Session Bypass Docs | v0.21.0 | 0/0 | Not started | - |
+| 32. Hook Behavior Enhancements | v0.21.0 | 1/1 | Complete    | 2026-04-16 |
+| 33. Trivial-Session Bypass Docs | v0.21.0 | 1/0 | Complete    | 2026-04-16 |
 
 ## Backlog
 
