@@ -52,12 +52,12 @@
 
 | REQ-ID  | Phase    | Status  |
 |---------|----------|---------|
-| REF-01  | Phase 30 | Pending |
-| CI-01   | Phase 30 | Pending |
-| CI-02   | Phase 30 | Pending |
-| HOOK-01 | Phase 31 | Pending |
-| HOOK-02 | Phase 31 | Pending |
-| HOOK-03 | Phase 31 | Pending |
-| HOOK-04 | Phase 32 | Pending |
-| HOOK-05 | Phase 32 | Pending |
-| DOC-01  | Phase 33 | Pending |
+| REF-01  | Phase 30 | Done    |
+| CI-01   | Phase 30 | Done    |
+| CI-02   | Phase 30 | Done    |
+| HOOK-01 | Phase 31 | Done    |
+| HOOK-02 | Phase 31 | Done    |
+| HOOK-03 | Phase 31 | Done    |
+| HOOK-04 | Phase 32 | Done    |
+| HOOK-05 | Phase 32 | Descoped |
+| DOC-01  | Phase 33 | Done    |

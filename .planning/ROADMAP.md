@@ -110,7 +110,7 @@ Phases 30 -> 31 -> 32 -> 33
 | 30. Shared Helper & CI Chores | v0.21.0 | 1/1 | Complete    | 2026-04-16 |
 | 31. Hook Bug Fixes | v0.21.0 | 1/1 | Complete    | 2026-04-16 |
 | 32. Hook Behavior Enhancements | v0.21.0 | 1/1 | Complete    | 2026-04-16 |
-| 33. Trivial-Session Bypass Docs | v0.21.0 | 1/0 | Complete    | 2026-04-16 |
+| 33. Trivial-Session Bypass Docs | v0.21.0 | 1/1 | Complete    | 2026-04-16 |
 
 ## Backlog
 
